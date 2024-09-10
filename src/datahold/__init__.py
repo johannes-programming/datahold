@@ -1,9 +1,10 @@
 import functools
+import types
 
 __all__ = ["DataList"]
 
 
-class DataList:
+class BaseList:
 
     @functools.wraps(list.__add__)
     def __add__(self, *args, **kwargs):
@@ -242,3 +243,19 @@ class DataList:
         ans = data.sort(*args, **kwargs)
         self.data = data
         return ans
+
+
+class OkayList(BaseList):
+    @functools.wraps(list.__eq__)
+    def __eq__(self, other, /):
+        if type(self) != type(other):
+            return False
+        return self.data == other.data
+
+    @functools.wraps(list.__hash__)
+    def __hash__(self):
+        raise TypeError("unhashable type: %r" % type(self).__name__)
+
+    @functools.wraps(list.__init__)
+    def __init__(self, data=[]) -> None:
+        self.data = data
