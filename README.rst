@@ -47,9 +47,9 @@ This class inherits from `BaseList` and implements some common sense overwrites 
 * `__eq__` returns `True` iff types are equal and data is equal
 * `__ne__` negates `__eq__`
 * `__ge__` returns `type(self)(other).__le__(self)`
-* __gt__ returns `True` iff `__eq__` returns False and `__ge__` returns `True`
-* __lt__ returns `True` iff `__eq__` returns False and __le__ returns `True`
-* __le__ returns `self.data.__le__(type(self)(other).data)``
+* `__gt__` returns `True` iff `__eq__` returns False and `__ge__` returns `True`
+* `__lt__` returns `True` iff `__eq__` returns False and __le__ returns `True`
+* `__le__` returns `self.data.__le__(type(self)(other).data)`
 * modify `__eq__` or `__le__` as needed to change the behaviour of the other comparison methods
 * `__hash__` raises now a more fitting exception
 * `__iadd__` uses now extend
