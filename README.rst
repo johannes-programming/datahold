@@ -87,8 +87,8 @@ This project is licensed under the MIT License.
 Links
 -----
 
-* ``Download <https://pypi.org/project/datahold/#files>``_
-* ``Source <https://github.com/johannes-programming/datahold>``_
+* `Download <https://pypi.org/project/datahold/#files>`_
+* `Source <https://github.com/johannes-programming/datahold>`_
 
 Credits
 -------
