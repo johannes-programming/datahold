@@ -312,3 +312,244 @@ class OkayList(BaseList):
     @functools.wraps(list.copy)
     def copy(self, /):
         return type(self)(self.data)
+
+
+class BaseDict:
+
+    @functools.wraps(dict.__contains__)
+    def __contains__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__contains__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__delitem__)
+    def __delitem__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__delitem__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__eq__)
+    def __eq__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__eq__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__format__)
+    def __format__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__format__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__ge__)
+    def __ge__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__ge__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__getitem__)
+    def __getitem__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__getitem__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__gt__)
+    def __gt__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__gt__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__hash__)
+    def __hash__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__hash__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__ior__)
+    def __ior__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__ior__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__iter__)
+    def __iter__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__iter__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__le__)
+    def __le__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__le__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__len__)
+    def __len__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__len__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__lt__)
+    def __lt__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__lt__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__ne__)
+    def __ne__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__ne__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__new__)
+    def __new__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__new__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__or__)
+    def __or__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__or__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__reduce__)
+    def __reduce__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__reduce__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__reduce_ex__)
+    def __reduce_ex__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__reduce_ex__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__repr__)
+    def __repr__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__repr__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__reversed__)
+    def __reversed__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__reversed__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__ror__)
+    def __ror__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__ror__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__setitem__)
+    def __setitem__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__setitem__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.__str__)
+    def __str__(self, *args, **kwargs):
+        data = self.data
+        ans = data.__str__(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.clear)
+    def clear(self, *args, **kwargs):
+        data = self.data
+        ans = data.clear(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.copy)
+    def copy(self, *args, **kwargs):
+        data = self.data
+        ans = data.copy(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.fromkeys)
+    def fromkeys(self, *args, **kwargs):
+        data = self.data
+        ans = data.fromkeys(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.get)
+    def get(self, *args, **kwargs):
+        data = self.data
+        ans = data.get(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.items)
+    def items(self, *args, **kwargs):
+        data = self.data
+        ans = data.items(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.keys)
+    def keys(self, *args, **kwargs):
+        data = self.data
+        ans = data.keys(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.pop)
+    def pop(self, *args, **kwargs):
+        data = self.data
+        ans = data.pop(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.popitem)
+    def popitem(self, *args, **kwargs):
+        data = self.data
+        ans = data.popitem(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.setdefault)
+    def setdefault(self, *args, **kwargs):
+        data = self.data
+        ans = data.setdefault(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.update)
+    def update(self, *args, **kwargs):
+        data = self.data
+        ans = data.update(*args, **kwargs)
+        self.data = data
+        return ans
+
+    @functools.wraps(dict.values)
+    def values(self, *args, **kwargs):
+        data = self.data
+        ans = data.values(*args, **kwargs)
+        self.data = data
+        return ans
