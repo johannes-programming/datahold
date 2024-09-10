@@ -13,7 +13,7 @@ Content
 BaseList
 ~~~~~~~~
 
-To understand the class BaseList here the beginning of its code:
+To understand the class `BaseList` here the beginning of its code:
 
 .. code-block:: python
 
@@ -33,7 +33,7 @@ The following functions are defined the same way:
 
 The only function present in `list` and absent in `BaseList` is `__class_getitem__`
 
-We can use BaseList as parent for a list-like class. It is recommended to implement is the subclass:
+We can use `BaseList` as parent for a list-like class. It is recommended to implement is the subclass:
 - a property named `data` with getter and setter wrapping a private variable (for example named `_data`)
 - the `__init__` magic method
 This allows the creatation of a list-like class with modified behaviour with only minimal effort. To enhance perpormance we can overwrite some of the methods.
@@ -55,6 +55,11 @@ This class inherits from `BaseList` and implements some common sense overwrites 
 * `__iadd__` uses now extend
 * `__init__` allows now to set data immediately
 * see the code for all overwrites
+
+BaseDict
+~~~~~~~~
+
+Just like BaseList but for dict...
 
 Installation
 ------------
@@ -82,4 +87,4 @@ Credits
 - Author: Johannes
 - Email: johannes-programming@mailfence.com
 
-Thank you for using datahold!
+Thank you for using `datahold`!
