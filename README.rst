@@ -23,9 +23,8 @@ Explanation
             self.data = data
             return ans
 
-        # The following functions are defined the same way:
-        # __contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __hash__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __reduce__, __reduce_ex__, __repr__, __reversed__, __rmul__, __setitem__, __str__,
-        # append, clear, copy, count, extend, index, insert, pop, remove, reverse, sort
+The following functions are defined the same way:
+__contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __hash__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __reduce__, __reduce_ex__, __repr__, __reversed__, __rmul__, __setitem__, __str__, append, clear, copy, count, extend, index, insert, pop, remove, reverse, sort
 
 Installation
 ------------
