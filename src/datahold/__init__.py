@@ -1,8 +1,6 @@
 import functools
 import types
 
-import scaevola
-
 __all__ = ["DataList"]
 
 
