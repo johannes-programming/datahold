@@ -1,10 +1,14 @@
 import functools
 import types
 
+import scaevola
+
 __all__ = ["DataList"]
 
 
 class BaseList:
+
+    data: list
 
     @functools.wraps(list.__add__)
     def __add__(self, *args, **kwargs):
@@ -252,10 +256,61 @@ class OkayList(BaseList):
             return False
         return self.data == other.data
 
+    @functools.wraps(list.__ge__)
+    def __ge__(self, other, /):
+        other = type(self)(other)
+        return other.__le__(self)
+
+    @functools.wraps(list.__gt__)
+    def __gt__(self, other, /):
+        other = type(self)(other)
+        return other.__lt__(self)
+
     @functools.wraps(list.__hash__)
     def __hash__(self):
         raise TypeError("unhashable type: %r" % type(self).__name__)
 
+    @functools.wraps(list.__iadd__)
+    def __iadd__(self, data, /):
+        self.extend(data)
+
     @functools.wraps(list.__init__)
     def __init__(self, data=[]) -> None:
         self.data = data
+
+    @functools.wraps(list.__le__)
+    def __le__(self, other):
+        other = type(self)(other)
+        return self.data <= other.data
+
+    @functools.wraps(list.__lt__)
+    def __lt__(self, other, /):
+        if self.__eq__(other):
+            return False
+        return self.__le__(other)
+
+    @functools.wraps(list.__ne__)
+    def __ne__(self, other, /):
+        return not self.__eq__(other)
+
+    def __radd__(self, other, /):
+        other = type(self)(other)
+        return other.__radd__(self)
+
+    @functools.wraps(list.__repr__)
+    def __repr__(self) -> str:
+        return "%s(%s)" % (type(self).__name__, self)
+
+    @functools.wraps(list.__reversed__)
+    def __reversed__(self):
+        ans = self.copy()
+        ans.reverse()
+        return ans
+
+    @functools.wraps(list.__rmul__)
+    def __rmul__(self, other, /):
+        return self.__mul__(other)
+
+    @functools.wraps(list.copy)
+    def copy(self, /):
+        return type(self)(self.data)
