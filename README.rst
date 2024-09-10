@@ -31,7 +31,7 @@ To understand the class BaseList here the beginning of its code:
 The following functions are defined the same way:
 __contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __hash__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __reduce__, __reduce_ex__, __repr__, __reversed__, __rmul__, __setitem__, __str__, append, clear, copy, count, extend, index, insert, pop, remove, reverse, sort
 
-The only function preset in list and absent in BaseList is __class_getitem__
+The only function present in list and absent in BaseList is __class_getitem__
 
 We can use BaseList as parent for a list-like class. It is recommended to implement is the subclass:
 - a property named data with getter and setter wrapping a private variable (for example named _data)
