@@ -19,13 +19,6 @@ class DataList:
         self.data = data
         return ans
 
-    @functools.wraps(list.__delattr__)
-    def __delattr__(self, *args, **kwargs):
-        data = self.data
-        ans = data.__delattr__(*args, **kwargs)
-        self.data = data
-        return ans
-
     @functools.wraps(list.__delitem__)
     def __delitem__(self, *args, **kwargs):
         data = self.data
