@@ -5,7 +5,7 @@ datahold
 Overview
 --------
 
-Wrap common datastructures for inheritance with modification.
+Wrap common mutable datastructures for inheritance with modification.
 
 Content
 -------
@@ -59,7 +59,7 @@ This class inherits from `BaseList` and implements some common sense overwrites 
 BaseDict
 ~~~~~~~~
 
-Just like BaseList but for dict...
+Just like `BaseList` but for dict...
 
 Installation
 ------------
