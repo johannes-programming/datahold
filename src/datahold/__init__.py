@@ -316,6 +316,8 @@ class OkayList(BaseList):
 
 class BaseDict:
 
+    data: dict
+
     @functools.wraps(dict.__contains__)
     def __contains__(self, *args, **kwargs):
         data = self.data
