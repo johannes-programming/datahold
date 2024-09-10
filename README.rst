@@ -42,6 +42,7 @@ OkayList
 ~~~~~~~~
 
 This class inherits from BaseList and implements some common sense overwrites for further inheritance. For example:
+
 * the comparison operations are overwritten:
 * __eq__ returns True iff types are equal and data is equal
 * __ne__ negates __eq__
