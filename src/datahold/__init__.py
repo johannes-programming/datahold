@@ -261,8 +261,9 @@ class OkayList(BaseList):
 
     @functools.wraps(list.__gt__)
     def __gt__(self, other, /):
-        other = type(self)(other)
-        return other.__lt__(self)
+        if self.__eq__(other):
+            return False
+        return self.__ge__(other)
 
     @functools.wraps(list.__hash__)
     def __hash__(self):
@@ -278,8 +279,7 @@ class OkayList(BaseList):
 
     @functools.wraps(list.__le__)
     def __le__(self, other):
-        other = type(self)(other)
-        return self.data <= other.data
+        return self.data.__le__(type(self)(other).data)
 
     @functools.wraps(list.__lt__)
     def __lt__(self, other, /):
@@ -301,7 +301,7 @@ class OkayList(BaseList):
 
     @functools.wraps(list.__reversed__)
     def __reversed__(self):
-        ans = self.copy()
+        ans = type(self)(self.data)
         ans.reverse()
         return ans
 
