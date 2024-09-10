@@ -29,7 +29,7 @@ To understand the class `BaseList` here the beginning of its code:
             return ans
 
 The following functions are defined the same way:
-`__contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __hash__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __reduce__, __reduce_ex__, __repr__, __reversed__, __rmul__, __setitem__, __str__, append, clear, copy, count, extend, index, insert, pop, remove, reverse, sort`
+`__contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __hash__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __setitem__, __str__, append, clear, copy, count, extend, index, insert, pop, remove, reverse, sort`
 
 The only function present in `list` and absent in `BaseList` is `__class_getitem__`
 
@@ -47,8 +47,8 @@ This class inherits from `BaseList` and implements some common sense overwrites 
 * `__eq__` returns `True` iff types are equal and data is equal
 * `__ne__` negates `__eq__`
 * `__ge__` returns `type(self)(other).__le__(self)`
-* `__gt__` returns `True` iff `__eq__` returns False and `__ge__` returns `True`
-* `__lt__` returns `True` iff `__eq__` returns False and __le__ returns `True`
+* `__gt__` returns `True` iff `__eq__` returns `False` and `__ge__` returns `True`
+* `__lt__` returns `True` iff `__eq__` returns `False` and `__le__` returns `True`
 * `__le__` returns `self.data.__le__(type(self)(other).data)`
 * modify `__eq__` or `__le__` as needed to change the behaviour of the other comparison methods
 * `__hash__` raises now a more fitting exception
