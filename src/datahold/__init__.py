@@ -407,20 +407,6 @@ class BaseDict:
         self.data = data
         return ans
 
-    @functools.wraps(dict.__ne__)
-    def __ne__(self, *args, **kwargs):
-        data = self.data
-        ans = data.__ne__(*args, **kwargs)
-        self.data = data
-        return ans
-
-    @functools.wraps(dict.__new__)
-    def __new__(self, *args, **kwargs):
-        data = self.data
-        ans = data.__new__(*args, **kwargs)
-        self.data = data
-        return ans
-
     @functools.wraps(dict.__or__)
     def __or__(self, *args, **kwargs):
         data = self.data
