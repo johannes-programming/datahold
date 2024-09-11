@@ -769,6 +769,10 @@ class OkayDict(BaseDict):
     def __ne__(self, other, /):
         return not self.__eq__(other)
 
+    @functools.wraps(dict.__repr__)
+    def __repr__(self) -> str:
+        return "%s(%r)" % (type(self).__name__, self.data)
+
     @functools.wraps(dict.__reversed__)
     def __reversed__(self):
         ans = type(self)(self.data)
@@ -835,7 +839,7 @@ class OkayList(BaseList):
 
     @functools.wraps(list.__repr__)
     def __repr__(self) -> str:
-        return "%s(%s)" % (type(self).__name__, self)
+        return "%s(%r)" % (type(self).__name__, self.data)
 
     @functools.wraps(list.__reversed__)
     def __reversed__(self):
@@ -854,3 +858,45 @@ class OkayList(BaseList):
     @functools.wraps(list.reverse)
     def reverse(self, /):
         self.data = self.data.__reversed__()
+
+
+class OkaySet(BaseSet):
+
+    @functools.wraps(set.__eq__)
+    def __eq__(self, other, /):
+        if type(self) != type(other):
+            return False
+        return self.data == other.data
+
+    @functools.wraps(set.__ge__)
+    def __ge__(self, other, /):
+        other = type(self)(other)
+        return other.__le__(self)
+
+    @functools.wraps(set.__gt__)
+    def __gt__(self, other, /):
+        if self.__eq__(other):
+            return False
+        return self.__ge__(other)
+
+    @functools.wraps(set.__hash__)
+    def __hash__(self):
+        raise TypeError("unhashable type: %r" % type(self).__name__)
+
+    @functools.wraps(set.__le__)
+    def __le__(self, other):
+        return self.data.__le__(type(self)(other).data)
+
+    @functools.wraps(set.__lt__)
+    def __lt__(self, other, /):
+        if self.__eq__(other):
+            return False
+        return self.__le__(other)
+
+    @functools.wraps(set.__ne__)
+    def __ne__(self, other, /):
+        return not self.__eq__(other)
+
+    @functools.wraps(set.__repr__)
+    def __repr__(self) -> str:
+        return "%s(%r)" % (type(self).__name__, self.data)
