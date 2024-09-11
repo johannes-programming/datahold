@@ -34,8 +34,10 @@ The following methods are defined this way:
 The only function present in ``list`` and absent in ``BaseList`` is ``__class_getitem__``
 
 We can use ``BaseList`` as parent for a list-like class. It is recommended to implement is the subclass:
-- a property named ``data`` with getter and setter wrapping a private variable (for example named ``_data``)
-- the ``__init__`` magic method
+
+* a property named ``data`` with getter and setter wrapping a private variable (for example named ``_data``)
+* the ``__init__`` magic method
+
 This allows the creatation of a list-like class with modified behaviour with only minimal effort. To enhance perpormance we can overwrite some of the methods.
 
 OkayList
@@ -93,7 +95,7 @@ Links
 Credits
 -------
 
-- Author: Johannes
-- Email: johannes-programming@mailfence.com
+* Author: Johannes
+* Email: johannes-programming@mailfence.com
 
 Thank you for using ``datahold``!
