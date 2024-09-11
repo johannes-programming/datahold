@@ -56,7 +56,6 @@ This class inherits from ``BaseList`` and implements some common sense overwrite
 * ``__hash__`` raises now a more fitting exception
 * ``__iadd__`` uses now extend
 * ``__init__`` allows now to set data immediately
-* see the code for all overwrites
 
 BaseDict
 ~~~~~~~~
@@ -70,7 +69,7 @@ OkayDict
 
 This class inherits from ``BaseDict`` and implements some common sense overwrites for further inheritance. For example:
 
-* the comparison operations are overwritten like in ``OkayList``(see there)
+* the comparison operations are overwritten like in ``OkayList`` (see there)
 
 BaseSet
 ~~~~~~~
@@ -84,7 +83,7 @@ OkaySet
 
 This class inherits from ``BaseSet`` and implements some common sense overwrites for further inheritance. For example:
 
-* the comparison operations are overwritten like in ``OkayList``(see there)
+* the comparison operations are overwritten like in ``OkayList`` (see there)
 
 Installation
 ------------
@@ -103,6 +102,7 @@ This project is licensed under the MIT License.
 Links
 -----
 
+* `Documentation <https://pypi.org/project/datahold/>`_
 * `Download <https://pypi.org/project/datahold/#files>`_
 * `Source <https://github.com/johannes-programming/datahold>`_
 
