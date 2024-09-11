@@ -840,7 +840,7 @@ class OkayList(BaseList):
     @functools.wraps(list.__reversed__)
     def __reversed__(self):
         ans = type(self)(self.data)
-        ans.reverse()
+        ans.data = ans.data.__reversed__()
         return ans
 
     @functools.wraps(list.__rmul__)
@@ -850,3 +850,7 @@ class OkayList(BaseList):
     @functools.wraps(list.copy)
     def copy(self, /):
         return type(self)(self.data)
+
+    @functools.wraps(list.reverse)
+    def reverse(self, /):
+        self.data = self.data.__reversed__()
