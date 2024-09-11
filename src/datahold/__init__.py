@@ -443,6 +443,8 @@ class BaseList:
 
 class BaseSet:
 
+    data: set
+
     @functools.wraps(set.__and__)
     def __and__(self, *args, **kwargs):
         data = self.data
@@ -729,6 +731,58 @@ class BaseSet:
         ans = data.update(*args, **kwargs)
         self.data = data
         return ans
+
+
+class OkayDict(BaseDict):
+    @functools.wraps(dict.__eq__)
+    def __eq__(self, other, /):
+        if type(self) != type(other):
+            return False
+        return self.data == other.data
+
+    @functools.wraps(dict.__ge__)
+    def __ge__(self, other, /):
+        other = type(self)(other)
+        return other.__le__(self)
+
+    @functools.wraps(dict.__gt__)
+    def __gt__(self, other, /):
+        if self.__eq__(other):
+            return False
+        return self.__ge__(other)
+
+    @functools.wraps(dict.__hash__)
+    def __hash__(self):
+        raise TypeError("unhashable type: %r" % type(self).__name__)
+
+    @functools.wraps(dict.__init__)
+    def __init__(self, *args, **kwargs) -> None:
+        self.data = dict(*args, **kwargs)
+
+    @functools.wraps(dict.__lt__)
+    def __lt__(self, other, /):
+        if self.__eq__(other):
+            return False
+        return self.__le__(other)
+
+    @functools.wraps(dict.__ne__)
+    def __ne__(self, other, /):
+        return not self.__eq__(other)
+
+    @functools.wraps(dict.__reversed__)
+    def __reversed__(self):
+        ans = type(self)(self.data)
+        ans.data = ans.data.__reversed__()
+        return ans
+
+    @functools.wraps(dict.copy)
+    def copy(self, /):
+        return type(self)(self.data)
+
+    @classmethod
+    @functools.wraps(dict.fromkeys)
+    def fromkeys(cls, *args, **kwargs):
+        return cls(dict.fromkeys(*args, **kwargs))
 
 
 class OkayList(BaseList):
