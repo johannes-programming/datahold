@@ -759,6 +759,10 @@ class OkayDict(BaseDict):
     def __init__(self, *args, **kwargs) -> None:
         self.data = dict(*args, **kwargs)
 
+    @functools.wraps(dict.__le__)
+    def __le__(self, other):
+        return self.data.__le__(type(self)(other).data)
+
     @functools.wraps(dict.__lt__)
     def __lt__(self, other, /):
         if self.__eq__(other):
