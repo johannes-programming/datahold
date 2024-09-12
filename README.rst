@@ -29,11 +29,11 @@ To understand the class ``BaseList`` here the beginning of its code:
             return ans
 
 The following methods are defined this way:
-``__add__``, ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__iadd__``, ``__imul__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__mul__``, ``__repr__``, ``__reversed__``, ``__rmul__``, ``__setitem__``, ``__str__``, ``append``, ``clear``, ``copy``, ``count``, ``extend``, ``index``, ``insert``, ``pop``, ``remove``, ``reverse``, ``sort``
+``__add__``, ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__iadd__``, ``__imul__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__mul__``, ``__repr__``, ``__reversed__``, ``__rmul__``, ``__setitem__``, ``__str__``, ``append``, ``clear``, ``copy``, ``count``, ``extend``, ``index``, ``insert``, ``pop``, ``remove``, ``reverse``, ``sort``.
 
 The only function present in ``list`` and absent in ``BaseList`` is ``__class_getitem__``
 
-We can use ``BaseList`` as parent for a list-like class. It is recommended to implement is the subclass:
+We can use ``BaseList`` as parent for a list-like class. It is recommended to implement in the subclass:
 
 * a property named ``data`` with getter and setter wrapping a private variable (for example named ``_data``)
 * the ``__init__`` magic method
@@ -61,7 +61,7 @@ BaseDict
 ~~~~~~~~
 
 Just like ``BaseList`` but for dict...
-The following methods are implemented: ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__ior__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``, ``__setitem__``, ``__str__``, ``clear``, ``copy``, ``get``, ``items``, ``keys``, ``pop``, ``popitem``, ``setdefault``, ``update``, ``values``
+The following methods are implemented: ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__ior__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``, ``__setitem__``, ``__str__``, ``clear``, ``copy``, ``get``, ``items``, ``keys``, ``pop``, ``popitem``, ``setdefault``, ``update``, ``values``.
 The classmethods ``__class_getitem__`` and ``fromkeys`` are not implemented.
 
 OkayDict
@@ -75,7 +75,7 @@ BaseSet
 ~~~~~~~
 
 Just like ``BaseSet`` but for set...
-The following methods are implemented: ``__and__``, ``__contains__``, ``__eq__``, ``__format__``, ``__ge__``, ``__gt__``, ``__hash__``, ``__iand__``, ``__ior__``, ``__isub__``, ``__iter__``, ``__ixor__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__str__``, ``__sub__``, ``__xor__``, ``add``, ``clear``, ``copy``, ``difference``, ``difference_update``, ``discard``, ``intersection``, ``intersection_update``, ``isdisjoint``, ``issubset``, ``issuperset``, ``pop``, ``remove``, ``symmetric_difference``, ``symmetric_difference_update``, ``union``, ``update``
+The following methods are implemented: ``__and__``, ``__contains__``, ``__eq__``, ``__format__``, ``__ge__``, ``__gt__``, ``__hash__``, ``__iand__``, ``__ior__``, ``__isub__``, ``__iter__``, ``__ixor__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__str__``, ``__sub__``, ``__xor__``, ``add``, ``clear``, ``copy``, ``difference``, ``difference_update``, ``discard``, ``intersection``, ``intersection_update``, ``isdisjoint``, ``issubset``, ``issuperset``, ``pop``, ``remove``, ``symmetric_difference``, ``symmetric_difference_update``, ``union``, ``update``.
 The classmethod ``__class_getitem__`` is not implemented.
 
 OkaySet
