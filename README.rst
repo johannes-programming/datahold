@@ -10,14 +10,25 @@ Wrap common mutable datastructures for inheritance with modification.
 Content
 -------
 
-BaseList
-~~~~~~~~
-
-To understand the class ``BaseList`` here the beginning of its code:
+HoldABC
+~~~~~~~
 
 .. code-block:: python
 
-    class BaseList:
+    class HoldABC(abc.ABC):
+        @property
+        @abc.abstractmethod
+        def data(self):
+            ...
+
+HoldList
+~~~~~~~~
+
+To understand the class ``HoldList`` here the beginning of its code:
+
+.. code-block:: python
+
+    class HoldList(HoldABC):
 
         data: list
 
@@ -31,19 +42,39 @@ To understand the class ``BaseList`` here the beginning of its code:
 The following methods are defined this way:
 ``__add__``, ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__iadd__``, ``__imul__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__mul__``, ``__repr__``, ``__reversed__``, ``__rmul__``, ``__setitem__``, ``__str__``, ``append``, ``clear``, ``copy``, ``count``, ``extend``, ``index``, ``insert``, ``pop``, ``remove``, ``reverse``, ``sort``.
 
-The only function present in ``list`` and absent in ``BaseList`` is ``__class_getitem__``
+The only function present in ``list`` and absent in ``HoldList`` is ``__class_getitem__``
 
-We can use ``BaseList`` as parent for a list-like class. It is recommended to implement in the subclass:
+We can use ``HoldList`` as parent for a list-like class. It is necessary to implement in the subclass:
 
 * a property named ``data`` with getter and setter wrapping a private variable (for example named ``_data``)
 * the ``__init__`` magic method
 
 This allows the creatation of a list-like class with modified behaviour with only minimal effort. To enhance perpormance we can overwrite some of the methods.
 
+HoldDict
+~~~~~~~~
+
+Just like ``HoldList`` but for dict...
+The following methods are implemented: ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__ior__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``, ``__setitem__``, ``__str__``, ``clear``, ``copy``, ``get``, ``items``, ``keys``, ``pop``, ``popitem``, ``setdefault``, ``update``, ``values``.
+The classmethods ``__class_getitem__`` and ``fromkeys`` are not implemented.
+
+
+HoldSet
+~~~~~~~
+
+Just like ``HoldSet`` but for set...
+The following methods are implemented: ``__and__``, ``__contains__``, ``__eq__``, ``__format__``, ``__ge__``, ``__gt__``, ``__hash__``, ``__iand__``, ``__ior__``, ``__isub__``, ``__iter__``, ``__ixor__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__str__``, ``__sub__``, ``__xor__``, ``add``, ``clear``, ``copy``, ``difference``, ``difference_update``, ``discard``, ``intersection``, ``intersection_update``, ``isdisjoint``, ``issubset``, ``issuperset``, ``pop``, ``remove``, ``symmetric_difference``, ``symmetric_difference_update``, ``union``, ``update``.
+The classmethod ``__class_getitem__`` is not implemented.
+
+OkayABC
+~~~~~~~
+
+A common abc for ``OkayList``, ``OkayDict``, and ``OkaySet``.
+
 OkayList
 ~~~~~~~~
 
-This class inherits from ``BaseList``. It implements a ``data`` property that binds a variable ``_data``.
+This class inherits from ``HoldList`` and ``OkayABC``. It implements a ``data`` property that binds a variable ``_data``.
 
 
 .. code-block:: python
@@ -77,29 +108,16 @@ Based on that it implements common sense methods. For example:
   + ``__le__`` returns ``self._data <= type(self)(other)._data``
   + modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods
 
-BaseDict
-~~~~~~~~
-
-Just like ``BaseList`` but for dict...
-The following methods are implemented: ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__ior__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``, ``__setitem__``, ``__str__``, ``clear``, ``copy``, ``get``, ``items``, ``keys``, ``pop``, ``popitem``, ``setdefault``, ``update``, ``values``.
-The classmethods ``__class_getitem__`` and ``fromkeys`` are not implemented.
-
 OkayDict
 ~~~~~~~~
 
-A subclass of ``BaseDict`` with common sense implementations for further inheritance just like ``OkayList`` for ``BaseList``.
-
-BaseSet
-~~~~~~~
-
-Just like ``BaseSet`` but for set...
-The following methods are implemented: ``__and__``, ``__contains__``, ``__eq__``, ``__format__``, ``__ge__``, ``__gt__``, ``__hash__``, ``__iand__``, ``__ior__``, ``__isub__``, ``__iter__``, ``__ixor__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__str__``, ``__sub__``, ``__xor__``, ``add``, ``clear``, ``copy``, ``difference``, ``difference_update``, ``discard``, ``intersection``, ``intersection_update``, ``isdisjoint``, ``issubset``, ``issuperset``, ``pop``, ``remove``, ``symmetric_difference``, ``symmetric_difference_update``, ``union``, ``update``.
-The classmethod ``__class_getitem__`` is not implemented.
+A subclass of ``HoldDict`` with common sense implementations for further inheritance just like ``OkayList`` for ``HoldList``.
 
 OkaySet
 ~~~~~~~
 
-A subclass of ``BaseSet`` with common sense implementations for further inheritance just like ``OkayList`` for ``BaseList``.
+A subclass of ``HoldSet`` with common sense implementations for further inheritance just like ``OkayList`` for ``HoldList``.
+
 
 Installation
 ------------
@@ -125,7 +143,7 @@ Links
 Credits
 -------
 
-* Author: Johannes
-* Email: johannes-programming@mailfence.com
+* Author: `Johannes <http://johannes-programming.website>`_
+* Email: `johannes-programming@mailfence.com <mailto:johannes-programming@mailfence.com>`_
 
 Thank you for using ``datahold``!

@@ -1,9 +1,28 @@
+import abc
 import functools
+from typing import *
 
-__all__ = ["DataList"]
+import scaevola
+
+__all__ = [
+    "HoldABC",
+    "HoldDict",
+    "HoldList",
+    "HoldSet",
+    "OkayABC",
+    "OkayDict",
+    "OkayList",
+    "OkaySet",
+]
 
 
-class BaseDict:
+class HoldABC(abc.ABC):
+    @property
+    @abc.abstractmethod
+    def data(self): ...
+
+
+class HoldDict(HoldABC):
 
     data: dict
 
@@ -211,7 +230,7 @@ class BaseDict:
         return ans
 
 
-class BaseList:
+class HoldList(HoldABC):
 
     data: list
 
@@ -440,7 +459,7 @@ class BaseList:
         return ans
 
 
-class BaseSet:
+class HoldSet(HoldABC):
 
     data: set
 
@@ -732,93 +751,76 @@ class BaseSet:
         return ans
 
 
-class OkayDict(BaseDict):
+class OkayABC(scaevola.Scaevola, abc.ABC):
 
     def __bool__(self, /):
         return bool(len(self))
 
-    @functools.wraps(dict.__contains__)
     def __contains__(self, value, /):
         return value in self._data
 
-    @functools.wraps(dict.__eq__)
     def __eq__(self, other, /):
         if type(self) != type(other):
             return False
         return self.data == other.data
 
-    @functools.wraps(dict.__format__)
-    def __format__(self, format_spec: str = "", /):
+    def __format__(self, format_spec="", /):
         return format(str(self), format_spec)
 
-    @functools.wraps(dict.__ge__)
-    def __ge__(self, other, /):
-        other = type(self)(other)
-        return other <= self
-
-    @functools.wraps(dict.__getitem__)
     def __getitem__(self, key, /):
         return self._data[key]
 
-    @functools.wraps(dict.__gt__)
     def __gt__(self, other, /):
         return not (self == other) and (self >= other)
 
-    @functools.wraps(dict.__hash__)
     def __hash__(self, /):
         raise TypeError("unhashable type: %r" % type(self).__name__)
+
+    @abc.abstractmethod
+    def __init__(self, *args, **kwargs) -> None: ...
+
+    def __iter__(self, /):
+        return iter(self._data)
+
+    def __len__(self, /):
+        return len(self._data)
+
+    def __lt__(self, other, /):
+        return not (self == other) and (self <= other)
+
+    def __ne__(self, other, /):
+        return not (self == other)
+
+    def __repr__(self, /) -> str:
+        return "%s(%r)" % (type(self).__name__, self._data)
+
+    def __reversed__(self, /):
+        return type(self)(reversed(self.data))
+
+    def __str__(self, /):
+        return repr(self)
+
+    def copy(self, /) -> Self:
+        """New holder for equivalent data."""
+        return type(self)(self.data)
+
+
+class OkayDict(OkayABC, HoldDict):
 
     @functools.wraps(dict.__init__)
     def __init__(self, data, /, **kwargs) -> None:
         self.data = dict(data, **kwargs)
 
-    @functools.wraps(dict.__iter__)
-    def __iter__(self, /):
-        return iter(self._data)
-
     @functools.wraps(dict.__le__)
     def __le__(self, other, /):
         return self._data <= dict(other)
-
-    @functools.wraps(dict.__len__)
-    def __len__(self, /):
-        return len(self._data)
-
-    @functools.wraps(dict.__lt__)
-    def __lt__(self, other, /):
-        return not (self == other) and (self <= other)
-
-    @functools.wraps(dict.__ne__)
-    def __ne__(self, other, /):
-        return not (self == other)
 
     @functools.wraps(dict.__or__)
     def __or__(self, other, /):
         return type(self)(other)(self._data | dict(other))
 
-    @functools.wraps(dict.__repr__)
-    def __repr__(self, /) -> str:
-        return "%s(%s)" % (type(self).__name__, self._data)
-
-    @functools.wraps(dict.__reversed__)
-    def __reversed__(self, /):
-        return type(self)(self.data.__reversed__())
-
-    @functools.wraps(dict.__ror__)
-    def __ror__(self, other, /):
-        other = type(self)(other)
-        return other | self
-
-    @functools.wraps(dict.__str__)
-    def __str__(self, /):
-        return repr(self)
-
-    @functools.wraps(dict.copy)
-    def copy(self, /):
-        return type(self)(self.data)
-
     @property
-    def data(self, /):
+    def data(self, /) -> dict:
         return dict(self._data)
 
     @data.setter
@@ -851,106 +853,34 @@ class OkayDict(BaseDict):
         return self._data.values()
 
 
-class OkayList(BaseList):
-
-    def __bool__(self, /):
-        return bool(len(self))
+class OkayList(OkayABC, HoldList):
 
     @functools.wraps(list.__add__)
     def __add__(self, other, /):
         return type(self)(self._data + list(other))
 
-    @functools.wraps(list.__contains__)
-    def __contains__(self, value, /):
-        return value in self._data
-
-    @functools.wraps(list.__eq__)
-    def __eq__(self, other, /):
-        if type(self) != type(other):
-            return False
-        return self.data == other.data
-
-    @functools.wraps(list.__format__)
-    def __format__(self, format_spec: str = "", /):
-        return format(str(self), format_spec)
-
-    @functools.wraps(list.__ge__)
-    def __ge__(self, other, /):
-        other = type(self)(other)
-        return other <= self
-
-    @functools.wraps(list.__getitem__)
-    def __getitem__(self, key, /):
-        return self._data[key]
-
-    @functools.wraps(list.__gt__)
-    def __gt__(self, other, /):
-        return not (self == other) and (self >= other)
-
-    @functools.wraps(list.__hash__)
-    def __hash__(self, /):
-        raise TypeError("unhashable type: %r" % type(self).__name__)
-
     @functools.wraps(list.__init__)
     def __init__(self, data=[]) -> None:
         self.data = data
-
-    @functools.wraps(list.__iter__)
-    def __iter__(self, /):
-        return iter(self._data)
 
     @functools.wraps(list.__le__)
     def __le__(self, other, /):
         return self._data <= list(other)
 
-    @functools.wraps(list.__len__)
-    def __len__(self, /):
-        return len(self._data)
-
-    @functools.wraps(list.__lt__)
-    def __lt__(self, other, /):
-        return not (self == other) and (self <= other)
-
     @functools.wraps(list.__mul__)
     def __mul__(self, value, /):
         return type(self)(self.data * value)
 
-    @functools.wraps(list.__ne__)
-    def __ne__(self, other, /):
-        return not (self == other)
-
-    @functools.wraps(list.__repr__)
-    def __repr__(self, /) -> str:
-        return "%s(%s)" % (type(self).__name__, self._data)
-
-    @functools.wraps(list.__reversed__)
-    def __reversed__(self, /):
-        return type(self)(self.data.__reversed__())
-
     @functools.wraps(list.__rmul__)
     def __rmul__(self, value, /):
         return self * value
-
-    @functools.wraps(list.__setitem__)
-    def __setitem__(self, key, value):
-        data = self.data
-        data[key] = value
-        self.data = data
-
-    @functools.wraps(list.__str__)
-    def __str__(self, /):
-        return repr(self)
-
-    @functools.wraps(list.copy)
-    def copy(self, /):
-        return type(self)(self.data)
 
     @functools.wraps(list.count)
     def count(self, value, /):
         return self._data.count(value)
 
     @property
-    def data(self, /):
+    def data(self, /) -> list:
         return list(self._data)
 
     @data.setter
@@ -966,97 +896,23 @@ class OkayList(BaseList):
         return self._data.index(*args)
 
 
-class OkaySet(BaseSet):
-
-    def __bool__(self, /):
-        return bool(len(self))
+class OkaySet(OkayABC, HoldSet):
 
     @functools.wraps(set.__and__)
     def __and__(self, other, /):
         return type(self)(self._data & set(other))
 
-    @functools.wraps(set.__contains__)
-    def __contains__(self, value, /):
-        return value in self._data
-
-    @functools.wraps(set.__eq__)
-    def __eq__(self, other, /):
-        if type(self) != type(other):
-            return False
-        return self.data == other.data
-
-    @functools.wraps(set.__format__)
-    def __format__(self, format_spec="", /):
-        return format(str(self), format_spec)
-
-    @functools.wraps(set.__ge__)
-    def __ge__(self, other, /):
-        other = type(self)(other)
-        return other <= self
-
-    @functools.wraps(set.__gt__)
-    def __gt__(self, other, /):
-        return not (self == other) and (self >= other)
-
-    @functools.wraps(set.__hash__)
-    def __hash__(self, /):
-        raise TypeError("unhashable type: %r" % type(self).__name__)
-
     @functools.wraps(set.__init__)
     def __init__(self, data=set()) -> None:
         self.data = data
-
-    @functools.wraps(set.__iter__)
-    def __iter__(self, /):
-        return iter(self._data)
 
     @functools.wraps(set.__le__)
     def __le__(self, other, /):
         return self._data <= set(other)
 
-    @functools.wraps(set.__len__)
-    def __len__(self, /):
-        return len(self._data)
-
-    @functools.wraps(set.__lt__)
-    def __lt__(self, other, /):
-        return not (self == other) and (self <= other)
-
-    @functools.wraps(set.__ne__)
-    def __ne__(self, other, /):
-        return not (self == other)
-
     @functools.wraps(set.__or__)
     def __or__(self, other, /):
         return type(self)(self._data | set(other))
-
-    @functools.wraps(set.__rand__)
-    def __rand__(self, other, /):
-        other = type(self)(other)
-        return other & self
-
-    @functools.wraps(set.__repr__)
-    def __repr__(self, /) -> str:
-        return "%s(%s)" % (type(self).__name__, self._data)
-
-    @functools.wraps(set.__rsub__)
-    def __rsub__(self, other, /):
-        other = type(self)(other)
-        return other - self
-
-    @functools.wraps(set.__ror__)
-    def __ror__(self, other, /):
-        other = type(self)(other)
-        return other | self
-
-    @functools.wraps(set.__rxor__)
-    def __rxor__(self, other, /):
-        other = type(self)(other)
-        return other ^ self
-
-    @functools.wraps(set.__str__)
-    def __str__(self, /):
-        return repr(self)
 
     @functools.wraps(set.__sub__)
     def __sub__(self, other, /):
@@ -1066,12 +922,8 @@ class OkaySet(BaseSet):
     def __xor__(self, other, /):
         return type(self)(self._data ^ set(other))
 
-    @functools.wraps(set.copy)
-    def copy(self, /):
-        return type(self)(self.data)
-
     @property
-    def data(self, /):
+    def data(self, /) -> set:
         return set(self._data)
 
     @data.setter
