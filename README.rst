@@ -74,7 +74,8 @@ Based on that it implements common sense methods. For example:
   + ``__ge__`` returns ``type(self)(other) <= self``
   + ``__gt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__ge__`` returns ``True``
   + ``__lt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__le__`` returns ``True``
-  + ``__le__`` returns ``self._data <= type(self)(other)._data`` (modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods)
+  + ``__le__`` returns ``self._data <= type(self)(other)._data``
+  + modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods
 
 BaseDict
 ~~~~~~~~
