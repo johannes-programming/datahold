@@ -734,7 +734,6 @@ class BaseSet:
 
 class OkayDict(BaseDict):
 
-    @functools.wraps(dict.__bool__)
     def __bool__(self, /):
         return bool(len(self))
 
@@ -854,7 +853,6 @@ class OkayDict(BaseDict):
 
 class OkayList(BaseList):
 
-    @functools.wraps(list.__bool__)
     def __bool__(self, /):
         return bool(len(self))
 
@@ -970,7 +968,6 @@ class OkayList(BaseList):
 
 class OkaySet(BaseSet):
 
-    @functools.wraps(set.__bool__)
     def __bool__(self, /):
         return bool(len(self))
 
