@@ -43,19 +43,38 @@ This allows the creatation of a list-like class with modified behaviour with onl
 OkayList
 ~~~~~~~~
 
-This class inherits from ``BaseList`` and implements some common sense overwrites for further inheritance. For example:
+This class inherits from ``BaseList``. It implements a ``data`` property that binds a variable ``_data``.
 
-* the comparison operations are overwritten:
-* ``__eq__`` returns ``True`` iff types are equal and data is equal
-* ``__ne__`` negates ``__eq__``
-* ``__ge__`` returns ``type(self)(other).__le__(self)``
-* ``__gt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__ge__`` returns ``True``
-* ``__lt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__le__`` returns ``True``
-* ``__le__`` returns ``self.data.__le__(type(self)(other).data)``
-* modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods
+
+.. code-block:: python
+
+    @property
+    def data(self, /):
+        return list(self._data)
+
+    @data.setter
+    def data(self, values, /):
+        self._data = list(values)
+
+    @data.deleter
+    def data(self, /):
+        self._data = list()
+
+Based on that it implements common sense methods. For example:
+
+* all methods that cannot actually change the underlying object are now bound to ``_data`` instead of data
+* all methods that returned a list before now return ``OkayList`` (type adapts to further inheritance)
+* ``__bool__`` is implemented as bool(len(self)) because ``list.__bool__`` does not exist
 * ``__hash__`` raises now a more fitting exception
-* ``__iadd__`` uses now extend
 * ``__init__`` allows now to set data immediately
+* the comparison operations are overwritten:
+
+  + ``__eq__`` returns ``True`` iff types are equal and ``_data`` is equal
+  + ``__ne__`` negates ``__eq__``
+  + ``__ge__`` returns ``type(self)(other) <= self``
+  + ``__gt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__ge__`` returns ``True``
+  + ``__lt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__le__`` returns ``True``
+  + ``__le__`` returns ``self._data <= type(self)(other)._data`` (modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods)
 
 BaseDict
 ~~~~~~~~
@@ -67,9 +86,7 @@ The classmethods ``__class_getitem__`` and ``fromkeys`` are not implemented.
 OkayDict
 ~~~~~~~~
 
-This class inherits from ``BaseDict`` and implements some common sense overwrites for further inheritance. For example:
-
-* the comparison operations are overwritten like in ``OkayList`` (see there)
+A subclass of ``BaseDict`` with common sense implementations for further inheritance just like ``OkayList`` for ``BaseList``.
 
 BaseSet
 ~~~~~~~
@@ -81,9 +98,7 @@ The classmethod ``__class_getitem__`` is not implemented.
 OkaySet
 ~~~~~~~
 
-This class inherits from ``BaseSet`` and implements some common sense overwrites for further inheritance. For example:
-
-* the comparison operations are overwritten like in ``OkayList`` (see there)
+A subclass of ``BaseSet`` with common sense implementations for further inheritance just like ``OkayList`` for ``BaseList``.
 
 Installation
 ------------
