@@ -125,7 +125,7 @@ Links
 Credits
 -------
 
-* Author: Johannes
-* Email: johannes-programming@mailfence.com
+* Author: `Johannes <http://johannes-programming.website>`_
+* Email: `johannes-programming@mailfence.com <mailto:johannes-programming@mailfence.com>`_
 
 Thank you for using ``datahold``!
