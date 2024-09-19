@@ -1,5 +1,6 @@
 import abc
 import functools
+from collections.abc import ItemsView, KeysView, ValuesView
 from typing import *
 
 import scaevola
@@ -17,6 +18,9 @@ __all__ = [
 
 
 class HoldABC(abc.ABC):
+    @abc.abstractmethod
+    def __init__(self, *args, **kwargs) -> None: ...
+
     @property
     @abc.abstractmethod
     def data(self): ...
@@ -751,53 +755,66 @@ class HoldSet(HoldABC):
         return ans
 
 
-class OkayABC(scaevola.Scaevola, abc.ABC):
+class OkayABC(scaevola.Scaevola, HoldABC):
 
-    def __bool__(self, /):
-        return bool(len(self))
+    def __bool__(self, /) -> bool:
+        """Return bool(self)."""
+        return bool(self._data)
 
-    def __contains__(self, value, /):
+    def __contains__(self, value, /) -> bool:
+        """Return value in self."""
         return value in self._data
 
-    def __eq__(self, other, /):
-        if type(self) != type(other):
-            return False
-        return self.data == other.data
+    def __eq__(self, other, /) -> bool:
+        """Return self==other."""
+        return self._data == type(self._data)(other)
 
-    def __format__(self, format_spec="", /):
+    def __format__(self, format_spec="", /) -> str:
+        """Return format(self, format_spec)."""
         return format(str(self), format_spec)
 
-    def __getitem__(self, key, /):
+    def __getitem__(self, key, /) -> Any:
+        """Return self[key]."""
         return self._data[key]
 
-    def __gt__(self, other, /):
+    def __gt__(self, other, /) -> bool:
+        """Return self>=other."""
         return not (self == other) and (self >= other)
 
-    def __hash__(self, /):
+    def __hash__(self, /) -> int:
+        """raise TypeError"""
         raise TypeError("unhashable type: %r" % type(self).__name__)
 
-    @abc.abstractmethod
-    def __init__(self, *args, **kwargs) -> None: ...
-
-    def __iter__(self, /):
+    def __iter__(self, /) -> Iterator:
+        """Return iter(self)."""
         return iter(self._data)
 
-    def __len__(self, /):
+    def __le__(self, other, /) -> bool:
+        """Return self<=other."""
+        return self._data <= type(self._data)(other)
+
+    def __len__(self, /) -> int:
+        """Return len(self)."""
         return len(self._data)
 
-    def __lt__(self, other, /):
+    def __lt__(self, other, /) -> bool:
+        """Return self<other."""
         return not (self == other) and (self <= other)
 
-    def __ne__(self, other, /):
+    def __ne__(self, other, /) -> bool:
+        """Return self!=other."""
         return not (self == other)
 
     def __repr__(self, /) -> str:
+        """Return repr(self)."""
         return "%s(%r)" % (type(self).__name__, self._data)
 
-    def __reversed__(self, /):
+    def __reversed__(self, /) -> Self:
+        """Return reversed(self)."""
         return type(self)(reversed(self.data))
 
-    def __str__(self, /):
+    def __str__(self, /) -> str:
+        """Return str(self)."""
         return repr(self)
 
     def copy(self, /) -> Self:
@@ -809,74 +826,67 @@ class OkayDict(OkayABC, HoldDict):
 
     @functools.wraps(dict.__init__)
     def __init__(self, data, /, **kwargs) -> None:
+        """Initialize self."""
         self.data = dict(data, **kwargs)
 
-    @functools.wraps(dict.__le__)
-    def __le__(self, other, /):
-        return self._data <= dict(other)
-
-    @functools.wraps(dict.__or__)
-    def __or__(self, other, /):
-        return type(self)(other)(self._data | dict(other))
+    def __or__(self, other, /) -> Self:
+        """Return self|other."""
+        return type(self)(self._data | dict(other))
 
     @property
     def data(self, /) -> dict:
         return dict(self._data)
 
     @data.setter
-    def data(self, values, /):
+    def data(self, values, /) -> None:
         self._data = dict(values)
 
     @data.deleter
-    def data(self, /):
+    def data(self, /) -> None:
         self._data = dict()
 
     @classmethod
-    @functools.wraps(dict.fromkeys)
-    def fromkeys(cls, *args):
-        return cls(dict.fromkeys(*args))
+    def fromkeys(cls, iterable, value=None, /) -> Self:
+        """Create a new instance with keys from iterable and values set to value."""
+        return cls(dict.fromkeys(iterable, value))
 
     @functools.wraps(dict.get)
-    def get(self, /, *args):
+    def get(self, /, *args) -> Any:
         return self._data.get(*args)
 
     @functools.wraps(dict.items)
-    def items(self, /):
+    def items(self, /) -> ItemsView:
         return self._data.items()
 
     @functools.wraps(dict.keys)
-    def keys(self, /):
+    def keys(self, /) -> KeysView:
         return self._data.keys()
 
     @functools.wraps(dict.values)
-    def values(self, /):
+    def values(self, /) -> ValuesView:
         return self._data.values()
 
 
 class OkayList(OkayABC, HoldList):
 
-    @functools.wraps(list.__add__)
-    def __add__(self, other, /):
+    def __add__(self, other, /) -> Self:
+        """Return self+other."""
         return type(self)(self._data + list(other))
 
-    @functools.wraps(list.__init__)
     def __init__(self, data=[]) -> None:
+        """Initialize self."""
         self.data = data
 
-    @functools.wraps(list.__le__)
-    def __le__(self, other, /):
-        return self._data <= list(other)
-
-    @functools.wraps(list.__mul__)
-    def __mul__(self, value, /):
+    def __mul__(self, value, /) -> Self:
+        """Return self*other."""
         return type(self)(self.data * value)
 
-    @functools.wraps(list.__rmul__)
-    def __rmul__(self, value, /):
+    def __rmul__(self, value, /) -> Self:
+        """Return other*self."""
         return self * value
 
     @functools.wraps(list.count)
-    def count(self, value, /):
+    def count(self, value, /) -> int:
         return self._data.count(value)
 
     @property
@@ -884,42 +894,38 @@ class OkayList(OkayABC, HoldList):
         return list(self._data)
 
     @data.setter
-    def data(self, values, /):
+    def data(self, values, /) -> None:
         self._data = list(values)
 
     @data.deleter
-    def data(self, /):
+    def data(self, /) -> None:
         self._data = list()
 
     @functools.wraps(list.index)
-    def index(self, /, *args):
+    def index(self, /, *args) -> int:
         return self._data.index(*args)
 
 
 class OkaySet(OkayABC, HoldSet):
 
-    @functools.wraps(set.__and__)
-    def __and__(self, other, /):
+    def __and__(self, other, /) -> Self:
+        """Return self&other."""
         return type(self)(self._data & set(other))
 
-    @functools.wraps(set.__init__)
     def __init__(self, data=set()) -> None:
+        """Initialize self."""
         self.data = data
 
-    @functools.wraps(set.__le__)
-    def __le__(self, other, /):
-        return self._data <= set(other)
-
-    @functools.wraps(set.__or__)
-    def __or__(self, other, /):
+    def __or__(self, other, /) -> Self:
+        """Return self|other."""
         return type(self)(self._data | set(other))
 
-    @functools.wraps(set.__sub__)
-    def __sub__(self, other, /):
+    def __sub__(self, other, /) -> Self:
+        """Return self-other."""
         return type(self)(self._data - set(other))
 
-    @functools.wraps(set.__xor__)
-    def __xor__(self, other, /):
+    def __xor__(self, other, /) -> Self:
+        """Return self^other."""
         return type(self)(self._data ^ set(other))
 
     @property
@@ -927,37 +933,37 @@ class OkaySet(OkayABC, HoldSet):
         return set(self._data)
 
     @data.setter
-    def data(self, values):
+    def data(self, values: Iterable) -> None:
         self._data = set(values)
 
     @data.deleter
-    def data(self, /):
+    def data(self, /) -> None:
         self._data = set()
 
     @functools.wraps(set.difference)
-    def difference(self, /, *args):
+    def difference(self, /, *args) -> Self:
         return type(self)(self._data.difference(*args))
 
     @functools.wraps(set.intersection)
-    def intersection(self, /, *args):
+    def intersection(self, /, *args) -> set:
         return type(self)(self._data.intersection(*args))
 
     @functools.wraps(set.isdisjoint)
-    def isdisjoint(self, other, /):
+    def isdisjoint(self, other, /) -> bool:
         return self._data.isdisjoint(other)
 
     @functools.wraps(set.issubset)
-    def issubset(self, other, /):
+    def issubset(self, other, /) -> bool:
         return self._data.issubset(other)
 
     @functools.wraps(set.issuperset)
-    def issuperset(self, other, /):
+    def issuperset(self, other, /) -> bool:
         return self._data.issuperset(other)
 
     @functools.wraps(set.symmetric_difference)
-    def symmetric_difference(self, other, /):
+    def symmetric_difference(self, other, /) -> Self:
         return type(self)(self._data.symmetric_difference(other))
 
     @functools.wraps(set.union)
-    def union(self, /, *args):
+    def union(self, /, *args) -> Self:
         return type(self)(self._data.union(*args))
