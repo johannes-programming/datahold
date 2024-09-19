@@ -16,10 +16,12 @@ HoldABC
 .. code-block:: python
 
     class HoldABC(abc.ABC):
+        @abc.abstractmethod
+        def __init__(self, *args, **kwargs) -> None: ...
+
         @property
         @abc.abstractmethod
-        def data(self):
-            ...
+        def data(self): ...
 
 HoldList
 ~~~~~~~~
@@ -46,7 +48,7 @@ The only function present in ``list`` and absent in ``HoldList`` is ``__class_ge
 
 We can use ``HoldList`` as parent for a list-like class. It is necessary to implement in the subclass:
 
-* a property named ``data`` with getter and setter wrapping a private variable (for example named ``_data``)
+* a property named ``data``
 * the ``__init__`` magic method
 
 This allows the creatation of a list-like class with modified behaviour with only minimal effort. To enhance perpormance we can overwrite some of the methods.
@@ -69,13 +71,25 @@ The classmethod ``__class_getitem__`` is not implemented.
 OkayABC
 ~~~~~~~
 
-A common abc for ``OkayList``, ``OkayDict``, and ``OkaySet``.
+A common abc (child of ``HoldABC`` and `scaevola.Scaevola <https://pypi.org/project/datahold/>`_) for ``OkayList``, ``OkayDict``, and ``OkaySet``. It implements common sense overwrites for some methods. For example:
+
+* all methods that cannot actually change the underlying object are now bound to ``_data`` instead of data
+* ``__bool__`` is implemented as bool(self._data) because neither ``list``, ``dict``, nor ``set`` have a ``__bool__`` method defined.
+* ``__hash__`` raises now a more fitting exception
+* the comparison operations are overwritten:
+
+  + ``__eq__`` returns self._data == type(self._data)(other)
+  + ``__ne__`` negates ``__eq__``
+  + ``__ge__`` returns ``type(self)(other) <= self`` (inherited from ``scaevola.Scaevola``)
+  + ``__gt__`` returns ``not (self == other) and (self >= other)``
+  + ``__lt__`` returns ``not (self == other) and (self <= other)``
+  + ``__le__`` returns ``self._data <= type(self)(other)._data``
+  + modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods
 
 OkayList
 ~~~~~~~~
 
 This class inherits from ``HoldList`` and ``OkayABC``. It implements a ``data`` property that binds a variable ``_data``.
-
 
 .. code-block:: python
 
@@ -93,20 +107,8 @@ This class inherits from ``HoldList`` and ``OkayABC``. It implements a ``data`` 
 
 Based on that it implements common sense methods. For example:
 
-* all methods that cannot actually change the underlying object are now bound to ``_data`` instead of data
 * all methods that returned a list before now return ``OkayList`` (type adapts to further inheritance)
-* ``__bool__`` is implemented as bool(len(self)) because ``list.__bool__`` does not exist
-* ``__hash__`` raises now a more fitting exception
 * ``__init__`` allows now to set data immediately
-* the comparison operations are overwritten:
-
-  + ``__eq__`` returns ``True`` iff types are equal and ``_data`` is equal
-  + ``__ne__`` negates ``__eq__``
-  + ``__ge__`` returns ``type(self)(other) <= self``
-  + ``__gt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__ge__`` returns ``True``
-  + ``__lt__`` returns ``True`` iff ``__eq__`` returns ``False`` and ``__le__`` returns ``True``
-  + ``__le__`` returns ``self._data <= type(self)(other)._data``
-  + modify ``__eq__`` or ``__le__`` as needed to change the behaviour of the other comparison methods
 
 OkayDict
 ~~~~~~~~
@@ -117,7 +119,6 @@ OkaySet
 ~~~~~~~
 
 A subclass of ``HoldSet`` with common sense implementations for further inheritance just like ``OkayList`` for ``HoldList``.
-
 
 Installation
 ------------
