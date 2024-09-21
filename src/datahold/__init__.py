@@ -1,6 +1,6 @@
-import abc
 import functools
-from collections.abc import ItemsView, KeysView, ValuesView
+from abc import ABC, abstractmethod
+from collections import abc
 from typing import *
 
 import scaevola
@@ -17,16 +17,16 @@ __all__ = [
 ]
 
 
-class HoldABC(abc.ABC):
-    @abc.abstractmethod
+class HoldABC(ABC):
+    @abstractmethod
     def __init__(self, *args, **kwargs) -> None: ...
 
     @property
-    @abc.abstractmethod
+    @abstractmethod
     def data(self): ...
 
 
-class HoldDict(HoldABC):
+class HoldDict(HoldABC, abc.MutableMapping):
 
     data: dict
 
@@ -234,7 +234,7 @@ class HoldDict(HoldABC):
         return ans
 
 
-class HoldList(HoldABC):
+class HoldList(HoldABC, abc.MutableSequence):
 
     data: list
 
@@ -463,7 +463,7 @@ class HoldList(HoldABC):
         return ans
 
 
-class HoldSet(HoldABC):
+class HoldSet(HoldABC, abc.MutableSet):
 
     data: set
 
@@ -855,15 +855,15 @@ class OkayDict(OkayABC, HoldDict):
         return self._data.get(*args)
 
     @functools.wraps(dict.items)
-    def items(self, /) -> ItemsView:
+    def items(self, /) -> abc.ItemsView:
         return self._data.items()
 
     @functools.wraps(dict.keys)
-    def keys(self, /) -> KeysView:
+    def keys(self, /) -> abc.KeysView:
         return self._data.keys()
 
     @functools.wraps(dict.values)
-    def values(self, /) -> ValuesView:
+    def values(self, /) -> abc.ValuesView:
         return self._data.values()
 
 
