@@ -73,14 +73,18 @@ The classmethod ``__class_getitem__`` is not implemented.
 OkayABC
 ~~~~~~~
 
-A common abc (child of ``HoldABC`` and `scaevola.Scaevola <https://pypi.org/project/scaevola/>`_) for ``OkayList``, ``OkayDict``, and ``OkaySet``. It implements common sense overwrites for some methods. For example:
+A common abc for ``OkayList``, ``OkayDict``, and ``OkaySet``. Child of
+``Protected`` (see `protectedclasses <https://pypi.org/project/protectedclasses/>`_),
+``Scaevola`` (see `scaevola <https://pypi.org/project/scaevola/>`_),
+and ``HoldABC``.
+It implements common sense overwrites for some methods. For example:
 
 * all methods that cannot actually change the underlying object are now bound to ``_data`` instead of data
 * ``__bool__`` is implemented as bool(self._data) because neither ``list``, ``dict``, nor ``set`` have a ``__bool__`` method defined.
 * ``__hash__`` raises now a more fitting exception
 * the comparison operations are overwritten:
 
-  + ``__eq__`` returns self._data == type(self._data)(other)
+  + ``__eq__`` returns ``self._data == type(self._data)(other)``
   + ``__ne__`` negates ``__eq__``
   + ``__ge__`` returns ``type(self)(other) <= self`` (inherited from ``scaevola.Scaevola``)
   + ``__gt__`` returns ``not (self == other) and (self >= other)``

@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 from collections import abc
 from typing import *
 
-import scaevola
+from protectedclasses import Protected
+from scaevola import Scaevola
 
 __all__ = [
     "HoldABC",
@@ -755,7 +756,7 @@ class HoldSet(HoldABC, abc.MutableSet):
         return ans
 
 
-class OkayABC(scaevola.Scaevola, HoldABC):
+class OkayABC(Protected, Scaevola, HoldABC):
 
     def __bool__(self, /) -> bool:
         """Return bool(self)."""
