@@ -30,7 +30,7 @@ To understand the class ``HoldList`` here the beginning of its code:
 
 .. code-block:: python
 
-    class HoldList(HoldABC):
+    class HoldList(HoldABC, collections.abc.MutableSequence):
 
         data: list
 
@@ -57,6 +57,7 @@ HoldDict
 ~~~~~~~~
 
 Just like ``HoldList`` but for dict...
+It inherits from ``HoldABC`` and ``collections.abc.MutableMapping``.
 The following methods are implemented: ``__contains__``, ``__delitem__``, ``__eq__``, ``__format__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__hash__``, ``__ior__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``, ``__setitem__``, ``__str__``, ``clear``, ``copy``, ``get``, ``items``, ``keys``, ``pop``, ``popitem``, ``setdefault``, ``update``, ``values``.
 The classmethods ``__class_getitem__`` and ``fromkeys`` are not implemented.
 
@@ -65,13 +66,14 @@ HoldSet
 ~~~~~~~
 
 Just like ``HoldSet`` but for set...
+It inherits from ``HoldABC`` and ``collections.abc.MutableSet``.
 The following methods are implemented: ``__and__``, ``__contains__``, ``__eq__``, ``__format__``, ``__ge__``, ``__gt__``, ``__hash__``, ``__iand__``, ``__ior__``, ``__isub__``, ``__iter__``, ``__ixor__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__str__``, ``__sub__``, ``__xor__``, ``add``, ``clear``, ``copy``, ``difference``, ``difference_update``, ``discard``, ``intersection``, ``intersection_update``, ``isdisjoint``, ``issubset``, ``issuperset``, ``pop``, ``remove``, ``symmetric_difference``, ``symmetric_difference_update``, ``union``, ``update``.
 The classmethod ``__class_getitem__`` is not implemented.
 
 OkayABC
 ~~~~~~~
 
-A common abc (child of ``HoldABC`` and `scaevola.Scaevola <https://pypi.org/project/datahold/>`_) for ``OkayList``, ``OkayDict``, and ``OkaySet``. It implements common sense overwrites for some methods. For example:
+A common abc (child of ``HoldABC`` and `scaevola.Scaevola <https://pypi.org/project/scaevola/>`_) for ``OkayList``, ``OkayDict``, and ``OkaySet``. It implements common sense overwrites for some methods. For example:
 
 * all methods that cannot actually change the underlying object are now bound to ``_data`` instead of data
 * ``__bool__`` is implemented as bool(self._data) because neither ``list``, ``dict``, nor ``set`` have a ``__bool__`` method defined.
