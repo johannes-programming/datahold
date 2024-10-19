@@ -91,7 +91,7 @@ class TestDoc(unittest.TestCase):
             y = getattr(core, x)
             for a in dir(y):
                 b = getattr(y, a)
-                if not callable(b):
+                if not callable(b) and not isinstance(b, property):
                     continue
                 if getattr(b, "__isabstractmethod__", False):
                     continue
