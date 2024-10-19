@@ -247,7 +247,7 @@ class OkayABC(Scaevola, HoldABC):
 class OkayDict(OkayABC, HoldDict):
 
     @functools.wraps(dict.__init__)
-    def __init__(self, data, /, **kwargs) -> None:
+    def __init__(self, data: Any = {}, /, **kwargs) -> None:
         self.data = dict(data, **kwargs)
 
     __init__.__doc__ = "Initialize self."
