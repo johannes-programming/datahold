@@ -3,10 +3,9 @@ from abc import ABC, abstractmethod
 from collections import abc
 from typing import *
 
+from datahold._utils import getHoldType
 from datarepr import datarepr
 from scaevola import Scaevola
-
-from datahold._utils import getHoldType
 
 __all__ = [
     "HoldABC",
@@ -247,7 +246,7 @@ class OkayABC(Scaevola, HoldABC):
 class OkayDict(OkayABC, HoldDict):
 
     @functools.wraps(dict.__init__)
-    def __init__(self, data, /, **kwargs) -> None:
+    def __init__(self, data:Any={}, /, **kwargs) -> None:
         self.data = dict(data, **kwargs)
 
     __init__.__doc__ = "Initialize self."
