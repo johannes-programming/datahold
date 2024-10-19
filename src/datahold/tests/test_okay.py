@@ -2,8 +2,8 @@ import inspect
 import unittest
 from abc import ABCMeta
 
-import datahold
-from datahold import *
+from datahold import core
+from datahold.core import *
 
 
 class TestOkayDict(unittest.TestCase):
@@ -87,21 +87,17 @@ class TestOkaySet(unittest.TestCase):
 
 class TestDoc(unittest.TestCase):
     def test_doc(self):
-        for x in datahold.__all__:
-            y = getattr(datahold, x)
+        for x in core.__all__:
+            y = getattr(core, x)
             for a in dir(y):
                 b = getattr(y, a)
                 if not callable(b):
                     continue
                 if getattr(b, "__isabstractmethod__", False):
                     continue
-                if a == "__hash__" and not issubclass(y, OkayABC):
-                    continue
-                self.assertNotEqual(
-                    getattr(b, "__doc__", None),
-                    None,
-                    "%r inside %r has no docstring" % (a, x),
-                )
+                doc = getattr(b, "__doc__", None)
+                error = "%r inside %r has no docstring" % (a, x)
+                self.assertNotEqual(doc, None, error)
 
 
 if __name__ == "__main__":
