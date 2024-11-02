@@ -17,15 +17,15 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-    "datarepr>=0.0.4",
-    "scaevola>=1.0",
+    "datarepr>=1.0",
+    "scaevola>=1.0.11",
 ]
-description = "datahold"
+description = "Wrap common mutable datastructures for inheritance with modification."
 keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.1.6"
+version = "1.1.7"
 
 [project.license]
 file = "LICENSE.txt"
