@@ -25,7 +25,7 @@ class HoldABC(ABC):
     __slots__ = ("_data",)
 
     def __hash__(self, /) -> int:
-        """raise TypeError"""
+        "raise TypeError"
         raise TypeError("unhashable type: %r" % type(self).__name__)
 
     @abstractmethod
@@ -33,7 +33,7 @@ class HoldABC(ABC):
 
     @classmethod
     def __subclasshook__(cls, other: type, /) -> bool:
-        """Overwrite for custom subclass check."""
+        "Overwrite for custom subclass check."
         return NotImplemented
 
     @property
@@ -162,15 +162,15 @@ HoldSet = getHoldType(
 class OkayABC(Scaevola, HoldABC):
 
     def __bool__(self, /) -> bool:
-        """Return bool(self)."""
+        "This magic method implements bool(self)."
         return bool(self._data)
 
     def __contains__(self, value: Any, /) -> bool:
-        """Return value in self."""
+        "This magic method implements value in self."
         return value in self._data
 
     def __eq__(self, other: Any, /) -> bool:
-        """Return self==other."""
+        "This magic method implements self==other."
         if type(self) is type(other):
             return self._data == other._data
         try:
@@ -180,57 +180,57 @@ class OkayABC(Scaevola, HoldABC):
         return self._data == other._data
 
     def __format__(self, format_spec: Any = "", /) -> str:
-        """Return format(self, format_spec)."""
+        "This magic method implements format(self, format_spec)."
         return format(str(self), str(format_spec))
 
     def __getitem__(self, key: Any, /) -> Any:
-        """Return self[key]."""
+        "This magic method implements self[key]."
         return self._data[key]
 
     def __gt__(self, other: Any, /) -> bool:
-        """Return self>=other."""
+        "This magic method implements self>=other."
         return not (self == other) and (self >= other)
 
     def __iter__(self, /) -> Iterator:
-        """Return iter(self)."""
+        "This magic method implements iter(self)."
         return iter(self._data)
 
     def __le__(self, other: Any, /) -> bool:
-        """Return self<=other."""
+        "This magic method implements self<=other."
         return self._data <= type(self._data)(other)
 
     def __len__(self, /) -> int:
-        """Return len(self)."""
+        "This magic method implements len(self)."
         return len(self._data)
 
     def __lt__(self, other: Any, /) -> bool:
-        """Return self<other."""
+        "This magic method implements self<other."
         return not (self == other) and (self <= other)
 
     def __ne__(self, other: Any, /) -> bool:
-        """Return self!=other."""
+        "This magic method implements self!=other."
         return not (self == other)
 
     def __repr__(self, /) -> str:
-        """Return repr(self)."""
+        "This magic method implements repr(self)."
         return datarepr(type(self).__name__, self._data)
 
     def __reversed__(self, /) -> Self:
-        """Return reversed(self)."""
+        "This magic method implements reversed(self)."
         return type(self)(reversed(self.data))
 
     def __sorted__(self, /, **kwargs: Any) -> Self:
-        """Return sorted(self, **kwargs)."""
+        "This magic method implements sorted(self, **kwargs)."
         ans = type(self)(self.data)
         ans.sort(**kwargs)
         return ans
 
     def __str__(self, /) -> str:
-        """Return str(self)."""
+        "This magic method implements str(self)."
         return repr(self)
 
     def copy(self, /) -> Self:
-        """New holder for equivalent data."""
+        "This method creates and returns new holder for equivalent data."
         return type(self)(self.data)
 
 
@@ -243,12 +243,12 @@ class OkayDict(OkayABC, HoldDict):
     __init__.__doc__ = "Initialize self."
 
     def __or__(self, other: Any, /) -> Self:
-        """Return self|other."""
+        "This magic method implements self|other."
         return type(self)(self._data | dict(other))
 
     @property
     def data(self, /) -> dict:
-        """self.data"""
+        "This property represents the data."
         return dict(self._data)
 
     @data.setter
@@ -261,7 +261,7 @@ class OkayDict(OkayABC, HoldDict):
 
     @classmethod
     def fromkeys(cls, iterable: Iterable, value: Any = None, /) -> Self:
-        """Create a new instance with keys from iterable and values set to value."""
+        "This classmethod creates a new instance with keys from iterable and values set to value."
         return cls(dict.fromkeys(iterable, value))
 
     @functools.wraps(dict.get)
@@ -284,19 +284,19 @@ class OkayDict(OkayABC, HoldDict):
 class OkayList(OkayABC, HoldList):
 
     def __add__(self, other: Any, /) -> Self:
-        """Return self+other."""
+        "Return self+other."
         return type(self)(self._data + list(other))
 
     def __init__(self, data: Iterable = []) -> None:
-        """Initialize self."""
+        "Initialize self."
         self.data = data
 
     def __mul__(self, value: SupportsIndex, /) -> Self:
-        """Return self*other."""
+        "Return self*other."
         return type(self)(self.data * value)
 
     def __rmul__(self, value: SupportsIndex, /) -> Self:
-        """Return other*self."""
+        "Return other*self."
         return self * value
 
     @functools.wraps(list.count)
@@ -305,7 +305,7 @@ class OkayList(OkayABC, HoldList):
 
     @property
     def data(self, /) -> list:
-        """self.data"""
+        "self.data"
         return list(self._data)
 
     @data.setter
@@ -324,28 +324,28 @@ class OkayList(OkayABC, HoldList):
 class OkaySet(OkayABC, HoldSet):
 
     def __and__(self, other: Any, /) -> Self:
-        """Return self&other."""
+        "Return self&other."
         return type(self)(self._data & set(other))
 
     def __init__(self, data: Iterable = set()) -> None:
-        """Initialize self."""
+        "Initialize self."
         self.data = data
 
     def __or__(self, other: Any, /) -> Self:
-        """Return self|other."""
+        "Return self|other."
         return type(self)(self._data | set(other))
 
     def __sub__(self, other: Any, /) -> Self:
-        """Return self-other."""
+        "Return self-other."
         return type(self)(self._data - set(other))
 
     def __xor__(self, other: Any, /) -> Self:
-        """Return self^other."""
+        "Return self^other."
         return type(self)(self._data ^ set(other))
 
     @property
     def data(self, /) -> set:
-        """self.data"""
+        "self.data"
         return set(self._data)
 
     @data.setter
