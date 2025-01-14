@@ -21,25 +21,15 @@ __all__ = [
 
 
 class HoldABC(ABC):
+
+    __slots__ = ("_data",)
+
     def __hash__(self, /) -> int:
         """raise TypeError"""
         raise TypeError("unhashable type: %r" % type(self).__name__)
 
     @abstractmethod
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
-
-    def __setattr__(self, name: str, value: Any, /) -> None:
-        """Implement setattr(self, name, value)."""
-        cls = type(self)
-        if name.startswith("_"):
-            super().__setattr__(name, value)
-            return
-        if isinstance(getattr(cls, name, None), property):
-            super().__setattr__(name, value)
-            return
-        e = "%r object has no property %r"
-        e %= (cls.__name__, name)
-        raise AttributeError(e)
 
     @classmethod
     def __subclasshook__(cls, other: type, /) -> bool:
