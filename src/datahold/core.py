@@ -5,6 +5,7 @@ from typing import *
 
 from datarepr import datarepr
 from scaevola import Scaevola
+from unhash import unhash
 
 from datahold._utils import getHoldType
 
@@ -24,9 +25,7 @@ class HoldABC(ABC):
 
     __slots__ = ("_data",)
 
-    def __hash__(self, /) -> int:
-        "This magic method raises a TypeError."
-        raise TypeError("unhashable type: %r" % type(self).__name__)
+    __hash__ = unhash
 
     @abstractmethod
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
