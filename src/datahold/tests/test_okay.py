@@ -1,4 +1,5 @@
 import unittest
+from types import FunctionType
 from typing import *
 
 from datahold import core
