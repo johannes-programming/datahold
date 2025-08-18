@@ -40,7 +40,7 @@ class HoldABC(ABC):
     def data(self): ...
 
 
-HoldDict = _utils.getHoldType(
+@_utils.holdDecorator(
     "__contains__",
     "__delitem__",
     "__eq__",
@@ -69,12 +69,12 @@ HoldDict = _utils.getHoldType(
     "setdefault",
     "update",
     "values",
-    name="HoldDict",
-    bases=(HoldABC, abc.MutableMapping),
-    datacls=dict,
 )
+class HoldDict(HoldABC, abc.MutableMapping):
+    data: dict
 
-HoldList = _utils.getHoldType(
+
+@_utils.holdDecorator(
     "__add__",
     "__contains__",
     "__delitem__",
@@ -106,12 +106,12 @@ HoldList = _utils.getHoldType(
     "remove",
     "reverse",
     "sort",
-    name="HoldList",
-    bases=(HoldABC, abc.MutableSequence),
-    datacls=list,
 )
+class HoldList(HoldABC, abc.MutableSequence):
+    data: list
 
-HoldSet = _utils.getHoldType(
+
+@_utils.holdDecorator(
     "__and__",
     "__contains__",
     "__eq__",
@@ -152,10 +152,9 @@ HoldSet = _utils.getHoldType(
     "symmetric_difference_update",
     "union",
     "update",
-    name="HoldSet",
-    bases=(HoldABC, abc.MutableSet),
-    datacls=set,
 )
+class HoldSet(HoldABC, abc.MutableSet):
+    data: set
 
 
 class OkayABC(Scaevola, HoldABC):
@@ -235,7 +234,6 @@ class OkayABC(Scaevola, HoldABC):
 
 class OkayDict(OkayABC, HoldDict):
 
-    @_utils.wraps(dict.__init__)
     def __init__(self: Self, data: Any = (), /, **kwargs) -> None:
         "This magic method initializes self."
         self.data = dict(data, **kwargs)
@@ -262,23 +260,18 @@ class OkayDict(OkayABC, HoldDict):
         "This classmethod creates a new instance with keys from iterable and values set to value."
         return cls(dict.fromkeys(iterable, value))
 
-    @_utils.wraps(dict.get)
     def get(self: Self, /, *args: Any) -> Any:
         "This method returns self[key] if key is in the dictionary, and default otherwise."
         return self._data.get(*args)
 
-    @_utils.wraps(dict.items)
     def items(self: Self, /) -> abc.ItemsView:
         "This method returns a view of the items of the current instance."
         return self._data.items()
 
-    @_utils.wraps(dict.keys)
     def keys(self: Self, /) -> abc.KeysView:
         "This method returns a view of the keys of the current instance."
-
         return self._data.keys()
 
-    @_utils.wraps(dict.values)
     def values(self: Self, /) -> abc.ValuesView:
         "This method returns a view of the values of the current instance."
         return self._data.values()
@@ -302,7 +295,6 @@ class OkayList(OkayABC, HoldList):
         "This magic method implements other*self."
         return self * value
 
-    @_utils.wraps(list.count)
     def count(self: Self, value: Any, /) -> int:
         "This method returns the number of occurences of value."
         return self._data.count(value)
@@ -320,7 +312,6 @@ class OkayList(OkayABC, HoldList):
     def data(self: Self, /) -> None:
         self._data = list()
 
-    @_utils.wraps(list.index)
     def index(self: Self, /, *args: Any) -> int:
         "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
         return self._data.index(*args)
