@@ -28,7 +28,7 @@ class HoldABC(ABC):
     __hash__ = unhash
 
     @abstractmethod
-    def __init__(self, *args: Any, **kwargs: Any) -> None: ...
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
 
     @classmethod
     def __subclasshook__(cls, other: type, /) -> bool:
@@ -160,15 +160,15 @@ HoldSet = getHoldType(
 
 class OkayABC(Scaevola, HoldABC):
 
-    def __bool__(self, /) -> bool:
+    def __bool__(self: Self, /) -> bool:
         "This magic method implements bool(self)."
         return bool(self._data)
 
-    def __contains__(self, value: Any, /) -> bool:
+    def __contains__(self: Self, value: Any, /) -> bool:
         "This magic method implements value in self."
         return value in self._data
 
-    def __eq__(self, other: Any, /) -> bool:
+    def __eq__(self: Self, other: Any, /) -> bool:
         "This magic method implements self==other."
         if type(self) is type(other):
             return self._data == other._data
@@ -178,57 +178,57 @@ class OkayABC(Scaevola, HoldABC):
             return False
         return self._data == other._data
 
-    def __format__(self, format_spec: Any = "", /) -> str:
+    def __format__(self: Self, format_spec: Any = "", /) -> str:
         "This magic method implements format(self, format_spec)."
         return format(str(self), str(format_spec))
 
-    def __getitem__(self, key: Any, /) -> Any:
+    def __getitem__(self: Self, key: Any, /) -> Any:
         "This magic method implements self[key]."
         return self._data[key]
 
-    def __gt__(self, other: Any, /) -> bool:
+    def __gt__(self: Self, other: Any, /) -> bool:
         "This magic method implements self>=other."
         return not (self == other) and (self >= other)
 
-    def __iter__(self, /) -> Iterator:
+    def __iter__(self: Self, /) -> Iterator:
         "This magic method implements iter(self)."
         return iter(self._data)
 
-    def __le__(self, other: Any, /) -> bool:
+    def __le__(self: Self, other: Any, /) -> bool:
         "This magic method implements self<=other."
         return self._data <= type(self._data)(other)
 
-    def __len__(self, /) -> int:
+    def __len__(self: Self, /) -> int:
         "This magic method implements len(self)."
         return len(self._data)
 
-    def __lt__(self, other: Any, /) -> bool:
+    def __lt__(self: Self, other: Any, /) -> bool:
         "This magic method implements self<other."
         return not (self == other) and (self <= other)
 
-    def __ne__(self, other: Any, /) -> bool:
+    def __ne__(self: Self, other: Any, /) -> bool:
         "This magic method implements self!=other."
         return not (self == other)
 
-    def __repr__(self, /) -> str:
+    def __repr__(self: Self, /) -> str:
         "This magic method implements repr(self)."
         return datarepr(type(self).__name__, self._data)
 
-    def __reversed__(self, /) -> Self:
+    def __reversed__(self: Self, /) -> Self:
         "This magic method implements reversed(self)."
         return type(self)(reversed(self.data))
 
-    def __sorted__(self, /, **kwargs: Any) -> Self:
+    def __sorted__(self: Self, /, **kwargs: Any) -> Self:
         "This magic method implements sorted(self, **kwargs)."
         ans = type(self)(self.data)
         ans.sort(**kwargs)
         return ans
 
-    def __str__(self, /) -> str:
+    def __str__(self: Self, /) -> str:
         "This magic method implements str(self)."
         return repr(self)
 
-    def copy(self, /) -> Self:
+    def copy(self: Self, /) -> Self:
         "This method creates a new holder with equivalent data."
         return type(self)(self.data)
 
@@ -236,26 +236,26 @@ class OkayABC(Scaevola, HoldABC):
 class OkayDict(OkayABC, HoldDict):
 
     @functools.wraps(dict.__init__)
-    def __init__(self, data: Any = {}, /, **kwargs) -> None:
+    def __init__(self: Self, data: Any = {}, /, **kwargs) -> None:
         self.data = dict(data, **kwargs)
 
     __init__.__doc__ = "This magic method initializes self."
 
-    def __or__(self, other: Any, /) -> Self:
+    def __or__(self: Self, other: Any, /) -> Self:
         "This magic method implements self|other."
         return type(self)(self._data | dict(other))
 
     @property
-    def data(self, /) -> dict:
+    def data(self: Self, /) -> dict:
         "This property represents the data."
         return dict(self._data)
 
     @data.setter
-    def data(self, values: Any, /) -> None:
+    def data(self: Self, values: Any, /) -> None:
         self._data = dict(values)
 
     @data.deleter
-    def data(self, /) -> None:
+    def data(self: Self, /) -> None:
         self._data = dict()
 
     @classmethod
@@ -264,25 +264,25 @@ class OkayDict(OkayABC, HoldDict):
         return cls(dict.fromkeys(iterable, value))
 
     @functools.wraps(dict.get)
-    def get(self, /, *args: Any) -> Any:
+    def get(self: Self, /, *args: Any) -> Any:
         return self._data.get(*args)
 
     get.__doc__ = "This method returns self[key] if key is in the dictionary, and default otherwise."
 
     @functools.wraps(dict.items)
-    def items(self, /) -> abc.ItemsView:
+    def items(self: Self, /) -> abc.ItemsView:
         return self._data.items()
 
     items.__doc__ = "This method returns a view of the items of the current instance."
 
     @functools.wraps(dict.keys)
-    def keys(self, /) -> abc.KeysView:
+    def keys(self: Self, /) -> abc.KeysView:
         return self._data.keys()
 
     keys.__doc__ = "This method returns a view of the keys of the current instance."
 
     @functools.wraps(dict.values)
-    def values(self, /) -> abc.ValuesView:
+    def values(self: Self, /) -> abc.ValuesView:
         return self._data.values()
 
     values.__doc__ = "This method returns a view of the values of the current instance."
@@ -290,43 +290,43 @@ class OkayDict(OkayABC, HoldDict):
 
 class OkayList(OkayABC, HoldList):
 
-    def __add__(self, other: Any, /) -> Self:
+    def __add__(self: Self, other: Any, /) -> Self:
         "This magic method implements self+other."
         return type(self)(self._data + list(other))
 
-    def __init__(self, data: Iterable = []) -> None:
+    def __init__(self: Self, data: Iterable = []) -> None:
         "This magic method initializes self."
         self.data = data
 
-    def __mul__(self, value: SupportsIndex, /) -> Self:
+    def __mul__(self: Self, value: SupportsIndex, /) -> Self:
         "This magic method implements self*other."
         return type(self)(self.data * value)
 
-    def __rmul__(self, value: SupportsIndex, /) -> Self:
+    def __rmul__(self: Self, value: SupportsIndex, /) -> Self:
         "This magic method implements other*self."
         return self * value
 
     @functools.wraps(list.count)
-    def count(self, value: Any, /) -> int:
+    def count(self: Self, value: Any, /) -> int:
         return self._data.count(value)
 
     count.__doc__ = "This method returns the number of occurences of value."
 
     @property
-    def data(self, /) -> list:
+    def data(self: Self, /) -> list:
         "This property represents the data."
         return list(self._data)
 
     @data.setter
-    def data(self, values: Iterable, /) -> None:
+    def data(self: Self, values: Iterable, /) -> None:
         self._data = list(values)
 
     @data.deleter
-    def data(self, /) -> None:
+    def data(self: Self, /) -> None:
         self._data = list()
 
     @functools.wraps(list.index)
-    def index(self, /, *args: Any) -> int:
+    def index(self: Self, /, *args: Any) -> int:
         return self._data.index(*args)
 
     index.__doc__ = "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
@@ -334,63 +334,63 @@ class OkayList(OkayABC, HoldList):
 
 class OkaySet(OkayABC, HoldSet):
 
-    def __and__(self, other: Any, /) -> Self:
+    def __and__(self: Self, other: Any, /) -> Self:
         "This magic method implements self&other."
         return type(self)(self._data & set(other))
 
-    def __init__(self, data: Iterable = set()) -> None:
+    def __init__(self: Self, data: Iterable = set()) -> None:
         "This magic method initializes self."
         self.data = data
 
-    def __or__(self, other: Any, /) -> Self:
+    def __or__(self: Self, other: Any, /) -> Self:
         "This magic method implements self|other."
         return type(self)(self._data | set(other))
 
-    def __sub__(self, other: Any, /) -> Self:
+    def __sub__(self: Self, other: Any, /) -> Self:
         "This magic method implements self-other."
         return type(self)(self._data - set(other))
 
-    def __xor__(self, other: Any, /) -> Self:
+    def __xor__(self: Self, other: Any, /) -> Self:
         "This magic method implements self^other."
         return type(self)(self._data ^ set(other))
 
     @property
-    def data(self, /) -> set:
+    def data(self: Self, /) -> set:
         "This property represents the data."
         return set(self._data)
 
     @data.setter
-    def data(self, values: Iterable) -> None:
+    def data(self: Self, values: Iterable) -> None:
         self._data = set(values)
 
     @data.deleter
-    def data(self, /) -> None:
+    def data(self: Self, /) -> None:
         self._data = set()
 
-    def difference(self, /, *others: Any) -> Self:
+    def difference(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self without the items also found in any of the others."
-        return type(self)(self._data.difference(*args))
+        return type(self)(self._data.difference(*others))
 
-    def intersection(self, /, *others: Any) -> set:
+    def intersection(self: Self, /, *others: Any) -> set:
         "This method returns a copy of self without the items not found in all of the others."
-        return type(self)(self._data.intersection(*args))
+        return type(self)(self._data.intersection(*others))
 
-    def isdisjoint(self, other: Any, /) -> bool:
+    def isdisjoint(self: Self, other: Any, /) -> bool:
         "This method determines if self and other have no intersection."
         return self._data.isdisjoint(other)
 
-    def issubset(self, other: Any, /) -> bool:
+    def issubset(self: Self, other: Any, /) -> bool:
         "This method determines if self is a subset of other."
         return self._data.issubset(other)
 
-    def issuperset(self, other: Any, /) -> bool:
+    def issuperset(self: Self, other: Any, /) -> bool:
         "This method determines if self is a superset of other."
         return self._data.issuperset(other)
 
-    def symmetric_difference(self, other: Any, /) -> Self:
+    def symmetric_difference(self: Self, other: Any, /) -> Self:
         "This method returns the symmetric difference between self and other."
         return type(self)(self._data.symmetric_difference(other))
 
-    def union(self, /, *others: Any) -> Self:
+    def union(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self with all the items in the others added."
-        return type(self)(self._data.union(*args))
+        return type(self)(self._data.union(*others))

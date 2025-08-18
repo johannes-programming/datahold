@@ -6,6 +6,7 @@ requires = [
 
 [project]
 authors = [
+    { email = "johannes.programming@gmail.com", name = "Johannes" },
     { email = "johannes-programming@mailfence.com", name = "Johannes" },
 ]
 classifiers = [
@@ -29,7 +30,7 @@ keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.1.9"
+version = "1.1.9+local"
 
 [project.license]
 file = "LICENSE.txt"

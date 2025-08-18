@@ -7,12 +7,12 @@ __all__ = [
 ]
 
 
-def getHoldFunc(cls, name):
-    old = getattr(cls, name)
+def getHoldFunc(cls: type, name: str) -> Any:
+    old: Any = getattr(cls, name)
 
     def new(self, *args: Any, **kwargs: Any) -> Any:
-        data = self.data
-        ans = old(data, *args, **kwargs)
+        data: Any = self.data
+        ans: Any = old(data, *args, **kwargs)
         self.data = data
         return ans
 
@@ -21,12 +21,13 @@ def getHoldFunc(cls, name):
 
 
 def getHoldType(
-    *funcnames,
-    name,
-    bases,
-    datacls,
-):
-    funcs = dict()
+    *funcnames: str,
+    name: str,
+    bases: tuple[type],
+    datacls: type,
+) -> type:
+    funcs: dict = dict()
+    n: str
     for n in funcnames:
         funcs[n] = getHoldFunc(datacls, n)
     ans = type(name, bases, funcs)
