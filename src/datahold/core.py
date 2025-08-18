@@ -7,7 +7,7 @@ from datarepr import datarepr
 from scaevola import Scaevola
 from unhash import unhash
 
-from datahold._utils import getHoldType
+from datahold import _utils
 
 __all__ = [
     "HoldABC",
@@ -31,7 +31,7 @@ class HoldABC(ABC):
     def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
 
     @classmethod
-    def __subclasshook__(cls, other: type, /) -> bool:
+    def __subclasshook__(cls: type, other: type, /) -> bool:
         "This magic classmethod can be overwritten for a custom subclass check."
         return NotImplemented
 
@@ -40,7 +40,7 @@ class HoldABC(ABC):
     def data(self): ...
 
 
-HoldDict = getHoldType(
+HoldDict = _utils.getHoldType(
     "__contains__",
     "__delitem__",
     "__eq__",
@@ -74,7 +74,7 @@ HoldDict = getHoldType(
     datacls=dict,
 )
 
-HoldList = getHoldType(
+HoldList = _utils.getHoldType(
     "__add__",
     "__contains__",
     "__delitem__",
@@ -111,7 +111,7 @@ HoldList = getHoldType(
     datacls=list,
 )
 
-HoldSet = getHoldType(
+HoldSet = _utils.getHoldType(
     "__and__",
     "__contains__",
     "__eq__",
@@ -235,11 +235,10 @@ class OkayABC(Scaevola, HoldABC):
 
 class OkayDict(OkayABC, HoldDict):
 
-    @functools.wraps(dict.__init__)
-    def __init__(self: Self, data: Any = {}, /, **kwargs) -> None:
+    @_utils.wraps(dict.__init__)
+    def __init__(self: Self, data: Any = (), /, **kwargs) -> None:
+        "This magic method initializes self."
         self.data = dict(data, **kwargs)
-
-    __init__.__doc__ = "This magic method initializes self."
 
     def __or__(self: Self, other: Any, /) -> Self:
         "This magic method implements self|other."
@@ -259,33 +258,30 @@ class OkayDict(OkayABC, HoldDict):
         self._data = dict()
 
     @classmethod
-    def fromkeys(cls, iterable: Iterable, value: Any = None, /) -> Self:
+    def fromkeys(cls: type, iterable: Iterable, value: Any = None, /) -> Self:
         "This classmethod creates a new instance with keys from iterable and values set to value."
         return cls(dict.fromkeys(iterable, value))
 
-    @functools.wraps(dict.get)
+    @_utils.wraps(dict.get)
     def get(self: Self, /, *args: Any) -> Any:
+        "This method returns self[key] if key is in the dictionary, and default otherwise."
         return self._data.get(*args)
 
-    get.__doc__ = "This method returns self[key] if key is in the dictionary, and default otherwise."
-
-    @functools.wraps(dict.items)
+    @_utils.wraps(dict.items)
     def items(self: Self, /) -> abc.ItemsView:
+        "This method returns a view of the items of the current instance."
         return self._data.items()
 
-    items.__doc__ = "This method returns a view of the items of the current instance."
-
-    @functools.wraps(dict.keys)
+    @_utils.wraps(dict.keys)
     def keys(self: Self, /) -> abc.KeysView:
+        "This method returns a view of the keys of the current instance."
+
         return self._data.keys()
 
-    keys.__doc__ = "This method returns a view of the keys of the current instance."
-
-    @functools.wraps(dict.values)
+    @_utils.wraps(dict.values)
     def values(self: Self, /) -> abc.ValuesView:
+        "This method returns a view of the values of the current instance."
         return self._data.values()
-
-    values.__doc__ = "This method returns a view of the values of the current instance."
 
 
 class OkayList(OkayABC, HoldList):
@@ -294,7 +290,7 @@ class OkayList(OkayABC, HoldList):
         "This magic method implements self+other."
         return type(self)(self._data + list(other))
 
-    def __init__(self: Self, data: Iterable = []) -> None:
+    def __init__(self: Self, data: Iterable = ()) -> None:
         "This magic method initializes self."
         self.data = data
 
@@ -306,11 +302,10 @@ class OkayList(OkayABC, HoldList):
         "This magic method implements other*self."
         return self * value
 
-    @functools.wraps(list.count)
+    @_utils.wraps(list.count)
     def count(self: Self, value: Any, /) -> int:
+        "This method returns the number of occurences of value."
         return self._data.count(value)
-
-    count.__doc__ = "This method returns the number of occurences of value."
 
     @property
     def data(self: Self, /) -> list:
@@ -325,11 +320,10 @@ class OkayList(OkayABC, HoldList):
     def data(self: Self, /) -> None:
         self._data = list()
 
-    @functools.wraps(list.index)
+    @_utils.wraps(list.index)
     def index(self: Self, /, *args: Any) -> int:
+        "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
         return self._data.index(*args)
-
-    index.__doc__ = "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
 
 
 class OkaySet(OkayABC, HoldSet):
@@ -338,7 +332,7 @@ class OkaySet(OkayABC, HoldSet):
         "This magic method implements self&other."
         return type(self)(self._data & set(other))
 
-    def __init__(self: Self, data: Iterable = set()) -> None:
+    def __init__(self: Self, data: Iterable = ()) -> None:
         "This magic method initializes self."
         self.data = data
 
