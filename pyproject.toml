@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-    "setuptools>=61.0.0",
+    "setuptools>=61.0",
 ]
 
 [project]
@@ -20,16 +20,16 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "datarepr>=1.0",
-    "scaevola>=1.0.11",
-    "unhash>=1.0",
+    "datarepr>=1.0,<2",
+    "scaevola>=1.0.11,<2",
+    "unhash>=1.0,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
 keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.1.10+docs"
+version = "1.1.10+local"
 
 [project.license]
 file = "LICENSE.txt"
