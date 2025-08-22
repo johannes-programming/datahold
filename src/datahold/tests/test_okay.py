@@ -1,9 +1,15 @@
 import unittest
-from types import FunctionType
 from typing import *
 
 from datahold import core
 from datahold.core import *
+
+
+class TestHold(unittest.TestCase):
+    def test_constructor(self: Self) -> None:
+        HoldDict()
+        HoldList()
+        HoldSet()
 
 
 class TestOkayDict(unittest.TestCase):
@@ -32,7 +38,7 @@ class TestOkayDict(unittest.TestCase):
         self.assertEqual(len(self.okay_dict), 2)
 
     def test_or(self: Self) -> None:
-        merged = self.okay_dict | {"c": 3}
+        merged: Any = self.okay_dict | {"c": 3}
         self.assertEqual(merged, OkayDict({"a": 1, "b": 2, "c": 3}))
 
 
@@ -81,12 +87,18 @@ class TestOkaySet(unittest.TestCase):
         self.assertEqual(len(self.okay_set), 3)
 
     def test_union(self: Self) -> None:
-        result = self.okay_set | {4, 5}
+        result: Any = self.okay_set | {4, 5}
         self.assertEqual(result, OkaySet({1, 2, 3, 4, 5}))
 
 
 class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
+        x: Any
+        y: Any
+        a: Any
+        b: Any
+        doc: Any
+        error: Any
         for x in core.__all__:
             y = getattr(core, x)
             for a in dir(y):
