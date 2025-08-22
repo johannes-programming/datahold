@@ -1,5 +1,5 @@
-import functools
-from abc import ABC, abstractmethod
+import sys
+from abc import ABC, ABCMeta, abstractmethod
 from collections import abc
 from typing import *
 
@@ -37,7 +37,7 @@ class HoldABC(ABC):
 
     @property
     @abstractmethod
-    def data(self): ...
+    def data(self: Self) -> Any: ...
 
 
 @_utils.holdDecorator(
