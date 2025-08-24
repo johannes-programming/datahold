@@ -242,19 +242,6 @@ class OkayDict(OkayABC, HoldDict):
         "This magic method implements self|other."
         return type(self)(self._data | dict(other))
 
-    @property
-    def data(self: Self, /) -> dict:
-        "This property represents the data."
-        return dict(self._data)
-
-    @data.setter
-    def data(self: Self, values: Any, /) -> None:
-        self._data = dict(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = dict()
-
     @classmethod
     def fromkeys(cls: type, iterable: Iterable, value: Any = None, /) -> Self:
         "This classmethod creates a new instance with keys from iterable and values set to value."
@@ -299,19 +286,6 @@ class OkayList(OkayABC, HoldList):
         "This method returns the number of occurences of value."
         return self._data.count(value)
 
-    @property
-    def data(self: Self, /) -> list:
-        "This property represents the data."
-        return list(self._data)
-
-    @data.setter
-    def data(self: Self, values: Iterable, /) -> None:
-        self._data = list(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = list()
-
     def index(self: Self, /, *args: Any) -> int:
         "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
         return self._data.index(*args)
@@ -338,19 +312,6 @@ class OkaySet(OkayABC, HoldSet):
     def __xor__(self: Self, other: Any, /) -> Self:
         "This magic method implements self^other."
         return type(self)(self._data ^ set(other))
-
-    @property
-    def data(self: Self, /) -> set:
-        "This property represents the data."
-        return set(self._data)
-
-    @data.setter
-    def data(self: Self, values: Iterable) -> None:
-        self._data = set(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = set()
 
     def difference(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self without the items also found in any of the others."
