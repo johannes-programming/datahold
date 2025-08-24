@@ -1,4 +1,3 @@
-import sys
 from abc import ABC, ABCMeta, abstractmethod
 from collections import abc
 from typing import *
@@ -28,7 +27,9 @@ class HoldABC(ABC):
     __hash__ = unhash
 
     @abstractmethod
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
+        "This magic method initializes self."
+        ...
 
     @classmethod
     def __subclasshook__(cls: type, other: type, /) -> bool:
@@ -172,10 +173,11 @@ class OkayABC(Scaevola, HoldABC):
         if type(self) is type(other):
             return self._data == other._data
         try:
-            other = type(self)(other)
+            opp: Self = type(self)(other)
         except:
             return False
-        return self._data == other._data
+        else:
+            return self._data == opp._data
 
     def __format__(self: Self, format_spec: Any = "", /) -> str:
         "This magic method implements format(self, format_spec)."
@@ -219,8 +221,8 @@ class OkayABC(Scaevola, HoldABC):
 
     def __sorted__(self: Self, /, **kwargs: Any) -> Self:
         "This magic method implements sorted(self, **kwargs)."
-        ans = type(self)(self.data)
-        ans.sort(**kwargs)
+        data: Any = sorted(self.data)
+        ans: Self = type(self)(data)
         return ans
 
     def __str__(self: Self, /) -> str:
@@ -234,26 +236,13 @@ class OkayABC(Scaevola, HoldABC):
 
 class OkayDict(OkayABC, HoldDict):
 
-    def __init__(self: Self, data: Any = (), /, **kwargs) -> None:
+    def __init__(self: Self, data: Iterable = (), /, **kwargs: Any) -> None:
         "This magic method initializes self."
         self.data = dict(data, **kwargs)
 
     def __or__(self: Self, other: Any, /) -> Self:
         "This magic method implements self|other."
         return type(self)(self._data | dict(other))
-
-    @property
-    def data(self: Self, /) -> dict:
-        "This property represents the data."
-        return dict(self._data)
-
-    @data.setter
-    def data(self: Self, values: Any, /) -> None:
-        self._data = dict(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = dict()
 
     @classmethod
     def fromkeys(cls: type, iterable: Iterable, value: Any = None, /) -> Self:
@@ -299,19 +288,6 @@ class OkayList(OkayABC, HoldList):
         "This method returns the number of occurences of value."
         return self._data.count(value)
 
-    @property
-    def data(self: Self, /) -> list:
-        "This property represents the data."
-        return list(self._data)
-
-    @data.setter
-    def data(self: Self, values: Iterable, /) -> None:
-        self._data = list(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = list()
-
     def index(self: Self, /, *args: Any) -> int:
         "This method returns the index of the first occurence of value, or raises a ValueError if value is not present."
         return self._data.index(*args)
@@ -338,19 +314,6 @@ class OkaySet(OkayABC, HoldSet):
     def __xor__(self: Self, other: Any, /) -> Self:
         "This magic method implements self^other."
         return type(self)(self._data ^ set(other))
-
-    @property
-    def data(self: Self, /) -> set:
-        "This property represents the data."
-        return set(self._data)
-
-    @data.setter
-    def data(self: Self, values: Iterable) -> None:
-        self._data = set(values)
-
-    @data.deleter
-    def data(self: Self, /) -> None:
-        self._data = set()
 
     def difference(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self without the items also found in any of the others."

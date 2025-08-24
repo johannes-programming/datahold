@@ -7,7 +7,7 @@ __all__ = [
     "holdDecorator",
 ]
 
-INITDOC: str = "This property represents the underlying data of the current instance."
+INITDOC: str = "This property represents the underlying data."
 
 
 class holdDecorator:
@@ -26,6 +26,22 @@ class holdDecorator:
         self._funcnames = funcnames
 
     @classmethod
+    def getAnnotationsDict(cls: type, sig: ins.Signature) -> dict:
+        ans: dict = dict()
+        p: ins.Parameter
+        for p in sig.parameters.values():
+            ans[p.name] = p.annotation
+        ans["return"] = sig.return_annotation
+        return ans
+
+    @classmethod
+    def getNonEmpty(cls: type, value: Any, backup: Any = Any) -> Any:
+        if value is ins.Parameter.empty:
+            return backup
+        else:
+            return value
+
+    @classmethod
     def makeDataProperty(cls: type, *, datacls: type) -> property:
         def fget(self: Self) -> Any:
             return datacls(self._data)
@@ -33,7 +49,15 @@ class holdDecorator:
         def fset(self: Self, value: Any) -> None:
             self._data = datacls(value)
 
-        ans: property = property(fget=fget, fset=fset, doc=INITDOC)
+        def fdel(self: Self) -> None:
+            self._data = datacls()
+
+        ans: property = property(
+            fget=fget,
+            fset=fset,
+            fdel=fdel,
+            doc=INITDOC,
+        )
         return ans
 
     @classmethod
@@ -70,26 +94,27 @@ class holdDecorator:
         new.__module__ = holdcls.__module__
         new.__name__ = name
         new.__qualname__ = holdcls.__qualname__ + "." + name
-        cls.updateSignature(old=old, new=new)
+        cls.wrap(old=old, new=new, isinit=False)
         setattr(holdcls, name, new)
 
     @classmethod
     def setupInitFunc(cls: type, holdcls: type) -> None:
         datacls: type = holdcls.__annotations__["data"]
-        new = cls.makeInitFunc(datacls=datacls)
-        old = datacls.__init__
+        new: FunctionType = cls.makeInitFunc(datacls=datacls)
+        old: FunctionType = datacls.__init__
         new.__module__ = holdcls.__module__
         new.__name__ = "__init__"
         new.__qualname__ = holdcls.__qualname__ + ".__init__"
-        cls.updateSignature(old=old, new=new)
+        cls.wrap(old=old, new=new, isinit=True)
         holdcls.__init__ = new
 
     @classmethod
-    def updateSignature(
+    def wrap(
         cls: type,
         *,
         old: Callable,
         new: FunctionType,
+        isinit: bool,
     ) -> ins.Signature:
         try:
             oldsig: ins.Signature = ins.signature(old)
@@ -103,14 +128,11 @@ class holdDecorator:
         for n, p in enumerate(oldsig.parameters.values()):
             if n == 0:
                 a = Self
-            elif p.annotation is ins.Parameter.empty:
-                a = Any
             else:
-                a = p.annotation
+                a = cls.getNonEmpty(p.annotation)
             q = p.replace(annotation=a)
             params.append(q)
-        if oldsig.return_annotation is ins.Parameter.empty:
-            a = Any
-        else:
-            a = oldsig.return_annotation
+        a = None if isinit else Any
+        a = cls.getNonEmpty(oldsig.return_annotation, backup=a)
         new.__signature__ = ins.Signature(params, return_annotation=a)
+        new.__annotations__ = cls.getAnnotationsDict(new.__signature__)
