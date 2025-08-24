@@ -39,71 +39,337 @@
     @abstractmethod
     def data(self: Self) -> Any: ...</code></pre>
                             </dd>
-                        </dl>
-                        <dl id="HoldList" class="heading2">
-                            <dt>The <a href="#HoldList"><code>HoldList</code></a> class</dt>
+                            <dt>class datahold.HoldDict(*args: Any, **kwargs: Any)</dt>
                             <dd>
-                                <p>To understand the class <code>HoldList</code>, here is the beginning of its code:</p>
-                                <pre class="block"><code>class HoldList(HoldABC, collections.abc.MutableSequence):
-
-    data: list
-
-    @functools.wraps(list.__add__)
-    def __add__(self, *args, **kwargs):
+                                <p>
+                                    This class is a brute wrapper for <code>dict</code>.
+                                    It inherits from <code>HoldABC</code> and <code>collections.abc.MutableMapping</code>. 
+                                    Its constructor passes all arguments to the constructor of <code>dict</code>
+                                    and the result is saved within the <code>data</code> property.
+                                </p>
+                                <dl class="heading4">
+                                    <dt>__contains__(key: Any) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>in</code> operator.
+                                            Internally its code is equivalent to the following:</p>
+                                        <pre class="block"><code>    def __contains__(self: Self, key: Any, /) -> Any:
+        "True if the dictionary has the specified key, else False."
         data = self.data
         ans = data.__add__(*args, **kwargs)
         self.data = data
         return ans</code></pre>
-                                <p>The following methods are defined this way: <code>__add__</code>, <code>__contains__</code>, <code>__delitem__</code>, 
-                                <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, 
-                                <code>__iadd__</code>, <code>__imul__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, 
-                                <code>__mul__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__rmul__</code>, <code>__setitem__</code>, <code>__str__</code>, 
-                                <code>append</code>, <code>clear</code>, <code>copy</code>, <code>count</code>, <code>extend</code>, <code>index</code>, <code>insert</code>, 
-                                <code>pop</code>, <code>remove</code>, <code>reverse</code>, <code>sort</code>.</p>
-
-                                <p>The only function present in <code>list</code> and absent in <code>HoldList</code> is <code>__class_getitem__</code>.</p>
-                                <p>We can use <code>HoldList</code> as a parent for a list-like class. It is necessary to implement in the subclass:</p>
-                                <ul>
-                                    <li>A property named <code>data</code></li>
-                                    <li>The <code>__init__</code> magic method</li>
-                                </ul>
-                                <p>This allows the creation of a list-like class with modified behavior with only minimal effort. To enhance performance, we can overwrite some of the methods.</p>
+                                        <p>The imprecize annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
+                                    </dd>
+                                    <dt>__delitem__(key: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the deletion of items. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__eq__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>==</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__format__(format_spec: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the inbuilt <code>format</code> function. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__ge__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>>=</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__getitem__(key: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the returning of items. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__gt__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>></code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__hash__() -> int</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the inbuilt function <code>hash</code>.
+                                            Its function is <code><a href="https://unhash.johannes-programming.online/">unhash</a>.unhash</code>.
+                                            It always raises a <code>TypeError</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__ior__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>|=</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__iter__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements iteration. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__le__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code><=</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__len__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the inbuilt <code>len</code> function. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__lt__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code><</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__or__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>|</code> operator. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__repr__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements representation. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__reversed__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the inbuilt <code>reversed</code> function. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__ror__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>|</code> operator from the right side if the left operand does not have it implemented. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__setitem__(key: Any, value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the setting of items. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__str__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the explicit conversion into a string. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>__subclasshook__(other: type, /) -> bool</dt>
+                                    <dd>
+                                        <p>
+                                            This classmethod is inherited directly from <code>HoldABC</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>clear() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method deletes of all items. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>copy() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method implements dublication. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                            Remember that because of that a <code>dict</code> is returned.
+                                        </p>
+                                    </dd>
+                                    <dt>data: dict</dt>
+                                    <dd>
+                                        This property is implemented with the equivalent to the following code:
+                                        <pre class="block"><code>    @property
+    def data(self: Self) -> dict:
+        return dict(self._data)
+    
+    @data.setter
+    def data(self: Self, value: Any) -> None:
+        self._data = dict(value)</code></pre>
+                                    </dd>
+                                    <dt>get(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method implements getting an item with a default in case of its absence. 
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>items() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method returns an iterator over the items.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>keys() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method returns an iterator over the keys.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>popitem() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method deletes and returns the last item.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>setdefault(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method ensures the presence of a key.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>update(*args: Any, **kwargs: Any) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method updates the data.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                    <dt>values() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This method returns an iterator over the values.
+                                            Its inner workings are analogous to <code>__contains__</code>.
+                                        </p>
+                                    </dd>
+                                </dl>
                             </dd>
-                        </dl>
-                        <dl id="HoldDict" class="heading2">
-                            <dt>The <a href="#HoldDict"><code>HoldDict</code></a> class</dt>
+                            <dt>class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
                             <dd>
-                                <p>Just like <code>HoldList</code> but for <code>dict</code>... It inherits from <code>HoldABC</code> and <code>collections.abc.MutableMapping</code>.
-                                The following methods are implemented: <code>__contains__</code>, <code>__delitem__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, 
-                                <code>__getitem__</code>, <code>__gt__</code>, <code>__ior__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, 
-                                <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__setitem__</code>, <code>__str__</code>, 
-                                <code>clear</code>, <code>copy</code>, <code>get</code>, <code>items</code>, <code>keys</code>, <code>pop</code>, <code>popitem</code>, <code>setdefault</code>, 
-                                <code>update</code>, <code>values</code>.</p>
-
-                                <p>The class methods <code>__class_getitem__</code> and <code>fromkeys</code> are not implemented.</p>
+                                <p>
+                                    This class is analogous to <code>HoldDict</code>. 
+                                    It implements the magic methods 
+                                    <code>__add__</code>,
+                                    <code>__contains__</code>,
+                                    <code>__delitem__</code>,
+                                    <code>__eq__</code>,
+                                    <code>__format__</code>,
+                                    <code>__ge__</code>,
+                                    <code>__getitem__</code>,
+                                    <code>__gt__</code>,
+                                    <code>__iadd__</code>,
+                                    <code>__imul__</code>,
+                                    <code>__iter__</code>,
+                                    <code>__le__</code>,
+                                    <code>__len__</code>,
+                                    <code>__lt__</code>,
+                                    <code>__mul__</code>,
+                                    <code>__repr__</code>,
+                                    <code>__reversed__</code>,
+                                    <code>__rmul__</code>,
+                                    <code>__setitem__</code>, and
+                                    <code>__str__</code>.
+                                    The other methods implemented are 
+                                    <code>append</code>,
+                                    <code>clear</code>,
+                                    <code>copy</code>,
+                                    <code>count</code>,
+                                    <code>extend</code>,
+                                    <code>index</code>,
+                                    <code>insert</code>,
+                                    <code>pop</code>,
+                                    <code>remove</code>,
+                                    <code>reverse</code>, and
+                                    <code>sort</code>.
+                                    It is a child of <code>HoldABC</code> and of <code>collections.abc.MutableSequence</code>,
+                                    thereby also inheriting their members. 
+                                </p>
+                            <dt>class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This class is analogous to <code>HoldDict</code>. 
+                                    It implements the magic methods 
+                                    <code>__and__</code>,
+                                    <code>__contains__</code>,
+                                    <code>__eq__</code>,
+                                    <code>__format__</code>,
+                                    <code>__ge__</code>,
+                                    <code>__gt__</code>,
+                                    <code>__iand__</code>,
+                                    <code>__ior__</code>,
+                                    <code>__isub__</code>,
+                                    <code>__iter__</code>,
+                                    <code>__le__</code>,
+                                    <code>__len__</code>,
+                                    <code>__lt__</code>,
+                                    <code>__or__</code>,
+                                    <code>__rand__</code>,
+                                    <code>__repr__</code>,
+                                    <code>__ror__</code>,
+                                    <code>__rsub__</code>,
+                                    <code>__rxor__</code>,
+                                    <code>__str__</code>,
+                                    <code>__sub__</code>,
+                                    <code>__rmul__</code>,
+                                    <code>__sub__</code>, and
+                                    <code>__xor__</code>.
+                                    The other methods implemented are 
+                                    <code>add</code>,
+                                    <code>clear</code>,
+                                    <code>copy</code>,
+                                    <code>difference</code>,
+                                    <code>difference_update</code>,
+                                    <code>discard</code>,
+                                    <code>intersection</code>,
+                                    <code>intersection_update</code>,
+                                    <code>isdisjoint</code>,
+                                    <code>issubset</code>,
+                                    <code>issuperset</code>,
+                                    <code>pop</code>,
+                                    <code>remove</code>,
+                                    <code>symmetric_difference</code>,
+                                    <code>symmetric_difference_update</code>,
+                                    <code>union</code>, and
+                                    <code>update</code>.
+                                    It is a child of <code>HoldABC</code> and of <code>collections.abc.MutableSet</code>,
+                                    thereby also inheriting their members. 
+                                </p>
                             </dd>
-                        </dl>
-                        <dl id="HoldSet" class="heading2">
-                            <dt>The <a href="#HoldSet"><code>HoldSet</code></a> class</dt>
+                            <dt>class OkayABC</dt>
                             <dd>
-                                <p>Just like <code>HoldList</code> but for <code>set</code>... It inherits from <code>HoldABC</code> and <code>collections.abc.MutableSet</code>.
-                                The following methods are implemented: <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, 
-                                <code>__gt__</code>, <code>__iand__</code>, <code>__ior__</code>, <code>__isub__</code>, <code>__iter__</code>, <code>__ixor__</code>, 
-                                <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__rand__</code>, <code>__repr__</code>, <code>__ror__</code>, 
-                                <code>__rsub__</code>, <code>__rxor__</code>, <code>__str__</code>, <code>__sub__</code>, <code>__xor__</code>, <code>add</code>, <code>clear</code>, <code>copy</code>, 
-                                <code>difference</code>, <code>difference_update</code>, <code>discard</code>, <code>intersection</code>, <code>intersection_update</code>, 
-                                <code>isdisjoint</code>, <code>issubset</code>, <code>issuperset</code>, <code>pop</code>, <code>remove</code>, <code>symmetric_difference</code>, 
-                                <code>symmetric_difference_update</code>, <code>union</code>, <code>update</code>.</p>
-
-                                <p>The class method <code>__class_getitem__</code> is not implemented.</p>
-                            </dd>
-                        </dl>
-                        <dl id="OkayABC" class="heading2">
-                            <dt>The <a href="#OkayABC"><code>OkayABC</code></a> class</dt>
-                            <dd>
-                                <p>A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. Child of <code>Scaevola</code> 
-                                (see <a href="https://pypi.org/project/scaevola/">scaevola</a>) and <code>HoldABC</code>.
-                                It implements common-sense overwrites for some methods. For example:</p>
+                                <p>
+                                    A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. 
+                                    Child of <code>Scaevola</code> 
+                                    (see <a href="https://pypi.org/project/scaevola/">scaevola</a>) and <code>HoldABC</code>.
+                                    It implements common-sense overwrites for some methods. For example:
+                                </p>
                                 <ul>
                                     <li>All methods that cannot actually change the underlying object are now bound to <code>_data</code> instead of <code>data</code>.</li>
                                     <li><code>__bool__</code> is implemented as <code>bool(self._data)</code> because neither <code>list</code>, <code>dict</code>, nor <code>set</code> have a <code>__bool__</code> method defined.</li>
@@ -120,11 +386,16 @@
                                 </ul>
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
                             </dd>
-                        </dl>
-                        <dl id="OkayList" class="heading2">
-                            <dt>The <a href="#OkayList"><code>OkayList</code></a> class</dt>
+                            <dt>class OkayDict(data: Any = (), /, **kwargs: Any)</dt>
                             <dd>
-                                <p>This class inherits from <code>HoldList</code> and <code>OkayABC</code>. It implements a <code>data</code> property that binds a variable <code>_data</code>.</p>
+                                <p>A subclass of <code>HoldDict</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
+                            </dd>
+                            <dt>class OkayList(data: Iterable = ())</dt>
+                            <dd>
+                                <p>
+                                    This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
+                                    It implements a <code>data</code> property that binds a variable <code>_data</code>.
+                                </p>
                                 <pre class="block"><code>    @property
     def data(self, /):
         return list(self._data)
@@ -142,17 +413,12 @@
                                     <li><code>__init__</code> allows setting data immediately.</li>
                                 </ul>
                             </dd>
-                        </dl>
-                        <dl id="OkayDict" class="heading2">
-                            <dt>The <a href="#OkayDict"><code>OkayDict</code></a> class</dt>
+                            <dt>class OkaySet(data: Iterable = ())</dt>
                             <dd>
-                                <p>A subclass of <code>HoldDict</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
-                            </dd>
-                        </dl>
-                        <dl id="OkaySet" class="heading2">
-                            <dt>The <a href="#OkaySet"><code>OkaySet</code></a> class</dt>
-                            <dd>
-                                <p>A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
+                                <p>
+                                    A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, 
+                                    just like <code>OkayList</code> for <code>HoldList</code>.
+                                </p>
                             </dd>
                         </dl>
                     </dd>
