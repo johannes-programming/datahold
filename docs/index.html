@@ -209,17 +209,6 @@
                                             Remember that because of that a <code>dict</code> is returned.
                                         </p>
                                     </dd>
-                                    <dt>data: dict</dt>
-                                    <dd>
-                                        This property is implemented with the equivalent to the following code:
-                                        <pre class="block"><code>    @property
-    def data(self: Self) -> dict:
-        return dict(self._data)
-    
-    @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = dict(value)</code></pre>
-                                    </dd>
                                     <dt>get(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
                                         <p>
