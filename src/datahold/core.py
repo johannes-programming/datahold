@@ -234,7 +234,7 @@ class OkayABC(Scaevola, HoldABC):
 
 class OkayDict(OkayABC, HoldDict):
 
-    def __init__(self: Self, data: Any = (), /, **kwargs) -> None:
+    def __init__(self: Self, data: Any = (), /, **kwargs:Any) -> None:
         "This magic method initializes self."
         self.data = dict(data, **kwargs)
 
