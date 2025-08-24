@@ -5,6 +5,13 @@ from datahold import core
 from datahold.core import *
 
 
+class TestHold(unittest.TestCase):
+    def test_constructor(self: Self) -> None:
+        HoldDict()
+        HoldList()
+        HoldSet()
+
+
 class TestOkayDict(unittest.TestCase):
 
     def setUp(self: Self) -> None:
