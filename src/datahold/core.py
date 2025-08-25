@@ -1,4 +1,3 @@
-import sys
 from abc import ABC, ABCMeta, abstractmethod
 from collections import abc
 from typing import *
@@ -28,7 +27,9 @@ class HoldABC(ABC):
     __hash__ = unhash
 
     @abstractmethod
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: 
+        "This magic method initializes self."
+        ...
 
     @classmethod
     def __subclasshook__(cls: type, other: type, /) -> bool:
@@ -172,10 +173,11 @@ class OkayABC(Scaevola, HoldABC):
         if type(self) is type(other):
             return self._data == other._data
         try:
-            other = type(self)(other)
+            opp:Self = type(self)(other)
         except:
             return False
-        return self._data == other._data
+        else:
+            return self._data == opp._data
 
     def __format__(self: Self, format_spec: Any = "", /) -> str:
         "This magic method implements format(self, format_spec)."
@@ -219,8 +221,8 @@ class OkayABC(Scaevola, HoldABC):
 
     def __sorted__(self: Self, /, **kwargs: Any) -> Self:
         "This magic method implements sorted(self, **kwargs)."
-        ans = type(self)(self.data)
-        ans.sort(**kwargs)
+        data:Any = sorted(self.data)
+        ans:Self = type(self)(data)
         return ans
 
     def __str__(self: Self, /) -> str:

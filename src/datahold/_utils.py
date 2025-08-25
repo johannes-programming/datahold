@@ -48,8 +48,16 @@ class holdDecorator:
 
         def fset(self: Self, value: Any) -> None:
             self._data = datacls(value)
+        
+        def fdel(self:Self) -> None:
+            self._data = datacls()
 
-        ans: property = property(fget=fget, fset=fset, doc=INITDOC)
+        ans: property = property(
+            fget=fget, 
+            fset=fset, 
+            fdel=fdel,
+            doc=INITDOC,
+        )
         return ans
 
     @classmethod
@@ -92,8 +100,8 @@ class holdDecorator:
     @classmethod
     def setupInitFunc(cls: type, holdcls: type) -> None:
         datacls: type = holdcls.__annotations__["data"]
-        new = cls.makeInitFunc(datacls=datacls)
-        old = datacls.__init__
+        new :FunctionType= cls.makeInitFunc(datacls=datacls)
+        old :FunctionType= datacls.__init__
         new.__module__ = holdcls.__module__
         new.__name__ = "__init__"
         new.__qualname__ = holdcls.__qualname__ + ".__init__"
