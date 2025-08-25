@@ -28,7 +28,9 @@
     __hash__ = unhash
 
     @abstractmethod
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: 
+        "This magic method initializes self."
+        ...
 
     @classmethod
     def __subclasshook__(cls: type, other: type, /) -> bool:
@@ -53,13 +55,13 @@
                                         <p>
                                             This magic method implements the <code>in</code> operator.
                                             Internally its code is equivalent to the following:</p>
-                                        <pre class="block"><code>    def __contains__(self: Self, key: Any, /) -> Any:
-        "True if the dictionary has the specified key, else False."
-        data = self.data
-        ans = data.__add__(*args, **kwargs)
-        self.data = data
-        return ans</code></pre>
-                                        <p>The imprecize annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
+                                        <pre class="block"><code>def __contains__(self: Self, key: Any, /) -> Any:
+    "True if the dictionary has the specified key, else False."
+    data = self.data
+    ans = data.__add__(*args, **kwargs)
+    self.data = data
+    return ans</code></pre>
+                                        <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
                                     </dd>
                                     <dt id="HoldDict.__delitem__">__delitem__(key: Any, /) -> Any</dt>
                                     <dd>
@@ -212,13 +214,17 @@
                                     <dt id="HoldDict.data">data: dict</dt>
                                     <dd>
                                         This property is implemented with the equivalent to the following code:
-                                        <pre class="block"><code>    @property
-    def data(self: Self) -> dict:
-        return dict(self._data)
-    
-    @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = dict(value)</code></pre>
+                                        <pre class="block"><code>@property
+def data(self: Self) -> dict:
+    return dict(self._data)
+
+@data.setter
+def data(self: Self, value: Any) -> None:
+    self._data = dict(value)
+
+@data.deleter
+def data(self: Self) -> None:
+    self._data = dict()</code></pre>
                                     </dd>
                                     <dt id="HoldDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
