@@ -1,4 +1,4 @@
-from abc import ABC, ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod
 from collections import abc
 from typing import *
 
@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-class HoldABC(ABC):
+class HoldABC(metaclass=ABCMeta):
 
     __slots__ = ("_data",)
 
@@ -39,6 +39,7 @@ class HoldABC(ABC):
     @property
     @abstractmethod
     def data(self: Self) -> Any: ...
+abc.Collection.register(HoldABC)
 
 
 @_utils.holdDecorator(
@@ -71,8 +72,9 @@ class HoldABC(ABC):
     "update",
     "values",
 )
-class HoldDict(HoldABC, abc.MutableMapping):
+class HoldDict(HoldABC):
     data: dict
+abc.MutableMapping.register(HoldDict)
 
 
 @_utils.holdDecorator(
@@ -108,8 +110,9 @@ class HoldDict(HoldABC, abc.MutableMapping):
     "reverse",
     "sort",
 )
-class HoldList(HoldABC, abc.MutableSequence):
+class HoldList(HoldABC):
     data: list
+abc.MutableSequence.register(HoldList)
 
 
 @_utils.holdDecorator(
@@ -154,8 +157,9 @@ class HoldList(HoldABC, abc.MutableSequence):
     "union",
     "update",
 )
-class HoldSet(HoldABC, abc.MutableSet):
+class HoldSet(HoldABC):
     data: set
+abc.MutableSet.register(HoldSet)
 
 
 class OkayABC(Scaevola, HoldABC):
