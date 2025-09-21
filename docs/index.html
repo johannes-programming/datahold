@@ -58,7 +58,7 @@
                                         <pre class="block"><code>def __contains__(self: Self, key: Any, /) -> Any:
     "True if the dictionary has the specified key, else False."
     data = self.data
-    ans = data.__add__(*args, **kwargs)
+    ans = data.__contains__(*args, **kwargs)
     self.data = data
     return ans</code></pre>
                                         <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
