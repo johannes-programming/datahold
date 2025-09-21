@@ -24,6 +24,8 @@ class HoldABC(ABC):
 
     __slots__ = ("_data",)
 
+    data:Any
+
     __hash__ = unhash
 
     @abstractmethod
@@ -72,6 +74,7 @@ class HoldABC(ABC):
     "values",
 )
 class HoldDict(HoldABC, abc.MutableMapping):
+    __slots__ = ("_data",)
     data: dict
 
 
@@ -109,6 +112,7 @@ class HoldDict(HoldABC, abc.MutableMapping):
     "sort",
 )
 class HoldList(HoldABC, abc.MutableSequence):
+    __slots__ = ("_data",)
     data: list
 
 
@@ -155,10 +159,12 @@ class HoldList(HoldABC, abc.MutableSequence):
     "update",
 )
 class HoldSet(HoldABC, abc.MutableSet):
+    __slots__ = ("_data",)
     data: set
 
 
 class OkayABC(Scaevola, HoldABC):
+    __slots__ = ("_data",)
 
     def __bool__(self: Self, /) -> bool:
         "This magic method implements bool(self)."
@@ -235,6 +241,7 @@ class OkayABC(Scaevola, HoldABC):
 
 
 class OkayDict(OkayABC, HoldDict):
+    __slots__ = ("_data",)
 
     def __init__(self: Self, data: Iterable = (), /, **kwargs: Any) -> None:
         "This magic method initializes self."
@@ -268,6 +275,7 @@ class OkayDict(OkayABC, HoldDict):
 
 class OkayList(OkayABC, HoldList):
 
+    __slots__ = ("_data",)
     def __add__(self: Self, other: Any, /) -> Self:
         "This magic method implements self+other."
         return type(self)(self._data + list(other))
@@ -294,6 +302,8 @@ class OkayList(OkayABC, HoldList):
 
 
 class OkaySet(OkayABC, HoldSet):
+
+    __slots__ = ("_data",)
 
     def __and__(self: Self, other: Any, /) -> Self:
         "This magic method implements self&other."

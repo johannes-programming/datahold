@@ -21,7 +21,7 @@ classifiers = [
 ]
 dependencies = [
     "datarepr>=1.0,<2",
-    "scaevola>=1.0.11,<2",
+    "scaevola>=1.0.15,<2",
     "unhash>=1.0,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
