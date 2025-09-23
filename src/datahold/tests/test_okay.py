@@ -5,6 +5,16 @@ from datahold import core
 from datahold.core import *
 
 
+class TestData(unittest.TestCase):
+    def test_constructor(self: Self) -> None:
+        with self.assertRaises(Exception):
+            DataDict()
+        with self.assertRaises(Exception):
+            DataList()
+        with self.assertRaises(Exception):
+            DataSet()
+
+
 class TestHold(unittest.TestCase):
     def test_constructor(self: Self) -> None:
         HoldDict()
