@@ -1,14 +1,19 @@
-from abc import ABC, ABCMeta, abstractmethod
-from collections import abc
+import collections
+from abc import ABCMeta, abstractmethod
 from typing import *
 
+import setdoc
 from datarepr import datarepr
 from scaevola import Scaevola
 from unhash import unhash
 
-from datahold import _utils
+from datahold._utils import deco
 
 __all__ = [
+    "DataABC",
+    "DataDict",
+    "DataList",
+    "DataSet",
     "HoldABC",
     "HoldDict",
     "HoldList",
@@ -20,16 +25,14 @@ __all__ = [
 ]
 
 
-class HoldABC(ABC):
-
-    __slots__ = ("_data",)
+class DataABC(metaclass=ABCMeta):
+    __slots__ = ()
 
     __hash__ = unhash
 
     @abstractmethod
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
-        "This magic method initializes self."
-        ...
+    @setdoc.basic
+    def __init__(self: Self, data: Any) -> None: ...
 
     @classmethod
     def __subclasshook__(cls: type, other: type, /) -> bool:
@@ -41,7 +44,7 @@ class HoldABC(ABC):
     def data(self: Self) -> Any: ...
 
 
-@_utils.holdDecorator(
+@deco.ClassFuncDecorator(
     "__contains__",
     "__delitem__",
     "__eq__",
@@ -71,11 +74,12 @@ class HoldABC(ABC):
     "update",
     "values",
 )
-class HoldDict(HoldABC, abc.MutableMapping):
+@deco.ClassInitDecorator()
+class DataDict(DataABC, collections.abc.MutableMapping):
     data: dict
 
 
-@_utils.holdDecorator(
+@deco.ClassFuncDecorator(
     "__add__",
     "__contains__",
     "__delitem__",
@@ -108,11 +112,12 @@ class HoldDict(HoldABC, abc.MutableMapping):
     "reverse",
     "sort",
 )
-class HoldList(HoldABC, abc.MutableSequence):
+@deco.ClassInitDecorator()
+class DataList(DataABC, collections.abc.MutableSequence):
     data: list
 
 
-@_utils.holdDecorator(
+@deco.ClassFuncDecorator(
     "__and__",
     "__contains__",
     "__eq__",
@@ -154,22 +159,46 @@ class HoldList(HoldABC, abc.MutableSequence):
     "union",
     "update",
 )
-class HoldSet(HoldABC, abc.MutableSet):
+@deco.ClassInitDecorator()
+class DataSet(DataABC, collections.abc.MutableSet):
+    data: set
+
+
+class HoldABC(DataABC):
+    __slots__ = ("_data",)
+
+
+@deco.ClassDataDecorator()
+class HoldDict(DataDict, HoldABC):
+    __slots__ = ()
+    data: dict
+
+
+@deco.ClassDataDecorator()
+class HoldList(DataList, HoldABC):
+    __slots__ = ()
+    data: list
+
+
+@deco.ClassDataDecorator()
+class HoldSet(DataSet, HoldABC):
+    __slots__ = ()
     data: set
 
 
 class OkayABC(Scaevola, HoldABC):
+    __slots__ = ()
 
+    @setdoc.basic
     def __bool__(self: Self, /) -> bool:
-        "This magic method implements bool(self)."
         return bool(self._data)
 
-    def __contains__(self: Self, value: Any, /) -> bool:
-        "This magic method implements value in self."
-        return value in self._data
+    @setdoc.basic
+    def __contains__(self: Self, other: Any, /) -> bool:
+        return other in self._data
 
+    @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> bool:
-        "This magic method implements self==other."
         if type(self) is type(other):
             return self._data == other._data
         try:
@@ -179,44 +208,44 @@ class OkayABC(Scaevola, HoldABC):
         else:
             return self._data == opp._data
 
+    @setdoc.basic
     def __format__(self: Self, format_spec: Any = "", /) -> str:
-        "This magic method implements format(self, format_spec)."
         return format(str(self), str(format_spec))
 
+    @setdoc.basic
     def __getitem__(self: Self, key: Any, /) -> Any:
-        "This magic method implements self[key]."
         return self._data[key]
 
+    @setdoc.basic
     def __gt__(self: Self, other: Any, /) -> bool:
-        "This magic method implements self>=other."
         return not (self == other) and (self >= other)
 
+    @setdoc.basic
     def __iter__(self: Self, /) -> Iterator:
-        "This magic method implements iter(self)."
         return iter(self._data)
 
+    @setdoc.basic
     def __le__(self: Self, other: Any, /) -> bool:
-        "This magic method implements self<=other."
         return self._data <= type(self._data)(other)
 
+    @setdoc.basic
     def __len__(self: Self, /) -> int:
-        "This magic method implements len(self)."
         return len(self._data)
 
+    @setdoc.basic
     def __lt__(self: Self, other: Any, /) -> bool:
-        "This magic method implements self<other."
         return not (self == other) and (self <= other)
 
+    @setdoc.basic
     def __ne__(self: Self, other: Any, /) -> bool:
-        "This magic method implements self!=other."
         return not (self == other)
 
+    @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        "This magic method implements repr(self)."
         return datarepr(type(self).__name__, self._data)
 
+    @setdoc.basic
     def __reversed__(self: Self, /) -> Self:
-        "This magic method implements reversed(self)."
         return type(self)(reversed(self.data))
 
     def __sorted__(self: Self, /, **kwargs: Any) -> Self:
@@ -225,8 +254,8 @@ class OkayABC(Scaevola, HoldABC):
         ans: Self = type(self)(data)
         return ans
 
+    @setdoc.basic
     def __str__(self: Self, /) -> str:
-        "This magic method implements str(self)."
         return repr(self)
 
     def copy(self: Self, /) -> Self:
@@ -235,13 +264,14 @@ class OkayABC(Scaevola, HoldABC):
 
 
 class OkayDict(OkayABC, HoldDict):
+    __slots__ = ()
 
+    @setdoc.basic
     def __init__(self: Self, data: Iterable = (), /, **kwargs: Any) -> None:
-        "This magic method initializes self."
         self.data = dict(data, **kwargs)
 
+    @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self|other."
         return type(self)(self._data | dict(other))
 
     @classmethod
@@ -253,35 +283,36 @@ class OkayDict(OkayABC, HoldDict):
         "This method returns self[key] if key is in the dictionary, and default otherwise."
         return self._data.get(*args)
 
-    def items(self: Self, /) -> abc.ItemsView:
+    def items(self: Self, /) -> collections.abc.ItemsView:
         "This method returns a view of the items of the current instance."
         return self._data.items()
 
-    def keys(self: Self, /) -> abc.KeysView:
+    def keys(self: Self, /) -> collections.abc.KeysView:
         "This method returns a view of the keys of the current instance."
         return self._data.keys()
 
-    def values(self: Self, /) -> abc.ValuesView:
+    def values(self: Self, /) -> collections.abc.ValuesView:
         "This method returns a view of the values of the current instance."
         return self._data.values()
 
 
 class OkayList(OkayABC, HoldList):
+    __slots__ = ()
 
+    @setdoc.basic
     def __add__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self+other."
         return type(self)(self._data + list(other))
 
+    @setdoc.basic
     def __init__(self: Self, data: Iterable = ()) -> None:
-        "This magic method initializes self."
         self.data = data
 
+    @setdoc.basic
     def __mul__(self: Self, value: SupportsIndex, /) -> Self:
-        "This magic method implements self*other."
         return type(self)(self.data * value)
 
+    @setdoc.basic
     def __rmul__(self: Self, value: SupportsIndex, /) -> Self:
-        "This magic method implements other*self."
         return self * value
 
     def count(self: Self, value: Any, /) -> int:
@@ -294,25 +325,26 @@ class OkayList(OkayABC, HoldList):
 
 
 class OkaySet(OkayABC, HoldSet):
+    __slots__ = ()
 
+    @setdoc.basic
     def __and__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self&other."
         return type(self)(self._data & set(other))
 
+    @setdoc.basic
     def __init__(self: Self, data: Iterable = ()) -> None:
-        "This magic method initializes self."
         self.data = data
 
+    @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self|other."
         return type(self)(self._data | set(other))
 
+    @setdoc.basic
     def __sub__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self-other."
         return type(self)(self._data - set(other))
 
+    @setdoc.basic
     def __xor__(self: Self, other: Any, /) -> Self:
-        "This magic method implements self^other."
         return type(self)(self._data ^ set(other))
 
     def difference(self: Self, /, *others: Any) -> Self:
