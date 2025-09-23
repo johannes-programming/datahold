@@ -1,9 +1,9 @@
-from abc import ABC, ABCMeta, abstractmethod
-from collections import abc
+from abc import abstractmethod
+import collections
 from typing import *
 
 from datarepr import datarepr
-from scaevola import Scaevola
+import scaevola
 from unhash import unhash
 
 from datahold import _utils
@@ -19,8 +19,7 @@ __all__ = [
     "OkaySet",
 ]
 
-
-class HoldABC(ABC):
+class HoldABC(collections.abc.Collection):
 
     __slots__ = ("_data",)
 
@@ -71,7 +70,8 @@ class HoldABC(ABC):
     "update",
     "values",
 )
-class HoldDict(HoldABC, abc.MutableMapping):
+class HoldDict(HoldABC, collections.abc.MutableMapping):
+    __slots__ = ()
     data: dict
 
 
@@ -108,7 +108,8 @@ class HoldDict(HoldABC, abc.MutableMapping):
     "reverse",
     "sort",
 )
-class HoldList(HoldABC, abc.MutableSequence):
+class HoldList(HoldABC, collections.abc.MutableSequence):
+    __slots__ = ()
     data: list
 
 
@@ -154,11 +155,14 @@ class HoldList(HoldABC, abc.MutableSequence):
     "union",
     "update",
 )
-class HoldSet(HoldABC, abc.MutableSet):
+class HoldSet(HoldABC, collections.abc.MutableSet):
+    __slots__ = ()
     data: set
 
 
-class OkayABC(Scaevola, HoldABC):
+@scaevola.auto
+class OkayABC(HoldABC):
+    __slots__ = ()
 
     def __bool__(self: Self, /) -> bool:
         "This magic method implements bool(self)."
@@ -235,6 +239,7 @@ class OkayABC(Scaevola, HoldABC):
 
 
 class OkayDict(OkayABC, HoldDict):
+    __slots__ = ()
 
     def __init__(self: Self, data: Iterable = (), /, **kwargs: Any) -> None:
         "This magic method initializes self."
@@ -253,20 +258,21 @@ class OkayDict(OkayABC, HoldDict):
         "This method returns self[key] if key is in the dictionary, and default otherwise."
         return self._data.get(*args)
 
-    def items(self: Self, /) -> abc.ItemsView:
+    def items(self: Self, /) -> collections.abc.ItemsView:
         "This method returns a view of the items of the current instance."
         return self._data.items()
 
-    def keys(self: Self, /) -> abc.KeysView:
+    def keys(self: Self, /) -> collections.abc.KeysView:
         "This method returns a view of the keys of the current instance."
         return self._data.keys()
 
-    def values(self: Self, /) -> abc.ValuesView:
+    def values(self: Self, /) -> collections.abc.ValuesView:
         "This method returns a view of the values of the current instance."
         return self._data.values()
 
 
 class OkayList(OkayABC, HoldList):
+    __slots__ = ()
 
     def __add__(self: Self, other: Any, /) -> Self:
         "This magic method implements self+other."
@@ -294,6 +300,7 @@ class OkayList(OkayABC, HoldList):
 
 
 class OkaySet(OkayABC, HoldSet):
+    __slots__ = ()
 
     def __and__(self: Self, other: Any, /) -> Self:
         "This magic method implements self&other."
