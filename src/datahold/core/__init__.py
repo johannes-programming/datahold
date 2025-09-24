@@ -76,6 +76,7 @@ class DataABC(metaclass=ABCMeta):
 )
 @deco.ClassInitDecorator()
 class DataDict(DataABC, collections.abc.MutableMapping):
+    __slots__ = ()
     data: dict
 
 
@@ -114,6 +115,7 @@ class DataDict(DataABC, collections.abc.MutableMapping):
 )
 @deco.ClassInitDecorator()
 class DataList(DataABC, collections.abc.MutableSequence):
+    __slots__ = ()
     data: list
 
 
@@ -161,6 +163,7 @@ class DataList(DataABC, collections.abc.MutableSequence):
 )
 @deco.ClassInitDecorator()
 class DataSet(DataABC, collections.abc.MutableSet):
+    __slots__ = ()
     data: set
 
 
