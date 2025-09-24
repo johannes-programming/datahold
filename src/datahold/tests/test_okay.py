@@ -103,6 +103,7 @@ class TestOkaySet(unittest.TestCase):
 
 class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
+        obj: Any
         x: Any
         y: Any
         a: Any
@@ -120,6 +121,12 @@ class TestDoc(unittest.TestCase):
                 doc = getattr(b, "__doc__", None)
                 error = "%r inside %r has no docstring" % (a, x)
                 self.assertNotEqual(doc, None, error)
+            try:
+                obj = y()
+            except TypeError:
+                continue
+            with self.assertRaises(AttributeError):
+                obj.foo = 42
 
 
 if __name__ == "__main__":
