@@ -1,5 +1,3 @@
-import collections
-from abc import ABCMeta, abstractmethod
 from typing import *
 
 import setdoc
@@ -8,9 +6,7 @@ from scaevola import Scaevola
 
 from datahold.core.HoldABC import HoldABC
 
-__all__ = [
-    "OkayABC",
-]
+__all__ = ["OkayABC"]
 
 
 class OkayABC(Scaevola, HoldABC):
