@@ -21,8 +21,9 @@ classifiers = [
 ]
 dependencies = [
     "datarepr>=1.0,<2",
+    "frozendict>=2.4.6,<3",
     "scaevola>=1.0.11,<2",
-    "setdoc>=1.2,<2",
+    "setdoc>=1.2.4,<2",
     "unhash>=1.0,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
@@ -30,7 +31,7 @@ keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.2.2"
+version = "2.0.0"
 
 [project.license]
 file = "LICENSE.txt"
