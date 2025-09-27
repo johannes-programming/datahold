@@ -104,29 +104,33 @@ class TestOkaySet(unittest.TestCase):
 class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
         obj: Any
-        x: Any
+        x: str
         y: Any
         a: Any
         b: Any
         doc: Any
         error: Any
-        for x in core.__all__:
-            y = getattr(core, x)
-            for a in dir(y):
-                b = getattr(y, a)
-                if not callable(b) and not isinstance(b, property):
+        s: str
+        t: str
+        for s in ("Data", "Hold", "Okay"):
+            for t in ("ABC", "Dict", "List", "Set"):
+                x = s + t
+                y = getattr(core, x)
+                for a in dir(y):
+                    b = getattr(y, a)
+                    if not callable(b) and not isinstance(b, property):
+                        continue
+                    if getattr(b, "__isabstractmethod__", False):
+                        continue
+                    doc = getattr(b, "__doc__", None)
+                    error = "%r inside %r has no docstring" % (a, x)
+                    self.assertNotEqual(doc, None, error)
+                try:
+                    obj = y()
+                except TypeError:
                     continue
-                if getattr(b, "__isabstractmethod__", False):
-                    continue
-                doc = getattr(b, "__doc__", None)
-                error = "%r inside %r has no docstring" % (a, x)
-                self.assertNotEqual(doc, None, error)
-            try:
-                obj = y()
-            except TypeError:
-                continue
-            with self.assertRaises(AttributeError):
-                obj.foo = 42
+                with self.assertRaises(AttributeError):
+                    obj.foo = 42
 
 
 if __name__ == "__main__":
