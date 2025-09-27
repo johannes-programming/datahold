@@ -57,3 +57,4 @@ __all__ = ["DataSet"]
 )
 class DataSet(DataABC, collections.abc.MutableSet):
     __slots__ = ()
+    data: frozenset

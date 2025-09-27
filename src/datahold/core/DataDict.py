@@ -45,3 +45,4 @@ from datahold.core.DataABC import DataABC
 )
 class DataDict(DataABC, collections.abc.MutableMapping):
     __slots__ = ()
+    data: frozendict
