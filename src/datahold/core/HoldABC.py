@@ -7,3 +7,4 @@ __all__ = ["HoldABC"]
 
 class HoldABC(DataABC):
     __slots__ = ("_data",)
+    data: Any
