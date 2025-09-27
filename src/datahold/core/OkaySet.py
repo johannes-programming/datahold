@@ -42,16 +42,16 @@ class OkaySet(OkayABC, HoldSet):
         "This method returns a copy of self without the items not found in all of the others."
         return type(self)(self._data.intersection(*others))
 
+    @setdoc.basic
     def isdisjoint(self: Self, other: Any, /) -> bool:
-        "This method determines if self and other have no intersection."
         return self._data.isdisjoint(other)
 
+    @setdoc.basic
     def issubset(self: Self, other: Any, /) -> bool:
-        "This method determines if self is a subset of other."
         return self._data.issubset(other)
 
+    @setdoc.basic
     def issuperset(self: Self, other: Any, /) -> bool:
-        "This method determines if self is a superset of other."
         return self._data.issuperset(other)
 
     def symmetric_difference(self: Self, other: Any, /) -> Self:
