@@ -10,6 +10,8 @@ __all__ = ["DataABC"]
 class DataABC(metaclass=ABCMeta):
     __slots__ = ()
 
+    data: Any
+
     __hash__ = unhash
 
     @abstractmethod
