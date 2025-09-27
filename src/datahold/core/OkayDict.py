@@ -7,9 +7,7 @@ from frozendict import frozendict
 from datahold.core.HoldDict import HoldDict
 from datahold.core.OkayABC import OkayABC
 
-__all__ = [
-    "OkayDict",
-]
+__all__ = ["OkayDict"]
 
 
 class OkayDict(OkayABC, HoldDict):
