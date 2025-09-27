@@ -11,6 +11,7 @@ __all__ = ["OkayABC"]
 
 class OkayABC(Scaevola, HoldABC):
     __slots__ = ()
+    data: Any
 
     @setdoc.basic
     def __bool__(self: Self, /) -> bool:
