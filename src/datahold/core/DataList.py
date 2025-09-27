@@ -48,3 +48,4 @@ __all__ = ["DataList"]
 )
 class DataList(DataABC, collections.abc.MutableSequence):
     __slots__ = ()
+    data: tuple
