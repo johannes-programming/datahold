@@ -1,3 +1,3 @@
-from datahold._utils.deco.ClassDataDecorator import ClassDataDecorator
-from datahold._utils.deco.ClassFuncDecorator import ClassFuncDecorator
-from datahold._utils.deco.ClassInitDecorator import ClassInitDecorator
+from datahold._utils.deco.dataDeco import dataDeco
+from datahold._utils.deco.funcDeco import funcDeco
+from datahold._utils.deco.initDeco import initDeco
