@@ -5,9 +5,7 @@ import setdoc
 from datahold.core.HoldList import HoldList
 from datahold.core.OkayABC import OkayABC
 
-__all__ = [
-    "OkayList",
-]
+__all__ = ["OkayList"]
 
 
 class OkayList(OkayABC, HoldList):
