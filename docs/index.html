@@ -358,10 +358,35 @@ def data(self: Self, value: Any) -> None:
                             </dd>
                             <dt id="HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
                             <dd>
+                                <dl class="heading4">
+                                    <dt id="HoldList.data">data: tuple</dt>
+                                    <dd>
+                                        This property is implemented with the equivalent to the following code:
+                                        <pre class="block"><code>@property
+def data(self: Self) -> tuple:
+    return self._data
+
+@data.setter
+def data(self: Self, value: Any) -> None:
+    self._data = tuple(value)</code></pre>
+                                    </dd>
+                                </dl>   
                             </dd>
                             <dt id="HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd>
+                                <dl class="heading4">
+                                    <dt id="HoldSet.data">data: frozenset</dt>
+                                    <dd>
+                                        This property is implemented with the equivalent to the following code:
+                                        <pre class="block"><code>@property
+def data(self: Self) -> frozenset:
+    return self._data
 
+@data.setter
+def data(self: Self, value: Any) -> None:
+    self._data = frozenset(value)</code></pre>
+                                    </dd>
+                                </dl>   
                             </dd>
                             <dt id="OkayABC">class datahold.OkayABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
@@ -394,20 +419,7 @@ def data(self: Self, value: Any) -> None:
                             <dd>
                                 <p>
                                     This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
-                                    It implements a <code>data</code> property that binds a variable <code>_data</code>.
                                 </p>
-                                <pre class="block"><code>    @property
-    def data(self, /):
-        return list(self._data)
-
-    @data.setter
-    def data(self, values, /):
-        self._data = list(values)</code></pre>
-                                <p>Based on this, it implements common-sense methods. For example:</p>
-                                <ul>
-                                    <li>All methods that returned a <code>list</code> before now return <code>OkayList</code> (type adapts to further inheritance).</li>
-                                    <li><code>__init__</code> allows setting data immediately.</li>
-                                </ul>
                             </dd>
                             <dt id="OkaySet">class datahold.OkaySet(data: Iterable = ())</dt>
                             <dd>
