@@ -9,7 +9,7 @@ from datahold.core.DataABC import DataABC
 
 
 @deco.funcDeco(
-    *Cfg.cfg.data["datafuncs"]["Dict"],
+    funcnames=Cfg.cfg.data["datafuncs"]["Dict"],
     Frozen=frozendict,
     NonFrozen=dict,
 )
