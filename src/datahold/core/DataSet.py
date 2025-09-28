@@ -9,7 +9,7 @@ __all__ = ["DataSet"]
 
 
 @deco.funcDeco(
-    *Cfg.cfg.data["datafuncs"]["Set"],
+    funcnames=Cfg.cfg.data["datafuncs"]["Set"],
     Frozen=frozenset,
     NonFrozen=set,
 )
