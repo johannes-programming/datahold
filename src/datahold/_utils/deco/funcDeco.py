@@ -8,8 +8,8 @@ from datahold._utils.deco.wrapping import wrap
 __all__ = ["funcDeco"]
 
 
-def funcDeco(*args: str, **kwargs: type) -> partial:
-    return partial(update, funcnames=args, **kwargs)
+def funcDeco(**kwargs: type) -> partial:
+    return partial(update, **kwargs)
 
 
 def update(
