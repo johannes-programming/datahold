@@ -9,7 +9,7 @@ __all__ = ["DataList"]
 
 
 @deco.funcDeco(
-    *Cfg.cfg.data["datafuncs"]["List"],
+    funcnames=Cfg.cfg.data["datafuncs"]["List"],
     Frozen=tuple,
     NonFrozen=list,
 )
