@@ -8,8 +8,10 @@ __all__ = [
     "HoldList",
 ]
 
+Item = TypeVar("Item")
+
 
 @deco.dataDeco()
-class HoldList(HoldABC, DataList):
+class HoldList(HoldABC, DataList[Item]):
     __slots__ = ()
-    data: tuple
+    data: tuple[Item, ...]

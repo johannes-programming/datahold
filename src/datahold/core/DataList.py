@@ -8,15 +8,18 @@ from datahold.core.DataABC import DataABC
 __all__ = ["DataList"]
 
 
+Item = TypeVar("Item")
+
+
 @deco.funcDeco(
     funcnames=Cfg.cfg.data["datafuncs"]["List"],
-    Frozen=tuple,
-    NonFrozen=list,
+    Frozen=tuple[Item, ...],
+    NonFrozen=list[Item],
 )
 @deco.initDeco(
-    Frozen=tuple,
-    NonFrozen=list,
+    Frozen=tuple[Item, ...],
+    NonFrozen=list[Item],
 )
-class DataList(DataABC, collections.abc.MutableSequence):
+class DataList(DataABC, collections.abc.MutableSequence[Item]):
     __slots__ = ()
-    data: tuple
+    data: tuple[Item, ...]
