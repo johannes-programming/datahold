@@ -7,10 +7,12 @@ from datahold.core.OkayABC import OkayABC
 
 __all__ = ["OkayList"]
 
+Item = TypeVar("Item")
 
-class OkayList(OkayABC, HoldList):
+
+class OkayList(OkayABC, HoldList[Item]):
     __slots__ = ()
-    data: tuple
+    data: tuple[Item, ...]
 
     @setdoc.basic
     def __add__(self: Self, other: Any, /) -> Self:
