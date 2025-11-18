@@ -10,8 +10,11 @@ __all__ = [
     "HoldDict",
 ]
 
+Key = TypeVar("Key")
+Value = TypeVar("Value")
+
 
 @deco.dataDeco()
-class HoldDict(DataDict, HoldABC):
+class HoldDict(HoldABC, DataDict[Key, Value]):
     __slots__ = ()
-    data: frozendict
+    data: frozendict[Key, Value]
