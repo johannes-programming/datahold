@@ -9,7 +9,10 @@ __all__ = [
 ]
 
 
+Item = TypeVar("Item")
+
+
 @deco.dataDeco()
-class HoldSet(HoldABC, DataSet):
+class HoldSet(HoldABC, DataSet[Item]):
     __slots__ = ()
-    data: frozenset
+    data: frozenset[Item]
