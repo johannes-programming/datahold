@@ -12,6 +12,6 @@ __all__ = [
 
 
 @deco.dataDeco()
-class HoldDict(DataDict, HoldABC):
+class HoldDict(HoldABC, DataDict):
     __slots__ = ()
     data: frozendict
