@@ -7,10 +7,12 @@ from datahold.core.OkayABC import OkayABC
 
 __all__ = ["OkaySet"]
 
+Item = TypeVar("Item")
 
-class OkaySet(OkayABC, HoldSet):
+
+class OkaySet(OkayABC, HoldSet[Item]):
     __slots__ = ()
-    data: frozenset
+    data: frozenset[Item]
 
     @setdoc.basic
     def __and__(self: Self, other: Any, /) -> Self:
