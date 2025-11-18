@@ -10,6 +10,6 @@ __all__ = [
 
 
 @deco.dataDeco()
-class HoldSet(DataSet, HoldABC):
+class HoldSet(HoldABC, DataSet):
     __slots__ = ()
     data: frozenset

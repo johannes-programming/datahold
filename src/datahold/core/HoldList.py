@@ -10,6 +10,6 @@ __all__ = [
 
 
 @deco.dataDeco()
-class HoldList(DataList, HoldABC):
+class HoldList(HoldABC, DataList):
     __slots__ = ()
     data: tuple
