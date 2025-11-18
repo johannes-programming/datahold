@@ -41,7 +41,7 @@
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="DataDict">class datahold.DataDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is a brute wrapper for <code>dict</code>.
@@ -262,7 +262,7 @@
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="DataList">class datahold.DataList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is analogous to <code><a href="#DataDict">DataDict</a></code>. 
@@ -303,7 +303,7 @@
                                     thereby also inheriting their members. 
                                 </p>
                             </dd>
-                            <dt id="DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="DataSet">class datahold.DataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is analogous to <code><a href="#DataDict">DataDict</a></code>. 
@@ -357,7 +357,7 @@
                             <dt id="HoldABC">class datahold.HoldABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
                             </dd>
-                            <dt id="HoldDict">class datahold.HoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="HoldDict">class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt id="HoldDict.data">data: frozendict</dt>
@@ -373,7 +373,7 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>    
                             </dd>
-                            <dt id="HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="HoldList">class datahold.HoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt id="HoldList.data">data: tuple</dt>
@@ -389,7 +389,7 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>   
                             </dd>
-                            <dt id="HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="HoldSet">class datahold.HoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt id="HoldSet.data">data: frozenset</dt>
@@ -428,17 +428,17 @@ def data(self: Self, value: Any) -> None:
                                 </ul>
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
                             </dd>
-                            <dt id="OkayDict">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</dt>
+                            <dt id="OkayDict">class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)</dt>
                             <dd>
                                 <p>A subclass of <code><a href="#HoldDict">HoldDict</a></code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
                             </dd>
-                            <dt id="OkayList">class datahold.OkayList(data: Iterable = ())</dt>
+                            <dt id="OkayList">class datahold.OkayList[Item](data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
                                 </p>
                             </dd>
-                            <dt id="OkaySet">class datahold.OkaySet(data: Iterable = ())</dt>
+                            <dt id="OkaySet">class datahold.OkaySet[Item](data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, 
