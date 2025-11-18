@@ -10,10 +10,14 @@ from datahold.core.OkayABC import OkayABC
 __all__ = ["OkayDict"]
 
 
-class OkayDict(OkayABC, HoldDict):
+Key = TypeVar("Key")
+Value = TypeVar("Value")
+
+
+class OkayDict(OkayABC, HoldDict[Key, Value]):
     __slots__ = ()
 
-    data: frozendict
+    data: frozendict[Key, Value]
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable = (), /, **kwargs: Any) -> None:
