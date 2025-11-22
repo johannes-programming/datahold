@@ -29,7 +29,8 @@ def update(
 
 
 def setupInit(*, Target: type, **kwargs: type) -> None:
-    new: FunctionType = makeInit(**kwargs)
+    new: FunctionType
+    new = makeInit(**kwargs)
     new.__module__ = Target.__module__
     new.__name__ = "__init__"
     new.__qualname__ = Target.__qualname__ + ".__init__"
