@@ -11,8 +11,13 @@ __all__ = ["DataList"]
 Item = TypeVar("Item")
 
 
-@deco.funcDeco(
-    funcnames=Cfg.cfg.data["datafuncs"]["List"],
+@deco.unfrozenDeco(
+    funcnames=Cfg.cfg.data["unfrozen"]["list"],
+    Frozen=tuple[Item, ...],
+    NonFrozen=list[Item],
+)
+@deco.frozenDeco(
+    funcnames=Cfg.cfg.data["frozen"]["list"],
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],
 )
