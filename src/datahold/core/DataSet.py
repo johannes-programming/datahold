@@ -11,8 +11,13 @@ __all__ = ["DataSet"]
 Item = TypeVar("Item")
 
 
-@deco.funcDeco(
-    funcnames=Cfg.cfg.data["datafuncs"]["Set"],
+@deco.unfrozenDeco(
+    funcnames=Cfg.cfg.data["unfrozen"]["set"],
+    Frozen=frozenset[Item],
+    NonFrozen=set[Item],
+)
+@deco.frozenDeco(
+    funcnames=Cfg.cfg.data["frozen"]["set"],
     Frozen=frozenset[Item],
     NonFrozen=set[Item],
 )
