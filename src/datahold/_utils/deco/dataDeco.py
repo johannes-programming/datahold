@@ -20,7 +20,9 @@ def update(
 
 
 def makeData(Target: type) -> property:
-    Frozen: type = Target.__annotations__["data"]
+    Frozen: type
+    ans: property
+    Frozen = Target.__annotations__["data"]
 
     def fget(self: Self) -> Any:
         return self._data
@@ -32,7 +34,7 @@ def makeData(Target: type) -> property:
 
     adapt(fset, Target=Target)
 
-    ans: property = property(
+    ans = property(
         fget=fget,
         fset=fset,
         doc=setdoc.getbasicdoc("data"),
