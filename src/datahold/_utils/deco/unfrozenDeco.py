@@ -5,10 +5,10 @@ from typing import *
 
 from datahold._utils.deco.wrapping import wrap
 
-__all__ = ["funcDeco"]
+__all__ = ["unfrozenDeco"]
 
 
-def funcDeco(**kwargs: type) -> partial:
+def unfrozenDeco(**kwargs: type) -> partial:
     return partial(update, **kwargs)
 
 
@@ -38,8 +38,10 @@ def setupFunc(
     Frozen: type,
     name: str,
 ) -> None:
-    old: Callable = getattr(NonFrozen, name)
-    new: FunctionType = makeFunc(
+    old: Callable
+    new: FunctionType
+    old = getattr(NonFrozen, name)
+    new = makeFunc(
         old=old,
         NonFrozen=NonFrozen,
         Frozen=Frozen,
@@ -52,8 +54,10 @@ def setupFunc(
 
 def makeFunc(*, old: FunctionType, NonFrozen: type, Frozen: type) -> Any:
     def new(self: Self, *args: Any, **kwargs: Any) -> Any:
-        data: Any = NonFrozen(self.data)
-        ans: Any = old(data, *args, **kwargs)
+        data: Any
+        ans: Any
+        data = NonFrozen(self.data)
+        ans = old(data, *args, **kwargs)
         self.data = Frozen(data)
         return ans
 
