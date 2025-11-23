@@ -11,6 +11,10 @@ class HashABC(metaclass=ABCMeta):
 
     data: Any
 
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(self.data)
+
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...

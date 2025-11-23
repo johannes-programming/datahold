@@ -14,6 +14,8 @@ class Cfg(enum.Enum):
     @functools.cached_property
     def data(self: Self) -> dict:
         "This cached property holds the cfg data."
-        text: str = resources.read_text("datahold._utils", "cfg.toml")
-        ans: dict = tomllib.loads(text)
+        text: str
+        ans: dict
+        text = resources.read_text("datahold._utils", "cfg.toml")
+        ans = tomllib.loads(text)
         return ans

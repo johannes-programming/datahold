@@ -10,16 +10,18 @@ def wrap(
     old: Callable,
     new: FunctionType,
 ) -> ins.Signature:
-    new.__doc__ = old.__doc__
-    try:
-        oldsig: ins.Signature = ins.signature(old)
-    except ValueError:
-        return
-    params: list = list()
+    oldsig: ins.Signature
+    params: list
     a: Any
     n: int
     p: ins.Parameter
     q: ins.Parameter
+    new.__doc__ = old.__doc__
+    try:
+        oldsig = ins.signature(old)
+    except ValueError:
+        return
+    params = list()
     for n, p in enumerate(oldsig.parameters.values()):
         if n == 0:
             a = Self
@@ -34,8 +36,9 @@ def wrap(
 
 
 def getAnnotationsDict(sig: ins.Signature) -> dict:
-    ans: dict = dict()
+    ans: dict
     p: ins.Parameter
+    ans = dict()
     for p in sig.parameters.values():
         ans[p.name] = p.annotation
     ans["return"] = sig.return_annotation
