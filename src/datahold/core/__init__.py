@@ -2,6 +2,10 @@ from datahold.core.DataABC import *
 from datahold.core.DataDict import *
 from datahold.core.DataList import *
 from datahold.core.DataSet import *
+from datahold.core.HashABC import *
+from datahold.core.HashDict import *
+from datahold.core.HashList import *
+from datahold.core.HashSet import *
 from datahold.core.HoldABC import *
 from datahold.core.HoldDict import *
 from datahold.core.HoldList import *
