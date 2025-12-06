@@ -16,10 +16,6 @@ Item = TypeVar("Item")
     Frozen=frozenset[Item],
     NonFrozen=set[Item],
 )
-@deco.initDeco(
-    Frozen=frozenset[Item],
-    NonFrozen=set[Item],
-)
 class HashSet(HashABC, collections.abc.MutableSet[Item]):
     __slots__ = ()
     data: frozenset[Item]

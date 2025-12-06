@@ -16,6 +16,10 @@ Item = TypeVar("Item")
     Frozen=frozenset[Item],
     NonFrozen=set[Item],
 )
+@deco.initDeco(
+    Frozen=frozenset[Item],
+    NonFrozen=set[Item],
+)
 class DataSet(DataABC, HashSet[Item]):
     __slots__ = ()
     data: frozenset[Item]

@@ -16,10 +16,6 @@ Value = TypeVar("Value")
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],
 )
-@deco.initDeco(
-    Frozen=frozendict[Key, Value],
-    NonFrozen=dict[Key, Value],
-)
 class HashDict(HashABC, collections.abc.MutableMapping[Key, Value]):
     __slots__ = ()
     data: frozendict[Key, Value]

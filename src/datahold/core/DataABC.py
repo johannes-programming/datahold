@@ -12,4 +12,4 @@ class DataABC(HashABC):
 
     data: Any
 
-    __hash__ = unhash
+    __hash__ = None

@@ -16,6 +16,10 @@ Item = TypeVar("Item")
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],
 )
+@deco.initDeco(
+    Frozen=tuple[Item, ...],
+    NonFrozen=list[Item],
+)
 class DataList(DataABC, HashList[Item]):
     __slots__ = ()
     data: tuple[Item, ...]

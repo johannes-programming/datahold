@@ -16,10 +16,6 @@ Item = TypeVar("Item")
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],
 )
-@deco.initDeco(
-    Frozen=tuple[Item, ...],
-    NonFrozen=list[Item],
-)
 class HashList(HashABC, collections.abc.MutableSequence[Item]):
     __slots__ = ()
     data: tuple[Item, ...]
