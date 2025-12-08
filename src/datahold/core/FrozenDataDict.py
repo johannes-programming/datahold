@@ -5,7 +5,9 @@ from frozendict import frozendict
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.HashABC import HashABC
+from datahold.core.FrozenDataBase import FrozenDataBase
+
+__all__ = ["FrozenDataDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
@@ -16,6 +18,9 @@ Value = TypeVar("Value")
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],
 )
-class HashDict(HashABC, collections.abc.MutableMapping[Key, Value]):
+class FrozenDataDict(
+    FrozenDataBase[frozendict[Key, Value]],
+    collections.abc.Mapping[Key, Value],
+):
     __slots__ = ()
     data: frozendict[Key, Value]

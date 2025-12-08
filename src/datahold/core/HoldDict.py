@@ -2,19 +2,16 @@ from typing import *
 
 from frozendict import frozendict
 
-from datahold._utils import deco
-from datahold.core.DataDict import DataDict
-from datahold.core.HoldABC import HoldABC
+from datahold.core.FrozenHoldDict import FrozenHoldDict
+from datahold.core.HoldBase import HoldBase
 
-__all__ = [
-    "HoldDict",
-]
+__all__ = ["HoldDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
 
 
-@deco.dataDeco()
-class HoldDict(HoldABC, DataDict[Key, Value]):
-    __slots__ = ()
-    data: frozendict[Key, Value]
+class HoldDict(
+    HoldBase[frozendict[Key, Value]],
+    FrozenHoldDict[Key, Value],
+): ...

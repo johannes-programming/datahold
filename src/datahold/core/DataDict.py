@@ -4,8 +4,9 @@ from frozendict import frozendict
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.DataABC import DataABC
-from datahold.core.HashDict import HashDict
+from datahold.core.DataBase import DataBase
+
+__all__ = ["DataDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
@@ -16,10 +17,6 @@ Value = TypeVar("Value")
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],
 )
-@deco.initDeco(
-    Frozen=frozendict[Key, Value],
-    NonFrozen=dict[Key, Value],
-)
-class DataDict(DataABC, HashDict[Key, Value]):
+class DataDict(DataBase):
     __slots__ = ()
     data: frozendict[Key, Value]

@@ -3,13 +3,15 @@ from typing import *
 
 import setdoc
 
-__all__ = ["HashABC"]
+__all__ = ["FrozenDataBase"]
+
+Data = TypeVar("Data")
 
 
-class HashABC(metaclass=ABCMeta):
+class FrozenDataBase(Generic[Data], metaclass=ABCMeta):
     __slots__ = ()
 
-    data: Any
+    data: Data
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
@@ -26,4 +28,4 @@ class HashABC(metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def data(self: Self) -> Any: ...
+    def data(self: Self) -> Data: ...
