@@ -30,7 +30,7 @@ keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "3.0.0+no.deco"
+version = "3.0.0+test.defect"
 
 [project.license]
 file = "LICENSE.txt"

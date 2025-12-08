@@ -8,6 +8,7 @@ from datahold._utils.Cfg import Cfg
 from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataDict import FrozenDataDict
 
+__all__ = ["DataDict"]
 Key = TypeVar("Key")
 Value = TypeVar("Value")
 
