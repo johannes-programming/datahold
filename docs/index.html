@@ -1288,8 +1288,18 @@ def data(self: Self, value: Any) -> None:
                             </dd>
                         </dl>
                         <dl class="heading4" version="3.0.0.dev0">
-                            <dt id="DataBase">class datahold.DataBase</dt>
-                            <dd></dd>
+                            <dt id="DataBase">class datahold.DataBase(self: Self, *args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>copy(self: Self) -> Self</dt>
+                                    <dd>
+                                        <p>
+                                            This method returns a new copy of self.
+                                            It is implemented as <code>type(self)(self)</code>.
+                                        </p>
+                                    </dd>
+                                </dl>
+                            </dd>
                             <dt id="DataDict">class datahold.DataDict</dt>
                             <dd></dd>
                             <dt id="DataList">class datahold.DataList</dt>
@@ -1301,8 +1311,6 @@ def data(self: Self, value: Any) -> None:
                                 <dl class="heading4">
                                     <dt>__hash__(self: Self) -> int</dt>
                                     <dd></dd>
-                                    <dt>__init__(self: Self, *args: Any, **kwargs: Any) -> None</dt>
-                                    <dd>This magic method is abstract.</dd>
                                     <dt>__subclasshook__(cls: type, other: type, /) -> bool</dt>
                                     <dd>This magic classmethod can be overwritten for a custom subclass check.</dd>
                                     <dt>data: Any</dt>
@@ -1316,15 +1324,21 @@ def data(self: Self, value: Any) -> None:
                             <dt id="FrozenDataSet">class datahold.FrozenDataSet</dt>
                             <dd></dd>
                             <dt id="FrozenHoldBase">class datahold.FrozenHoldBase</dt>
-                            <dd></dd>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>data: Any</dt>
+                                    <dd></dd>
+                                </dl>
+                            </dd>
                             <dt id="FrozenHoldDict">class datahold.FrozenHoldDict</dt>
                             <dd></dd>
                             <dt id="FrozenHoldList">class datahold.FrozenHoldList</dt>
                             <dd></dd>
                             <dt id="FrozenHoldSet">class datahold.FrozenHoldSet</dt>
                             <dd></dd>
-                            <dt id="HoldBase">class datahold.HoldBase</dt>
-                            <dd></dd>
+                            <dt id="HoldBase">class datahold.HoldBase(self: Self, *args: Any, **kwargs: Any)</dt>
+                            <dd>
+                            </dd>
                             <dt id="HoldDict">class datahold.HoldDict</dt>
                             <dd></dd>
                             <dt id="HoldList">class datahold.HoldList</dt>
