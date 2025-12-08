@@ -6,7 +6,3 @@ from datahold.core.HoldABC import *
 from datahold.core.HoldDict import *
 from datahold.core.HoldList import *
 from datahold.core.HoldSet import *
-from datahold.core.OkayABC import *
-from datahold.core.OkayDict import *
-from datahold.core.OkayList import *
-from datahold.core.OkaySet import *

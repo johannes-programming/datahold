@@ -1,27 +1,11 @@
-from abc import ABCMeta, abstractmethod
 from typing import *
 
-import setdoc
+from datahold.core.FrozenDataABC import FrozenDataABC
 
 __all__ = ["DataABC"]
 
 
-class DataABC(metaclass=ABCMeta):
+class DataABC(FrozenDataABC):
     __slots__ = ()
 
-    data: Any
-
     __hash__ = None
-
-    @abstractmethod
-    @setdoc.basic
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None: ...
-
-    @classmethod
-    def __subclasshook__(cls: type, other: type, /) -> bool:
-        "This magic classmethod can be overwritten for a custom subclass check."
-        return NotImplemented
-
-    @property
-    @abstractmethod
-    def data(self: Self) -> Any: ...
