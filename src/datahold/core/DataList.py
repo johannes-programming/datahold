@@ -1,8 +1,8 @@
 import collections
 from typing import *
 
-from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
+from datahold._utils.deco import unfrozen
 from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataList import FrozenDataList
 
@@ -12,12 +12,12 @@ __all__ = ["DataList"]
 Item = TypeVar("Item")
 
 
-@deco.unfrozenDeco(
+@unfrozen.unfrozenDeco(
     funcnames=Cfg.cfg.data["unfrozen"]["list"],
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],
 )
-@deco.initDeco(
+@unfrozen.initDeco(
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],
 )

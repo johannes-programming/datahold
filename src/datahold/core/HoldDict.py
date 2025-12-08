@@ -2,7 +2,7 @@ from typing import *
 
 from frozendict import frozendict
 
-from datahold._utils import deco
+from datahold._utils.deco import unfrozen
 from datahold.core.DataDict import DataDict
 from datahold.core.HoldBase import HoldBase
 
@@ -12,7 +12,7 @@ Key = TypeVar("Key")
 Value = TypeVar("Value")
 
 
-@deco.dataDeco()
+@unfrozen.dataDeco()
 class HoldDict(HoldBase, DataDict[Key, Value]):
     __slots__ = ()
     data: frozendict[Key, Value]
