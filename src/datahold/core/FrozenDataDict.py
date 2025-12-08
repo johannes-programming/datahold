@@ -24,3 +24,8 @@ class FrozenDataDict(
 ):
     __slots__ = ()
     data: frozendict[Key, Value]
+
+    @classmethod
+    def fromkeys(cls: type, keys: Iterable, value: Any = None, /) -> Self:
+        "This classmethod maps the given keys to the given value."
+        return cls(frozendict.fromkeys(keys, value))
