@@ -2,7 +2,6 @@ from abc import ABCMeta, abstractmethod
 from typing import *
 
 import setdoc
-from unhash import unhash
 
 __all__ = ["DataABC"]
 
@@ -12,7 +11,7 @@ class DataABC(metaclass=ABCMeta):
 
     data: Any
 
-    __hash__ = unhash
+    __hash__ = None
 
     @abstractmethod
     @setdoc.basic
