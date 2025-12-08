@@ -15,7 +15,6 @@ dict = [
     "__reversed__",
     "__ror__",
     "__str__",
-    "copy",
     "get",
     "items",
     "keys",
@@ -38,7 +37,6 @@ list = [
     "__reversed__",
     "__rmul__",
     "__str__",
-    "copy",
     "count",
     "index",
 ]
@@ -62,7 +60,6 @@ set = [
     "__str__",
     "__sub__",
     "__xor__",
-    "copy",
     "difference",
     "intersection",
     "isdisjoint",

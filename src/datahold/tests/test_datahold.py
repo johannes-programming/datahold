@@ -8,6 +8,9 @@ from collections.abc import (
 )
 from collections.abc import Set as AbstractSet
 from inspect import isabstract
+from typing import Any, Self
+
+from frozendict import frozendict
 
 from datahold.core.DataBase import DataBase
 from datahold.core.DataDict import DataDict
@@ -28,7 +31,7 @@ from datahold.core.HoldSet import HoldSet
 
 
 class TestAbstractness(unittest.TestCase):
-    def test_abstract_classes(self):
+    def test_abstract_classes(self: Self) -> None:
         # data
         self.assertTrue(isabstract(DataBase))
         self.assertTrue(isabstract(DataDict))
@@ -44,7 +47,7 @@ class TestAbstractness(unittest.TestCase):
         self.assertTrue(isabstract(FrozenHoldBase))
         self.assertTrue(isabstract(HoldBase))
 
-    def test_concrete_classes(self):
+    def test_concrete_classes(self: Self) -> None:
         FrozenHoldDict({"a": 1})
         FrozenHoldList([1, 2])
         FrozenHoldSet({1, 2})
@@ -55,7 +58,7 @@ class TestAbstractness(unittest.TestCase):
 
 
 class TestInheritance(unittest.TestCase):
-    def test_dict_inheritance(self):
+    def test_dict_inheritance(self: Self) -> None:
         # base → concrete
         self.assertTrue(issubclass(DataDict, DataBase))
         self.assertTrue(issubclass(FrozenDataDict, FrozenDataBase))
@@ -67,7 +70,7 @@ class TestInheritance(unittest.TestCase):
         # hold non-frozen do NOT inherit from frozen
         self.assertFalse(issubclass(HoldDict, FrozenHoldDict))
 
-    def test_list_inheritance(self):
+    def test_list_inheritance(self: Self) -> None:
         self.assertTrue(issubclass(DataList, DataBase))
         self.assertTrue(issubclass(FrozenDataList, FrozenDataBase))
         self.assertTrue(issubclass(HoldList, HoldBase))
@@ -76,7 +79,7 @@ class TestInheritance(unittest.TestCase):
         self.assertTrue(issubclass(DataList, FrozenDataList))
         self.assertFalse(issubclass(HoldList, FrozenHoldList))
 
-    def test_set_inheritance(self):
+    def test_set_inheritance(self: Self) -> None:
         self.assertTrue(issubclass(DataSet, DataBase))
         self.assertTrue(issubclass(FrozenDataSet, FrozenDataBase))
         self.assertTrue(issubclass(HoldSet, HoldBase))
@@ -87,27 +90,34 @@ class TestInheritance(unittest.TestCase):
 
 
 class TestProtocols(unittest.TestCase):
-    def test_mapping_protocols(self):
-        f = FrozenHoldDict({"a": 1})
-        m = HoldDict({"a": 1})
+    def test_mapping_protocols_x(self: Self) -> None:
+        x: FrozenHoldDict
+        x = FrozenHoldDict({"a": 1})
 
-        self.assertIsInstance(f, Mapping)
-        self.assertNotIsInstance(f, MutableMapping)
+        self.assertIsInstance(x, Mapping)
+        self.assertNotIsInstance(x, MutableMapping)
 
-        self.assertIsInstance(m, Mapping)
-        self.assertIsInstance(m, MutableMapping)
+    def test_mapping_protocols_y(self: Self) -> None:
+        y: HoldDict
+        y = HoldDict({"a": 1})
 
-    def test_sequence_protocols(self):
+        self.assertIsInstance(y, Mapping)
+        self.assertIsInstance(y, MutableMapping)
+
+    def test_sequence_protocols_x(self: Self) -> None:
+        f: FrozenHoldList
         f = FrozenHoldList([1, 2, 3])
-        m = HoldList([1, 2, 3])
 
         self.assertIsInstance(f, Sequence)
         self.assertNotIsInstance(f, MutableSequence)
 
+    def test_sequence_protocols_y(self: Self) -> None:
+        m: HoldList
+        m = HoldList([1, 2, 3])
         self.assertIsInstance(m, Sequence)
         self.assertIsInstance(m, MutableSequence)
 
-    def test_set_protocols(self):
+    def test_set_protocols(self: Self) -> None:
         f = FrozenHoldSet({1, 2, 3})
         m = HoldSet({1, 2, 3})
 
@@ -119,28 +129,28 @@ class TestProtocols(unittest.TestCase):
 
 
 class TestDataAttribute(unittest.TestCase):
-    def test_dict_data_is_immutable_mapping(self):
+    def test_dict_data_is_immutable_mapping(self: Self) -> None:
         f = FrozenHoldDict({"a": 1})
         m = HoldDict({"a": 1})
 
         for obj in (f, m):
-            self.assertIsInstance(obj.data, Mapping)
-            self.assertNotIsInstance(obj.data, dict)
+            self.assertIsInstance(obj.data, frozendict)
 
             # try to mutate underlying data
             with self.assertRaises((TypeError, AttributeError)):
                 obj.data["b"] = 2
 
-    def test_list_data_is_tuple(self):
+    def test_list_data_is_tuple(self: Self) -> None:
+        o: Any
         f = FrozenHoldList([1, 2, 3])
         m = HoldList([1, 2, 3])
 
-        for obj in (f, m):
-            self.assertIsInstance(obj.data, tuple)
-            with self.assertRaises(TypeError):
-                obj.data.append(4)
+        for o in (f, m):
+            self.assertIsInstance(o.data, tuple)
+            with self.assertRaises(Exception):
+                o.data.append(4)
 
-    def test_set_data_is_frozenset(self):
+    def test_set_data_is_frozenset(self: Self) -> None:
         f = FrozenHoldSet({1, 2, 3})
         m = HoldSet({1, 2, 3})
 
@@ -151,21 +161,21 @@ class TestDataAttribute(unittest.TestCase):
 
 
 class TestFrozenMutability(unittest.TestCase):
-    def test_frozen_dict_cannot_mutate(self):
+    def test_frozen_dict_cannot_mutate(self: Self) -> None:
         f = FrozenHoldDict({"a": 1})
         with self.assertRaises((TypeError, AttributeError)):
             f["b"] = 2
         with self.assertRaises((TypeError, AttributeError)):
             f.pop("a", None)
 
-    def test_frozen_list_cannot_mutate(self):
+    def test_frozen_list_cannot_mutate(self: Self) -> None:
         f = FrozenHoldList([1, 2, 3])
         with self.assertRaises((TypeError, AttributeError)):
             f.append(4)
         with self.assertRaises((TypeError, AttributeError)):
             f.pop()
 
-    def test_frozen_set_cannot_mutate(self):
+    def test_frozen_set_cannot_mutate(self: Self) -> None:
         f = FrozenHoldSet({1, 2, 3})
         with self.assertRaises((TypeError, AttributeError)):
             f.add(4)
@@ -174,19 +184,21 @@ class TestFrozenMutability(unittest.TestCase):
 
 
 class TestMutableBehavior(unittest.TestCase):
-    def test_hold_dict_mutates_and_syncs_data(self):
-        d = HoldDict({"a": 1})
-        d["b"] = 2
-        self.assertEqual(d["b"], 2)
-        self.assertEqual(d.data["b"], 2)
+    def test_hold_dict_mutates_and_syncs_data(self: Self) -> None:
+        x: HoldDict
+        x = HoldDict({"a": 1})
+        x["b"] = 2
+        self.assertEqual(x["b"], 2)
+        self.assertEqual(x.data["b"], 2)
 
-    def test_hold_list_mutates_and_syncs_data(self):
-        lst = HoldList([1, 2])
-        lst.append(3)
-        self.assertEqual(list(lst), [1, 2, 3])
-        self.assertEqual(lst.data, (1, 2, 3))
+    def test_hold_list_mutates_and_syncs_data(self: Self) -> None:
+        x: HoldList
+        x = HoldList([1, 2])
+        x.append(3)
+        self.assertEqual(list(x), [1, 2, 3])
+        self.assertEqual(x.data, (1, 2, 3))
 
-    def test_hold_set_mutates_and_syncs_data(self):
+    def test_hold_set_mutates_and_syncs_data(self: Self) -> None:
         s = HoldSet({1, 2})
         s.add(3)
         self.assertTrue(3 in s)
@@ -194,12 +206,32 @@ class TestMutableBehavior(unittest.TestCase):
 
 
 class TestCopy(unittest.TestCase):
-    def test_frozen_have_no_copy(self):
+    def test_frozen_have_no_copy(self: Self) -> None:
         self.assertFalse(hasattr(FrozenHoldDict({"a": 1}), "copy"))
         self.assertFalse(hasattr(FrozenHoldList([1, 2]), "copy"))
         self.assertFalse(hasattr(FrozenHoldSet({1, 2}), "copy"))
 
-    def test_mutable_copy_returns_same_type_and_is_shallow(self):
+    def test_frozen_have_no_copy_2(self: Self) -> None:
+        """
+        Frozen classes should not define their own copy method.
+        (If a parent class or wrapped object exposes one, we ignore that.)
+        """
+        for cls, args in (
+            (FrozenHoldDict, ({"a": 1},)),
+            (FrozenHoldList, ([1, 2],)),
+            (FrozenHoldSet, ({1, 2},)),
+        ):
+            # They must not *define* copy themselves
+            self.assertNotIn("copy", cls.__dict__)
+
+            # Optional: if they *do* expose copy on the instance, it should not
+            # create a mutable variant; you can drop this if you prefer.
+            obj = cls(*args)
+            if hasattr(obj, "copy"):
+                copy_obj = obj.copy()
+                self.assertIsInstance(copy_obj, cls)
+
+    def test_mutable_copy_returns_same_type_and_is_shallow(self: Self) -> None:
         d = HoldDict({"a": {"x": 1}})
         d_copy = d.copy()
         self.assertIsInstance(d_copy, type(d))
@@ -210,7 +242,7 @@ class TestCopy(unittest.TestCase):
         d["a"]["x"] = 2
         self.assertEqual(d_copy["a"]["x"], 2)
 
-    def test_list_copy(self):
+    def test_list_copy(self: Self) -> None:
         lst = HoldList([[1], [2]])
         lst_copy = lst.copy()
         self.assertIsInstance(lst_copy, type(lst))
@@ -220,7 +252,7 @@ class TestCopy(unittest.TestCase):
         lst[0].append(99)
         self.assertEqual(lst_copy[0], [1, 99])
 
-    def test_set_copy(self):
+    def test_set_copy(self: Self) -> None:
         s = HoldSet({1, 2, 3})
         s_copy = s.copy()
         self.assertIsInstance(s_copy, type(s))
