@@ -6,9 +6,7 @@ from datahold._utils import deco
 from datahold.core.DataDict import DataDict
 from datahold.core.HoldABC import HoldABC
 
-__all__ = [
-    "HoldDict",
-]
+__all__ = ["HoldDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
