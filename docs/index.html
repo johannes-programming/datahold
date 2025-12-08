@@ -9,10 +9,11 @@
                 <a>datahold</a>
                 <p>
                     Version:
-                    <select>
+                    <select id="version">
                         <option>1.1.13</option>
                         <option>2.0.0</option>
                         <option selected>2.2.1</option>
+                        <option>3.0.0.dev0</option>
                     </select>
                 </p>
             </dt>
@@ -1285,6 +1286,65 @@ def data(self: Self, value: Any) -> None:
                                     just like <code>OkayList</code> for <code>HoldList</code>.
                                 </p>
                             </dd>
+                        </dl>
+                        <dl class="heading4" version="3.0.0.dev0">
+                            <dt id="DataBase">class datahold.DataBase(self: Self, *args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>copy(self: Self) -> Self</dt>
+                                    <dd>
+                                        <p>
+                                            This method returns a new copy of self.
+                                            It is implemented as <code>type(self)(self)</code>.
+                                        </p>
+                                    </dd>
+                                </dl>
+                            </dd>
+                            <dt id="DataDict">class datahold.DataDict</dt>
+                            <dd></dd>
+                            <dt id="DataList">class datahold.DataList</dt>
+                            <dd></dd>
+                            <dt id="DataSet">class datahold.DataSet</dt>
+                            <dd></dd>
+                            <dt id="FrozenDataBase">class datahold.FrozenDataBase(self: Self, *args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>__hash__(self: Self) -> int</dt>
+                                    <dd></dd>
+                                    <dt>__subclasshook__(cls: type, other: type, /) -> bool</dt>
+                                    <dd>This magic classmethod can be overwritten for a custom subclass check.</dd>
+                                    <dt>data: Any</dt>
+                                    <dd></dd>
+                                </dl>
+                            </dd>
+                            <dt id="FrozenDataDict">class datahold.FrozenDataDict</dt>
+                            <dd></dd>
+                            <dt id="FrozenDataList">class datahold.FrozenDataList</dt>
+                            <dd></dd>
+                            <dt id="FrozenDataSet">class datahold.FrozenDataSet</dt>
+                            <dd></dd>
+                            <dt id="FrozenHoldBase">class datahold.FrozenHoldBase</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>data: Any</dt>
+                                    <dd></dd>
+                                </dl>
+                            </dd>
+                            <dt id="FrozenHoldDict">class datahold.FrozenHoldDict</dt>
+                            <dd></dd>
+                            <dt id="FrozenHoldList">class datahold.FrozenHoldList</dt>
+                            <dd></dd>
+                            <dt id="FrozenHoldSet">class datahold.FrozenHoldSet</dt>
+                            <dd></dd>
+                            <dt id="HoldBase">class datahold.HoldBase(self: Self, *args: Any, **kwargs: Any)</dt>
+                            <dd>
+                            </dd>
+                            <dt id="HoldDict">class datahold.HoldDict</dt>
+                            <dd></dd>
+                            <dt id="HoldList">class datahold.HoldList</dt>
+                            <dd></dd>
+                            <dt id="HoldSet">class datahold.HoldSet</dt>
+                            <dd></dd>
                         </dl>
                     </dd>
                     <dt id="testing">Testing</dt>
