@@ -13,7 +13,7 @@ Key = TypeVar("Key")
 Value = TypeVar("Value")
 
 
-@unfrozen.unfrozenDeco(
+@unfrozen.funcDeco(
     funcnames=Cfg.cfg.data["unfrozen"]["dict"],
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],

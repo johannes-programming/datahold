@@ -5,10 +5,10 @@ from typing import *
 
 from datahold._utils.wrapping import wrap
 
-__all__ = ["unfrozenDeco"]
+__all__ = ["funcDeco"]
 
 
-def unfrozenDeco(**kwargs: type) -> partial:
+def funcDeco(**kwargs: type) -> partial:
     return partial(update, **kwargs)
 
 
