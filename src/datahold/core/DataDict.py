@@ -6,6 +6,7 @@ from frozendict import frozendict
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
 from datahold.core.DataABC import DataABC
+from datahold.core.FrozenDataDict import FrozenDataDict
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
@@ -16,15 +17,14 @@ Value = TypeVar("Value")
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],
 )
-@deco.frozenDeco(
-    funcnames=Cfg.cfg.data["frozen"]["dict"],
-    Frozen=frozendict[Key, Value],
-    NonFrozen=dict[Key, Value],
-)
 @deco.initDeco(
     Frozen=frozendict[Key, Value],
     NonFrozen=dict[Key, Value],
 )
-class DataDict(DataABC, collections.abc.MutableMapping[Key, Value]):
+class DataDict(
+    DataABC,
+    FrozenDataDict[Key, Value],
+    collections.abc.MutableMapping[Key, Value],
+):
     __slots__ = ()
     data: frozendict[Key, Value]
