@@ -4,7 +4,7 @@ from typing import *
 import setdoc
 
 from datahold.core.FrozenDataList import FrozenDataList
-from datahold.core.FrozenHoldABC import FrozenHoldABC
+from datahold.core.FrozenHoldBase import FrozenHoldBase
 
 __all__ = ["FrozenHoldList"]
 
@@ -12,9 +12,8 @@ Item = TypeVar("Item")
 
 
 class FrozenHoldList(
-    FrozenHoldABC,
+    FrozenHoldBase,
     FrozenDataList[Item],
-    collections.abc.MutableSequence[Item],
 ):
 
     __slots__ = ()

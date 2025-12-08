@@ -5,7 +5,7 @@ import setdoc
 from frozendict import frozendict
 
 from datahold.core.FrozenDataDict import FrozenDataDict
-from datahold.core.FrozenHoldABC import FrozenHoldABC
+from datahold.core.FrozenHoldBase import FrozenHoldBase
 
 __all__ = ["FrozenHoldDict"]
 
@@ -14,9 +14,8 @@ Value = TypeVar("Value")
 
 
 class FrozenHoldDict(
-    FrozenHoldABC,
+    FrozenHoldBase,
     FrozenDataDict[Key, Value],
-    collections.abc.MutableMapping[Key, Value],
 ):
 
     __slots__ = ()

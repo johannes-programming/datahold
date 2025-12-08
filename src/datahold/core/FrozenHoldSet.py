@@ -4,7 +4,7 @@ from typing import *
 import setdoc
 
 from datahold.core.FrozenDataSet import FrozenDataSet
-from datahold.core.FrozenHoldABC import FrozenHoldABC
+from datahold.core.FrozenHoldBase import FrozenHoldBase
 
 __all__ = ["FrozenHoldSet"]
 
@@ -12,9 +12,8 @@ Item = TypeVar("Item")
 
 
 class FrozenHoldSet(
-    FrozenHoldABC,
+    FrozenHoldBase,
     FrozenDataSet[Item],
-    collections.abc.MutableSet[Item],
 ):
 
     __slots__ = ()

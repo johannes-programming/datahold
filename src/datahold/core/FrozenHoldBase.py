@@ -1,11 +1,11 @@
 from typing import *
 
-from datahold.core.FrozenDataABC import FrozenDataABC
+from datahold.core.FrozenDataBase import FrozenDataBase
 
-__all__ = ["FrozenHoldDict"]
+__all__ = ["FrozenHoldBase"]
 
 
-class FrozenHoldDict(FrozenDataABC):
+class FrozenHoldBase(FrozenDataBase):
 
     __slots__ = ("_data",)
 

@@ -90,7 +90,7 @@ class TestDataholdGenerics(unittest.TestCase):
         cls: type
         origin: Any
         args: Any
-        for cls in (datahold.DataABC, datahold.HoldABC):
+        for cls in (datahold.DataBase, datahold.HoldBase):
             with self.subTest(cls=cls.__name__):
                 try:
                     # If this raises, we just skip the stricter check

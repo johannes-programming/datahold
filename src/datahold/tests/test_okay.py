@@ -28,7 +28,7 @@ class TestDoc(unittest.TestCase):
         s: str
         t: str
         for s in ("Data", "Hold"):
-            for t in ("ABC", "Dict", "List", "Set"):
+            for t in ("Base", "Dict", "List", "Set"):
                 name = s + t
                 with self.subTest(name=name):
                     self.go(name=name)

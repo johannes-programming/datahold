@@ -5,7 +5,7 @@ from frozendict import frozendict
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.FrozenDataABC import FrozenDataABC
+from datahold.core.FrozenDataBase import FrozenDataBase
 
 __all__ = ["FrozenDataDict"]
 
@@ -19,7 +19,7 @@ Value = TypeVar("Value")
     NonFrozen=dict[Key, Value],
 )
 class FrozenDataDict(
-    FrozenDataABC,
+    FrozenDataBase,
     collections.abc.Mapping[Key, Value],
 ):
     __slots__ = ()

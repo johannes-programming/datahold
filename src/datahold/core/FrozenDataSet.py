@@ -3,7 +3,7 @@ from typing import *
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.FrozenDataABC import FrozenDataABC
+from datahold.core.FrozenDataBase import FrozenDataBase
 
 __all__ = ["FrozenDataSet"]
 
@@ -16,7 +16,7 @@ Item = TypeVar("Item")
     NonFrozen=set[Item],
 )
 class FrozenDataSet(
-    FrozenDataABC,
+    FrozenDataBase,
     collections.abc.Set[Item],
 ):
     __slots__ = ()

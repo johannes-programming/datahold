@@ -4,7 +4,7 @@ from frozendict import frozendict
 
 from datahold._utils import deco
 from datahold.core.DataDict import DataDict
-from datahold.core.HoldABC import HoldABC
+from datahold.core.HoldBase import HoldBase
 
 __all__ = ["HoldDict"]
 
@@ -13,6 +13,6 @@ Value = TypeVar("Value")
 
 
 @deco.dataDeco()
-class HoldDict(HoldABC, DataDict[Key, Value]):
+class HoldDict(HoldBase, DataDict[Key, Value]):
     __slots__ = ()
     data: frozendict[Key, Value]

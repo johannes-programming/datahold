@@ -5,7 +5,7 @@ from frozendict import frozendict
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.DataABC import DataABC
+from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataDict import FrozenDataDict
 
 Key = TypeVar("Key")
@@ -22,7 +22,7 @@ Value = TypeVar("Value")
     NonFrozen=dict[Key, Value],
 )
 class DataDict(
-    DataABC,
+    DataBase,
     FrozenDataDict[Key, Value],
     collections.abc.MutableMapping[Key, Value],
 ):

@@ -3,7 +3,7 @@ from typing import *
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.DataABC import DataABC
+from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataList import FrozenDataList
 
 __all__ = ["DataList"]
@@ -22,7 +22,7 @@ Item = TypeVar("Item")
     NonFrozen=list[Item],
 )
 class DataList(
-    DataABC,
+    DataBase,
     FrozenDataList[Item],
     collections.abc.MutableSequence[Item],
 ):

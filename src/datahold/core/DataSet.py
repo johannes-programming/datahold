@@ -3,7 +3,7 @@ from typing import *
 
 from datahold._utils import deco
 from datahold._utils.Cfg import Cfg
-from datahold.core.DataABC import DataABC
+from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataSet import FrozenDataSet
 
 __all__ = ["DataSet"]
@@ -22,7 +22,7 @@ Item = TypeVar("Item")
     NonFrozen=set[Item],
 )
 class DataSet(
-    DataABC,
+    DataBase,
     FrozenDataSet[Item],
     collections.abc.MutableSet[Item],
 ):

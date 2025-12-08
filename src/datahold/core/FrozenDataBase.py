@@ -3,10 +3,10 @@ from typing import *
 
 import setdoc
 
-__all__ = ["FrozenDataABC"]
+__all__ = ["FrozenDataBase"]
 
 
-class FrozenDataABC(metaclass=ABCMeta):
+class FrozenDataBase(metaclass=ABCMeta):
     __slots__ = ()
 
     data: Any
