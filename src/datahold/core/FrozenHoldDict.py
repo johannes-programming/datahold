@@ -1,8 +1,8 @@
 from typing import *
 
-import setdoc
 from frozendict import frozendict
 
+from datahold._utils import frozen
 from datahold.core.FrozenDataDict import FrozenDataDict
 from datahold.core.FrozenHoldBase import FrozenHoldBase
 
@@ -12,6 +12,10 @@ Key = TypeVar("Key")
 Value = TypeVar("Value")
 
 
+@frozen.initDeco(
+    Frozen=frozendict[Key, Value],
+    NonFrozen=dict[Key, Value],
+)
 class FrozenHoldDict(
     FrozenHoldBase,
     FrozenDataDict[Key, Value],
@@ -20,7 +24,3 @@ class FrozenHoldDict(
     __slots__ = ()
 
     data: frozendict[Key, Value]
-
-    @setdoc.basic
-    def __init__(self: Self, data: Any, /, **kwargs: Any) -> None:
-        self._data = frozendict(data, **kwargs)

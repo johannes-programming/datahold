@@ -10,7 +10,7 @@ __all__ = ["FrozenDataList"]
 Item = TypeVar("Item")
 
 
-@frozen.frozenDeco(
+@frozen.funcDeco(
     funcnames=Cfg.cfg.data["frozen"]["list"],
     Frozen=tuple[Item, ...],
     NonFrozen=list[Item],

@@ -10,7 +10,7 @@ __all__ = ["FrozenDataSet"]
 Item = TypeVar("Item")
 
 
-@frozen.frozenDeco(
+@frozen.funcDeco(
     funcnames=Cfg.cfg.data["frozen"]["set"],
     Frozen=frozenset[Item],
     NonFrozen=set[Item],

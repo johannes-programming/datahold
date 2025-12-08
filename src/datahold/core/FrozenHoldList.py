@@ -2,6 +2,7 @@ from typing import *
 
 import setdoc
 
+from datahold._utils import frozen
 from datahold.core.FrozenDataList import FrozenDataList
 from datahold.core.FrozenHoldBase import FrozenHoldBase
 
@@ -10,6 +11,10 @@ __all__ = ["FrozenHoldList"]
 Item = TypeVar("Item")
 
 
+@frozen.initDeco(
+    Frozen=tuple[Item, ...],
+    NonFrozen=list[Item],
+)
 class FrozenHoldList(
     FrozenHoldBase,
     FrozenDataList[Item],
