@@ -3,8 +3,8 @@ from typing import *
 
 from frozendict import frozendict
 
+from datahold._utils import unfrozen
 from datahold._utils.Cfg import Cfg
-from datahold._utils.deco import unfrozen
 from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataDict import FrozenDataDict
 

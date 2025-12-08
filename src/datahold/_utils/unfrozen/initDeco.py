@@ -3,7 +3,7 @@ from functools import partial
 from types import FunctionType
 from typing import *
 
-from datahold._utils.deco.wrapping import wrap
+from datahold._utils.wrapping import wrap
 
 __all__ = ["initDeco"]
 

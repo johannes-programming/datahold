@@ -1,8 +1,8 @@
 import collections
 from typing import *
 
+from datahold._utils import unfrozen
 from datahold._utils.Cfg import Cfg
-from datahold._utils.deco import unfrozen
 from datahold.core.DataBase import DataBase
 from datahold.core.FrozenDataList import FrozenDataList
 

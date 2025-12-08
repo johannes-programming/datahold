@@ -1,6 +1,6 @@
 from typing import *
 
-from datahold._utils.deco import unfrozen
+from datahold._utils import unfrozen
 from datahold.core.DataSet import DataSet
 from datahold.core.HoldBase import HoldBase
 

@@ -3,12 +3,12 @@ from functools import partial
 from types import FunctionType
 from typing import *
 
-from datahold._utils.deco.wrapping import wrap
+from datahold._utils.wrapping import wrap
 
-__all__ = ["unfrozenDeco"]
+__all__ = ["frozenDeco"]
 
 
-def unfrozenDeco(**kwargs: type) -> partial:
+def frozenDeco(**kwargs: type) -> partial:
     return partial(update, **kwargs)
 
 
@@ -58,7 +58,6 @@ def makeFunc(*, old: FunctionType, NonFrozen: type, Frozen: type) -> Any:
         ans: Any
         data = NonFrozen(self.data)
         ans = old(data, *args, **kwargs)
-        self.data = Frozen(data)
         return ans
 
     wrap(new=new, old=old)

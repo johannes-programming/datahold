@@ -1,8 +1,8 @@
 import collections
 from typing import *
 
+from datahold._utils import frozen
 from datahold._utils.Cfg import Cfg
-from datahold._utils.deco import frozen
 from datahold.core.FrozenDataBase import FrozenDataBase
 
 __all__ = ["FrozenDataSet"]
