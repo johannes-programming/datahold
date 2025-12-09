@@ -1,15 +1,20 @@
 from typing import *
-
-from datahold._utils import unfrozen
-from datahold.core.DataList import DataList
-from datahold.core.HoldBase import HoldBase
-
+from .HoldObject import HoldObject
+from .BaseHoldList import BaseHoldList
+from .DataList import DataList
+import setdoc
 __all__ = ["HoldList"]
 
 Item = TypeVar("Item")
 
-
-@unfrozen.dataDeco()
-class HoldList(HoldBase, DataList[Item]):
+class HoldList(HoldObject, BaseHoldList[Item, ...], DataList[Item, ...]):
+    data:tuple[Item, ...]
     __slots__ = ()
-    data: tuple[Item, ...]
+    @property
+    @setdoc.basic
+    def data(self:Self) -> tuple[Item, ...]:
+        return self._data
+    @data.setter
+    def data(self:Self, value:Any) -> None:
+        self._data = tuple[Item, ...](value)
+

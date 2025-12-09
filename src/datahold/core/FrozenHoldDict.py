@@ -1,26 +1,18 @@
+
+from .FrozenDataDict import FrozenDataDict
+from .BaseHoldDict import BaseHoldDict
+from .FrozenHoldObject import FrozenHoldObject
 from typing import *
-
 from frozendict import frozendict
-
-from datahold._utils import frozen
-from datahold.core.FrozenDataDict import FrozenDataDict
-from datahold.core.FrozenHoldBase import FrozenHoldBase
-
+import setdoc
 __all__ = ["FrozenHoldDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
 
-
-@frozen.initDeco(
-    Frozen=frozendict[Key, Value],
-    NonFrozen=dict[Key, Value],
-)
-class FrozenHoldDict(
-    FrozenHoldBase,
-    FrozenDataDict[Key, Value],
-):
-
+class FrozenHoldDict(BaseHoldDict[Key, Value], FrozenDataDict, FrozenHoldObject):
+    data:frozendict[Key, Value]
     __slots__ = ()
-
-    data: frozendict[Key, Value]
+    @setdoc.basic
+    def __init__(self:Self, data:Any, /, **kwargs:Any)->None:
+        self._data = frozendict[Key, Value](data, **kwargs)

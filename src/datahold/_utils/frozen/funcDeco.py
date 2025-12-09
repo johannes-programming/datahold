@@ -16,7 +16,6 @@ def update(
     Target: type,
     *,
     funcnames: str,
-    Frozen: type,
     NonFrozen: type,
 ) -> type:
     name: str
@@ -24,7 +23,6 @@ def update(
         setupFunc(
             Target=Target,
             name=name,
-            Frozen=Frozen,
             NonFrozen=NonFrozen,
         )
     abc.update_abstractmethods(Target)
@@ -35,7 +33,6 @@ def setupFunc(
     *,
     Target: type,
     NonFrozen: type,
-    Frozen: type,
     name: str,
 ) -> None:
     old: Callable
@@ -44,7 +41,6 @@ def setupFunc(
     new = makeFunc(
         old=old,
         NonFrozen=NonFrozen,
-        Frozen=Frozen,
     )
     new.__module__ = Target.__module__
     new.__name__ = name
@@ -52,13 +48,9 @@ def setupFunc(
     setattr(Target, name, new)
 
 
-def makeFunc(*, old: FunctionType, NonFrozen: type, Frozen: type) -> Any:
+def makeFunc(*, old: FunctionType, NonFrozen: type) -> Any:
     def new(self: Self, *args: Any, **kwargs: Any) -> Any:
-        data: Any
-        ans: Any
-        data = NonFrozen(self.data)
-        ans = old(data, *args, **kwargs)
-        return ans
+        return old(NonFrozen(self.data), *args, **kwargs)
 
     wrap(new=new, old=old)
 

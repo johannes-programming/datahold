@@ -1,30 +1,26 @@
-import collections
+from .BaseDataSet import BaseDataSet
+from .DataObject import DataObject
 from typing import *
-
 from datahold._utils import unfrozen
 from datahold._utils.Cfg import Cfg
-from datahold.core.DataBase import DataBase
-from datahold.core.FrozenDataSet import FrozenDataSet
-
+import setdoc
+import collections
 __all__ = ["DataSet"]
-
 
 Item = TypeVar("Item")
 
-
 @unfrozen.funcDeco(
     funcnames=Cfg.cfg.data["unfrozen"]["set"],
-    Frozen=frozenset[Item],
     NonFrozen=set[Item],
 )
-@unfrozen.initDeco(
-    Frozen=frozenset[Item],
-    NonFrozen=set[Item],
-)
-class DataSet(
-    DataBase,
-    FrozenDataSet[Item],
-    collections.abc.MutableSet[Item],
-):
+class DataSet(DataObject, BaseDataSet[Item]):
+    data:frozenset[Item]
     __slots__ = ()
-    data: frozenset[Item]
+    @setdoc.basic
+    def __init__(self:Self, data:Iterable, /) -> None:
+        self.data = frozenset[Item](data)
+
+    
+
+
+

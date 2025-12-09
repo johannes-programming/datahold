@@ -1,23 +1,17 @@
-from typing import *
 
-from datahold._utils import frozen
-from datahold.core.FrozenDataSet import FrozenDataSet
-from datahold.core.FrozenHoldBase import FrozenHoldBase
+from .FrozenDataSet import FrozenDataSet
+from .BaseHoldSet import BaseHoldSet
+from .FrozenHoldObject import FrozenHoldObject
+from typing import *
+import setdoc
 
 __all__ = ["FrozenHoldSet"]
 
 Item = TypeVar("Item")
 
-
-@frozen.initDeco(
-    Frozen=frozenset[Item],
-    NonFrozen=set[Item],
-)
-class FrozenHoldSet(
-    FrozenHoldBase,
-    FrozenDataSet[Item],
-):
-
+class FrozenHoldSet(BaseHoldSet[Item], FrozenDataSet, FrozenHoldObject):
+    data:frozenset[Item]
     __slots__ = ()
-
-    data: frozenset[Item]
+    @setdoc.basic
+    def __init__(self:Self, data:Iterable, /)->None:
+        self._data = frozenset[Item](data)

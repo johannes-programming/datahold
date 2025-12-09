@@ -1,18 +1,22 @@
 from typing import *
-
+from .HoldObject import HoldObject
+from .BaseHoldDict import BaseHoldDict
+from .DataDict import DataDict
 from frozendict import frozendict
-
-from datahold._utils import unfrozen
-from datahold.core.DataDict import DataDict
-from datahold.core.HoldBase import HoldBase
-
+import setdoc
 __all__ = ["HoldDict"]
 
 Key = TypeVar("Key")
 Value = TypeVar("Value")
 
-
-@unfrozen.dataDeco()
-class HoldDict(HoldBase, DataDict[Key, Value]):
+class HoldDict(HoldObject, BaseHoldDict[Key, Value], DataDict[Key, Value]):
+    data:frozendict[Key, Value]
     __slots__ = ()
-    data: frozendict[Key, Value]
+    @property
+    @setdoc.basic
+    def data(self:Self) -> frozendict[Key, Value]:
+        return self._data
+    @data.setter
+    def data(self:Self, value:Any) -> None:
+        self._data = frozendict[Key, Value](value)
+

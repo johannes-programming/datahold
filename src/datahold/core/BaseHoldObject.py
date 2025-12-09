@@ -1,10 +1,10 @@
 from typing import *
 
-from datahold.core.DataBase import DataBase
+from .BaseDataObject import BaseDataObject
 
 __all__ = ["HoldBase"]
 
 
-class HoldBase(DataBase):
+class BaseHoldObject(BaseDataObject):
     __slots__ = ("_data",)
     data: Any
