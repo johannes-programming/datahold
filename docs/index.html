@@ -1290,31 +1290,51 @@ def data(self: Self, value: Any) -> None:
                         <dl class="heading4" version="2.3.0.dev2">
                             <dt id="2.3.0.dev2-BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
-                                <dl class="heading4">
-                                    <dt id="2.3.0.dev2-BaseDataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
-                                    <dd>
-                                        <p>
-                                            This magic method implements the <code>in</code> operator.
-                                            Internally its code is equivalent to the following:
-                                        </p>
-                                        <pre class="block"><code>def __contains__(self: Self, key: Any, /) -> Any:
-    "True if the dictionary has the specified key, else False."
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev2-BaseDataObject">BaseDataObject</a></code>.
+                                    It implements all methods and classmethods of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>).
+                                    The implementation of <code>__format__</code> works like this:
+                                    <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+    "Default object formatter."
     return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
-                                        <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
-                                    </dd>
-                                    <dt id="2.3.0.dev2-HoldDict.__eq__">__eq__(value: Any, /) -> Any</dt>
-                                    <dd>
-                                        <p>
-                                            This magic method implements the <code>==</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.3.0.dev2-HoldDict.__contains__">__contains__</a></code>.
-                                        </p>
-                                    </dd>
-                                    <dt>data: frozendict[Key, Value]</dt>
-                                    <dd></dd>
-                                </dl>
+                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
+                                    The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
+                                    <code>fromkeys</code> - the only classmethod - works as follows:
+                                    <pre class="block"><code>@classmethod
+def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+    "Create a new dictionary with keys from iterable and values set to value."
+    return dict[Key, Value].fromkeys(*args, **kwargs)</code></pre>
+                                </p>
                             </dd>
-                            <dt id="2.3.0.dev2-BaseDataList">class datahold.BaseDataList(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dt id="2.3.0.dev2-BaseDataList">class datahold.BaseDataList[Item](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev2-BaseDataObject">BaseDataObject</a></code>.
+                                    It works analogously to <code><a href="#2.3.0.dev2-BaseDataDict">BaseDataDict</a></code>.
+                                    It implements the methods
+                                    <code>__add__</code>,
+                                    <code>__contains__</code>,
+                                    <code>__eq__</code>,
+                                    <code>__format__</code>,
+                                    <code>__ge__</code>,
+                                    <code>__getitem__</code>,
+                                    <code>__gt__</code>,
+                                    <code>__iter__</code>,
+                                    <code>__le__</code>,
+                                    <code>__len__</code>,
+                                    <code>__lt__</code>,
+                                    <code>__mul__</code>,
+                                    <code>__repr__</code>,
+                                    <code>__reversed__</code>,
+                                    <code>__rmul__</code>,
+                                    <code>__str__</code>,
+                                    <code>count</code>, and
+                                    <code>index</code> accordingly.
+                                    It has no classmethod to implement.
+                                </p>
+                            </dd>
                             <dt id="2.3.0.dev2-BaseDataObject">class datahold.BaseDataObject(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>This abstract base class is the ancestor of all other classes in <code><a>datahold</a>.core</code>.</p>
