@@ -1,12 +1,33 @@
-from datahold.core.DataABC import *
-from datahold.core.DataDict import *
-from datahold.core.DataList import *
-from datahold.core.DataSet import *
-from datahold.core.HoldABC import *
-from datahold.core.HoldDict import *
-from datahold.core.HoldList import *
-from datahold.core.HoldSet import *
-from datahold.core.OkayABC import *
-from datahold.core.OkayDict import *
-from datahold.core.OkayList import *
-from datahold.core.OkaySet import *
+from .BaseDataDict import BaseDataDict
+from .BaseDataList import BaseDataList
+from .BaseDataObject import BaseDataObject
+from .BaseDataSet import BaseDataSet
+from .BaseHoldDict import BaseHoldDict
+from .BaseHoldList import BaseHoldList
+from .BaseHoldObject import BaseHoldObject
+from .BaseHoldSet import BaseHoldSet
+from .DataDict import DataDict
+from .DataList import DataList
+from .DataObject import DataObject
+from .DataSet import DataSet
+from .FrozenDataDict import FrozenDataDict
+from .FrozenDataList import FrozenDataList
+from .FrozenDataObject import FrozenDataObject
+from .FrozenDataSet import FrozenDataSet
+from .FrozenHoldDict import FrozenHoldDict
+from .FrozenHoldList import FrozenHoldList
+from .FrozenHoldObject import FrozenHoldObject
+from .FrozenHoldSet import FrozenHoldSet
+from .HoldDict import HoldDict
+from .HoldList import HoldList
+from .HoldObject import HoldObject
+from .HoldSet import HoldSet
+from .OkayDict import OkayDict
+from .OkayList import OkayList
+from .OkayObject import OkayObject
+from .OkaySet import OkaySet
+
+# aliases for legacy
+DataABC = DataObject
+HoldABC = HoldObject
+OkayABC = OkayObject

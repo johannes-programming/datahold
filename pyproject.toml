@@ -20,18 +20,17 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
+    "scaevola>=1.0.11,<2",
     "datarepr>=1.0,<2",
     "frozendict>=2.4.6,<3",
-    "scaevola>=1.0.11,<2",
     "setdoc>=1.2.4,<2",
-    "unhash>=1.0,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
 keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "2.2.1"
+version = "2.3.0.dev2"
 
 [project.license]
 file = "LICENSE.txt"

@@ -4,22 +4,18 @@ import setdoc
 from datarepr import datarepr
 from scaevola import Scaevola
 
-from datahold.core.HoldABC import HoldABC
+from .HoldObject import HoldObject
 
-__all__ = ["OkayABC"]
+__all__ = ["OkayObject"]
 
 
-class OkayABC(Scaevola, HoldABC):
+class OkayObject(Scaevola, HoldObject):
     __slots__ = ()
     data: Any
 
     @setdoc.basic
     def __bool__(self: Self, /) -> bool:
         return bool(self._data)
-
-    @setdoc.basic
-    def __contains__(self: Self, other: Any, /) -> bool:
-        return other in self._data
 
     @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> bool:
@@ -37,24 +33,12 @@ class OkayABC(Scaevola, HoldABC):
         return format(self._data, str(format_spec))
 
     @setdoc.basic
-    def __getitem__(self: Self, key: Any, /) -> Any:
-        return self._data[key]
-
-    @setdoc.basic
     def __gt__(self: Self, other: Any, /) -> bool:
         return not (self == other) and (self >= other)
 
     @setdoc.basic
-    def __iter__(self: Self, /) -> Iterator:
-        return iter(self._data)
-
-    @setdoc.basic
     def __le__(self: Self, other: Any, /) -> bool:
         return self._data <= type(self._data)(other)
-
-    @setdoc.basic
-    def __len__(self: Self, /) -> int:
-        return len(self._data)
 
     @setdoc.basic
     def __lt__(self: Self, other: Any, /) -> bool:
@@ -69,13 +53,5 @@ class OkayABC(Scaevola, HoldABC):
         return datarepr(type(self).__name__, self._data)
 
     @setdoc.basic
-    def __reversed__(self: Self, /) -> reversed:
-        return reversed(self._data)
-
-    @setdoc.basic
     def __str__(self: Self, /) -> str:
         return repr(self)
-
-    @setdoc.basic
-    def copy(self: Self, /) -> Self:
-        return type(self)(self.data)
