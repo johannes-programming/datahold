@@ -3,14 +3,24 @@ from functools import partial
 from types import FunctionType
 from typing import *
 
-__all__ = ["wrap"]
+__all__ = ["wraps"]
 
 
 def wraps(cls: type) -> partial:
     return partial(update, cls)
 
 
-def update(cls: type, func: FunctionType) -> FunctionType:
+def update(cls: type, member: FunctionType | classmethod) -> FunctionType | classmethod:
+    func: Callable
+    if type(member) is classmethod:
+        func = member.__func__
+    else:
+        func = member
+    update_func(cls, func, type(member))
+    return member
+
+
+def update_func(cls: type, func: FunctionType, Member: type) -> None:
     params: list
     a: Any
     n: int
@@ -23,49 +33,24 @@ def update(cls: type, func: FunctionType) -> FunctionType:
     try:
         oldsig = ins.signature(old)
     except ValueError:
-        return func
+        return
     params = list()
+    if Member is classmethod:
+        params = list(ins.signature(func).parameters.values())
+        p = params[0]
+        params.clear()
+        params.append(p)
     for n, p in enumerate(oldsig.parameters.values()):
-        if n == 0:
-            a = Self
-        else:
+        if n != 0 or Member is classmethod:
             a = getNonEmpty(p.annotation)
+        else:
+            a = Self
         q = p.replace(annotation=a)
         params.append(q)
     a = getNonEmpty(oldsig.return_annotation)
     func.__signature__ = ins.Signature(params, return_annotation=a)
     func.__annotations__ = getAnnotationsDict(func.__signature__)
-    return func
-
-
-def wrap(
-    *,
-    old: Callable,
-    new: FunctionType,
-) -> ins.Signature:
-    params: list
-    a: Any
-    n: int
-    p: ins.Parameter
-    q: ins.Parameter
-    oldsig: ins.Signature
-    new.__doc__ = old.__doc__
-    try:
-        oldsig = ins.signature(old)
-    except ValueError:
-        return
-    params = list()
-    for n, p in enumerate(oldsig.parameters.values()):
-        if n == 0:
-            a = Self
-        else:
-            a = getNonEmpty(p.annotation)
-        q = p.replace(annotation=a)
-        params.append(q)
-    a = ins.signature(new).return_annotation
-    a = getNonEmpty(oldsig.return_annotation, backup=a)
-    new.__signature__ = ins.Signature(params, return_annotation=a)
-    new.__annotations__ = getAnnotationsDict(new.__signature__)
+    return
 
 
 def getAnnotationsDict(sig: ins.Signature) -> dict:
