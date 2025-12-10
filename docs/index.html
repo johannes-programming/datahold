@@ -28,7 +28,7 @@
                     <dt id="install">Installation</dt>
                     <dd id="installCorpus"></dd>
                     <dt id="features">Features</dt>
-                    <dd id="1.1.13-featuresCorpus">
+                    <dd id="featuresCorpus">
                         <dl class="heading4" version="1.1.13">
                             <dt id="1.1.13-HoldABC">class datahold.HoldABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
@@ -1288,12 +1288,23 @@ def data(self: Self, value: Any) -> None:
                             </dd>
                         </dl>
                         <dl class="heading4" version="2.3.0.dev2">
-                            <dt id="2.3.0.dev2-BaseDataDict">class datahold.BaseDataDict(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dt id="2.3.0.dev2-BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt>data: frozendict[Key, Value]</dt>
+                                    <dd></dd>
+                                </dl>
+                            </dd>
                             <dt id="2.3.0.dev2-BaseDataList">class datahold.BaseDataList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
                             <dt id="2.3.0.dev2-BaseDataObject">class datahold.BaseDataObject(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dd>
+                                <p>This abstract base class is the ancestor of all other classes in <code><a>datahold</a>.core</code>.</p>
+                                <dl class="heading4">
+                                    <dt>data: Any</dt>
+                                    <dd>This property is abstract.</dd>
+                                </dl>
+                            </dd>
                             <dt id="2.3.0.dev2-BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
                             <dt id="2.3.0.dev2-BaseHoldDict">class datahold.BaseHoldDict(*args: Any, **kwargs: Any)</dt>
