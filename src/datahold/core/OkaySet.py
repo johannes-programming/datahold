@@ -3,24 +3,20 @@ from typing import *
 import setdoc
 
 from datahold.core.HoldSet import HoldSet
-from datahold.core.OkayABC import OkayABC
+from datahold.core.OkayObject import OkayObject
 
 __all__ = ["OkaySet"]
 
 Item = TypeVar("Item")
 
 
-class OkaySet(OkayABC, HoldSet[Item]):
+class OkaySet(OkayObject, HoldSet[Item]):
     __slots__ = ()
     data: frozenset[Item]
 
     @setdoc.basic
     def __and__(self: Self, other: Any, /) -> Self:
         return type(self)(self._data & set(other))
-
-    @setdoc.basic
-    def __init__(self: Self, data: Iterable = ()) -> None:
-        self.data = data
 
     @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
@@ -41,18 +37,6 @@ class OkaySet(OkayABC, HoldSet[Item]):
     def intersection(self: Self, /, *others: Any) -> set:
         "This method returns a copy of self without the items not found in all of the others."
         return type(self)(self._data.intersection(*others))
-
-    @setdoc.basic
-    def isdisjoint(self: Self, other: Any, /) -> bool:
-        return self._data.isdisjoint(other)
-
-    @setdoc.basic
-    def issubset(self: Self, other: Any, /) -> bool:
-        return self._data.issubset(other)
-
-    @setdoc.basic
-    def issuperset(self: Self, other: Any, /) -> bool:
-        return self._data.issuperset(other)
 
     def symmetric_difference(self: Self, other: Any, /) -> Self:
         "This method returns the symmetric difference between self and other."
