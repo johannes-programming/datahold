@@ -1295,9 +1295,11 @@ def data(self: Self, value: Any) -> None:
                                     from <code><a href="#2.3.0.dev2-BaseDataObject">BaseDataObject</a></code>.
                                     It implements all methods and classmethods of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>).
                                     The implementation of <code>__format__</code> works like this:
-                                    <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+                                </p>
+                                <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
     "Default object formatter."
     return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
+                                <p>
                                     Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
                                     The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
                                     <code>fromkeys</code> - the only classmethod - works as follows:
@@ -1358,27 +1360,28 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                             <dd></dd>
                             <dt id="2.3.0.dev2-DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
-                                <dl class="heading4">
-                                    <dt id="2.3.0.dev2-DataDict.__delitem__">__delitem__(key: Any, /) -> Any</dt>
-                                    <dd>
-                                        <p>
-                                            This magic method implements <code>del self[key]</code>.
-                                            Internally its code is equivalent to the following:
-                                        </p>
-                                        <pre class="block"><code>def __delitem__(self: Self, key: Any, /) -> Any:
-    "Delete self[key]."
-    ans: Any
-    data: dict[Key, Value]
-    data = dict[Key, Value](self.data)
-    ans = data.__contains__(*args, **kwargs)
-    self.data = frozendict[Key, Value](data)
-    return ans</code></pre>
-                                        <p>
-                                            The imprecise annotations and docstring are due to it adhering 
-                                            to the underlying <code>dict.__contains__</code> as closely as possible.
-                                        </p>
-                                    </dd>
-                                </dl>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev2-DataObject">DataObject</a></code>, 
+                                    <code><a href="#2.3.0.dev2-BaseDataDict">BaseDataDict[Key, Value]</a></code>, 
+                                    and <code>collections.abc.MutableMapping[Key, Value]</code>.
+                                    It implements all methods and classmethods of <code>dict</code> 
+                                    that can change the underlying instance 
+                                    (and that are not already present in <code>object</code>).
+                                    The implementation of <code>__format__</code> works like this:
+                                </p>
+                                <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+    "Default object formatter."
+    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
+                                <p>
+                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
+                                    The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
+                                    <code>fromkeys</code> - the only classmethod - works as follows:
+                                    <pre class="block"><code>@classmethod
+def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+    "Create a new dictionary with keys from iterable and values set to value."
+    return dict[Key, Value].fromkeys(*args, **kwargs)</code></pre>
+                                </p>
                             </dd>
                             <dt id="2.3.0.dev2-DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
