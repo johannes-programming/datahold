@@ -1291,6 +1291,17 @@ def data(self: Self, value: Any) -> None:
                             <dt id="2.3.0.dev2-BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
+                                    <dt id="2.3.0.dev2-BaseDataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the <code>in</code> operator.
+                                            Internally its code is equivalent to the following:
+                                        </p>
+                                        <pre class="block"><code>def __contains__(self: Self, key: Any, /) -> Any:
+    "True if the dictionary has the specified key, else False."
+    return dict(self.data).__contains__(*args, **kwargs)</code></pre>
+                                        <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
+                                    </dd>
                                     <dt>data: frozendict[Key, Value]</dt>
                                     <dd></dd>
                                 </dl>
