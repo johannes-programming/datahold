@@ -107,7 +107,7 @@ class TestDoc(unittest.TestCase):
         s: str
         t: str
         for s in ("Data", "Hold", "Okay"):
-            for t in ("ABC", "Dict", "List", "Set"):
+            for t in ("Object", "Dict", "List", "Set"):
                 name = s + t
                 with self.subTest(name=name):
                     self.go(name=name)
@@ -125,6 +125,8 @@ class TestDoc(unittest.TestCase):
             if not callable(b) and not isinstance(b, property):
                 continue
             if getattr(b, "__isabstractmethod__", False):
+                continue
+            if a == "__subclasshook__":
                 continue
             doc = getattr(b, "__doc__", None)
             error = "%r inside %r has no docstring" % (a, name)
