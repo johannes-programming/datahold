@@ -1314,24 +1314,11 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     from <code><a href="#2.3.0.dev2-BaseDataObject">BaseDataObject</a></code>.
                                     It works analogously to <code><a href="#2.3.0.dev2-BaseDataDict">BaseDataDict</a></code>.
                                     It implements the methods
-                                    <code>__add__</code>,
-                                    <code>__contains__</code>,
-                                    <code>__eq__</code>,
-                                    <code>__format__</code>,
-                                    <code>__ge__</code>,
-                                    <code>__getitem__</code>,
-                                    <code>__gt__</code>,
-                                    <code>__iter__</code>,
-                                    <code>__le__</code>,
-                                    <code>__len__</code>,
-                                    <code>__lt__</code>,
-                                    <code>__mul__</code>,
-                                    <code>__repr__</code>,
-                                    <code>__reversed__</code>,
-                                    <code>__rmul__</code>,
-                                    <code>__str__</code>,
-                                    <code>count</code>, and
-                                    <code>index</code> accordingly.
+                                    <code>__add__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>,
+                                    <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>,
+                                    <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__mul__</code>,
+                                    <code>__repr__</code>, <code>__reversed__</code>, <code>__rmul__</code>, <code>__str__</code>,
+                                    <code>count</code>, and <code>index</code> accordingly.
                                     It has no classmethod to implement.
                                 </p>
                             </dd>
@@ -1344,7 +1331,23 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                 </dl>
                             </dd>
                             <dt id="2.3.0.dev2-BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev2-BaseDataObject">BaseDataObject</a></code>.
+                                    It works analogously to <code><a href="#2.3.0.dev2-BaseDataDict">BaseDataDict</a></code>.
+                                    It implements the methods
+                                    <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>,
+                                    <code>__ge__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, 
+                                    <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__rand__</code>,
+                                    <code>__repr__</code>, <code>__ror__</code>, <code>__rsub__</code>, <code>__rxor__</code>, 
+                                    <code>__str__</code>, <code>__sub__</code>, <code>__xor__</code>,
+                                    <code>difference</code>, <code>intersection</code>, <code>isdisjoint</code>, 
+                                    <code>issubset</code>, <code>issuperset</code>, 
+                                    <code>symmetric_difference</code>, and <code>union</code> accordingly.
+                                    It has no classmethod to implement.
+                                </p>
+                            </dd>
                             <dt id="2.3.0.dev2-BaseHoldDict">class datahold.BaseHoldDict(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
                             <dt id="2.3.0.dev2-BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
