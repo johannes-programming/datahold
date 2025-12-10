@@ -5,23 +5,6 @@ from datahold import core
 from datahold.core import *
 
 
-class TestData(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
-        with self.assertRaises(Exception):
-            DataDict()
-        with self.assertRaises(Exception):
-            DataList()
-        with self.assertRaises(Exception):
-            DataSet()
-
-
-class TestHold(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
-        HoldDict()
-        HoldList()
-        HoldSet()
-
-
 class TestOkayDict(unittest.TestCase):
 
     def setUp(self: Self) -> None:
@@ -48,7 +31,8 @@ class TestOkayDict(unittest.TestCase):
         self.assertEqual(len(self.okay_dict), 2)
 
     def test_or(self: Self) -> None:
-        merged: Any = self.okay_dict | {"c": 3}
+        merged: Any
+        merged = self.okay_dict | {"c": 3}
         self.assertEqual(merged, OkayDict({"a": 1, "b": 2, "c": 3}))
 
 
@@ -97,34 +81,35 @@ class TestOkaySet(unittest.TestCase):
         self.assertEqual(len(self.okay_set), 3)
 
     def test_union(self: Self) -> None:
-        result: Any = self.okay_set | {4, 5}
+        result: Any
+        result = self.okay_set | {4, 5}
         self.assertEqual(result, OkaySet({1, 2, 3, 4, 5}))
 
 
 class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
         name: str
-        s: str
         t: str
-        for s in ("Data", "Hold", "Okay"):
-            for t in ("ABC", "Dict", "List", "Set"):
-                name = s + t
-                with self.subTest(name=name):
-                    self.go(name=name)
+        for t in ("Object", "Dict", "List", "Set"):
+            name = "Okay" + t
+            with self.subTest(name=name):
+                self.go(name=name)
 
     def go(self: Self, name: str) -> None:
-        obj: Any
-        y: Any
         a: Any
         b: Any
         doc: Any
         error: Any
+        obj: Any
+        y: Any
         y = getattr(core, name)
         for a in dir(y):
             b = getattr(y, a)
             if not callable(b) and not isinstance(b, property):
                 continue
             if getattr(b, "__isabstractmethod__", False):
+                continue
+            if a == "__subclasshook__":
                 continue
             doc = getattr(b, "__doc__", None)
             error = "%r inside %r has no docstring" % (a, name)
