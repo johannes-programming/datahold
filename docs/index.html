@@ -17,9 +17,9 @@
                     <dt id="install">Installation</dt>
                     <dd id="installCorpus"></dd>
                     <dt id="features">Features</dt>
-                    <dd id="featuresCorpus">
-                        <dl id="HoldABC" class="heading2">
-                            <dt>The <a href="#HoldABC"><code>HoldABC</code></a> class</dt>
+                    <dd id="1.1.10-featuresCorpus" version="1.1.10">
+                        <dl id="1.1.10-HoldABC" class="heading2">
+                            <dt>The <a href="#1.1.10-HoldABC"><code>HoldABC</code></a> class</dt>
                             <dd>
                                 <pre class="block"><code>class HoldABC(abc.ABC):
     def __hash__(self, /) -&gt; int:
@@ -52,8 +52,8 @@
     def data(self): ...</code></pre>
                             </dd>
                         </dl>
-                        <dl id="HoldList" class="heading2">
-                            <dt>The <a href="#HoldList"><code>HoldList</code></a> class</dt>
+                        <dl id="1.1.10-HoldList" class="heading2">
+                            <dt>The <a href="#1.1.10-HoldList"><code>HoldList</code></a> class</dt>
                             <dd>
                                 <p>To understand the class <code>HoldList</code>, here is the beginning of its code:</p>
                                 <pre class="block"><code>class HoldList(HoldABC, collections.abc.MutableSequence):
@@ -81,10 +81,10 @@
                                 </ul>
                                 <p>This allows the creation of a list-like class with modified behavior with only minimal effort. To enhance performance, we can overwrite some of the methods.</p>
 
-                                </dd>
+                            </dd>
                         </dl>
-                        <dl id="HoldDict" class="heading2">
-                            <dt>The <a href="#HoldDict"><code>HoldDict</code></a> class</dt>
+                        <dl id="1.1.10-HoldDict" class="heading2">
+                            <dt>The <a href="#1.1.10-HoldDict"><code>HoldDict</code></a> class</dt>
                             <dd>
                                 <p>Just like <code>HoldList</code> but for <code>dict</code>... It inherits from <code>HoldABC</code> and <code>collections.abc.MutableMapping</code>.
                                 The following methods are implemented: <code>__contains__</code>, <code>__delitem__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, 
@@ -96,8 +96,8 @@
                                 <p>The class methods <code>__class_getitem__</code> and <code>fromkeys</code> are not implemented.</p>
                             </dd>
                         </dl>
-                        <dl id="HoldSet" class="heading2">
-                            <dt>The <a href="#HoldSet"><code>HoldSet</code></a> class</dt>
+                        <dl id="1.1.10-HoldSet" class="heading2">
+                            <dt>The <a href="#1.1.10-HoldSet"><code>HoldSet</code></a> class</dt>
                             <dd>
                                 <p>Just like <code>HoldList</code> but for <code>set</code>... It inherits from <code>HoldABC</code> and <code>collections.abc.MutableSet</code>.
                                 The following methods are implemented: <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, 
@@ -111,8 +111,8 @@
                                 <p>The class method <code>__class_getitem__</code> is not implemented.</p>
                             </dd>
                         </dl>
-                        <dl id="OkayABC" class="heading2">
-                            <dt>The <a href="#OkayABC"><code>OkayABC</code></a> class</dt>
+                        <dl id="1.1.10-OkayABC" class="heading2">
+                            <dt>The <a href="#1.1.10-OkayABC"><code>OkayABC</code></a> class</dt>
                             <dd>
                                 <p>A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. Child of <code>Scaevola</code> 
                                 (see <a href="https://pypi.org/project/scaevola/">scaevola</a>) and <code>HoldABC</code>.
@@ -134,8 +134,8 @@
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
                             </dd>
                         </dl>
-                        <dl id="OkayList" class="heading2">
-                            <dt>The <a href="#OkayList"><code>OkayList</code></a> class</dt>
+                        <dl id="1.1.10-OkayList" class="heading2">
+                            <dt>The <a href="#1.1.10-OkayList"><code>OkayList</code></a> class</dt>
                             <dd>
                                 <p>This class inherits from <code>HoldList</code> and <code>OkayABC</code>. It implements a <code>data</code> property that binds a variable <code>_data</code>.</p>
                                 <pre class="block"><code>    @property
@@ -156,14 +156,14 @@
                                 </ul>
                             </dd>
                         </dl>
-                        <dl id="OkayDict" class="heading2">
-                            <dt>The <a href="#OkayDict"><code>OkayDict</code></a> class</dt>
+                        <dl id="1.1.10-OkayDict" class="heading2">
+                            <dt>The <a href="#1.1.10-OkayDict"><code>OkayDict</code></a> class</dt>
                             <dd>
                                 <p>A subclass of <code>HoldDict</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
                             </dd>
                         </dl>
-                        <dl id="OkaySet" class="heading2">
-                            <dt>The <a href="#OkaySet"><code>OkaySet</code></a> class</dt>
+                        <dl id="1.1.10-OkaySet" class="heading2">
+                            <dt>The <a href="#1.1.10-OkaySet"><code>OkaySet</code></a> class</dt>
                             <dd>
                                 <p>A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
                             </dd>
