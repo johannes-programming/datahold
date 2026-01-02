@@ -13,6 +13,7 @@
                         <option>1.1.13</option>
                         <option>2.0.0</option>
                         <option selected>2.2.1</option>
+                        <option>2.3.0.dev3</option>
                     </select>
                 </p>
             </dt>
@@ -1285,6 +1286,148 @@ def data(self: Self, value: Any) -> None:
                                     just like <code>OkayList</code> for <code>HoldList</code>.
                                 </p>
                             </dd>
+                        </dl>
+                        <dl class="heading4" version="2.3.0.dev3">
+                            <dt id="2.3.0.dev3-BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev3-BaseDataObject">BaseDataObject</a></code>.
+                                    It implements all methods and classmethods of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>).
+                                    The implementation of <code>__format__</code> works like this:
+                                </p>
+                                <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+    "Default object formatter."
+    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
+                                <p>
+                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
+                                    The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
+                                    <code>fromkeys</code> - the only classmethod - works as follows:
+                                    <pre class="block"><code>@classmethod
+def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+    "Create a new dictionary with keys from iterable and values set to value."
+    return dict[Key, Value].fromkeys(*args, **kwargs)</code></pre>
+                                </p>
+                            </dd>
+                            <dt id="2.3.0.dev3-BaseDataList">class datahold.BaseDataList[Item](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev3-BaseDataObject">BaseDataObject</a></code>.
+                                    It works analogously to <code><a href="#2.3.0.dev3-BaseDataDict">BaseDataDict</a></code>.
+                                    It implements the methods
+                                    <code>__add__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>,
+                                    <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>,
+                                    <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__mul__</code>,
+                                    <code>__repr__</code>, <code>__reversed__</code>, <code>__rmul__</code>, <code>__str__</code>,
+                                    <code>count</code>, and <code>index</code> accordingly.
+                                    It has no classmethod to implement.
+                                </p>
+                            </dd>
+                            <dt id="2.3.0.dev3-BaseDataObject">class datahold.BaseDataObject(*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>This abstract base class is the ancestor of all other classes in <code><a>datahold</a>.core</code>.</p>
+                                <dl class="heading4">
+                                    <dt>data: Any</dt>
+                                    <dd>This property is abstract.</dd>
+                                </dl>
+                            </dd>
+                            <dt id="2.3.0.dev3-BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev3-BaseDataObject">BaseDataObject</a></code>.
+                                    It works analogously to <code><a href="#2.3.0.dev3-BaseDataDict">BaseDataDict</a></code>.
+                                    It implements the methods
+                                    <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>,
+                                    <code>__ge__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, 
+                                    <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__rand__</code>,
+                                    <code>__repr__</code>, <code>__ror__</code>, <code>__rsub__</code>, <code>__rxor__</code>, 
+                                    <code>__str__</code>, <code>__sub__</code>, <code>__xor__</code>,
+                                    <code>difference</code>, <code>intersection</code>, <code>isdisjoint</code>, 
+                                    <code>issubset</code>, <code>issuperset</code>, 
+                                    <code>symmetric_difference</code>, and <code>union</code> accordingly.
+                                    It has no classmethod to implement.
+                                </p>
+                            </dd>
+                            <dt id="2.3.0.dev3-BaseHoldDict">class datahold.BaseHoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-BaseHoldObject">class datahold.BaseHoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-BaseHoldSet">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract base class inherits 
+                                    from <code><a href="#2.3.0.dev3-DataObject">DataObject</a></code>, 
+                                    <code><a href="#2.3.0.dev3-BaseDataDict">BaseDataDict[Key, Value]</a></code>, 
+                                    and <code>collections.abc.MutableMapping[Key, Value]</code>.
+                                    It implements all methods and classmethods of <code>dict</code> 
+                                    that can change the underlying instance 
+                                    (and that are not already present in <code>object</code>).
+                                    The implementation of <code>__format__</code> works like this:
+                                </p>
+                                <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+    "Default object formatter."
+    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
+                                <p>
+                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
+                                    The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
+                                    <code>fromkeys</code> - the only classmethod - works as follows:
+                                    <pre class="block"><code>@classmethod
+def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+    "Create a new dictionary with keys from iterable and values set to value."
+    return dict[Key, Value].fromkeys(*args, **kwargs)</code></pre>
+                                </p>
+                            </dd>
+                            <dt id="2.3.0.dev3-DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-DataObject">class datahold.DataObject(*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <dl class="heading4">
+                                    <dt id="2.3.0.dev3-DataObject.copy">copy() -> Self</dt>
+                                    <dd>
+                                        This method returns <code>type(self)(self.data)</code>.
+                                    </dd>
+                                </dl>
+                            </dd>
+                            <dt id="2.3.0.dev3-DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenDataDict">class datahold.FrozenDataDict(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenDataList">class datahold.FrozenDataList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenDataObject">class datahold.FrozenDataObject(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenDataSet">class datahold.FrozenDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenHoldDict">class datahold.FrozenHoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenHoldList">class datahold.FrozenHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenHoldObject">class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-FrozenHoldSet">class datahold.FrozenHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-HoldDict">class datahold.HoldDict(data: Iterable = (), **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-HoldObject">class datahold.HoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-OkayDict">class datahold.OkayDict(data: Iterable = (), **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-OkayList">class datahold.OkayList(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-OkayObject">class datahold.OkayObject(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
+                            <dt id="2.3.0.dev3-OkaySet">class datahold.OkaySet(*args: Any, **kwargs: Any)</dt>
+                            <dd></dd>
                         </dl>
                     </dd>
                     <dt id="testing">Testing</dt>
