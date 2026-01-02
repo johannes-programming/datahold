@@ -5,7 +5,15 @@
     </head>
     <body>
         <dl class="heading0">
-            <dt><a>datahold</a></dt>
+            <dt>
+                <a>datahold</a>
+                <p>
+                    Version:
+                    <select id="version">
+                        <option selected>1.1.13</option>
+                    </select>
+                </p>
+            </dt>
             <dd>
                 <dl class="heading1">
                     <dt id="overview">Overview</dt>
@@ -18,8 +26,8 @@
                     <dd id="installCorpus"></dd>
                     <dt id="features">Features</dt>
                     <dd id="featuresCorpus">
-                        <dl id="HoldABC" class="heading4">
-                            <dt id="HoldABC">class datahold.HoldABC(*args: Any, **kwargs: Any)</dt>
+                        <dl class="heading4" version="1.1.13">
+                            <dt id="1.1.13-HoldABC">class datahold.HoldABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <pre class="block"><code>class HoldABC(ABC):
 
@@ -41,16 +49,16 @@
     @abstractmethod
     def data(self: Self) -> Any: ...</code></pre>
                             </dd>
-                            <dt id="HoldDict">class datahold.HoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="1.1.13-HoldDict">class datahold.HoldDict(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is a brute wrapper for <code>dict</code>.
-                                    It inherits from <code><a href="#HoldABC">HoldABC</a></code> and <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableMapping</code>. 
+                                    It inherits from <code><a href="#1.1.13-HoldABC">HoldABC</a></code> and <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableMapping</code>. 
                                     Its constructor passes all arguments to the constructor of <code>dict</code>
                                     and the result is saved within the <code>data</code> property.
                                 </p>
                                 <dl class="heading4">
-                                    <dt id="HoldDict.__contains__">__contains__(key: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__contains__">__contains__(key: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>in</code> operator.
@@ -63,49 +71,49 @@
     return ans</code></pre>
                                         <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
                                     </dd>
-                                    <dt id="HoldDict.__delitem__">__delitem__(key: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__delitem__">__delitem__(key: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the deletion of items. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__eq__">__eq__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__eq__">__eq__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>==</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the inbuilt <code>format</code> function. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__ge__">__ge__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__ge__">__ge__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>>=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__getitem__">__getitem__(key: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__getitem__">__getitem__(key: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the returning of items. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__gt__">__gt__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__gt__">__gt__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>></code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__hash__">__hash__() -> int</dt>
+                                    <dt id="1.1.13-HoldDict.__hash__">__hash__() -> int</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the inbuilt function <code>hash</code>.
@@ -113,105 +121,105 @@
                                             It always raises a <code>TypeError</code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__ior__">__ior__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__ior__">__ior__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>|=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__iter__">__iter__() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__iter__">__iter__() -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements iteration. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__le__">__le__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__le__">__le__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code><=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__len__">__len__() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__len__">__len__() -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the inbuilt <code>len</code> function. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__lt__">__lt__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__lt__">__lt__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code><</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__or__">__or__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__or__">__or__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>|</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__repr__">__repr__() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__repr__">__repr__() -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements representation. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__reversed__">__reversed__() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__reversed__">__reversed__() -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the inbuilt <code>reversed</code> function. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__ror__">__ror__(value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__ror__">__ror__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the <code>|</code> operator from the right side if the left operand does not have it implemented. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__setitem__">__setitem__(key: Any, value: Any, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__setitem__">__setitem__(key: Any, value: Any, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the setting of items. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__str__">__str__() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.__str__">__str__() -> Any</dt>
                                     <dd>
                                         <p>
                                             This magic method implements the explicit conversion into a string. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.__subclasshook__">__subclasshook__(other: type, /) -> bool</dt>
+                                    <dt id="1.1.13-HoldDict.__subclasshook__">__subclasshook__(other: type, /) -> bool</dt>
                                     <dd>
                                         <p>
-                                            This classmethod is inherited directly from <code><a href="#HoldABC">HoldABC</a></code>.
+                                            This classmethod is inherited directly from <code><a href="#1.1.13-HoldABC">HoldABC</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.clear">clear() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.clear">clear() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method deletes of all items. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.copy">copy() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.copy">copy() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method implements dublication. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                             Remember that because of that a <code>dict</code> is returned.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.data">data: dict</dt>
+                                    <dt id="1.1.13-HoldDict.data">data: dict</dt>
                                     <dd>
                                         This property is implemented with the equivalent to the following code:
                                         <pre class="block"><code>@property
@@ -226,61 +234,61 @@ def data(self: Self, value: Any) -> None:
 def data(self: Self) -> None:
     self._data = dict()</code></pre>
                                     </dd>
-                                    <dt id="HoldDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This method implements getting an item with a default in case of its absence. 
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.items">items() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.items">items() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method returns an iterator over the items.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.keys">keys() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.keys">keys() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method returns an iterator over the keys.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.popitem">popitem() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.popitem">popitem() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method deletes and returns the last item.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.setdefault">setdefault(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.setdefault">setdefault(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             This method ensures the presence of a key.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.update">update(*args: Any, **kwargs: Any) -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.update">update(*args: Any, **kwargs: Any) -> Any</dt>
                                     <dd>
                                         <p>
                                             This method updates the data.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
-                                    <dt id="HoldDict.values">values() -> Any</dt>
+                                    <dt id="1.1.13-HoldDict.values">values() -> Any</dt>
                                     <dd>
                                         <p>
                                             This method returns an iterator over the values.
-                                            Its inner workings are analogous to <code><a href="#HoldDict.__contains__">__contains__</a></code>.
+                                            Its inner workings are analogous to <code><a href="#1.1.13-HoldDict.__contains__">__contains__</a></code>.
                                         </p>
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="1.1.13-HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
-                                    This class is analogous to <code><a href="#HoldDict">HoldDict</a></code>. 
+                                    This class is analogous to <code><a href="#1.1.13-HoldDict">HoldDict</a></code>. 
                                     It implements the magic methods 
                                     <code>__add__</code>,
                                     <code>__contains__</code>,
@@ -314,13 +322,13 @@ def data(self: Self) -> None:
                                     <code>remove</code>,
                                     <code>reverse</code>, and
                                     <code>sort</code>.
-                                    It is a child of <code><a href="#HoldABC">HoldABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSequence</code>,
+                                    It is a child of <code><a href="#1.1.13-HoldABC">HoldABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSequence</code>,
                                     thereby also inheriting their members. 
                                 </p>
-                            <dt id="HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="1.1.13-HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
-                                    This class is analogous to <code><a href="#HoldDict">HoldDict</a></code>. 
+                                    This class is analogous to <code><a href="#1.1.13-HoldDict">HoldDict</a></code>. 
                                     It implements the magic methods 
                                     <code>__and__</code>,
                                     <code>__contains__</code>,
@@ -364,15 +372,15 @@ def data(self: Self) -> None:
                                     <code>symmetric_difference_update</code>,
                                     <code>union</code>, and
                                     <code>update</code>.
-                                    It is a child of <code><a href="#HoldABC">HoldABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSet</code>,
+                                    It is a child of <code><a href="#1.1.13-HoldABC">HoldABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSet</code>,
                                     thereby also inheriting their members. 
                                 </p>
                             </dd>
-                            <dt id="OkayABC">class datahold.OkayABC(*args: Any, **kwargs: Any)</dt>
+                            <dt id="1.1.13-OkayABC">class datahold.OkayABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. 
-                                    Child of <code><a href="https://pypi.org/project/scaevola/">Scaevola</a></code> and <code><a href="#HoldABC">HoldABC</a></code>.
+                                    Child of <code><a href="https://pypi.org/project/scaevola/">Scaevola</a></code> and <code><a href="#1.1.13-HoldABC">HoldABC</a></code>.
                                     It implements common-sense overwrites for some methods. For example:
                                 </p>
                                 <ul>
@@ -391,11 +399,11 @@ def data(self: Self) -> None:
                                 </ul>
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
                             </dd>
-                            <dt id="OkayDict">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</dt>
+                            <dt id="1.1.13-OkayDict">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</dt>
                             <dd>
-                                <p>A subclass of <code><a href="#HoldDict">HoldDict</a></code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
+                                <p>A subclass of <code><a href="#1.1.13-HoldDict">HoldDict</a></code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
                             </dd>
-                            <dt id="OkayList">class datahold.OkayList(data: Iterable = ())</dt>
+                            <dt id="1.1.13-OkayList">class datahold.OkayList(data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
@@ -418,14 +426,14 @@ def data(self: Self) -> None:
                                     <li><code>__init__</code> allows setting data immediately.</li>
                                 </ul>
                             </dd>
-                            <dt id="OkaySet">class datahold.OkaySet(data: Iterable = ())</dt>
+                            <dt id="1.1.13-OkaySet">class datahold.OkaySet(data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, 
                                     just like <code>OkayList</code> for <code>HoldList</code>.
                                 </p>
                             </dd>
-                        </dl>
+                        </dl>  
                     </dd>
                     <dt id="testing">Testing</dt>
                     <dd id="testingCorpus"></dd>
