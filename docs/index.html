@@ -1293,24 +1293,199 @@ def data(self: Self, value: Any) -> None:
                                 <p>
                                     This abstract base class inherits 
                                     from <code><a href="#2.3.0.dev4-BaseDataObject">BaseDataObject</a></code>.
-                                    It <code>data</code> property is annotated as <code>frozendict[Key, Value]</code>.
-                                    It implements all methods and classmethods of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>).
-                                    The implementation of <code>__format__</code> works like this:
+                                    It implements all methods 
+                                    and <a href="#2.3.0.dev4-BaseDataDict.fromkeys">classmethods</a> 
+                                    of <code>dict</code> that cannot change the underlying instance 
+                                    (and that are not already present in <code>object</code>).
                                 </p>
-                                <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
+                                <dl class="heading4">
+                                    <dt>__slots__ = ()</dt>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__eq__">__eq__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            This magic method implements the builtin <code>format</code> function.
+                                            It works as follows:
+                                        </p>
+                                        <pre class="block"><code>def __format__(self: Self, format_spec: Any, /) -> Any
     "Default object formatter."
-    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</code></pre>
-                                <p>
-                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
-                                    The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously.
-                                    <code>fromkeys</code> - the only classmethod - works as follows:
-                                    <pre class="block"><code>@classmethod
+    return dict[Key, Value](self.data).__format__(*args, **kwargs)</code></pre>
+                                        <p>
+                                            Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__ge__">__ge__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__getitem__">__getitem__(*args: Any, **kwargs: Any) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__gt__">__gt__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__iter__">__iter__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__le__">__le__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__len__">__len__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__lt__">__lt__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__or__">__or__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__repr__">__repr__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__reversed__">__reversed__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__ror__">__ror__(value: Any, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.__str__">__str__() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt>data: frozendict[Key, Value]</dt>
+                                    <dd>
+                                        <p>
+                                            This abstract property 
+                                            is inherited from <code><a href="#2.3.0.dev4-BaseDataObject">BaseDataObject</a></code>
+                                            and reannotated.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.fromkeys">fromkeys(iterable: Any, value: Any = None, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            <code><a href="#2.3.0.dev4-BaseDataDict.fromkeys">fromkeys</a></code> 
+                                            is the only classmethod of <code>dict</code>
+                                            and therefore also of <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>.
+                                            It works as follows:
+                                        </p>
+                                        <pre class="block"><code>@classmethod
 def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
     "Create a new dictionary with keys from iterable and values set to value."
     return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))</code></pre>
-                                </p>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.keys">keys() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.items">items() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                    <dt id="2.3.0.dev4-BaseDataDict.values">values() -> Any</dt>
+                                    <dd>
+                                        <p>
+                                            See <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>
+                                            and <code><a href="#2.3.0.dev4-BaseDataDict.__format__">__format__</a></code>
+                                            for more information.
+                                        </p>
+                                    </dd>
+                                </dl>
                             </dd>
-                            <dt id="2.3.0.dev4-BaseDataList">class datahold.BaseDataList[Item](*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.3.0.dev4-BaseDataList">class datahold.BaseDataList[Item](data: Iterable, /)</dt>
                             <dd>
                                 <p>
                                     This abstract base class inherits 
@@ -1352,14 +1527,80 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     It has no classmethod to implement.
                                 </p>
                             </dd>
-                            <dt id="2.3.0.dev4-BaseHoldDict">class datahold.BaseHoldDict(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dt id="2.3.0.dev4-BaseHoldDict">class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dd>
+                                <p>
+                                    This abstract class inherits 
+                                    from <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code> 
+                                    and from <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a>[Key, Value]</code>.
+                                </p>
+                                <dt>__slots__ = ()</dt>
+                                <dd>
+                                    <p>
+                                        The slot layout of the class is dictated 
+                                        by <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code>.
+                                    </p>
+                                </dd>
+                                <dt>data: dict[Key, Value]</dt>
+                                <dd>
+                                    <p>
+                                        This abstract property is inherited from both parent classes.
+                                    </p>
+                                </dd>
+                            </dd>
                             <dt id="2.3.0.dev4-BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dd>
+                                <dl class="heading4">
+                                    <p>
+                                        This abstract class inherits 
+                                        from <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code> 
+                                        and from <code><a href="#2.3.0.dev4-BaseDataList">BaseDataList[Item]</a></code>.
+                                    </p>
+                                    <dt>__slots__ = ()</dt>
+                                    <dd>
+                                        <p>
+                                            The slot layout of the class is dictated 
+                                            by <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code>.
+                                        </p>
+                                    </dd>
+                                    <dt>data: tuple[Item, ...]</dt>
+                                    <dd>
+                                        <p>
+                                            This abstract property is inherited from both parent classes.
+                                        </p>
+                                    </dd>
+                                </dl>
+                            </dd>
                             <dt id="2.3.0.dev4-BaseHoldObject">class datahold.BaseHoldObject(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dd>
+                                <p>
+                                    This abstract class inherits from <code><a href="#2.3.0.dev4-BaseDataObject">BaseDataObject</a></code>.
+                                    It sets <code>__slots__</code> to <code>("_data",)</code>.
+                                </p>
+                            </dd>
                             <dt id="2.3.0.dev4-BaseHoldSet">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
-                            <dd></dd>
+                            <dd>
+                                <dl class="heading4">
+                                    <p>
+                                        This abstract class inherits 
+                                        from <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code> 
+                                        and from <code><a href="#2.3.0.dev4-BaseDataSet">BaseDataSet[Item]</a></code>.
+                                    </p>
+                                    <dt>__slots__ = ()</dt>
+                                    <dd>
+                                        <p>
+                                            The slot layout of the class is dictated 
+                                            by <code><a href="#2.3.0.dev4-BaseHoldObject">BaseHoldObject</a></code>.
+                                        </p>
+                                    </dd>
+                                    <dt>data: frozenset[Item]</dt>
+                                    <dd>
+                                        <p>
+                                            This abstract property is inherited from both parent classes.
+                                        </p>
+                                    </dd>
+                                </dl>
+                            </dd>
                             <dt id="2.3.0.dev4-DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
