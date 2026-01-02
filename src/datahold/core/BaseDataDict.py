@@ -101,9 +101,9 @@ class BaseDataDict(
 
     @classmethod
     @wraps(dict[Key, Value])
-    def fromkeys(cls: type, *args: Any, **kwargs: Any) -> Any:
+    def fromkeys(cls: type[Self], *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value].fromkeys(*args, **kwargs)
+        return cls[Key, Value](dict[Key, Value].fromkeys(*args, **kwargs))
 
     @wraps(dict[Key, Value])
     def get(self: Self, *args: Any, **kwargs: Any) -> Any:
