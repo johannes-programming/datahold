@@ -1293,6 +1293,7 @@ def data(self: Self, value: Any) -> None:
                                 <p>
                                     This abstract base class inherits 
                                     from <code><a href="#2.3.0.dev4-BaseDataObject">BaseDataObject</a></code>.
+                                    It <code>data</code> property is annotated as <code>frozendict[Key, Value]</code>.
                                     It implements all methods and classmethods of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>).
                                     The implementation of <code>__format__</code> works like this:
                                 </p>
@@ -1306,7 +1307,7 @@ def data(self: Self, value: Any) -> None:
                                     <pre class="block"><code>@classmethod
 def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
     "Create a new dictionary with keys from iterable and values set to value."
-    return cls[Key, Value](dict[Key, Value].fromkeys(*args, **kwargs))</code></pre>
+    return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))</code></pre>
                                 </p>
                             </dd>
                             <dt id="2.3.0.dev4-BaseDataList">class datahold.BaseDataList[Item](*args: Any, **kwargs: Any)</dt>
@@ -1315,6 +1316,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     This abstract base class inherits 
                                     from <code><a href="#2.3.0.dev4-BaseDataObject">BaseDataObject</a></code>.
                                     It works analogously to <code><a href="#2.3.0.dev4-BaseDataDict">BaseDataDict</a></code>.
+                                    It <code>data</code> property is annotated as <code>tuple[Item, ...]</code>.
                                     It implements the methods
                                     <code>__add__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>,
                                     <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>,
