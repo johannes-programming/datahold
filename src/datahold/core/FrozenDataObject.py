@@ -9,9 +9,9 @@ __all__ = ["FrozenDataObject"]
 
 
 class FrozenDataObject(BaseDataObject, collections.abc.Hashable):
-    __slots__ = ()
 
     data: Any
+    __slots__ = ()
 
     @setdoc.basic
     def __hash__(self: Self) -> int:

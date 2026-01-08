@@ -1,6 +1,7 @@
 from typing import *
 
 import setdoc
+from cmp3 import CmpABC
 from datarepr import datarepr
 from scaevola import Scaevola
 
@@ -9,44 +10,39 @@ from .HoldObject import HoldObject
 __all__ = ["OkayObject"]
 
 
-class OkayObject(Scaevola, HoldObject):
-    __slots__ = ()
+class OkayObject(CmpABC, Scaevola, HoldObject):
     data: Any
+    __slots__ = ()
 
     @setdoc.basic
     def __bool__(self: Self, /) -> bool:
         return bool(self._data)
 
     @setdoc.basic
-    def __eq__(self: Self, other: Any, /) -> bool:
+    def __cmp__(self: Self, other: Any, /) -> Any:
+        ref: Any
         if type(self) is type(other):
-            return self._data == other._data
-        try:
-            opp: Self = type(self)(other)
-        except:
-            return False
+            ref = other
         else:
-            return self._data == opp._data
+            try:
+                ref = type(self._data)(other)
+            except Exception:
+                return ()
+        try:
+            if self._data <= ref._data <= self._data:
+                return 0
+            if ref._data <= self._data and not (self._data <= ref._data):
+                return 1
+            if self._data <= ref._data and not (ref._data <= self._data):
+                return -1
+        except Exception:
+            if self._data == ref._data:
+                return 0
+        return float("nan")
 
     @setdoc.basic
     def __format__(self: Self, format_spec: Any = "", /) -> str:
         return format(self._data, str(format_spec))
-
-    @setdoc.basic
-    def __gt__(self: Self, other: Any, /) -> bool:
-        return not (self == other) and (self >= other)
-
-    @setdoc.basic
-    def __le__(self: Self, other: Any, /) -> bool:
-        return self._data <= type(self._data)(other)
-
-    @setdoc.basic
-    def __lt__(self: Self, other: Any, /) -> bool:
-        return not (self == other) and (self <= other)
-
-    @setdoc.basic
-    def __ne__(self: Self, other: Any, /) -> bool:
-        return not (self == other)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:

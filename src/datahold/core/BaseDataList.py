@@ -15,8 +15,8 @@ class BaseDataList(
     BaseDataObject,
     collections.abc.Sequence[Item],
 ):
-    __slots__ = ()
     data: tuple[Item, ...]
+    __slots__ = ()
 
     @wraps(list[Item])
     def __add__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -54,7 +54,10 @@ class BaseDataList(
         return list[Item](self.data).__gt__(*args, **kwargs)
 
     @abstractmethod
-    def __init__(self: Self, data: Iterable, /) -> None: ...
+    @wraps(list[Item])
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
+        "This doc string is overwritten together with the signature to match the original as closely as possible."
+        ...
 
     @wraps(list[Item])
     def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:

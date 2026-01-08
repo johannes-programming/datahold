@@ -11,8 +11,8 @@ Item = TypeVar("Item")
 
 
 class OkayList(OkayObject, HoldList[Item]):
-    __slots__ = ()
     data: tuple[Item, ...]
+    __slots__ = ()
 
     @setdoc.basic
     def __add__(self: Self, other: Any, /) -> Self:

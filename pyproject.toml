@@ -9,7 +9,7 @@ authors = [
     { email = "johannes.programming@gmail.com", name = "Johannes" },
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
@@ -20,9 +20,10 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "scaevola>=1.0.11,<2",
+    "cmp3>=0.5.1,<1",
     "datarepr>=1.0,<2",
     "frozendict>=2.4.6,<3",
+    "scaevola>=1.0.11,<2",
     "setdoc>=1.2.4,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
@@ -30,7 +31,7 @@ keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "2.3.0.dev3"
+version = "2.3.0.dev4+local"
 
 [project.license]
 file = "LICENSE.txt"

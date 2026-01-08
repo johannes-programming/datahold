@@ -11,8 +11,8 @@ Item = TypeVar("Item")
 
 
 class OkaySet(OkayObject, HoldSet[Item]):
-    __slots__ = ()
     data: frozenset[Item]
+    __slots__ = ()
 
     @setdoc.basic
     def __and__(self: Self, other: Any, /) -> Self:

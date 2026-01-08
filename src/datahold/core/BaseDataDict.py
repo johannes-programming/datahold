@@ -18,8 +18,8 @@ class BaseDataDict(
     BaseDataObject,
     collections.abc.Mapping[Key, Value],
 ):
-    __slots__ = ()
     data: frozendict[Key, Value]
+    __slots__ = ()
 
     @wraps(dict[Key, Value])
     def __contains__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -52,7 +52,10 @@ class BaseDataDict(
         return dict[Key, Value](self.data).__gt__(*args, **kwargs)
 
     @abstractmethod
-    def __init__(self: Self, data: Any, /, **kwargs: Any) -> None: ...
+    @wraps(dict[Key, Value])
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
+        "This doc string is overwritten together with the signature to match the original as closely as possible."
+        ...
 
     @wraps(dict[Key, Value])
     def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:

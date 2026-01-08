@@ -15,8 +15,8 @@ class BaseDataSet(
     BaseDataObject,
     collections.abc.Set[Item],
 ):
-    __slots__ = ()
     data: frozenset[Item]
+    __slots__ = ()
 
     @wraps(set[Item])
     def __and__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -49,7 +49,10 @@ class BaseDataSet(
         return set[Item](self.data).__gt__(*args, **kwargs)
 
     @abstractmethod
-    def __init__(self: Self, data: Iterable, /) -> None: ...
+    @wraps(set[Item])
+    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
+        "This doc string is overwritten together with the signature to match the original as closely as possible."
+        ...
 
     @wraps(set[Item])
     def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:

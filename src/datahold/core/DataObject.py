@@ -9,9 +9,9 @@ __all__ = ["DataObject"]
 
 class DataObject(BaseDataObject):
     data: Any
-    __slots__ = ()
 
     __hash__ = None
+    __slots__ = ()
 
     @setdoc.basic
     def copy(self: Self) -> Self:

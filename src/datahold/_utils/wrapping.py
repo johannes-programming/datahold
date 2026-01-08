@@ -23,13 +23,13 @@ def getNonEmpty(value: Any, backup: Any = Any) -> Any:
         return value
 
 
-
 def update(cls: type, member: FunctionType | classmethod) -> FunctionType | classmethod:
     if type(member) is classmethod:
         update_classmethod(cls, member)
     else:
         update_func(cls, member)
     return member
+
 
 def update_classmethod(cls: type, clsmthd: classmethod) -> None:
     params: list
@@ -41,13 +41,13 @@ def update_classmethod(cls: type, clsmthd: classmethod) -> None:
     old: Callable
     func = clsmthd.__func__
     old = getattr(cls, func.__name__)
-    func.__doc__ = old.__doc__
+    func.__doc__ = clsmthd.__doc__
     try:
         oldsig = ins.signature(old)
     except ValueError:
         return
     p = ins.Parameter(
-        name="cls", 
+        name="cls",
         kind=ins.Parameter.POSITIONAL_ONLY,
         annotation=type[Self],
     )
@@ -58,7 +58,6 @@ def update_classmethod(cls: type, clsmthd: classmethod) -> None:
         params.append(q)
     func.__signature__ = ins.Signature(params, return_annotation=Self)
     func.__annotations__ = getAnnotationsDict(func.__signature__)
-
 
 
 def update_func(cls: type, func: FunctionType) -> None:
@@ -80,9 +79,13 @@ def update_func(cls: type, func: FunctionType) -> None:
         a = getNonEmpty(p.annotation) if n else Self
         q = p.replace(annotation=a)
         params.append(q)
-    a = getNonEmpty(oldsig.return_annotation)
+    if func.__name__ == "__init__":
+        a = None
+    else:
+        a = getNonEmpty(oldsig.return_annotation)
     func.__signature__ = ins.Signature(params, return_annotation=a)
     func.__annotations__ = getAnnotationsDict(func.__signature__)
+
 
 def wraps(cls: type) -> partial:
     return partial(update, cls)

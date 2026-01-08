@@ -1,4 +1,3 @@
-import collections
 from typing import *
 
 import setdoc
@@ -15,9 +14,9 @@ Value = TypeVar("Value")
 
 
 class OkayDict(OkayObject, HoldDict[Key, Value]):
-    __slots__ = ()
 
     data: frozendict[Key, Value]
+    __slots__ = ()
 
     @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
