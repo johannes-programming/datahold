@@ -1,16 +1,16 @@
 from typing import *
 
 import setdoc
+from copyable import Copyable
 
 from .BaseDataObject import BaseDataObject
 
 __all__ = ["DataObject"]
 
 
-class DataObject(BaseDataObject):
+class DataObject(BaseDataObject, Copyable):
     data: Any
 
-    __hash__ = None
     __slots__ = ()
 
     @setdoc.basic
