@@ -19,7 +19,7 @@ class OkayObject(CmpABC, Scaevola, HoldObject):
         return bool(self._data)
 
     @setdoc.basic
-    def __cmp__(self: Self, other: Any, /) -> Any:
+    def __cmp__(self: Self, other: Any, /) -> Optional[float | int]:
         ref: Any
         if type(self) is type(other):
             ref = other
@@ -27,13 +27,13 @@ class OkayObject(CmpABC, Scaevola, HoldObject):
             try:
                 ref = type(self._data)(other)
             except Exception:
-                return ()
+                return
         try:
             if self._data <= ref._data <= self._data:
                 return 0
-            if ref._data <= self._data and not (self._data <= ref._data):
+            if (not self._data <= ref._data) and ref._data <= self._data:
                 return 1
-            if self._data <= ref._data and not (ref._data <= self._data):
+            if self._data <= ref._data and (not ref._data <= self._data):
                 return -1
         except Exception:
             if self._data == ref._data:
