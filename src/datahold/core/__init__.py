@@ -23,6 +23,9 @@ from .HoldList import HoldList
 from .HoldObject import HoldObject
 from .HoldSet import HoldSet
 
+# imports for legacy
+from okayhold import OkayDict, OkayList, OkayObject, OkaySet
+
 # aliases for legacy
 DataABC = DataObject
 HoldABC = HoldObject

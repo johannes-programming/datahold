@@ -1,6 +1,6 @@
-from okayhold import OkayDict, OkayList, OkayObject, OkaySet
 
-from datahold.tests import *
+
+from .tests import *
 
 from .core.BaseDataDict import BaseDataDict
 from .core.BaseDataList import BaseDataList
@@ -26,6 +26,11 @@ from .core.HoldDict import HoldDict
 from .core.HoldList import HoldList
 from .core.HoldObject import HoldObject
 from .core.HoldSet import HoldSet
+
+# imports for legacy
+from okayhold import OkayDict, OkayList, OkayObject, OkaySet
+
+# aliases for legacy
 
 DataABC = DataObject
 HoldABC = HoldObject

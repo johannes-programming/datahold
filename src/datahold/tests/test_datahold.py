@@ -36,10 +36,6 @@ from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldObject import HoldObject
 from datahold.core.HoldSet import HoldSet
-from datahold.core.OkayDict import OkayDict
-from datahold.core.OkayList import OkayList
-from datahold.core.OkayObject import OkayObject
-from datahold.core.OkaySet import OkaySet
 
 
 class TestAbstractness(unittest.TestCase):
