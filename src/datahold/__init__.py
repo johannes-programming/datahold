@@ -1,4 +1,2 @@
-
-
-from .tests import *
 from .core import *
+from .tests import *
