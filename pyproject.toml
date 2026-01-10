@@ -20,17 +20,17 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "copyable>=0.0.0.dev2,<1",
+    "copyable>=1.0,<2",
     "frozendict>=2.4.6,<3",
     "okayhold>=0.3,<1",
-    "setdoc>=1.2.4,<2",
+    "setdoc>=1.2.8,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
 keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "2.3.0a2+okay.test"
+version = "2.3.0a2+okay.copy"
 
 [project.license]
 file = "LICENSE.txt"
