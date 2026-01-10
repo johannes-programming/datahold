@@ -33,7 +33,7 @@ keywords = []
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "2.3.0a2+okay.dict"
+version = "2.3.0a2+okay.list"
 
 [project.license]
 file = "LICENSE.txt"
