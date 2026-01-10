@@ -5,23 +5,6 @@ from datahold import core
 from datahold.core import *
 
 
-class TestData(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
-        with self.assertRaises(Exception):
-            DataDict()
-        with self.assertRaises(Exception):
-            DataList()
-        with self.assertRaises(Exception):
-            DataSet()
-
-
-class TestHold(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
-        HoldDict()
-        HoldList()
-        HoldSet()
-
-
 class TestOkayDict(unittest.TestCase):
 
     def setUp(self: Self) -> None:
@@ -106,13 +89,11 @@ class TestOkaySet(unittest.TestCase):
 class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
         name: str
-        s: str
         t: str
-        for s in ("Data", "Hold", "Okay"):
-            for t in ("Object", "Dict", "List", "Set"):
-                name = s + t
-                with self.subTest(name=name):
-                    self.go(name=name)
+        for t in ("Object", "Dict", "List", "Set"):
+            name = "Okay" + t
+            with self.subTest(name=name):
+                self.go(name=name)
 
     def go(self: Self, name: str) -> None:
         a: Any

@@ -81,7 +81,7 @@ class TestDataholdGenerics(unittest.TestCase):
 
     # --- Okay* ---
 
-    def test_OkayDict_is_generic(self):
+    def test_OkayDict_is_generic(self:Self)->None:
         self._assert_is_generic(datahold.OkayDict, 2)
         # Also ensure it’s still a mapping
         self.assertTrue(
@@ -89,14 +89,14 @@ class TestDataholdGenerics(unittest.TestCase):
             "OkayDict should behave like a mapping",
         )
 
-    def test_OkayList_is_generic(self):
+    def test_OkayList_is_generic(self:Self)->None:
         self._assert_is_generic(datahold.OkayList, 1)
         self.assertTrue(
             issubclass(datahold.OkayList, MutableSequence),
             "OkayList should behave like a sequence",
         )
 
-    def test_OkaySet_is_generic(self):
+    def test_OkaySet_is_generic(self:Self)->None:
         self._assert_is_generic(datahold.OkaySet, 1)
         self.assertTrue(
             issubclass(datahold.OkaySet, MutableSet),
