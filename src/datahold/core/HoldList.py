@@ -11,7 +11,7 @@ __all__ = ["HoldList"]
 Item = TypeVar("Item")
 
 
-class HoldList(HoldObject, DataList[Item, ...], BaseHoldList[Item, ...]):
+class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
     data: tuple[Item, ...]
     __slots__ = ()
 
