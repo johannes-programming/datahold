@@ -22,12 +22,3 @@ from .HoldDict import HoldDict
 from .HoldList import HoldList
 from .HoldObject import HoldObject
 from .HoldSet import HoldSet
-from .OkayDict import OkayDict
-from .OkayList import OkayList
-from .OkayObject import OkayObject
-from .OkaySet import OkaySet
-
-# aliases for legacy
-DataABC = DataObject
-HoldABC = HoldObject
-OkayABC = OkayObject
