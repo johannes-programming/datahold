@@ -16,7 +16,7 @@ class OkayList(OkayObject, HoldList[Item]):
 
     @setdoc.basic
     def __add__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data + list(other))
+        return type(self)(self._data + tuple(other))
 
     @setdoc.basic
     def __mul__(self: Self, value: SupportsIndex, /) -> Self:
