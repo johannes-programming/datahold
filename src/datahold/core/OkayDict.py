@@ -20,4 +20,4 @@ class OkayDict(OkayObject, HoldDict[Key, Value]):
 
     @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data | dict(other))
+        return type(self)(self._data | frozendict(other))
