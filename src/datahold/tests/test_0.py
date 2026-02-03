@@ -6,7 +6,7 @@ from datahold.core import *
 
 
 class TestData(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
+    def test_constructor_abc(self: Self) -> None:
         with self.assertRaises(Exception):
             core.DataDict.DataDict()
         with self.assertRaises(Exception):
@@ -14,15 +14,11 @@ class TestData(unittest.TestCase):
         with self.assertRaises(Exception):
             core.DataSet.DataSet()
 
-
-class TestHold(unittest.TestCase):
-    def test_constructor(self: Self) -> None:
+    def test_constructor_core(self: Self) -> None:
         core.HoldDict.HoldDict()
         core.HoldList.HoldList()
         core.HoldSet.HoldSet()
 
-
-class TestDoc(unittest.TestCase):
     def test_doc(self: Self) -> None:
         name: str
         s: str
