@@ -23,9 +23,9 @@ class TestDataholdGenerics(unittest.TestCase):
         origin: Any
         params: tuple[type, ...]
         sample_types: tuple[type, ...]
+
         # Pick some arbitrary distinct types for the parameters
         sample_types = (int, str, float, bytes)
-
         params = sample_types[:n_type_params]
         try:
             alias = cls[params if n_type_params > 1 else params[0]]
