@@ -16,25 +16,25 @@ class OkaySet(OkayObject, HoldSet[Item]):
 
     @setdoc.basic
     def __and__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data & set(other))
+        return type(self)(self._data & frozenset(other))
 
     @setdoc.basic
     def __or__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data | set(other))
+        return type(self)(self._data | frozenset(other))
 
     @setdoc.basic
     def __sub__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data - set(other))
+        return type(self)(self._data - frozenset(other))
 
     @setdoc.basic
     def __xor__(self: Self, other: Any, /) -> Self:
-        return type(self)(self._data ^ set(other))
+        return type(self)(self._data ^ frozenset(other))
 
     def difference(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self without the items also found in any of the others."
         return type(self)(self._data.difference(*others))
 
-    def intersection(self: Self, /, *others: Any) -> set:
+    def intersection(self: Self, /, *others: Any) -> Self:
         "This method returns a copy of self without the items not found in all of the others."
         return type(self)(self._data.intersection(*others))
 
