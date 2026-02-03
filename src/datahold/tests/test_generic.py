@@ -4,6 +4,8 @@ from typing import *
 
 import datahold
 
+__all__ = ["TestDataholdGenerics"]
+
 
 class TestDataholdGenerics(unittest.TestCase):
     def _assert_is_generic(
