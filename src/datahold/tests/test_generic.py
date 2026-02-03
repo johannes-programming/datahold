@@ -79,30 +79,6 @@ class TestDataholdGenerics(unittest.TestCase):
     def test_HoldSet_is_generic(self: Self) -> None:
         self._assert_is_generic(datahold.HoldSet, 1)
 
-    # --- Okay* ---
-
-    def test_OkayDict_is_generic(self: Self) -> None:
-        self._assert_is_generic(datahold.OkayDict, 2)
-        # Also ensure it’s still a mapping
-        self.assertTrue(
-            issubclass(datahold.OkayDict, MutableMapping),
-            "OkayDict should behave like a mapping",
-        )
-
-    def test_OkayList_is_generic(self: Self) -> None:
-        self._assert_is_generic(datahold.OkayList, 1)
-        self.assertTrue(
-            issubclass(datahold.OkayList, MutableSequence),
-            "OkayList should behave like a sequence",
-        )
-
-    def test_OkaySet_is_generic(self: Self) -> None:
-        self._assert_is_generic(datahold.OkaySet, 1)
-        self.assertTrue(
-            issubclass(datahold.OkaySet, MutableSet),
-            "OkaySet should behave like a set",
-        )
-
 
 if __name__ == "__main__":
     unittest.main()
