@@ -8,18 +8,18 @@ from datahold.core import *
 class TestData(unittest.TestCase):
     def test_constructor(self: Self) -> None:
         with self.assertRaises(Exception):
-            DataDict()
+            core.DataDict.DataDict()
         with self.assertRaises(Exception):
-            DataList()
+            core.DataList.DataList()
         with self.assertRaises(Exception):
-            DataSet()
+            core.DataSet.DataSet()
 
 
 class TestHold(unittest.TestCase):
     def test_constructor(self: Self) -> None:
-        HoldDict()
-        HoldList()
-        HoldSet()
+        core.HoldDict.HoldDict()
+        core.HoldList.HoldList()
+        core.HoldSet.HoldSet()
 
 
 class TestDoc(unittest.TestCase):
@@ -34,26 +34,28 @@ class TestDoc(unittest.TestCase):
                     self.go(name=name)
 
     def go(self: Self, name: str) -> None:
-        a: Any
-        b: Any
+        attrname: Any
+        cls: Any
         doc: Any
         error: Any
+        member: Any
+        module: Any
         obj: Any
-        y: Any
-        y = getattr(core, name)
-        for a in dir(y):
-            b = getattr(y, a)
-            if not callable(b) and not isinstance(b, property):
+        module = getattr(core, name)
+        cls = getattr(module, name)
+        for attrname in dir(cls):
+            member = getattr(cls, attrname)
+            if not callable(member) and not isinstance(member, property):
                 continue
-            if getattr(b, "__isabstractmethod__", False):
+            if getattr(member, "__isabstractmethod__", False):
                 continue
-            if a == "__subclasshook__":
+            if attrname == "__subclasshook__":
                 continue
-            doc = getattr(b, "__doc__", None)
-            error = "%r inside %r has no docstring" % (a, name)
+            doc = getattr(member, "__doc__", None)
+            error = "%r inside %r has no docstring" % (attrname, name)
             self.assertNotEqual(doc, None, error)
         try:
-            obj = y()
+            obj = cls()
         except TypeError:
             return
         with self.assertRaises(AttributeError):
