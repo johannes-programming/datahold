@@ -2,7 +2,7 @@ from typing import *
 
 from .BaseDataObject import BaseDataObject
 
-__all__ = ["HoldBase"]
+__all__ = ["BaseHoldObject"]
 
 
 class BaseHoldObject(BaseDataObject):
