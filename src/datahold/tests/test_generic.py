@@ -15,12 +15,12 @@ class TestDataholdGenerics(unittest.TestCase):
         Helper: assert that `cls[...]` works and that typing.get_origin/get_args
         see it as a proper generic alias of `cls`.
         """
-        sample_types: tuple[type]
-        params: tuple[type]
         alias: Any
-        origin: Any
         args: Any
         exc: BaseException
+        origin: Any
+        params: tuple[type, ...]
+        sample_types: tuple[type, ...]
         # Pick some arbitrary distinct types for the parameters
         sample_types = (int, str, float, bytes)
 
