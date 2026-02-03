@@ -1,7 +1,7 @@
 from typing import *
 
 import setdoc
-from cmp3 import CmpABC
+from cmp3 import CmpABC, cmp
 from datarepr import datarepr
 from scaevola import Scaevola
 
@@ -28,17 +28,7 @@ class OkayObject(CmpABC, Scaevola, HoldObject):
                 ref = type(self._data)(other)
             except Exception:
                 return
-        try:
-            if self._data <= ref._data <= self._data:
-                return 0
-            if (not self._data <= ref._data) and ref._data <= self._data:
-                return 1
-            if self._data <= ref._data and (not ref._data <= self._data):
-                return -1
-        except Exception:
-            if self._data == ref._data:
-                return 0
-        return float("nan")
+        return cmp(self._data, ref._data, mode="le eq")
 
     @setdoc.basic
     def __format__(self: Self, format_spec: Any = "", /) -> str:
