@@ -599,7 +599,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <dd>This property is abstract.</dd>
                                 </dl>
                             </dd>
-                            <dt id="2--BaseDataSet" version="2.3">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--BaseDataSet" version="2.3">class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <p> This abstract base class inherits from <code>
                                         <a href="#2--BaseDataObject">BaseDataObject</a>
@@ -636,7 +636,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="2--BaseHoldList" version="2.3">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--BaseHoldList" version="2.3">class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <p> This abstract class inherits from <code>
                                         <a href="#2--BaseHoldObject">BaseHoldObject</a>
@@ -672,7 +672,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </p>
                                 </div>
                             </dd>
-                            <dt id="2--BaseHoldSet" version="2.3">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--BaseHoldSet" version="2.3">class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <p> This abstract class inherits from <code>
                                         <a href="#2--BaseHoldObject">BaseHoldObject</a>
@@ -998,13 +998,13 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                 </div>
                             </dd>
                             <dd version="2.3"></dd>
-                            <dt id="2--FrozenDataDict" version="2.3">class datahold.FrozenDataDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenDataDict" version="2.3">class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
                                 </div>
                             </dd>
-                            <dt id="2--FrozenDataList" version="2.3">class datahold.FrozenDataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenDataList" version="2.3">class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
@@ -1016,19 +1016,19 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <p><span>Added in version 2.3.</span></p>
                                 </div>
                             </dd>
-                            <dt id="2--FrozenDataSet" version="2.3">class datahold.FrozenDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenDataSet" version="2.3">class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
                                 </div>
                             </dd>
-                            <dt id="2--FrozenHoldDict" version="2.3">class datahold.FrozenHoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenHoldDict" version="2.3">class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
                                 </div>
                             </dd>
-                            <dt id="2--FrozenHoldList" version="2.3">class datahold.FrozenHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenHoldList" version="2.3">class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
@@ -1040,7 +1040,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <p><span>Added in version 2.3.</span></p>
                                 </div>
                             </dd>
-                            <dt id="2--FrozenHoldSet" version="2.3">class datahold.FrozenHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2--FrozenHoldSet" version="2.3">class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
                                     <p><span>Added in version 2.3.</span></p>
