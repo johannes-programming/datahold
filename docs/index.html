@@ -1457,7 +1457,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <dd>This property is abstract.</dd>
                                 </dl>
                             </dd>
-                            <dt id="3--BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseDataSet">class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract base class inherits from <code>
                                         <a href="#3--BaseDataObject">BaseDataObject</a>
@@ -1489,7 +1489,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldList">class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
                                         <a href="#3--BaseHoldObject">BaseHoldObject</a>
@@ -1521,7 +1521,7 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <dd></dd>
                                 </dl>
                             </dd>
-                            <dt id="3--BaseHoldSet">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldSet">class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
                                         <a href="#3--BaseHoldObject">BaseHoldObject</a>
@@ -1564,7 +1564,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <dd></dd>
                                 </dl>
                             </dd>
-                            <dt id="3--DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataList">class datahold.DataList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1580,16 +1580,16 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <dd> This method returns <code>type(self)(self.data)</code>. </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataSet">class datahold.DataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3--FrozenDataDict">class datahold.FrozenDataDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataDict">class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
                                     <dd></dd>
                                 </dl>
                             </dd>
-                            <dt id="3--FrozenDataList">class datahold.FrozenDataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataList">class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1603,14 +1603,14 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <dd></dd>
                                 </dl>
                             </dd>
-                            <dt id="3--FrozenDataSet">class datahold.FrozenDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataSet">class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
                                     <dd></dd>
                                 </dl>
                             </dd>
-                            <dt id="3--FrozenHoldDict">class datahold.FrozenHoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldDict">class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1622,7 +1622,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--FrozenHoldList">class datahold.FrozenHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldList">class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1646,7 +1646,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--FrozenHoldSet">class datahold.FrozenHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldSet">class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1658,7 +1658,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--HoldDict">class datahold.HoldDict(data: Iterable = (), **kwargs: Any)</dt>
+                            <dt id="3--HoldDict">class datahold.HoldDict[Key, Value](data: Iterable = (), **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1670,7 +1670,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--HoldList">class datahold.HoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
@@ -1694,7 +1694,7 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3--HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--HoldSet">class datahold.HoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
