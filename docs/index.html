@@ -1422,31 +1422,31 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                             <dt id="2.3.0-OkaySet">class datahold.OkaySet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
                         </dl>
-                        <dl class="heading4" version="3.0.0">
-                            <dt id="3.0.0-BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                        <dl class="heading4" version="3.0">
+                            <dt id="3--BaseDataDict">class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract base class inherits from <code>
-                                        <a href="#3.0.0-BaseDataObject">BaseDataObject</a>
-                                    </code>. It implements all methods and <a href="#3.0.0-BaseDataDict.fromkeys">classmethods</a> of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>). </p>
+                                        <a href="#3--BaseDataObject">BaseDataObject</a>
+                                    </code>. It implements all methods and <a href="#3--BaseDataDict.fromkeys">classmethods</a> of <code>dict</code> that cannot change the underlying instance (and that are not already present in <code>object</code>). </p>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
-                                    <dt id="3.0.0-BaseDataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__eq__">__eq__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__eq__">__eq__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
                                     <dd>
                                         <p> This magic method implements the builtin <code>format</code> function. It works as follows: </p>
                                         <code><pre class="block">def __format__(self: Self, format_spec: Any, /) -> Any
@@ -1454,115 +1454,115 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
     return dict[Key, Value](self.data).__format__(*args, **kwargs)</pre></code>
                                         <p> Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__ge__">__ge__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__ge__">__ge__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__getitem__">__getitem__(*args: Any, **kwargs: Any) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__getitem__">__getitem__(*args: Any, **kwargs: Any) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__gt__">__gt__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__gt__">__gt__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__iter__">__iter__() -> Any</dt>
+                                    <dt id="3--BaseDataDict.__iter__">__iter__() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__le__">__le__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__le__">__le__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__len__">__len__() -> Any</dt>
+                                    <dt id="3--BaseDataDict.__len__">__len__() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__lt__">__lt__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__lt__">__lt__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__or__">__or__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__or__">__or__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__repr__">__repr__() -> Any</dt>
+                                    <dt id="3--BaseDataDict.__repr__">__repr__() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__reversed__">__reversed__() -> Any</dt>
+                                    <dt id="3--BaseDataDict.__reversed__">__reversed__() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__ror__">__ror__(value: Any, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.__ror__">__ror__(value: Any, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.__str__">__str__() -> Any</dt>
+                                    <dt id="3--BaseDataDict.__str__">__str__() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
                                     <dt>data: frozendict[Key, Value]</dt>
                                     <dd>
                                         <p> This abstract property is inherited from <code>
-                                                <a href="#3.0.0-BaseDataObject">BaseDataObject</a>
+                                                <a href="#3--BaseDataObject">BaseDataObject</a>
                                             </code> and reannotated. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.fromkeys">fromkeys(iterable: Any, value: Any = None, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.fromkeys">fromkeys(iterable: Any, value: Any = None, /) -> Any</dt>
                                     <dd>
                                         <p>
                                             <code>
-                                                <a href="#3.0.0-BaseDataDict.fromkeys">fromkeys</a>
+                                                <a href="#3--BaseDataDict.fromkeys">fromkeys</a>
                                             </code> is the only classmethod of <code>dict</code> and therefore also of <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code>. It works as follows:
                                         </p>
                                         <code><pre class="block">@classmethod
@@ -1570,54 +1570,54 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
     "Create a new dictionary with keys from iterable and values set to value."
     return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))</pre></code>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
+                                    <dt id="3--BaseDataDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.keys">keys() -> Any</dt>
+                                    <dt id="3--BaseDataDict.keys">keys() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.items">items() -> Any</dt>
+                                    <dt id="3--BaseDataDict.items">items() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
-                                    <dt id="3.0.0-BaseDataDict.values">values() -> Any</dt>
+                                    <dt id="3--BaseDataDict.values">values() -> Any</dt>
                                     <dd>
                                         <p> See <code>
-                                                <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                                <a href="#3--BaseDataDict">BaseDataDict</a>
                                             </code> and <code>
-                                                <a href="#3.0.0-BaseDataDict.__format__">__format__</a>
+                                                <a href="#3--BaseDataDict.__format__">__format__</a>
                                             </code> for more information. </p>
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-BaseDataList">class datahold.BaseDataList[Item](data: Iterable, /)</dt>
+                            <dt id="3--BaseDataList">class datahold.BaseDataList[Item](data: Iterable, /)</dt>
                             <dd>
                                 <p> This abstract base class inherits from <code>
-                                        <a href="#3.0.0-BaseDataObject">BaseDataObject</a>
+                                        <a href="#3--BaseDataObject">BaseDataObject</a>
                                     </code>. It works analogously to <code>
-                                        <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                        <a href="#3--BaseDataDict">BaseDataDict</a>
                                     </code>. It <code>data</code> property is annotated as <code>tuple[Item, ...]</code>. It implements the methods <code>__add__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__mul__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__rmul__</code>, <code>__str__</code>, <code>count</code>, and <code>index</code> accordingly. It has no classmethod to implement. </p>
                             </dd>
-                            <dt id="3.0.0-BaseDataObject">class datahold.BaseDataObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseDataObject">class datahold.BaseDataObject(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>This abstract base class is the ancestor of all other classes in <code>
                                         <a>datahold</a>.core </code>. </p>
@@ -1626,25 +1626,25 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <dd>This property is abstract.</dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseDataSet">class datahold.BaseDataSet(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract base class inherits from <code>
-                                        <a href="#3.0.0-BaseDataObject">BaseDataObject</a>
+                                        <a href="#3--BaseDataObject">BaseDataObject</a>
                                     </code>. It works analogously to <code>
-                                        <a href="#3.0.0-BaseDataDict">BaseDataDict</a>
+                                        <a href="#3--BaseDataDict">BaseDataDict</a>
                                     </code>. It implements the methods <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__rand__</code>, <code>__repr__</code>, <code>__ror__</code>, <code>__rsub__</code>, <code>__rxor__</code>, <code>__str__</code>, <code>__sub__</code>, <code>__xor__</code>, <code>difference</code>, <code>intersection</code>, <code>isdisjoint</code>, <code>issubset</code>, <code>issuperset</code>, <code>symmetric_difference</code>, and <code>union</code> accordingly. It has no classmethod to implement. </p>
                             </dd>
-                            <dt id="3.0.0-BaseHoldDict">class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldDict">class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
-                                        <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                        <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                     </code> and from <code>
-                                        <a href="#3.0.0-BaseDataDict">BaseDataDict</a>[Key, Value] </code>. </p>
+                                        <a href="#3--BaseDataDict">BaseDataDict</a>[Key, Value] </code>. </p>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
                                     <dd>
                                         <p> The slot layout of the class is dictated by <code>
-                                                <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                                <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                             </code>. </p>
                                     </dd>
                                     <dt>data: dict[Key, Value]</dt>
@@ -1653,18 +1653,18 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldList">class datahold.BaseHoldList(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
-                                        <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                        <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                     </code> and from <code>
-                                        <a href="#3.0.0-BaseDataList">BaseDataList</a>[Item]
+                                        <a href="#3--BaseDataList">BaseDataList</a>[Item]
                                     </code>. </p>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
                                     <dd>
                                         <p> The slot layout of the class is dictated by <code>
-                                                <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                                <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                             </code>. </p>
                                     </dd>
                                     <dt>data: tuple[Item, ...]</dt>
@@ -1673,24 +1673,24 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-BaseHoldObject">class datahold.BaseHoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldObject">class datahold.BaseHoldObject(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
-                                        <a href="#3.0.0-BaseDataObject">BaseDataObject</a>
+                                        <a href="#3--BaseDataObject">BaseDataObject</a>
                                     </code>. It sets <code>__slots__</code> to <code>("_data",)</code>. </p>
                             </dd>
-                            <dt id="3.0.0-BaseHoldSet">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--BaseHoldSet">class datahold.BaseHoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract class inherits from <code>
-                                        <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                        <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                     </code> and from <code>
-                                        <a href="#3.0.0-BaseDataSet">BaseDataSet</a>[Item]
+                                        <a href="#3--BaseDataSet">BaseDataSet</a>[Item]
                                     </code>. </p>
                                 <dl class="heading4">
                                     <dt>__slots__ = ()</dt>
                                     <dd>
                                         <p> The slot layout of the class is dictated by <code>
-                                                <a href="#3.0.0-BaseHoldObject">BaseHoldObject</a>
+                                                <a href="#3--BaseHoldObject">BaseHoldObject</a>
                                             </code>. </p>
                                     </dd>
                                     <dt>data: frozenset[Item]</dt>
@@ -1699,12 +1699,12 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p> This abstract base class inherits from <code>
-                                        <a href="#3.0.0-DataObject">DataObject</a>
+                                        <a href="#3--DataObject">DataObject</a>
                                     </code>, <code>
-                                        <a href="#3.0.0-BaseDataDict">BaseDataDict</a>[Key, Value]
+                                        <a href="#3--BaseDataDict">BaseDataDict</a>[Key, Value]
                                     </code>, and <code>collections.abc.MutableMapping[Key, Value]</code>. It implements all methods and classmethods of <code>dict</code> that can change the underlying instance (and that are not already present in <code>object</code>). The implementation of <code>__format__</code> works like this: 
                                 </p>
                                 <code><pre class="block">def __format__(self: Self, format_spec: Any, /) -> Any
@@ -1718,42 +1718,42 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
     "Create a new dictionary with keys from iterable and values set to value."
     return dict[Key, Value].fromkeys(*args, **kwargs)</pre></code>
                             </dd>
-                            <dt id="3.0.0-DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-DataObject">class datahold.DataObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataObject">class datahold.DataObject(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
-                                    <dt id="3.0.0-DataObject.copy">copy() -> Self</dt>
+                                    <dt id="3--DataObject.copy">copy() -> Self</dt>
                                     <dd> This method returns <code>type(self)(self.data)</code>. </dd>
                                 </dl>
                             </dd>
-                            <dt id="3.0.0-DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenDataDict">class datahold.FrozenDataDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataDict">class datahold.FrozenDataDict(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenDataList">class datahold.FrozenDataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataList">class datahold.FrozenDataList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenDataObject">class datahold.FrozenDataObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataObject">class datahold.FrozenDataObject(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenDataSet">class datahold.FrozenDataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenDataSet">class datahold.FrozenDataSet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenHoldDict">class datahold.FrozenHoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldDict">class datahold.FrozenHoldDict(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenHoldList">class datahold.FrozenHoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldList">class datahold.FrozenHoldList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenHoldObject">class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldObject">class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-FrozenHoldSet">class datahold.FrozenHoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--FrozenHoldSet">class datahold.FrozenHoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-HoldDict">class datahold.HoldDict(data: Iterable = (), **kwargs: Any)</dt>
+                            <dt id="3--HoldDict">class datahold.HoldDict(data: Iterable = (), **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-HoldObject">class datahold.HoldObject(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--HoldObject">class datahold.HoldObject(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="3--HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd></dd>
-                            <dt id="3.0.0-test">datahold.test() -> unittest.TextTestResult</dt>
+                            <dt id="3--test">datahold.test() -> unittest.TextTestResult</dt>
                             <dd class="testingCorpus"></dd>
                         </dl>
                     </dd>
