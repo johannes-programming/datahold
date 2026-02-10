@@ -384,15 +384,16 @@ def data(self: Self) -> None:
                                 <dl class="heading4">
                                     <dt id="2.0.0-DataABC.__hash__">__hash__() -> int</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the inbuilt function <code>hash</code>.
-                                            Its function is <code><a href="https://unhash.johannes-programming.online/">unhash</a>.unhash</code>.
-                                            It always raises a <code>TypeError</code>.
+                                        <p> 
+                                            This magic method implements the inbuilt function <code>hash</code>. 
+                                            Its function is 
+                                            <code><a href="https://unhash.johannes-programming.online/">unhash</a>.unhash</code>. 
+                                            It always raises a <code>TypeError</code>. 
                                         </p>
                                     </dd>
-                                    <dt id="2.0.0-DataDict.__subclasshook__">__subclasshook__(other: type, /) -> bool</dt>
+                                    <dt id="2.0.0-DataABC.__subclasshook__">__subclasshook__(other: type, /) -> bool</dt>
                                     <dd></dd>
-                                    <dt id="2.0.0-DataDict.data">data: Any</dt>
+                                    <dt id="2.0.0-DataABC.data">data: Any</dt>
                                     <dd>
                                         <p>This abstract property acts as the linchpin of all decending classes.</p>
                                     </dd>
@@ -409,213 +410,184 @@ def data(self: Self) -> None:
                                 <dl class="heading4">
                                     <dt id="2.0.0-DataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>in</code> operator.
-                                            Internally its code is equivalent to the following:</p>
-                                        <pre class="block"><code>def __contains__(self: Self, key: Any, /) -> Any:
+                                        <p> This magic method implements the <code>in</code> operator. Internally its code is equivalent to the following: </p>
+                                        <code><pre class="block">def __contains__(self: Self, key: Any, /) -> Any:
     "True if the dictionary has the specified key, else False."
     data = dict(self.data)
     ans = data.__contains__(*args, **kwargs)
     self.data = frozendict(data)
-    return ans</code></pre>
-                                        <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.</code></p>
+    return ans</pre></code>
+                                        <p>The imprecise annotations and docstring are due to it adhering to the underlying <code>dict.__contains__</code> as closely as possible.
+                                        </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__delitem__">__delitem__(key: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the deletion of items. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the deletion of items. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__eq__">__eq__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>==</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>==</code> operator. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__format__">__format__(format_spec: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the inbuilt <code>format</code> function. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the inbuilt <code>format</code> function. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__ge__">__ge__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>>=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>>=</code> operator. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__getitem__">__getitem__(key: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the returning of items. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the returning of items. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__gt__">__gt__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>></code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>></code> operator. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__hash__">__hash__() -> int</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the inbuilt function <code>hash</code>.
-                                            Its function is <code><a href="https://unhash.johannes-programming.online/">unhash</a>.unhash</code>.
-                                            It always raises a <code>TypeError</code>.
-                                        </p>
+                                        <p> This magic method implements the inbuilt function <code>hash</code>. Its function is <code>
+                                                <a href="https://unhash.johannes-programming.online/">unhash</a>.unhash </code>. It always raises a <code>TypeError</code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__ior__">__ior__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>|=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>|=</code> operator. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__iter__">__iter__() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements iteration. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements iteration. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__le__">__le__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code><=</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>
+                                                &lt;= </code> operator. Its inner workings are analogous to <code>
+                                                        <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                                    </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__len__">__len__() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the inbuilt <code>len</code> function. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the inbuilt <code>len</code> function. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__lt__">__lt__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code><</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>
+                                                &lt; </code> operator. Its inner workings are analogous to <code>
+                                                        <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                                    </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__or__">__or__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>|</code> operator. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>|</code> operator. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__repr__">__repr__() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements representation. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements representation. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__reversed__">__reversed__() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the inbuilt <code>reversed</code> function. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the inbuilt <code>reversed</code> function. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__ror__">__ror__(value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the <code>|</code> operator from the right side if the left operand does not have it implemented. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the <code>|</code> operator from the right side if the left operand does not have it implemented. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__setitem__">__setitem__(key: Any, value: Any, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the setting of items. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the setting of items. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__str__">__str__() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This magic method implements the explicit conversion into a string. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This magic method implements the explicit conversion into a string. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.__subclasshook__">__subclasshook__(other: type, /) -> bool</dt>
                                     <dd>
-                                        <p>
-                                            This classmethod is inherited directly from <code><a href="#2.0.0-DataABC">DataABC</a></code>.
-                                        </p>
+                                        <p> This classmethod is inherited directly from <code>
+                                                <a href="#2.0.0-DataABC">DataABC</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.clear">clear() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method deletes of all items. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method deletes of all items. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.copy">copy() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method implements dublication. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                            Remember that because of that a <code>dict</code> is returned.
-                                        </p>
+                                        <p> This method implements dublication. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. Remember that because of that a <code>dict</code> is returned. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.get">get(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method implements getting an item with a default in case of its absence. 
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method implements getting an item with a default in case of its absence. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.items">items() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method returns an iterator over the items.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method returns an iterator over the items. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.keys">keys() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method returns an iterator over the keys.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method returns an iterator over the keys. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.popitem">popitem() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method deletes and returns the last item.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method deletes and returns the last item. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.setdefault">setdefault(key: Any, default: Any = None, /) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method ensures the presence of a key.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method ensures the presence of a key. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.update">update(*args: Any, **kwargs: Any) -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method updates the data.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method updates the data. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                     <dt id="2.0.0-DataDict.values">values() -> Any</dt>
                                     <dd>
-                                        <p>
-                                            This method returns an iterator over the values.
-                                            Its inner workings are analogous to <code><a href="#2.0.0-DataDict.__contains__">__contains__</a></code>.
-                                        </p>
+                                        <p> This method returns an iterator over the values. Its inner workings are analogous to <code>
+                                                <a href="#2.0.0-DataDict.__contains__">__contains__</a>
+                                            </code>. </p>
                                     </dd>
                                 </dl>
                             </dd>
@@ -718,72 +690,82 @@ def data(self: Self) -> None:
                             <dd>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldDict.data">data: frozendict</dt>
-                                    <dd>
-                                        This property is implemented with the equivalent to the following code:
-                                        <pre class="block"><code>@property
+                                    <dd> This property is implemented with the equivalent to the following code:
+                                        <code><pre class="block">@property
 def data(self: Self) -> dict:
     return dict(self._data)
 
 @data.setter
 def data(self: Self, value: Any) -> None:
-    self._data = frozendict(value)</code></pre>
+    self._data = frozendict(value)</pre></code>
                                     </dd>
-                                </dl>    
+                                </dl>
                             </dd>
                             <dt id="2.0.0-HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldList.data">data: tuple</dt>
-                                    <dd>
-                                        This property is implemented with the equivalent to the following code:
-                                        <pre class="block"><code>@property
+                                    <dd> This property is implemented with the equivalent to the following code:
+                                        <code><pre class="block">@property
 def data(self: Self) -> tuple:
     return self._data
 
 @data.setter
 def data(self: Self, value: Any) -> None:
-    self._data = tuple(value)</code></pre>
+    self._data = tuple(value)</pre></code>
                                     </dd>
-                                </dl>   
+                                </dl>
                             </dd>
                             <dt id="2.0.0-HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldSet.data">data: frozenset</dt>
-                                    <dd>
-                                        This property is implemented with the equivalent to the following code:
-                                        <pre class="block"><code>@property
+                                    <dd> This property is implemented with the equivalent to the following code:
+                                        <code><pre class="block">@property
 def data(self: Self) -> frozenset:
     return self._data
 
 @data.setter
 def data(self: Self, value: Any) -> None:
-    self._data = frozenset(value)</code></pre>
+    self._data = frozenset(value)</pre></code>
                                     </dd>
-                                </dl>   
+                                </dl>
                             </dd>
                             <dt id="2.0.0-OkayABC">class datahold.OkayABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
-                                <p>
-                                    A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. 
-                                    Child of <code><a href="https://pypi.org/project/scaevola/">Scaevola</a></code> and <code><a href="#2.0.0-HoldABC">HoldABC</a></code>.
-                                    It implements common-sense overwrites for some methods. For example:
-                                </p>
+                                <p> A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. Child of <code>
+                                        <a href="https://pypi.org/project/scaevola/">Scaevola</a>
+                                    </code> and <code>
+                                        <a href="#2.0.0-HoldABC">HoldABC</a>
+                                    </code>. It implements common-sense overwrites for some methods. For example: </p>
                                 <ul>
-                                    <li>All methods that cannot actually change the underlying object are now bound to <code>_data</code> instead of <code>data</code>.</li>
-                                    <li><code>__bool__</code> is implemented as <code>bool(self._data)</code> because neither <code>list</code>, <code>dict</code>, nor <code>set</code> have a <code>__bool__</code> method defined.</li>
-                                    <li>The comparison operations are overwritten:
-                                        <ul>
-                                            <li><code>__eq__</code> returns <code>self._data == type(self._data)(other)</code>.</li>
-                                            <li><code>__ne__</code> negates <code>__eq__</code>.</li>
-                                            <li><code>__ge__</code> returns <code>type(self)(other) &lt;= self</code> (inherited from <code>scaevola.Scaevola</code>).</li>
-                                            <li><code>__gt__</code> returns <code>not (self == other) and (self &gt;= other)</code>.</li>
-                                            <li><code>__lt__</code> returns <code>not (self == other) and (self &lt;= other)</code>.</li>
-                                            <li><code>__le__</code> returns <code>self._data &lt;= type(self)(other)._data</code>.</li>
+                                    <li>All methods that cannot actually change the underlying object are now bound to <code>_data</code> instead of <code>data</code>. </li>
+                                    <li>
+                                        <code>__bool__</code> is implemented as <code>bool(self._data)</code> because neither <code>list</code>, <code>dict</code>, nor <code>set</code> have a <code>__bool__</code> method defined.
+                                    </li>
+                                    <li>The comparison operations are overwritten: <ul>
+                                            <li>
+                                                <code>__eq__</code> returns <code>self._data == type(self._data)(other)</code>.
+                                            </li>
+                                            <li>
+                                                <code>__ne__</code> negates <code>__eq__</code>.
+                                            </li>
+                                            <li>
+                                                <code>__ge__</code> returns <code>type(self)(other) &lt;= self</code> (inherited from <code>scaevola.Scaevola</code>).
+                                            </li>
+                                            <li>
+                                                <code>__gt__</code> returns <code>not (self == other) and (self &gt;= other)</code>.
+                                            </li>
+                                            <li>
+                                                <code>__lt__</code> returns <code>not (self == other) and (self &lt;= other)</code>.
+                                            </li>
+                                            <li>
+                                                <code>__le__</code> returns <code>self._data &lt;= type(self)(other)._data</code>.
+                                            </li>
                                         </ul>
                                     </li>
                                 </ul>
-                                <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
+                                <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods. </p>
                             </dd>
                             <dt id="2.0.0-OkayDict">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</dt>
                             <dd>
