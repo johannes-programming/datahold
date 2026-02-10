@@ -480,7 +480,7 @@ def data(self: Self) -> None:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="2.0.0-DataDict">class datahold.DataDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-DataDict">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is a brute wrapper for <code>dict</code>.
@@ -488,6 +488,12 @@ def data(self: Self) -> None:
                                     Its constructor passes all arguments to the constructor of <code>dict</code>
                                     and the result is saved within the <code>data</code> property.
                                 </p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                                 <dl class="heading4">
                                     <dt id="2.0.0-DataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
                                     <dd>
@@ -701,7 +707,7 @@ def data(self: Self) -> None:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dt id="2.0.0-DataList">class datahold.DataList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-DataList">class datahold.DataList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is analogous to <code><a href="#2.0.0-DataDict">DataDict</a></code>. 
@@ -741,8 +747,14 @@ def data(self: Self) -> None:
                                     It is a child of <code><a href="#2.0.0-DataABC">DataABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSequence</code>,
                                     thereby also inheriting their members. 
                                 </p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                             </dd>
-                            <dt id="2.0.0-DataSet">class datahold.DataSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-DataSet">class datahold.DataSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
                                 <p>
                                     This class is analogous to <code><a href="#2.0.0-DataDict">DataDict</a></code>. 
@@ -792,12 +804,24 @@ def data(self: Self) -> None:
                                     It is a child of <code><a href="#2.0.0-DataABC">DataABC</a></code> and of <code><a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSet</code>,
                                     thereby also inheriting their members. 
                                 </p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                             </dd>
                             <dt id="2.0.0-HoldABC">class datahold.HoldABC(*args: Any, **kwargs: Any)</dt>
                             <dd>
                             </dd>
-                            <dt id="2.0.0-HoldDict">class datahold.HoldDict(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-HoldDict">class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldDict.data">data: frozendict</dt>
                                     <dd>
@@ -812,8 +836,14 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>    
                             </dd>
-                            <dt id="2.0.0-HoldList">class datahold.HoldList(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-HoldList">class datahold.HoldList[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldList.data">data: tuple</dt>
                                     <dd>
@@ -828,8 +858,14 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>   
                             </dd>
-                            <dt id="2.0.0-HoldSet">class datahold.HoldSet(*args: Any, **kwargs: Any)</dt>
+                            <dt id="2.0.0-HoldSet">class datahold.HoldSet[Item](*args: Any, **kwargs: Any)</dt>
                             <dd>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                                 <dl class="heading4">
                                     <dt id="2.0.0-HoldSet.data">data: frozenset</dt>
                                     <dd>
@@ -867,22 +903,40 @@ def data(self: Self, value: Any) -> None:
                                 </ul>
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods.</p>
                             </dd>
-                            <dt id="2.0.0-OkayDict">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</dt>
+                            <dt id="2.0.0-OkayDict">class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)</dt>
                             <dd>
                                 <p>A subclass of <code><a href="#2.0.0-HoldDict">HoldDict</a></code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>.</p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                             </dd>
-                            <dt id="2.0.0-OkayList">class datahold.OkayList(data: Iterable = ())</dt>
+                            <dt id="2.0.0-OkayList">class datahold.OkayList[Item](data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
                                 </p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                             </dd>
-                            <dt id="2.0.0-OkaySet">class datahold.OkaySet(data: Iterable = ())</dt>
+                            <dt id="2.0.0-OkaySet">class datahold.OkaySet[Item](data: Iterable = ())</dt>
                             <dd>
                                 <p>
                                     A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, 
                                     just like <code>OkayList</code> for <code>HoldList</code>.
                                 </p>
+                                <div class="minor minor-changed">
+                                    <p>
+                                        <span>Changed in version 2.1:</span>
+                                        The class was made generic.
+                                    </p>
+                                </div>
                             </dd>
                         </dl>
                     </dd>
