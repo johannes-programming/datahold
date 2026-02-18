@@ -736,18 +736,39 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.1 2.2 2.3">class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <p> This class is a brute wrapper for <code>dict</code>. It inherits from <code>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2"> 
+                                    This class is a brute wrapper for <code>dict</code>. It inherits from <code>
                                         <a href="#2--DataABC">DataABC</a>
                                     </code> and <code>
-                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableMapping </code>. Its constructor passes all arguments to the constructor of <code>dict</code> and the result is saved within the <code>data</code> property. </p>
+                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableMapping </code>. Its constructor passes all arguments to the constructor of <code>dict</code> and the result is saved within the <code>data</code> property. 
+                                </p>
+                                <div version="2.3">
+                                    <p> 
+                                        This abstract base class inherits from <code>
+                                            <a href="#2--DataObject">DataObject</a>
+                                        </code>, <code>
+                                            <a href="#2--BaseDataDict">BaseDataDict</a>[Key, Value]
+                                        </code>, and <code>collections.abc.MutableMapping[Key, Value]</code>. It implements all methods and classmethods of <code>dict</code> that can change the underlying instance (and that are not already present in <code>object</code>). The implementation of <code>__format__</code> works like this: 
+                                    </p>
+                                    <code><pre class="block">def __format__(self: Self, format_spec: Any, /) -> Any
+    "Default object formatter."
+    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</pre></code>
+                                    <p> 
+                                        Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>. The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously. <code>fromkeys</code> - the only classmethod - works as follows:
+                                    </p>
+                                    <code><pre class="block">@classmethod
+def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+    "Create a new dictionary with keys from iterable and values set to value."
+    return dict[Key, Value].fromkeys(*args, **kwargs)</pre></code>
+                                </div>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
                                         The class was made generic.
                                     </p>
                                 </div>
-                                <dl class="heading4">
+                                <dl class="heading4" version="2.0 2.1 2.2">
                                     <dt id="2--DataDict.__contains__">__contains__(key: Any, /) -> Any</dt>
                                     <dd>
                                         <p> This magic method implements the <code>in</code> operator. Internally its code is equivalent to the following: </p>
@@ -931,24 +952,6 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dd version="2.3">
-                                <p> This abstract base class inherits from <code>
-                                        <a href="#2.3.0-DataObject">DataObject</a>
-                                    </code>, <code>
-                                        <a href="#2--BaseDataDict">BaseDataDict</a>[Key, Value]
-                                    </code>, and <code>collections.abc.MutableMapping[Key, Value]</code>. It implements all methods and classmethods of <code>dict</code> that can change the underlying instance (and that are not already present in <code>object</code>). The implementation of <code>__format__</code> works like this: 
-                                </p>
-                                <code><pre class="block">def __format__(self: Self, format_spec: Any, /) -> Any
-    "Default object formatter."
-    return dict[Key, Value](self.data).__contains__(*args, **kwargs)</pre></code>
-                                <p> 
-                                    Docsting and signature are somewhat imprecise because they mimic the original method of <code>dict</code>. The other methods - <code>__contains__</code>, <code>__eq__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__ror__</code>, <code>__str__</code>, <code>get</code>, <code>items</code>, <code>keys</code>, and <code>values</code> - work analogously. <code>fromkeys</code> - the only classmethod - works as follows:
-                                </p>
-                                <code><pre class="block">@classmethod
-def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
-    "Create a new dictionary with keys from iterable and values set to value."
-    return dict[Key, Value].fromkeys(*args, **kwargs)</pre></code>
-                            </dd>
                             <dt id="2--DataList">
                                 <ul>
                                     <li version="2.0">class datahold.DataList(*args: Any, **kwargs: Any)</li>
@@ -990,13 +993,15 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.1 2.2 2.3">class datahold.DataSet[Item](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <p> This class is analogous to <code>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2"> 
+                                    This class is analogous to <code>
                                         <a href="#2--DataDict">DataDict</a>
                                     </code>. It implements the magic methods <code>__and__</code>, <code>__contains__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, <code>__gt__</code>, <code>__iand__</code>, <code>__ior__</code>, <code>__isub__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__or__</code>, <code>__rand__</code>, <code>__repr__</code>, <code>__ror__</code>, <code>__rsub__</code>, <code>__rxor__</code>, <code>__str__</code>, <code>__sub__</code>, <code>__rmul__</code>, <code>__sub__</code>, and <code>__xor__</code>. The other methods implemented are <code>add</code>, <code>clear</code>, <code>copy</code>, <code>difference</code>, <code>difference_update</code>, <code>discard</code>, <code>intersection</code>, <code>intersection_update</code>, <code>isdisjoint</code>, <code>issubset</code>, <code>issuperset</code>, <code>pop</code>, <code>remove</code>, <code>symmetric_difference</code>, <code>symmetric_difference_update</code>, <code>union</code>, and <code>update</code>. It is a child of <code>
                                         <a href="#2--DataABC">DataABC</a>
                                     </code> and of <code>
-                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSet </code>, thereby also inheriting their members. </p>
+                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSet </code>, thereby also inheriting their members. 
+                                </p>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
@@ -1004,7 +1009,6 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </p>
                                 </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--FrozenDataDict" version="2.3">class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
@@ -1075,14 +1079,14 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.1 2.2 2.3">class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
+                            <dd version="2.0 2.1 2.2 2.3">
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
                                         The class was made generic.
                                     </p>
                                 </div>
-                                <dl class="heading4">
+                                <dl class="heading4" version="2.0 2.1 2.2">
                                     <dt id="2--HoldDict.data">data: frozendict</dt>
                                     <dd> This property is implemented with the equivalent to the following code:
                                         <code><pre class="block">@property
@@ -1095,7 +1099,6 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--HoldList">
                                 <ul>
                                     <li version="2.0">class datahold.HoldList(*args: Any, **kwargs: Any)</li>
