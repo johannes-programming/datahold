@@ -1056,7 +1056,13 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.3">datahold.HoldABC = datahold.HoldObject</li>
                                 </ul>
                             </dt>
-                            <dd></dd>
+                            <dd>
+                                <div class="minor minor-changed" version="2.3">
+                                    <p>
+                                        <span>Changed in version 2.3.</span>
+                                    </p>
+                                </div>
+                            </dd>
                             <dt id="2--HoldDict">
                                 <ul>
                                     <li version="2.0">class datahold.HoldDict(*args: Any, **kwargs: Any)</li>
@@ -1151,11 +1157,18 @@ def data(self: Self, value: Any) -> None:
                                 </ul>
                             </dt>
                             <dd version="2.0 2.1 2.2">
-                                <p> A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. Child of <code>
+                                <p> 
+                                    A common ABC for <code>OkayList</code>, <code>OkayDict</code>, and <code>OkaySet</code>. 
+                                    Child of 
+                                    <code>
                                         <a href="https://pypi.org/project/scaevola/">Scaevola</a>
-                                    </code> and <code>
+                                    </code> 
+                                    and 
+                                    <code>
                                         <a href="#2--HoldABC">HoldABC</a>
-                                    </code>. It implements common-sense overwrites for some methods. For example: </p>
+                                    </code>. 
+                                    It implements common-sense overwrites for some methods. For example: 
+                                </p>
                                 <ul>
                                     <li>All methods that cannot actually change the underlying object are now bound to <code>_data</code> instead of <code>data</code>. </li>
                                     <li>
@@ -1185,7 +1198,13 @@ def data(self: Self, value: Any) -> None:
                                 </ul>
                                 <p>Modify <code>__eq__</code> or <code>__le__</code> as needed to change the behavior of the other comparison methods. </p>
                             </dd>
-                            <dd version="2.3"></dd>
+                            <dd version="2.3">
+                                <div class="minor minor-changed" version="2.3">
+                                    <p>
+                                        <span>Changed in version 2.3.</span>
+                                    </p>
+                                </div>
+                            </dd>
                             <dt id="2--OkayDict">
                                 <ul>
                                     <li version="2.0">class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)</li>
