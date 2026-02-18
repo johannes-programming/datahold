@@ -958,13 +958,15 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.1 2.2 2.3">class datahold.DataList[Item](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>  
-                            <dd version="2.0 2.1 2.2">
-                                <p> This class is analogous to <code>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2"> 
+                                    This class is analogous to <code>
                                         <a href="#2--DataDict">DataDict</a>
                                     </code>. It implements the magic methods <code>__add__</code>, <code>__contains__</code>, <code>__delitem__</code>, <code>__eq__</code>, <code>__format__</code>, <code>__ge__</code>, <code>__getitem__</code>, <code>__gt__</code>, <code>__iadd__</code>, <code>__imul__</code>, <code>__iter__</code>, <code>__le__</code>, <code>__len__</code>, <code>__lt__</code>, <code>__mul__</code>, <code>__repr__</code>, <code>__reversed__</code>, <code>__rmul__</code>, <code>__setitem__</code>, and <code>__str__</code>. The other methods implemented are <code>append</code>, <code>clear</code>, <code>copy</code>, <code>count</code>, <code>extend</code>, <code>index</code>, <code>insert</code>, <code>pop</code>, <code>remove</code>, <code>reverse</code>, and <code>sort</code>. It is a child of <code>
                                         <a href="#2--DataABC">DataABC</a>
                                     </code> and of <code>
-                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSequence </code>, thereby also inheriting their members. </p>
+                                        <a href="https://docs.python.org/3/library/collections.html">collections</a>.abc.MutableSequence </code>, thereby also inheriting their members. 
+                                </p>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
@@ -972,7 +974,6 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
                                     </p>
                                 </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--DataObject" version="2.3">
                                 class datahold.DataObject(*args: Any, **kwargs: Any)
                             </dt>
@@ -1105,14 +1106,14 @@ def data(self: Self, value: Any) -> None:
                                     <li version="2.1 2.2 2.3">class datahold.HoldList[Item](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
+                            <dd version="2.0 2.1 2.2 2.3">
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
                                         The class was made generic.
                                     </p>
                                 </div>
-                                <dl class="heading4">
+                                <dl class="heading4" version="2.0 2.1 2.2">
                                     <dt id="2--HoldList.data">data: tuple</dt>
                                     <dd> This property is implemented with the equivalent to the following code:
                                         <code><pre class="block">@property
@@ -1125,7 +1126,6 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--HoldObject" version="2.3">class datahold.HoldObject(*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
@@ -1138,14 +1138,14 @@ def data(self: Self, value: Any) -> None:
                                     <li version="2.1 2.2 2.3">class datahold.HoldSet[Item](*args: Any, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
+                            <dd version="2.0 2.1 2.2 2.3">
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
                                         The class was made generic.
                                     </p>
                                 </div>
-                                <dl class="heading4">
+                                <dl class="heading4" version="2.0 2.1 2.2">
                                     <dt id="2--HoldSet.data">data: frozenset</dt>
                                     <dd> This property is implemented with the equivalent to the following code:
                                         <code><pre class="block">@property
@@ -1158,7 +1158,6 @@ def data(self: Self, value: Any) -> None:
                                     </dd>
                                 </dl>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--OkayABC">
                                 <ul>
                                     <li version="2.0 2.1 2.2">class datahold.OkayABC(*args: Any, **kwargs: Any)</li>
@@ -1223,10 +1222,12 @@ def data(self: Self, value: Any) -> None:
                                     <li version="2.1 2.2 2.3">class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <p>A subclass of <code>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2">
+                                    A subclass of <code>
                                         <a href="#2--HoldDict">HoldDict</a>
-                                    </code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>. </p>
+                                    </code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>. 
+                                </p>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
@@ -1234,15 +1235,16 @@ def data(self: Self, value: Any) -> None:
                                     </p>
                                 </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--OkayList">
                                 <ul>
                                     <li version="2.0">class datahold.OkayList(data: Iterable = ())</li>
                                     <li version="2.1 2.2 2.3">class datahold.OkayList[Item](data: Iterable = ())</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <p> This class inherits from <code>HoldList</code> and <code>OkayABC</code>. </p>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2"> 
+                                    This class inherits from <code>HoldList</code> and <code>OkayABC</code>. 
+                                </p>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
@@ -1250,7 +1252,6 @@ def data(self: Self, value: Any) -> None:
                                     </p>
                                 </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--OkayObject" version="2.3">class datahold.OkayObject(*args: Any, **kwargs: Any)</dt>
                             <dd version="2.3">
                                 <div class="minor minor-added">
@@ -1263,8 +1264,10 @@ def data(self: Self, value: Any) -> None:
                                     <li version="2.1 2.2 2.3">class datahold.OkaySet[Item](data: Iterable = ())</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <p> A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>. </p>
+                            <dd version="2.0 2.1 2.2 2.3">
+                                <p version="2.0 2.1 2.2">
+                                    A subclass of <code>HoldSet</code> with common-sense implementations for further inheritance, just like <code>OkayList</code> for <code>HoldList</code>. 
+                                </p>
                                 <div class="minor minor-changed" version="2.1 2.2 2.3">
                                     <p>
                                         <span>Changed in version 2.1:</span>
@@ -1272,7 +1275,6 @@ def data(self: Self, value: Any) -> None:
                                     </p>
                                 </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--test">datahold.test() -> unittest.TextTestResult</dt>
                             <dd class="testingCorpus"></dd>
                         </dl>
