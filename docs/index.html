@@ -703,8 +703,8 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                     <li version="2.3">datahold.DataABC = datahold.DataObject</li>
                                 </ul>
                             </dt>
-                            <dd version="2.0 2.1 2.2">
-                                <dl class="heading4">
+                            <dd>
+                                <dl class="heading4" version="2.0 2.1 2.2">
                                     <dt id="2--DataABC.__hash__">__hash__() -> int</dt>
                                     <dd>
                                         <p> 
@@ -721,8 +721,12 @@ def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
                                         <p>This abstract property acts as the linchpin of all decending classes.</p>
                                     </dd>
                                 </dl>
+                                <div class="minor minor-changed" version="2.3">
+                                    <p>
+                                        <span>Changed in version 2.3.</span>
+                                    </p>
+                                </div>
                             </dd>
-                            <dd version="2.3"></dd>
                             <dt id="2--DataDict">
                                 <ul>
                                     <li version="2.0">class datahold.DataDict(*args: Any, **kwargs: Any)</li>
