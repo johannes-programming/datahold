@@ -1755,13 +1755,20 @@ def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
             </dd>
         </dl>
     </body>
-    <script src="https://www.johannes-programming.online/script.js"></script>
-    <script>
-        setupLinksCorpus("datahold");
-        setupInstallCorpus("datahold");
-        setupTestingCorpus("datahold");
-        setupLicenseCorpus("datahold");
+    <script type="module">
+        import {
+            setupImpressumCorpus,
+            setupInstallCorpus,
+            setupLicenseCorpus,
+            setupLinksCorpus,
+            setupTestingCorpus,
+            addMetaAndLinkTags,
+        } from "https://www.johannes-programming.online/main.js";
         setupImpressumCorpus("datahold");
+        setupInstallCorpus("datahold");
+        setupLicenseCorpus("datahold");
+        setupLinksCorpus("datahold");
+        setupTestingCorpus("datahold");
         addMetaAndLinkTags();
     </script>
 </html>
