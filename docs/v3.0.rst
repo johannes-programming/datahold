@@ -1,0 +1,392 @@
+Overview
+--------
+
+This project wraps common mutable datastructures for inheritance with modification.
+
+Links
+-----
+
+- Download: https://pypi.org/project/datahold/#files
+- Index: https://pypi.org/project/datahold/
+- Source: https://github.com/johannes-programming/datahold/
+- Website: https://datahold.johannes-programming.online/
+
+Installation
+------------
+
+To install datahold, you can use pip. Open your terminal and run:
+
+.. code-block:: shell
+
+    pip install datahold
+
+Features
+--------
+
+``class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from BaseDataObject . It implements all methods and classmethods of dict that cannot change the underlying instance (and that are not already present in object).
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__contains__(key: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__eq__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__format__(format_spec: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements the builtin format function. It works as follows:
+
+.. code-block:: python
+        
+    def __format__(self: Self, format_spec: Any, /) -> Any
+        "Default object formatter."
+        return dict[Key, Value](self.data).__format__(*args, **kwargs)
+    
+Docsting and signature are somewhat imprecise because they mimic the original method of dict.
+
+``__ge__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__getitem__(*args: Any, **kwargs: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__gt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__iter__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__le__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__len__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__lt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__or__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__repr__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__reversed__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__ror__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__str__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``data: frozendict[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is inherited from BaseDataObject and reannotated.
+
+``fromkeys(iterable: Any, value: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+fromkeys is the only classmethod of dict and therefore also of BaseDataDict. It works as follows:
+
+.. code-block:: python
+
+    @classmethod
+    def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
+        "Create a new dictionary with keys from iterable and values set to value."
+        return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))
+
+See BaseDataDict and __format__ for more information.
+
+``get(key: Any, default: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``keys() -> Any``
+^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``items() -> Any``
+^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``values() -> Any``
+^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``class datahold.BaseDataList[Item](data: Iterable, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from BaseDataObject. It works analogously to BaseDataDict . It data property is annotated as tuple[Item, ...]. It implements the methods __add__, __contains__, __eq__, __format__, __ge__, __getitem__, __gt__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __str__, count, and index accordingly. It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.BaseDataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class is the ancestor of all other classes in datahold.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``data: Any``
+^^^^^^^^^^^^^
+
+This property is abstract.
+
+``class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from BaseDataObject. It works analogously to BaseDataDict . It implements the methods __and__, __contains__, __eq__, __format__, __ge__, __gt__, __iter__, __le__, __len__, __lt__, __or__, __rand__, __repr__, __ror__, __rsub__, __rxor__, __str__, __sub__, __xor__, difference, intersection, isdisjoint, issubset, issuperset, symmetric_difference, and union accordingly. It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract class inherits from BaseHoldObject and from BaseDataDict[Key, Value].
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject .
+
+``data: dict[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is inherited from both parent classes.
+
+``class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract class inherits from BaseHoldObject and from BaseDataList[Item].
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``data: tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is inherited from both parent classes.
+
+``class datahold.BaseHoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract class inherits from BaseDataObject.
+
+``__slots__ = ("_data",)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract class inherits from BaseHoldObject and from BaseDataSet[Item].
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``data: frozenset[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is inherited from both parent classes.
+
+``class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from DataObject, BaseDataDict[Key, Value], and collections.abc.MutableMapping[Key, Value]. It implements all methods and classmethods of dict that can change the underlying instance (and that are not already present in object). The implementation of __format__ works like this:
+
+.. code-block:: python
+        
+    def __format__(self: Self, format_spec: Any, /) -> Any
+        "Default object formatter."
+        return dict[Key, Value](self.data).__contains__(*args, **kwargs)
+
+Docsting and signature are somewhat imprecise because they mimic the original method of dict. The other methods - __contains__, __eq__, __ge__, __getitem__, __gt__, __iter__, __le__, __len__, __lt__, __or__, __repr__, __reversed__, __ror__, __str__, get, items, keys, and values - work analogously. fromkeys - the only classmethod - works as follows:
+
+.. code-block:: python
+        
+    @classmethod
+    def fromkeys(cls: type, iterable: Any, value: Any = None, /) -> Any:
+        "Create a new dictionary with keys from iterable and values set to value."
+        return dict[Key, Value].fromkeys(*args, **kwargs)
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.DataList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.DataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``copy() -> Self``
+^^^^^^^^^^^^^^^^^^
+
+This method returns type(self)(self.data).
+
+``class datahold.DataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.FrozenDataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.HoldDict[Key, Value](data: Iterable = (), **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.HoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.HoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``class datahold.HoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by BaseHoldObject.
+
+``datahold.test() -> unittest.TextTestResult``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This project can be tested through its ``test`` function.
+
+.. code-block:: python
+        
+    import datahold
+    datahold.test()
+
+License
+-------
+
+This project is licensed under the MIT License.
+
+Impressum
+---------
+
+**Johannes Programming**
+
+- Name: Johannes
+- Email: johannes.programming@gmail.com
+- Homepage: https://www.johannes-programming.online/
+- Gravatar: https://www.johannes-programming.fyi/
