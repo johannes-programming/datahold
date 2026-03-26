@@ -3,14 +3,6 @@ Overview
 
 This project wraps common mutable datastructures for inheritance with modification.
 
-Links
------
-
-- Download: https://pypi.org/project/datahold/#files
-- Index: https://pypi.org/project/datahold/
-- Source: https://github.com/johannes-programming/datahold/
-- Website: https://datahold.johannes-programming.online/
-
 Installation
 ------------
 
@@ -380,6 +372,14 @@ License
 -------
 
 This project is licensed under the MIT License.
+
+Links
+-----
+
+- Download: https://pypi.org/project/datahold/#files
+- Index: https://pypi.org/project/datahold/
+- Source: https://github.com/johannes-programming/datahold/
+- Website: https://datahold.johannes-programming.online/
 
 Impressum
 ---------
