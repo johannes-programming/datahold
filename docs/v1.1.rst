@@ -23,8 +23,8 @@ To install datahold, you can use pip. Open your terminal and run:
 Features
 --------
 
-`class datahold.HoldABC(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldABC(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
         
@@ -48,13 +48,13 @@ Features
         @abstractmethod
         def data(self: Self) -> Any: ...
 
-`class datahold.HoldDict(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldDict(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class is a brute wrapper for dict. It inherits from HoldABC and collections.abc.MutableMapping . Its constructor passes all arguments to the constructor of dict and the result is saved within the data property.
 
-`__contains__(key: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__contains__(key: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the in operator. Internally its code is equivalent to the following:
 
@@ -69,113 +69,113 @@ This magic method implements the in operator. Internally its code is equivalent 
 
 The imprecise annotations and docstring are due to it adhering to the underlying dict.__contains__ as closely as possible.
 
-`__delitem__(key: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__delitem__(key: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the deletion of items. Its inner workings are analogous to __contains__ .
 
-`__eq__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__eq__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the == operator. Its inner workings are analogous to __contains__ .
 
-`__format__(format_spec: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__format__(format_spec: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the inbuilt format function. Its inner workings are analogous to __contains__ .
 
-`__ge__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the >= operator. Its inner workings are analogous to __contains__ .
 
-`__getitem__(key: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the returning of items. Its inner workings are analogous to __contains__ .
 
-`__gt__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the > operator. Its inner workings are analogous to __contains__ .
 
-`__hash__() -> int`
-^^^^^^^^^^^^^^^^^^^
+``__hash__() -> int``
+^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the inbuilt function hash. Its function is unhash.unhash . It always raises a TypeError.
 
-`__ior__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ior__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements the `|=` operator. Its inner workings are analogous to __contains__ .
+This magic method implements the ``|=`` operator. Its inner workings are analogous to __contains__ .
 
-`__iter__() -> Any`
-^^^^^^^^^^^^^^^^^^^
+``__iter__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements iteration. Its inner workings are analogous to __contains__ .
 
-`__le__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__le__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the <= operator. Its inner workings are analogous to __contains__ .
 
-`__len__() -> Any`
-^^^^^^^^^^^^^^^^^^
+``__len__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the inbuilt len function. Its inner workings are analogous to __contains__ .
 
-`__lt__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__lt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the < operator. Its inner workings are analogous to __contains__ .
 
-`__or__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__or__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the | operator. Its inner workings are analogous to __contains__ .
 
-`__repr__() -> Any`
-^^^^^^^^^^^^^^^^^^^
+``__repr__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements representation. Its inner workings are analogous to __contains__ .
 
-`__reversed__() -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^
+``__reversed__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the inbuilt reversed function. Its inner workings are analogous to __contains__ .
 
-`__ror__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ror__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the | operator from the right side if the left operand does not have it implemented. Its inner workings are analogous to __contains__ .
 
-`__setitem__(key: Any, value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__setitem__(key: Any, value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the setting of items. Its inner workings are analogous to __contains__ .
 
-`__str__() -> Any`
-^^^^^^^^^^^^^^^^^^
+``__str__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the explicit conversion into a string. Its inner workings are analogous to __contains__ .
 
-`__subclasshook__(other: type, /) -> bool`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__subclasshook__(other: type, /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This classmethod is inherited directly from HoldABC.
 
-`clear() -> Any`
-^^^^^^^^^^^^^^^^
+``clear() -> Any``
+^^^^^^^^^^^^^^^^^^
 
 This method deletes of all items. Its inner workings are analogous to __contains__ .
 
-`copy() -> Any`
-^^^^^^^^^^^^^^^
+``copy() -> Any``
+^^^^^^^^^^^^^^^^^
 
 This method implements dublication. Its inner workings are analogous to __contains__ . Remember that because of that a dict is returned.
 
-`data: dict`
-^^^^^^^^^^^^
+``data: dict``
+^^^^^^^^^^^^^^
 
 This property is implemented with the equivalent to the following code:
 
@@ -193,53 +193,53 @@ This property is implemented with the equivalent to the following code:
     def data(self: Self) -> None:
         self._data = dict()
 
-`get(key: Any, default: Any = None, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``get(key: Any, default: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method implements getting an item with a default in case of its absence. Its inner workings are analogous to __contains__ .
 
-`items() -> Any`
-^^^^^^^^^^^^^^^^
+``items() -> Any``
+^^^^^^^^^^^^^^^^^^
 
 This method returns an iterator over the items. Its inner workings are analogous to __contains__ .
 
-`keys() -> Any`
-^^^^^^^^^^^^^^^
+``keys() -> Any``
+^^^^^^^^^^^^^^^^^
 
 This method returns an iterator over the keys. Its inner workings are analogous to __contains__ .
 
-`popitem() -> Any`
-^^^^^^^^^^^^^^^^^^
+``popitem() -> Any``
+^^^^^^^^^^^^^^^^^^^^
 
 This method deletes and returns the last item. Its inner workings are analogous to __contains__ .
 
-`setdefault(key: Any, default: Any = None, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``setdefault(key: Any, default: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method ensures the presence of a key. Its inner workings are analogous to __contains__ .
 
-`update(*args: Any, **kwargs: Any) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``update(*args: Any, **kwargs: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method updates the data. Its inner workings are analogous to __contains__ .
 
-`values() -> Any`
-^^^^^^^^^^^^^^^^^
+``values() -> Any``
+^^^^^^^^^^^^^^^^^^^
 
 This method returns an iterator over the values. Its inner workings are analogous to __contains__ .
 
-`class datahold.HoldList(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldList(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class is analogous to HoldDict. It implements the magic methods __add__, __contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __setitem__, and __str__. The other methods implemented are append, clear, copy, count, extend, index, insert, pop, remove, reverse, and sort. It is a child of HoldABC and of collections.abc.MutableSequence , thereby also inheriting their members.
 
-`class datahold.HoldSet(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldSet(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class is analogous to HoldDict. It implements the magic methods __and__, __contains__, __eq__, __format__, __ge__, __gt__, __iand__, __ior__, __isub__, __iter__, __le__, __len__, __lt__, __or__, __rand__, __repr__, __ror__, __rsub__, __rxor__, __str__, __sub__, __rmul__, __sub__, and __xor__. The other methods implemented are add, clear, copy, difference, difference_update, discard, intersection, intersection_update, isdisjoint, issubset, issuperset, pop, remove, symmetric_difference, symmetric_difference_update, union, and update. It is a child of HoldABC and of collections.abc.MutableSet , thereby also inheriting their members.
 
-`class datahold.OkayABC(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkayABC(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A common ABC for OkayList, OkayDict, and OkaySet. Child of Scaevola and HoldABC. It implements common-sense overwrites for some methods. For example:
 
@@ -254,13 +254,13 @@ __lt__ returns not (self == other) and (self <= other).
 __le__ returns self._data <= type(self)(other)._data.
 Modify __eq__ or __le__ as needed to change the behavior of the other comparison methods.
 
-`class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkayDict(data: Iterable = (), /, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A subclass of HoldDict with common-sense implementations for further inheritance, just like OkayList for HoldList.
 
-`class datahold.OkayList(data: Iterable = ())`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkayList(data: Iterable = ())``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from HoldList and OkayABC. It implements a data property that binds a variable _data.
 
@@ -283,13 +283,13 @@ Based on this, it implements common-sense methods. For example:
 All methods that returned a list before now return OkayList (type adapts to further inheritance).
 __init__ allows setting data immediately.
 
-`class datahold.OkaySet(data: Iterable = ())`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkaySet(data: Iterable = ())``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A subclass of HoldSet with common-sense implementations for further inheritance, just like OkayList for HoldList.
 
-`datahold.test() -> unittest.TextTestResult`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.test() -> unittest.TextTestResult``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project can be tested through its test function.
 
