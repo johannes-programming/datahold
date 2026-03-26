@@ -23,8 +23,8 @@ To install datahold, you can use pip. Open your terminal and run:
 Features
 --------
 
-`class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from BaseDataObject . It implements all methods and classmethods of dict that cannot change the underlying instance (and that are not already present in object).
 
@@ -32,21 +32,21 @@ This abstract base class inherits from BaseDataObject . It implements all method
     
     **Added in version 2.3.**
 
-`__slots__ = ()`
-^^^^^^^^^^^^^^^^
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
-`__contains__(key: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See BaseDataDict and __format__ for more information.
-
-`__eq__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__contains__(key: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__format__(format_spec: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__eq__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``__format__(format_spec: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements the builtin format function. It works as follows:
 
@@ -58,73 +58,73 @@ This magic method implements the builtin format function. It works as follows:
 
 Docsting and signature are somewhat imprecise because they mimic the original method of dict.
 
-`__ge__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__getitem__(*args: Any, **kwargs: Any) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(*args: Any, **kwargs: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__gt__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__iter__() -> Any`
-^^^^^^^^^^^^^^^^^^^
+``__iter__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__le__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__le__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__len__() -> Any`
-^^^^^^^^^^^^^^^^^^
+``__len__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__lt__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__lt__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__or__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__or__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__repr__() -> Any`
-^^^^^^^^^^^^^^^^^^^
+``__repr__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__reversed__() -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^
+``__reversed__() -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__ror__(value: Any, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ror__(value: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`__str__() -> Any`
-^^^^^^^^^^^^^^^^^^
+``__str__() -> Any``
+^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`data: frozendict[Key, Value]`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``data: frozendict[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is inherited from BaseDataObject and reannotated.
 
-`fromkeys(iterable: Any, value: Any = None, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``fromkeys(iterable: Any, value: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 fromkeys is the only classmethod of dict and therefore also of BaseDataDict. It works as follows:
 
@@ -137,28 +137,28 @@ fromkeys is the only classmethod of dict and therefore also of BaseDataDict. It 
 
 See BaseDataDict and __format__ for more information.
 
-`get(key: Any, default: Any = None, /) -> Any`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``get(key: Any, default: Any = None, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`keys() -> Any`
-^^^^^^^^^^^^^^^
-
-See BaseDataDict and __format__ for more information.
-
-`items() -> Any`
-^^^^^^^^^^^^^^^^
-
-See BaseDataDict and __format__ for more information.
-
-`values() -> Any`
+``keys() -> Any``
 ^^^^^^^^^^^^^^^^^
 
 See BaseDataDict and __format__ for more information.
 
-`class datahold.BaseDataList[Item](data: Iterable, /)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``items() -> Any``
+^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``values() -> Any``
+^^^^^^^^^^^^^^^^^^^
+
+See BaseDataDict and __format__ for more information.
+
+``class datahold.BaseDataList[Item](data: Iterable, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from BaseDataObject. It works analogously to BaseDataDict . It data property is annotated as tuple[Item, ...]. It implements the methods __add__, __contains__, __eq__, __format__, __ge__, __getitem__, __gt__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __str__, count, and index accordingly. It has no classmethod to implement.
 
@@ -166,8 +166,8 @@ This abstract base class inherits from BaseDataObject. It works analogously to B
     
     **Added in version 2.3.**
 
-`class datahold.BaseDataObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class is the ancestor of all other classes in datahold.
 
@@ -175,13 +175,13 @@ This abstract base class is the ancestor of all other classes in datahold.
     
     **Added in version 2.3.**
 
-`data: Any`
-^^^^^^^^^^^
+``data: Any``
+^^^^^^^^^^^^^
 
 This property is abstract.
 
-`class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from BaseDataObject . It works analogously to BaseDataDict . It implements the methods __and__, __contains__, __eq__, __format__, __ge__, __gt__, __iter__, __le__, __len__, __lt__, __or__, __rand__, __repr__, __ror__, __rsub__, __rxor__, __str__, __sub__, __xor__, difference, intersection, isdisjoint, issubset, issuperset, symmetric_difference, and union accordingly. It has no classmethod to implement.
 
@@ -189,8 +189,8 @@ This abstract base class inherits from BaseDataObject . It works analogously to 
     
     **Added in version 2.3.**
 
-`class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract class inherits from BaseHoldObject and from BaseDataDict[Key, Value] .
 
@@ -198,18 +198,18 @@ This abstract class inherits from BaseHoldObject and from BaseDataDict[Key, Valu
     
     **Added in version 2.3.**
 
-`__slots__ = ()`
-^^^^^^^^^^^^^^^^
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by BaseHoldObject .
 
-`data: dict[Key, Value]`
-^^^^^^^^^^^^^^^^^^^^^^^^
+``data: dict[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is inherited from both parent classes.
 
-`class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract class inherits from BaseHoldObject and from BaseDataList[Item].
 
@@ -217,18 +217,18 @@ This abstract class inherits from BaseHoldObject and from BaseDataList[Item].
     
     **Added in version 2.3.**
 
-`__slots__ = ()`
-^^^^^^^^^^^^^^^^
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by BaseHoldObject.
 
-`data: tuple[Item, ...]`
-^^^^^^^^^^^^^^^^^^^^^^^^
+``data: tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is inherited from both parent classes.
 
-`class datahold.BaseHoldObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract class inherits from BaseDataObject . It sets __slots__ to ("_data",).
 
@@ -236,8 +236,8 @@ This abstract class inherits from BaseDataObject . It sets __slots__ to ("_data"
     
     **Added in version 2.3.**
 
-`class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract class inherits from BaseHoldObject and from BaseDataSet[Item].
 
@@ -245,25 +245,25 @@ This abstract class inherits from BaseHoldObject and from BaseDataSet[Item].
     
     **Added in version 2.3.**
 
-`__slots__ = ()`
-^^^^^^^^^^^^^^^^
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by BaseHoldObject.
 
-`data: frozenset[Item]`
-^^^^^^^^^^^^^^^^^^^^^^^
+``data: frozenset[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is inherited from both parent classes.
 
-`datahold.DataABC = datahold.DataObject`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.DataABC = datahold.DataObject``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.3:** The class was renamed to DataObject. DataABC was changed into an alias for DataObject for legacy.
 
-`class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from DataObject, BaseDataDict[Key, Value], and collections.abc.MutableMapping[Key, Value]. It implements all methods and classmethods of dict that can change the underlying instance (and that are not already present in object). The implementation of __format__ works like this:
 
@@ -286,160 +286,160 @@ Docsting and signature are somewhat imprecise because they mimic the original me
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.DataList[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.DataObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`copy() -> Self`
-^^^^^^^^^^^^^^^^
+``copy() -> Self``
+^^^^^^^^^^^^^^^^^^
 
-This method returns `type(self)(self.data)`.
+This method returns ``type(self)(self.data)``.
 
-`class datahold.DataSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenDataObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`datahold.HoldABC = datahold.HoldObject`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.HoldABC = datahold.HoldObject``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.3:** The class was renamed to HoldObject. HoldABC was changed into an alias for HoldObject for legacy.
 
-`class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.HoldList[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldList[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.HoldObject(*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.HoldSet[Item](*args: Any, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldSet[Item](*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`datahold.OkayABC = datahold.OkayObject`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.OkayABC = datahold.OkayObject``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.3:** The class was renamed to OkayObject. OkayABC was changed into an alias for OkayObject for legacy.
 
-`class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`class datahold.OkayList[Item](data: Iterable = ())`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. container:: versionchanged
-    
-    **Changed in version 2.1:** The class was made generic.
-
-`class datahold.OkayObject(*args: Any, **kwargs: Any)`
+``class datahold.OkayList[Item](data: Iterable = ())``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. container:: versionchanged
+    
+    **Changed in version 2.1:** The class was made generic.
+
+``class datahold.OkayObject(*args: Any, **kwargs: Any)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
     
     **Added in version 2.3.**
 
-`class datahold.OkaySet[Item](data: Iterable = ())`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.OkaySet[Item](data: Iterable = ())``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
     
     **Changed in version 2.1:** The class was made generic.
 
-`datahold.test() -> unittest.TextTestResult`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.test() -> unittest.TextTestResult``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project can be tested through its test function.
 
