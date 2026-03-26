@@ -3,12 +3,22 @@ Overview
 
 This project wraps common mutable datastructures for inheritance with modification.
 
+Links
+-----
+
+- Download: https://pypi.org/project/datahold/#files
+- Index: https://pypi.org/project/datahold/
+- Source: https://github.com/johannes-programming/datahold/
+- Website: https://datahold.johannes-programming.online/
+
 Installation
 ------------
 
 To install datahold, you can use pip. Open your terminal and run:
 
-pip install datahold
+.. code-block:: shell
+
+    pip install datahold
 
 Features
 --------
@@ -97,7 +107,7 @@ This magic method implements the inbuilt function hash. Its function is unhash.u
 `__ior__(value: Any, /) -> Any`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements the |= operator. Its inner workings are analogous to __contains__ .
+This magic method implements the `|=` operator. Its inner workings are analogous to __contains__ .
 
 `__iter__() -> Any`
 ^^^^^^^^^^^^^^^^^^^
@@ -292,14 +302,6 @@ License
 -------
 
 This project is licensed under the MIT License.
-
-Links
------
-
-- Download: https://pypi.org/project/datahold/#files
-- Index: https://pypi.org/project/datahold/
-- Source: https://github.com/johannes-programming/datahold/
-- Website: https://datahold.johannes-programming.online/
 
 Impressum
 ---------
