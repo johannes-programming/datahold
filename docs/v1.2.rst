@@ -135,7 +135,7 @@ This magic method implements the inbuilt function hash. Its function is unhash.u
 `__ior__(value: Any, /) -> Any`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements the |= operator. Its inner workings are analogous to __contains__ .
+This magic method implements the `|=` operator. Its inner workings are analogous to __contains__ .
 
 `__iter__() -> Any`
 ^^^^^^^^^^^^^^^^^^^
