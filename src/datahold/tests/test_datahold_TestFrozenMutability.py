@@ -1,11 +1,12 @@
 import unittest
-from typing import Any, Self
-
-from frozendict import frozendict
+from typing import *
 
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
+from datahold.core.FrozenHoldNaming import FrozenHoldNaming
 from datahold.core.FrozenHoldSet import FrozenHoldSet
+
+__all__ = ["TestFrozenMutability"]
 
 
 class TestFrozenMutability(unittest.TestCase):
@@ -24,6 +25,14 @@ class TestFrozenMutability(unittest.TestCase):
             f.append(4)
         with self.assertRaises((TypeError, AttributeError)):
             f.pop()
+
+    def test_frozen_naming_cannot_mutate(self: Self) -> None:
+        f: FrozenHoldNaming
+        f = FrozenHoldNaming({"a": 1}.items())
+        with self.assertRaises((TypeError, AttributeError)):
+            f["b"] = 2
+        with self.assertRaises((TypeError, AttributeError)):
+            f.pop("a", None)
 
     def test_frozen_set_cannot_mutate(self: Self) -> None:
         f: FrozenHoldSet
