@@ -1,14 +1,12 @@
 import unittest
-from typing import Any, Self
+from typing import *
 
-from frozendict import frozendict
-
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
+from datahold.core.HoldNaming import HoldNaming
 from datahold.core.HoldSet import HoldSet
+
+__all__ = ["TestMutableBehavior"]
 
 
 class TestMutableBehavior(unittest.TestCase):
@@ -25,6 +23,13 @@ class TestMutableBehavior(unittest.TestCase):
         x.append(3)
         self.assertEqual(list(x), [1, 2, 3])
         self.assertEqual(x.data, (1, 2, 3))
+
+    def test_hold_naming_mutates_and_syncs_data(self: Self) -> None:
+        x: HoldNaming
+        x = HoldNaming({"a": 1}.items())
+        x["b"] = 2
+        self.assertEqual(x["b"], 2)
+        self.assertEqual(x.data["b"], 2)
 
     def test_hold_set_mutates_and_syncs_data(self: Self) -> None:
         s: HoldSet

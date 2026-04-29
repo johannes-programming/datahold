@@ -4,6 +4,8 @@ from typing import *
 from datahold import core
 from datahold.core import *
 
+__all__ = ["TestData"]
+
 
 class TestData(unittest.TestCase):
     def test_constructor_abc(self: Self) -> None:
@@ -12,11 +14,14 @@ class TestData(unittest.TestCase):
         with self.assertRaises(Exception):
             core.DataList.DataList()
         with self.assertRaises(Exception):
+            core.DataList.DataNaming()
+        with self.assertRaises(Exception):
             core.DataSet.DataSet()
 
     def test_constructor_core(self: Self) -> None:
         core.HoldDict.HoldDict()
         core.HoldList.HoldList()
+        core.HoldNaming.HoldNaming()
         core.HoldSet.HoldSet()
 
     def test_doc(self: Self) -> None:
