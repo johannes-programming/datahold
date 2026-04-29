@@ -6,18 +6,22 @@ from frozendict import frozendict
 
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
+from datahold.core.DataNaming import DataNaming
 from datahold.core.DataObject import DataObject
 from datahold.core.DataSet import DataSet
 from datahold.core.FrozenDataDict import FrozenDataDict
 from datahold.core.FrozenDataList import FrozenDataList
+from datahold.core.FrozenDataNaming import FrozenDataNaming
 from datahold.core.FrozenDataObject import FrozenDataObject
 from datahold.core.FrozenDataSet import FrozenDataSet
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
+from datahold.core.FrozenHoldNaming import FrozenHoldNaming
 from datahold.core.FrozenHoldObject import FrozenHoldObject
 from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
+from datahold.core.HoldNaming import HoldNaming
 from datahold.core.HoldSet import HoldSet
 
 __all__ = ["TestAbstractness"]
@@ -29,11 +33,13 @@ class TestAbstractness(unittest.TestCase):
         self.assertTrue(isabstract(DataObject))
         self.assertTrue(isabstract(DataDict))
         self.assertTrue(isabstract(DataList))
+        self.assertTrue(isabstract(DataNaming))
         self.assertTrue(isabstract(DataSet))
 
         self.assertTrue(isabstract(FrozenDataObject))
         self.assertTrue(isabstract(FrozenDataDict))
         self.assertTrue(isabstract(FrozenDataList))
+        self.assertTrue(isabstract(FrozenDataNaming))
         self.assertTrue(isabstract(FrozenDataSet))
 
         # hold
@@ -43,10 +49,12 @@ class TestAbstractness(unittest.TestCase):
     def test_concrete_classes(self: Self) -> None:
         FrozenHoldDict({"a": 1})
         FrozenHoldList([1, 2])
+        FrozenHoldNaming({"a": 1}.items())
         FrozenHoldSet({1, 2})
 
         HoldDict({"a": 1})
         HoldList([1, 2])
+        HoldNaming({"a": 1}.items())
         HoldSet({1, 2})
 
 

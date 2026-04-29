@@ -1,13 +1,15 @@
 import unittest
 from typing import Any, Self
 
-from frozendict import frozendict
+from namings import Naming
 
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
+from datahold.core.FrozenHoldNaming import FrozenHoldNaming
 from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
+from datahold.core.HoldNaming import HoldNaming
 from datahold.core.HoldSet import HoldSet
 
 __all__ = ["TestCopy"]
@@ -17,6 +19,7 @@ class TestCopy(unittest.TestCase):
     def test_frozen_have_no_copy(self: Self) -> None:
         self.assertFalse(hasattr(FrozenHoldDict({"a": 1}), "copy"))
         self.assertFalse(hasattr(FrozenHoldList([1, 2]), "copy"))
+        self.assertFalse(hasattr(FrozenHoldNaming({"a": 1}.items()), "copy"))
         self.assertFalse(hasattr(FrozenHoldSet({1, 2}), "copy"))
 
     def test_frozen_have_no_copy_2(self: Self) -> None:
@@ -31,6 +34,7 @@ class TestCopy(unittest.TestCase):
         for cls, args in (
             (FrozenHoldDict, ({"a": 1},)),
             (FrozenHoldList, ([1, 2],)),
+            (FrozenHoldNaming, ({"a": 1}.items(),)),
             (FrozenHoldSet, ({1, 2},)),
         ):
             # They must not *define* copy themselves
@@ -51,6 +55,19 @@ class TestCopy(unittest.TestCase):
         self.assertIsInstance(d_copy, type(d))
         self.assertIsNot(d_copy, d)
         self.assertEqual(dict(d_copy), dict(d))
+
+        # shallow: inner object is shared
+        d["a"]["x"] = 2
+        self.assertEqual(d_copy["a"]["x"], 2)
+
+    def test_naming_copy(self: Self) -> None:
+        d: HoldNaming
+        d_copy: HoldNaming
+        d = HoldNaming({"a": {"x": 1}}.items())
+        d_copy = d.copy()
+        self.assertIsInstance(d_copy, HoldNaming)
+        self.assertIsNot(d_copy, d)
+        self.assertEqual(Naming(d_copy), Naming(d))
 
         # shallow: inner object is shared
         d["a"]["x"] = 2

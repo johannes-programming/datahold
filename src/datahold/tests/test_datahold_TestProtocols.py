@@ -9,13 +9,13 @@ from collections.abc import (
 from collections.abc import Set as AbstractSet
 from typing import Self
 
-from frozendict import frozendict
-
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
+from datahold.core.FrozenHoldNaming import FrozenHoldNaming
 from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
+from datahold.core.HoldNaming import HoldNaming
 from datahold.core.HoldSet import HoldSet
 
 __all__ = ["TestProtocols"]
@@ -48,6 +48,20 @@ class TestProtocols(unittest.TestCase):
         m = HoldList([1, 2, 3])
         self.assertIsInstance(m, Sequence)
         self.assertIsInstance(m, MutableSequence)
+
+    def test_naming_protocols_x(self: Self) -> None:
+        x: FrozenHoldNaming
+        x = FrozenHoldNaming({"a": 1}.items())
+
+        self.assertIsInstance(x, Mapping)
+        self.assertNotIsInstance(x, MutableMapping)
+
+    def test_naming_protocols_y(self: Self) -> None:
+        y: HoldNaming
+        y = HoldNaming({"a": 1}.items())
+
+        self.assertIsInstance(y, Mapping)
+        self.assertIsInstance(y, MutableMapping)
 
     def test_set_protocols(self: Self) -> None:
         f: FrozenHoldSet
