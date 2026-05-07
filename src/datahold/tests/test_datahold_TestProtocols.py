@@ -1,3 +1,4 @@
+import collections.abc
 import unittest
 from collections.abc import (
     Mapping,
@@ -8,6 +9,8 @@ from collections.abc import (
 )
 from collections.abc import Set as AbstractSet
 from typing import Self
+
+import namings
 
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
@@ -51,17 +54,29 @@ class TestProtocols(unittest.TestCase):
 
     def test_naming_protocols_x(self: Self) -> None:
         x: FrozenHoldNaming
-        x = FrozenHoldNaming({"a": 1}.items())
+        x = FrozenHoldNaming({"a": 1})
 
-        self.assertIsInstance(x, Mapping)
+        self.assertIsInstance(x, collections.abc.Collection)
+
+        self.assertIsInstance(x, namings.abc.BaseNamingABC.BaseNamingABC)
+        self.assertIsInstance(x, namings.abc.FrozenNamingABC.FrozenNamingABC)
+        self.assertNotIsInstance(x, namings.abc.NamingABC.NamingABC)
+
+        self.assertNotIsInstance(x, Mapping)
         self.assertNotIsInstance(x, MutableMapping)
 
     def test_naming_protocols_y(self: Self) -> None:
         y: HoldNaming
-        y = HoldNaming({"a": 1}.items())
+        y = HoldNaming({"a": 1})
 
-        self.assertIsInstance(y, Mapping)
-        self.assertIsInstance(y, MutableMapping)
+        self.assertIsInstance(y, collections.abc.Collection)
+
+        self.assertIsInstance(y, namings.abc.BaseNamingABC.BaseNamingABC)
+        self.assertNotIsInstance(y, namings.abc.FrozenNamingABC.FrozenNamingABC)
+        self.assertIsInstance(y, namings.abc.NamingABC.NamingABC)
+
+        self.assertNotIsInstance(y, Mapping)
+        self.assertNotIsInstance(y, MutableMapping)
 
     def test_set_protocols(self: Self) -> None:
         f: FrozenHoldSet

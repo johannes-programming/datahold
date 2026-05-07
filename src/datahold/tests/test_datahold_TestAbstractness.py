@@ -2,8 +2,6 @@ import unittest
 from inspect import isabstract
 from typing import Self
 
-from frozendict import frozendict
-
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
 from datahold.core.DataNaming import DataNaming
