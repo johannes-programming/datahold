@@ -1,7 +1,7 @@
-import collections
 from abc import abstractmethod
 from typing import *
 
+import namings
 from namings import FrozenNaming, Naming
 
 from datahold._utils.wrapping import wraps
@@ -15,7 +15,7 @@ Value = TypeVar("Value")
 
 class BaseDataNaming(
     BaseDataObject,
-    collections.abc.Mapping[str, Value],
+    namings.abc.BaseNamingABC.BaseNamingABC[Value],
 ):
     data: FrozenNaming[Value]
     __slots__ = ()
@@ -95,12 +95,6 @@ class BaseDataNaming(
     def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return Naming[Value](self.data).__str__(*args, **kwargs)
-
-    @classmethod
-    @wraps(Naming[Value])
-    def fromkeys(cls: type[Self], *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return cls[Value](Naming[Value].fromkeys(*args, **kwargs))
 
     @wraps(Naming[Value])
     def get(self: Self, *args: Any, **kwargs: Any) -> Any:

@@ -1,6 +1,6 @@
-import collections
 from typing import *
 
+import namings
 import setdoc
 from namings import FrozenNaming, Naming
 
@@ -15,7 +15,7 @@ Value = TypeVar("Value")
 
 
 class DataNaming(
-    DataObject, BaseDataNaming[Value], collections.abc.MutableMapping[str, Value]
+    DataObject, BaseDataNaming[Value], namings.abc.NamingABC.NamingABC[Value]
 ):
     data: FrozenNaming[Value]
     __slots__ = ()
@@ -71,16 +71,6 @@ class DataNaming(
         data: Naming[Value]
         data = Naming[Value](self.data)
         ans = data.pop(*args, **kwargs)
-        self.data = FrozenNaming[Value](data)
-        return ans
-
-    @wraps(Naming[Value])
-    def popitem(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: Naming[Value]
-        data = Naming[Value](self.data)
-        ans = data.popitem(*args, **kwargs)
         self.data = FrozenNaming[Value](data)
         return ans
 
