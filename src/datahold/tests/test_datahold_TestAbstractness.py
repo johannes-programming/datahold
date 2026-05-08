@@ -47,12 +47,12 @@ class TestAbstractness(unittest.TestCase):
     def test_concrete_classes(self: Self) -> None:
         FrozenHoldDict({"a": 1})
         FrozenHoldList([1, 2])
-        FrozenHoldNaming({"a": 1}.items())
+        FrozenHoldNaming({"a": 1})
         FrozenHoldSet({1, 2})
 
         HoldDict({"a": 1})
         HoldList([1, 2])
-        HoldNaming({"a": 1}.items())
+        HoldNaming({"a": 1})
         HoldSet({1, 2})
 
 

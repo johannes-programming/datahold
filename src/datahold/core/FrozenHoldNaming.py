@@ -1,7 +1,7 @@
 from typing import *
 
+import namings
 import setdoc
-from namings import FrozenNaming
 
 from .BaseHoldNaming import BaseHoldNaming
 from .FrozenDataNaming import FrozenDataNaming
@@ -13,9 +13,9 @@ Value = TypeVar("Value")
 
 
 class FrozenHoldNaming(FrozenHoldObject, FrozenDataNaming, BaseHoldNaming[Value]):
-    data: FrozenNaming[Value]
+    data: namings.FrozenNaming[Value]
     __slots__ = ()
 
     @setdoc.basic
     def __init__(self: Self, data: Any, /, **kwargs: Any) -> None:
-        self._data = FrozenNaming[Value](data, **kwargs)
+        self._data = namings.FrozenNaming[Value](data, **kwargs)

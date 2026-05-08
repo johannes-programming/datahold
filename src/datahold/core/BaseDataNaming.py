@@ -2,7 +2,6 @@ from abc import abstractmethod
 from typing import *
 
 import namings
-from namings import FrozenNaming, Naming
 
 from datahold._utils.wrapping import wraps
 
@@ -17,101 +16,71 @@ class BaseDataNaming(
     BaseDataObject,
     namings.abc.BaseNamingABC.BaseNamingABC[Value],
 ):
-    data: FrozenNaming[Value]
+    data: namings.FrozenNaming[Value]
     __slots__ = ()
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __contains__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__contains__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__contains__(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__eq__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__eq__(*args, **kwargs)
 
-    @wraps(Naming[Value])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__format__(*args, **kwargs)
-
-    @wraps(Naming[Value])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__ge__(*args, **kwargs)
-
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __getitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__getitem__(*args, **kwargs)
-
-    @wraps(Naming[Value])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__gt__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__getitem__(*args, **kwargs)
 
     @abstractmethod
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ...
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__iter__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__iter__(*args, **kwargs)
 
-    @wraps(Naming[Value])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__le__(*args, **kwargs)
-
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__len__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__len__(*args, **kwargs)
 
-    @wraps(Naming[Value])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__lt__(*args, **kwargs)
-
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __or__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__or__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__or__(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __repr__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__repr__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__repr__(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def __reversed__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__reversed__(*args, **kwargs)
+        return namings.Naming[Value](self.data).__reversed__(*args, **kwargs)
 
-    @wraps(Naming[Value])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).__str__(*args, **kwargs)
-
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def get(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).get(*args, **kwargs)
+        return namings.Naming[Value](self.data).get(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def items(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).items(*args, **kwargs)
+        return namings.Naming[Value](self.data).items(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def keys(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).keys(*args, **kwargs)
+        return namings.Naming[Value](self.data).keys(*args, **kwargs)
 
-    @wraps(Naming[Value])
+    @wraps(namings.Naming[Value])
     def values(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return Naming[Value](self.data).values(*args, **kwargs)
+        return namings.Naming[Value](self.data).values(*args, **kwargs)

@@ -28,7 +28,7 @@ class TestFrozenMutability(unittest.TestCase):
 
     def test_frozen_naming_cannot_mutate(self: Self) -> None:
         f: FrozenHoldNaming
-        f = FrozenHoldNaming({"a": 1}.items())
+        f = FrozenHoldNaming({"a": 1})
         with self.assertRaises((TypeError, AttributeError)):
             f["b"] = 2
         with self.assertRaises((TypeError, AttributeError)):
