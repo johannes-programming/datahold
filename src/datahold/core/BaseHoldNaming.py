@@ -1,6 +1,6 @@
 from typing import *
 
-from namings import FrozenNaming
+import namings
 
 from .BaseDataNaming import BaseDataNaming
 from .BaseHoldObject import BaseHoldObject
@@ -11,5 +11,5 @@ Value = TypeVar("Value")
 
 
 class BaseHoldNaming(BaseHoldObject, BaseDataNaming[Value]):
-    data: FrozenNaming[Value]
+    data: namings.FrozenNaming[Value]
     __slots__ = ()

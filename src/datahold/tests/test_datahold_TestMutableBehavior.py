@@ -26,7 +26,7 @@ class TestMutableBehavior(unittest.TestCase):
 
     def test_hold_naming_mutates_and_syncs_data(self: Self) -> None:
         x: HoldNaming
-        x = HoldNaming({"a": 1}.items())
+        x = HoldNaming({"a": 1})
         x["b"] = 2
         self.assertEqual(x["b"], 2)
         self.assertEqual(x.data["b"], 2)

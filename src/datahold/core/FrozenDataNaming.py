@@ -1,7 +1,6 @@
 from typing import *
 
 import namings
-from namings import FrozenNaming
 
 from .BaseDataNaming import BaseDataNaming
 from .FrozenDataObject import FrozenDataObject
@@ -16,5 +15,5 @@ class FrozenDataNaming(
     BaseDataNaming[Value],
     namings.abc.FrozenNamingABC.FrozenNamingABC[Value],
 ):
-    data: FrozenNaming[Value]
+    data: namings.FrozenNaming[Value]
     __slots__ = ()

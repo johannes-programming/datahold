@@ -19,7 +19,7 @@ class TestCopy(unittest.TestCase):
     def test_frozen_have_no_copy(self: Self) -> None:
         self.assertFalse(hasattr(FrozenHoldDict({"a": 1}), "copy"))
         self.assertFalse(hasattr(FrozenHoldList([1, 2]), "copy"))
-        self.assertFalse(hasattr(FrozenHoldNaming({"a": 1}.items()), "copy"))
+        self.assertFalse(hasattr(FrozenHoldNaming({"a": 1}), "copy"))
         self.assertFalse(hasattr(FrozenHoldSet({1, 2}), "copy"))
 
     def test_frozen_have_no_copy_2(self: Self) -> None:
@@ -34,7 +34,7 @@ class TestCopy(unittest.TestCase):
         for cls, args in (
             (FrozenHoldDict, ({"a": 1},)),
             (FrozenHoldList, ([1, 2],)),
-            (FrozenHoldNaming, ({"a": 1}.items(),)),
+            (FrozenHoldNaming, ({"a": 1},)),
             (FrozenHoldSet, ({1, 2},)),
         ):
             # They must not *define* copy themselves
@@ -63,7 +63,7 @@ class TestCopy(unittest.TestCase):
     def test_naming_copy(self: Self) -> None:
         d: HoldNaming
         d_copy: HoldNaming
-        d = HoldNaming({"a": {"x": 1}}.items())
+        d = HoldNaming({"a": {"x": 1}})
         d_copy = d.copy()
         self.assertIsInstance(d_copy, HoldNaming)
         self.assertIsNot(d_copy, d)

@@ -47,8 +47,8 @@ class TestDataAttribute(unittest.TestCase):
         f: FrozenHoldNaming
         m: HoldNaming
         obj: Any
-        f = FrozenHoldNaming({"a": 1}.items())
-        m = HoldNaming({"a": 1}.items())
+        f = FrozenHoldNaming({"a": 1})
+        m = HoldNaming({"a": 1})
 
         for obj in (f, m):
             self.assertIsInstance(obj.data, FrozenNaming)
