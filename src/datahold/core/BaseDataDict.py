@@ -32,11 +32,6 @@ class BaseDataDict(
         return dict[Key, Value](self.data).__eq__(*args, **kwargs)
 
     @wraps(dict[Key, Value])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__format__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
     def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__ge__(*args, **kwargs)
@@ -96,11 +91,6 @@ class BaseDataDict(
     def __ror__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__ror__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__str__(*args, **kwargs)
 
     @classmethod
     @wraps(dict[Key, Value])
