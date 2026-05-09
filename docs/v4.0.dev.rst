@@ -18,7 +18,7 @@ Features
 ``class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataObject``.
+This abstract base ``class`` inherits from ``BaseDataObject``.
 It implements all methods and classmethods of ``dict``
 that cannot change the underlying instance
 (and that are not already present in ``object``).
@@ -138,7 +138,7 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 ``class datahold.BaseDataList[Item](data: Iterable, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataObject``.
+This abstract base ``class`` inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
 It data property is annotated as ``tuple[Item, ...]``.
 It implements the methods
@@ -153,7 +153,7 @@ It has no classmethod to implement.
 ``class datahold.BaseDataObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class is the ancestor of all other classes in datahold.
+This abstract base ``class`` is the ancestor of all other classes in datahold.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -182,7 +182,7 @@ This property is abstract.
 ``class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataObject``.
+This abstract base ``class`` inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
 It implements the methods ``__and__``, ``__contains__``, ``__ge__``, ``__gt__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__sub__``, ``__xor__``, ``difference``, ``intersection``, ``isdisjoint``, ``issubset``, ``issuperset``, ``symmetric_difference``, and ``union`` accordingly.
 It has no classmethod to implement.
@@ -198,7 +198,7 @@ This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataDict
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``data: types.MappingProxyType[Key, Value]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -213,7 +213,7 @@ This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataList
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``data: tuple[Item, ...]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -236,7 +236,7 @@ This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataSet[
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``data: frozenset[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -326,7 +326,7 @@ This method returns ``type(self)(self.data)``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -334,7 +334,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -342,7 +342,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -350,7 +350,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldDict[Key, Value](data: Iterable = (), **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -358,7 +358,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -366,7 +366,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -374,7 +374,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -382,7 +382,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
+The slot layout of the ``class`` is dictated by ``BaseHoldObject``.
 
 ``datahold.tests``
 ~~~~~~~~~~~~~~~~~~
