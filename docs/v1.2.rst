@@ -27,28 +27,28 @@ Features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 1.2.**
 
 ``class datahold.DataDict``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 1.2.**
 
 ``class datahold.DataList``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 1.2.**
 
 ``class datahold.DataSet``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 1.2.**
 
 ``class datahold.HoldABC(*args: Any, **kwargs: Any)``
@@ -63,7 +63,7 @@ Features
         __hash__ = unhash
 
         @abstractmethod
-        def __init__(self: Self, *args: Any, **kwargs: Any) -> None: 
+        def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
             "This magic method initializes self."
             ...
 
@@ -323,7 +323,7 @@ A subclass of HoldSet with common-sense implementations for further inheritance,
 This project can be tested through its test function.
 
 .. code-block:: python
-        
+
     import datahold
     datahold.test()
 

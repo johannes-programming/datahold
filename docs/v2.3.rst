@@ -29,7 +29,7 @@ Features
 This abstract base class inherits from BaseDataObject . It implements all methods and classmethods of dict that cannot change the underlying instance (and that are not already present in object).
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``__slots__ = ()``
@@ -163,7 +163,7 @@ See BaseDataDict and __format__ for more information.
 This abstract base class inherits from BaseDataObject. It works analogously to BaseDataDict . It data property is annotated as tuple[Item, ...]. It implements the methods __add__, __contains__, __eq__, __format__, __ge__, __getitem__, __gt__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __str__, count, and index accordingly. It has no classmethod to implement.
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.BaseDataObject(*args: Any, **kwargs: Any)``
@@ -172,7 +172,7 @@ This abstract base class inherits from BaseDataObject. It works analogously to B
 This abstract base class is the ancestor of all other classes in datahold.
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``data: Any``
@@ -186,7 +186,7 @@ This property is abstract.
 This abstract base class inherits from BaseDataObject . It works analogously to BaseDataDict . It implements the methods __and__, __contains__, __eq__, __format__, __ge__, __gt__, __iter__, __le__, __len__, __lt__, __or__, __rand__, __repr__, __ror__, __rsub__, __rxor__, __str__, __sub__, __xor__, difference, intersection, isdisjoint, issubset, issuperset, symmetric_difference, and union accordingly. It has no classmethod to implement.
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)``
@@ -195,7 +195,7 @@ This abstract base class inherits from BaseDataObject . It works analogously to 
 This abstract class inherits from BaseHoldObject and from BaseDataDict[Key, Value] .
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``__slots__ = ()``
@@ -214,7 +214,7 @@ This abstract property is inherited from both parent classes.
 This abstract class inherits from BaseHoldObject and from BaseDataList[Item].
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``__slots__ = ()``
@@ -233,7 +233,7 @@ This abstract property is inherited from both parent classes.
 This abstract class inherits from BaseDataObject . It sets __slots__ to ("_data",).
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)``
@@ -242,7 +242,7 @@ This abstract class inherits from BaseDataObject . It sets __slots__ to ("_data"
 This abstract class inherits from BaseHoldObject and from BaseDataSet[Item].
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``__slots__ = ()``
@@ -259,7 +259,7 @@ This abstract property is inherited from both parent classes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.3:** The class was renamed to DataObject. DataABC was changed into an alias for DataObject for legacy.
 
 ``class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)``
@@ -283,21 +283,21 @@ Docsting and signature are somewhat imprecise because they mimic the original me
         return dict[Key, Value].fromkeys(*args, **kwargs)
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.DataList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.DataObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``copy() -> Self``
@@ -309,133 +309,133 @@ This method returns ``type(self)(self.data)``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenDataObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``datahold.HoldABC = datahold.HoldObject``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.3:** The class was renamed to HoldObject. HoldABC was changed into an alias for HoldObject for legacy.
 
 ``class datahold.HoldDict[Key, Value](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.HoldList[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.HoldObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.HoldSet[Item](*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``datahold.OkayABC = datahold.OkayObject``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.3:** The class was renamed to OkayObject. OkayABC was changed into an alias for OkayObject for legacy.
 
 ``class datahold.OkayDict[Key, Value](data: Iterable = (), /, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.OkayList[Item](data: Iterable = ())``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.OkayObject(*args: Any, **kwargs: Any)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionadded
-    
+
     **Added in version 2.3.**
 
 ``class datahold.OkaySet[Item](data: Iterable = ())``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``datahold.test() -> unittest.TextTestResult``
@@ -444,7 +444,7 @@ This method returns ``type(self)(self.data)``.
 This project can be tested through its test function.
 
 .. code-block:: python
-        
+
     import datahold
     datahold.test()
 

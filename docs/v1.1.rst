@@ -27,7 +27,7 @@ Features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
-        
+
     class HoldABC(ABC):
 
         __slots__ = ("_data",)
@@ -35,7 +35,7 @@ Features
         __hash__ = unhash
 
         @abstractmethod
-        def __init__(self: Self, *args: Any, **kwargs: Any) -> None: 
+        def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
             "This magic method initializes self."
             ...
 

@@ -45,7 +45,7 @@ This abstract property acts as the linchpin of all decending classes.
 This class is a brute wrapper for dict. It inherits from DataABC and collections.abc.MutableMapping . Its constructor passes all arguments to the constructor of dict and the result is saved within the data property.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``__contains__(key: Any, /) -> Any``
@@ -210,7 +210,7 @@ This method returns an iterator over the values. Its inner workings are analogou
 This class is analogous to DataDict. It implements the magic methods __add__, __contains__, __delitem__, __eq__, __format__, __ge__, __getitem__, __gt__, __iadd__, __imul__, __iter__, __le__, __len__, __lt__, __mul__, __repr__, __reversed__, __rmul__, __setitem__, and __str__. The other methods implemented are append, clear, copy, count, extend, index, insert, pop, remove, reverse, and sort. It is a child of DataABC and of collections.abc.MutableSequence , thereby also inheriting their members.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.DataSet[Item](*args: Any, **kwargs: Any)``
@@ -219,7 +219,7 @@ This class is analogous to DataDict. It implements the magic methods __add__, __
 This class is analogous to DataDict. It implements the magic methods __and__, __contains__, __eq__, __format__, __ge__, __gt__, __iand__, __ior__, __isub__, __iter__, __le__, __len__, __lt__, __or__, __rand__, __repr__, __ror__, __rsub__, __rxor__, __str__, __sub__, __rmul__, __sub__, and __xor__. The other methods implemented are add, clear, copy, difference, difference_update, discard, intersection, intersection_update, isdisjoint, issubset, issuperset, pop, remove, symmetric_difference, symmetric_difference_update, union, and update. It is a child of DataABC and of collections.abc.MutableSet , thereby also inheriting their members.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.HoldABC(*args: Any, **kwargs: Any)``
@@ -229,7 +229,7 @@ This class is analogous to DataDict. It implements the magic methods __and__, __
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``data: frozendict``
@@ -251,7 +251,7 @@ This property is implemented with the equivalent to the following code:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``data: tuple``
@@ -273,7 +273,7 @@ This property is implemented with the equivalent to the following code:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``data: frozenset``
@@ -305,7 +305,7 @@ All methods that cannot actually change the underlying object are now bound to _
     * __ne__ negates __eq__.
     * __ge__ returns ``type(self)(other) <= self`` (inherited from scaevola.Scaevola).
     * __gt__ returns ``not (self == other) and (self >= other)``.
-    * __lt__ returns ``not (self == other) and (self <= other)``. 
+    * __lt__ returns ``not (self == other) and (self <= other)``.
     * __le__ returns ``self._data <= type(self)(other)._data``.
 
 Modify __eq__ or __le__ as needed to change the behavior of the other comparison methods.
@@ -316,7 +316,7 @@ Modify __eq__ or __le__ as needed to change the behavior of the other comparison
 A subclass of HoldDict with common-sense implementations for further inheritance, just like OkayList for HoldList.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.OkayList[Item](data: Iterable = ())``
@@ -325,7 +325,7 @@ A subclass of HoldDict with common-sense implementations for further inheritance
 This class inherits from HoldList and OkayABC.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``class datahold.OkaySet[Item](data: Iterable = ())``
@@ -334,7 +334,7 @@ This class inherits from HoldList and OkayABC.
 A subclass of HoldSet with common-sense implementations for further inheritance, just like OkayList for HoldList.
 
 .. container:: versionchanged
-    
+
     **Changed in version 2.1:** The class was made generic.
 
 ``datahold.test() -> unittest.TextTestResult``
