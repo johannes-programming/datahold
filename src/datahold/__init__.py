@@ -22,4 +22,3 @@ from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldObject import HoldObject
 from datahold.core.HoldSet import HoldSet
-from datahold.tests import test
