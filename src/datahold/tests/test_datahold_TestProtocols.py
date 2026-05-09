@@ -9,8 +9,6 @@ from collections.abc import (
 from collections.abc import Set as AbstractSet
 from typing import Self
 
-from frozendict import frozendict
-
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
 from datahold.core.FrozenHoldSet import FrozenHoldSet
