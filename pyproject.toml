@@ -9,7 +9,7 @@ authors = [
     { email = "johannes.programming@gmail.com", name = "Johannes" },
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: OS Independent",
@@ -21,7 +21,6 @@ dependencies = [
     "cmp3>=1.0,<2",
     "copyable>=1.0,<2",
     "datarepr>=1.0,<2",
-    "frozendict>=2.4.6,<3",
     "iterprod>=1.0,<2",
     "setdoc>=1.2.20,<2",
 ]
@@ -34,7 +33,7 @@ license-files = [
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "3.0.11"
+version = "4.0.0.dev0"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"

@@ -1,8 +1,8 @@
 import collections
+from types import MappingProxyType
 from typing import *
 
 import setdoc
-from frozendict import frozendict
 
 from datahold._utils.wrapping import wraps
 
@@ -18,7 +18,7 @@ Value = TypeVar("Value")
 class DataDict(
     DataObject, BaseDataDict[Key, Value], collections.abc.MutableMapping[Key, Value]
 ):
-    data: frozendict[Key, Value]
+    data: MappingProxyType[Key, Value]
     __slots__ = ()
 
     @wraps(dict[Key, Value])
@@ -28,12 +28,12 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.__delitem__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @setdoc.basic
     def __init__(self: Self, data: Any = (), /, **kwargs: Any) -> None:
-        self.data = frozendict[Key, Value](data, **kwargs)
+        self.data = MappingProxyType[Key, Value](dict[Key, Value](data, **kwargs))
 
     @wraps(dict[Key, Value])
     def __ior__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -42,7 +42,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.__ior__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -52,7 +52,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.__setitem__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -62,7 +62,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.clear(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -72,7 +72,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.pop(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -82,7 +82,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.popitem(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -92,7 +92,7 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.setdefault(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans
 
     @wraps(dict[Key, Value])
@@ -102,5 +102,5 @@ class DataDict(
         data: dict[Key, Value]
         data = dict[Key, Value](self.data)
         ans = data.update(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = MappingProxyType[Key, Value](data)
         return ans

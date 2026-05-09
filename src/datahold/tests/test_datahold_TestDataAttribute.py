@@ -1,7 +1,6 @@
 import unittest
+from types import MappingProxyType
 from typing import Any, Self
-
-from frozendict import frozendict
 
 from datahold.core.FrozenHoldDict import FrozenHoldDict
 from datahold.core.FrozenHoldList import FrozenHoldList
@@ -20,7 +19,7 @@ class TestDataAttribute(unittest.TestCase):
         m = HoldDict({"a": 1})
 
         for obj in (f, m):
-            self.assertIsInstance(obj.data, frozendict)
+            self.assertIsInstance(obj.data, MappingProxyType)
 
             # try to mutate underlying data
             with self.assertRaises((TypeError, AttributeError)):

@@ -1,8 +1,7 @@
 import collections
 from abc import abstractmethod
+from types import MappingProxyType
 from typing import *
-
-from frozendict import frozendict
 
 from datahold._utils.wrapping import wraps
 
@@ -18,7 +17,7 @@ class BaseDataDict(
     BaseDataObject,
     collections.abc.Mapping[Key, Value],
 ):
-    data: frozendict[Key, Value]
+    data: MappingProxyType[Key, Value]
     __slots__ = ()
 
     @wraps(dict[Key, Value])
