@@ -14,7 +14,6 @@ Value = TypeVar("Value")
 
 
 class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
-    data: frozendict[Key, Value]
     __slots__ = ()
 
     @property

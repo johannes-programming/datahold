@@ -7,5 +7,4 @@ __all__ = ["HoldObject"]
 
 
 class HoldObject(DataObject, BaseHoldObject):
-    data: Any
     __slots__ = ()
