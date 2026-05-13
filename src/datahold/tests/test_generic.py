@@ -10,7 +10,7 @@ __all__ = ["TestDataholdGenerics"]
 class TestDataholdGenerics(unittest.TestCase):
     def _assert_is_generic(
         self: Self,
-        cls: type,
+        cls: Any,
         n_type_params: int,
     ) -> None:
         """

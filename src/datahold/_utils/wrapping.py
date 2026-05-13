@@ -34,7 +34,7 @@ def update(cls: type, member: FunctionType | classmethod) -> FunctionType | clas
 def update_classmethod(cls: type, clsmthd: classmethod) -> None:
     params: list
     a: Any
-    func: FunctionType
+    func: Any
     p: ins.Parameter
     q: ins.Parameter
     oldsig: ins.Signature
@@ -60,7 +60,7 @@ def update_classmethod(cls: type, clsmthd: classmethod) -> None:
     func.__annotations__ = getAnnotationsDict(func.__signature__)
 
 
-def update_func(cls: type, func: FunctionType) -> None:
+def update_func(cls: type, func: Any) -> None:
     params: list
     a: Any
     n: int

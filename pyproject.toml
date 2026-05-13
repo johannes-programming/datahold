@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-    "setuptools>=64.0",
+    "setuptools>=77.0",
 ]
 
 [project]
@@ -11,33 +11,44 @@ authors = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Typing :: Typed",
 ]
 dependencies = [
     "cmp3>=1.0,<2",
-    "copyable>=1.0,<2",
-    "datarepr>=1.0,<2",
+    "copyable>=1.1,<2",
+    "datarepr>=1.2,<2",
     "frozendict>=2.4.6,<3",
-    "setdoc>=1.2.8,<2",
+    "iterprod>=1.1,<2",
+    "setdoc>=1.2.20,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."
 keywords = []
+license = "MIT"
+license-files = [
+    "LICENSE.txt",
+]
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "3.0.2"
-
-[project.license]
-file = "LICENSE.txt"
+version = "3.0.17"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"
 Index = "https://pypi.org/project/datahold/"
 Source = "https://github.com/johannes-programming/datahold/"
 Website = "http://datahold.johannes-programming.online/"
+
+[tool.mypy]
+files = []
+python_version = "3.11"
+strict = false
+
+[[tool.mypy.overrides]]
+module = "datahold.core.BaseDataSet"
+disable_error_code = [
+    "attr-defined",
+]

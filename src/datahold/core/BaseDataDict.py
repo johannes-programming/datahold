@@ -27,29 +27,9 @@ class BaseDataDict(
         return dict[Key, Value](self.data).__contains__(*args, **kwargs)
 
     @wraps(dict[Key, Value])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__eq__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__format__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__ge__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
     def __getitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__getitem__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__gt__(*args, **kwargs)
 
     @abstractmethod
     @wraps(dict[Key, Value])
@@ -63,19 +43,9 @@ class BaseDataDict(
         return dict[Key, Value](self.data).__iter__(*args, **kwargs)
 
     @wraps(dict[Key, Value])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__le__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
     def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__len__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__lt__(*args, **kwargs)
 
     @wraps(dict[Key, Value])
     def __or__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -97,16 +67,11 @@ class BaseDataDict(
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__ror__(*args, **kwargs)
 
-    @wraps(dict[Key, Value])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__str__(*args, **kwargs)
-
     @classmethod
     @wraps(dict[Key, Value])
     def fromkeys(cls: type[Self], *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return cls[Key, Value](dict[Key, Value].fromkeys(*args, **kwargs))
+        return cls(dict.fromkeys(*args, **kwargs))
 
     @wraps(dict[Key, Value])
     def get(self: Self, *args: Any, **kwargs: Any) -> Any:

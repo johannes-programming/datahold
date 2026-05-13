@@ -25,7 +25,7 @@ class DataDict(
     def __delitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.__delitem__(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -39,7 +39,7 @@ class DataDict(
     def __ior__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.__ior__(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -49,7 +49,7 @@ class DataDict(
     def __setitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.__setitem__(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -59,7 +59,7 @@ class DataDict(
     def clear(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.clear(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -69,7 +69,7 @@ class DataDict(
     def pop(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.pop(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -79,7 +79,7 @@ class DataDict(
     def popitem(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.popitem(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -89,7 +89,7 @@ class DataDict(
     def setdefault(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.setdefault(*args, **kwargs)
         self.data = frozendict[Key, Value](data)
@@ -99,7 +99,7 @@ class DataDict(
     def update(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
+        data: Any
         data = dict[Key, Value](self.data)
         ans = data.update(*args, **kwargs)
         self.data = frozendict[Key, Value](data)

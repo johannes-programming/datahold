@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 
 
 class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @property

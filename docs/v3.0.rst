@@ -38,18 +38,8 @@ This magic method implements ``key in self``. It works as follows:
 
 Docsting and signature are somewhat imprecise because they mimic the original method of ``dict``.
 
-``__ge__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
 ``__getitem__(*args: Any, **kwargs: Any) -> Any``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
-``__gt__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -58,18 +48,8 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
-``__le__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
 ``__len__() -> Any``
 ^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
-``__lt__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -110,7 +90,7 @@ It works as follows:
     @classmethod
     def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
         "Create a new dictionary with keys from iterable and values set to value."
-        return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))
+        return cls(dict[Key, Value].fromkeys(iterable, value))
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -140,9 +120,9 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
 It data property is annotated as ``tuple[Item, ...]``.
-It implements the methods ``__add__``, ``__contains__``, ``__ge__``, ``__getitem__``, ``__gt__``,
-``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__mul__``,
-``__repr__``, ``__reversed__``, ``__rmul__``, ``count``, and ``index`` accordingly.
+It implements the methods ``__add__``, ``__contains__``, ``__getitem__``,
+``__iter__``, ``__len__``, ``__mul__``, ``__repr__``, ``__reversed__``, ``__rmul__``,
+``count``, and ``index`` accordingly.
 It has no classmethod to implement.
 
 ``__slots__ = ()``
@@ -172,6 +152,86 @@ It should only ever be overwritten with an extensional equivalent.
         else:
             return NotImplemented
 
+``__ge__(self: Self, other: object) -> types.NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self >= other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __ge__(self: Self, other: object) -> types.NotImplementedType | bool:
+        "This magic method implements self>=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__ge__(other.data)
+        else:
+            return NotImplemented
+
+``__gt__(self: Self, other: object) -> types.NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self > other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __gt__(self: Self, other: object) -> types.NotImplementedType | bool:
+        "This magic method implements self>other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__gt__(other.data)
+        else:
+            return NotImplemented
+
+``__le__(self: Self, other: object) -> types.NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self <= other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __le__(self: Self, other: object) -> types.NotImplementedType | bool:
+        "This magic method implements self<=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__le__(other.data)
+        else:
+            return NotImplemented
+
+``__lt__(self: Self, other: object) -> types.NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self < other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __lt__(self: Self, other: object) -> types.NotImplementedType | bool:
+        "This magic method implements self<other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__lt__(other.data)
+        else:
+            return NotImplemented
+
+``__ne__(self: Self, other: object) -> types.NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self != other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __ne__(self: Self, other: object) -> types.NotImplementedType | bool:
+        "This magic method implements self!=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__ne__(other.data)
+        else:
+            return NotImplemented
+
 ``data: Any``
 ^^^^^^^^^^^^^
 
@@ -182,9 +242,8 @@ This property is abstract.
 
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
-It implements the methods ``__and__``, ``__contains__``, ``__ge__``, ``__gt__``,
-``__iter__``, ``__le__``, ``__len__``, ``__lt__``,
-``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__sub__``, ``__xor__``,
+It implements the methods ``__and__``, ``__contains__``, ``__iter__``, ``__len__``, ``__or__``,
+``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__sub__``, ``__xor__``,
 ``difference``, ``intersection``, ``isdisjoint``, ``issubset``, ``issuperset``,
 ``symmetric_difference``, and ``union`` accordingly.
 It has no classmethod to implement.
@@ -263,7 +322,7 @@ The implementation of ``__contains__`` works like this:
 
 Docsting and signature are somewhat imprecise because they mimic the original method of ``dict``.
 The other methods -
-``__contains__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``,
+``__contains__``, ``__getitem__``, ``__iter__``, ``__len__``,
 ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``,
 ``get``, ``items``, ``keys``, and ``values`` - work analogously.
 ``fromkeys`` - the only ``classmethod`` - works as follows:

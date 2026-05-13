@@ -29,29 +29,9 @@ class BaseDataList(
         return list[Item](self.data).__contains__(*args, **kwargs)
 
     @wraps(list[Item])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__eq__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__format__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__ge__(*args, **kwargs)
-
-    @wraps(list[Item])
     def __getitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return list[Item](self.data).__getitem__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__gt__(*args, **kwargs)
 
     @abstractmethod
     @wraps(list[Item])
@@ -65,19 +45,9 @@ class BaseDataList(
         return list[Item](self.data).__iter__(*args, **kwargs)
 
     @wraps(list[Item])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__le__(*args, **kwargs)
-
-    @wraps(list[Item])
     def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return list[Item](self.data).__len__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__lt__(*args, **kwargs)
 
     @wraps(list[Item])
     def __mul__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -98,11 +68,6 @@ class BaseDataList(
     def __rmul__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return list[Item](self.data).__rmul__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__str__(*args, **kwargs)
 
     @wraps(list[Item])
     def count(self: Self, *args: Any, **kwargs: Any) -> Any:

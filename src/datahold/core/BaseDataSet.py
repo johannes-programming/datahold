@@ -28,26 +28,6 @@ class BaseDataSet(
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return set[Item](self.data).__contains__(*args, **kwargs)
 
-    @wraps(set[Item])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__eq__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__format__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__ge__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__gt__(*args, **kwargs)
-
     @abstractmethod
     @wraps(set[Item])
     def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
@@ -60,19 +40,9 @@ class BaseDataSet(
         return set[Item](self.data).__iter__(*args, **kwargs)
 
     @wraps(set[Item])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__le__(*args, **kwargs)
-
-    @wraps(set[Item])
     def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return set[Item](self.data).__len__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__lt__(*args, **kwargs)
 
     @wraps(set[Item])
     def __or__(self: Self, *args: Any, **kwargs: Any) -> Any:
@@ -103,11 +73,6 @@ class BaseDataSet(
     def __rxor__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return set[Item](self.data).__rxor__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__str__(*args, **kwargs)
 
     @wraps(set[Item])
     def __sub__(self: Self, *args: Any, **kwargs: Any) -> Any:
