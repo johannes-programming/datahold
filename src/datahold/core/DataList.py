@@ -3,9 +3,7 @@ from typing import *
 
 import setdoc
 
-from datahold._utils.wrapping import wraps
-
-from .BaseDataList import BaseDataList
+from ..base.BaseDataList import BaseDataList
 from .DataObject import DataObject
 
 __all__ = ["DataList"]
@@ -17,126 +15,96 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     data: tuple[Item, ...]
     __slots__ = ()
 
-    @wraps(list[Item])
-    def __delitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
+    @setdoc.setdoc(list.__delitem__.__doc__)
+    def __delitem__(self: Self, key: SupportsIndex | slice, /) -> None:
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.__delitem__(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
+        data = list(self.data)
+        data.__delitem__(key)
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.__iadd__.__doc__)
+    def __iadd__(self: Self, value: Iterable[Item], /) -> list[Item]:
+        ans: list[Item]
+        data: list[Item]
+        data = list(self.data)
+        ans = data.__iadd__(value)
+        self.data = tuple(data)
         return ans
 
-    @wraps(list[Item])
-    def __iadd__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
+    @setdoc.setdoc(list.__imul__.__doc__)
+    def __imul__(self: Self, value: SupportsIndex, /) -> list[Item]:
         ans: Any
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.__iadd__(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def __imul__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.__imul__(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
+        data = list(self.data)
+        ans = data.__imul__(value)
+        self.data = tuple(data)
         return ans
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable = (), /) -> None:
-        self.data = tuple[Item, ...](data)
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+        self.data = tuple(data)
 
-    @wraps(list[Item])
-    def __setitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
+    @setdoc.setdoc(list.__setitem__.__doc__)
+    def __setitem__(self: Self, key: SupportsIndex | slice, value: Item, /) -> None:
+        data: Any
+        data = list(self.data)
+        data.__setitem__(key, value)
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.append.__doc__)
+    def append(self: Self, value: Item, /) -> None:
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.__setitem__(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
+        data = list(self.data)
+        data.append(value)
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.clear.__doc__)
+    def clear(self: Self, /) -> None:
+        data: list[Item]
+        data = list(self.data)
+        data.clear()
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.extend.__doc__)
+    def extend(self: Self, iterable: Iterable[Item], /) -> None:
+        data: list[Item]
+        data = list(self.data)
+        data.extend(iterable)
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.insert.__doc__)
+    def insert(self: Self, index: SupportsIndex, object: Item, /) -> None:
+        data: list[Item]
+        data = list(self.data)
+        data.insert(index, object)
+        self.data = tuple(data)
+
+    @setdoc.setdoc(list.pop.__doc__)
+    def pop(self: Self, index: SupportsIndex = -1, /) -> Item:
+        ans: Item
+        data: list[Item]
+        data = list(self.data)
+        ans = data.pop(index)
+        self.data = tuple(data)
         return ans
 
-    @wraps(list[Item])
-    def append(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
+    @setdoc.setdoc(list.remove.__doc__)
+    def remove(self: Self, value: Item) -> None:
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.append(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
+        data = list(self.data)
+        data.remove(value)
+        self.data = tuple(data)
 
-    @wraps(list[Item])
-    def clear(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
+    @setdoc.setdoc(list.reverse.__doc__)
+    def reverse(self: Self) -> None:
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.clear(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
+        data = list(self.data)
+        data.reverse()
+        self.data = tuple(data)
 
-    @wraps(list[Item])
-    def extend(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
+    @setdoc.setdoc(list.sort.__doc__)
+    def sort(self: Self, key: Optional[Callable] = None, reverse: bool = False) -> None:
         data: list[Item]
-        data = list[Item](self.data)
-        ans = data.extend(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def insert(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.insert(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def pop(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.pop(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def remove(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.remove(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def reverse(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.reverse(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
-
-    @wraps(list[Item])
-    def sort(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ans: Any
-        data: list[Item]
-        data = list[Item](self.data)
-        ans = data.sort(*args, **kwargs)
-        self.data = tuple[Item, ...](data)
-        return ans
+        data = list(self.data)
+        data.sort(key=key, reverse=reverse)
+        self.data = tuple(data)

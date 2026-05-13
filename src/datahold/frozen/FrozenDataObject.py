@@ -3,14 +3,13 @@ from typing import *
 
 import setdoc
 
-from .BaseDataObject import BaseDataObject
+from ..base.BaseDataObject import BaseDataObject
 
 __all__ = ["FrozenDataObject"]
 
 
 class FrozenDataObject(BaseDataObject, collections.abc.Hashable):
 
-    data: Any
     __slots__ = ()
 
     @setdoc.basic
