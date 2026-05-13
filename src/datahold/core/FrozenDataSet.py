@@ -9,5 +9,5 @@ Item = TypeVar("Item")
 
 
 class FrozenDataSet(FrozenDataObject, BaseDataSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()

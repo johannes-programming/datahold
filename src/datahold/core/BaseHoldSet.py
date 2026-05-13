@@ -9,5 +9,4 @@ Item = TypeVar("Item")
 
 
 class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
-    data: frozenset[Item]
     __slots__ = ()

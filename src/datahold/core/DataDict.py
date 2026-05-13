@@ -18,7 +18,6 @@ Value = TypeVar("Value")
 class DataDict(
     DataObject, BaseDataDict[Key, Value], collections.abc.MutableMapping[Key, Value]
 ):
-    data: frozendict[Key, Value]
     __slots__ = ()
 
     @wraps(dict[Key, Value])

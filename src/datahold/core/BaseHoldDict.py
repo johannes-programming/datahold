@@ -1,7 +1,5 @@
 from typing import *
 
-from frozendict import frozendict
-
 from .BaseDataDict import BaseDataDict
 from .BaseHoldObject import BaseHoldObject
 
@@ -12,5 +10,5 @@ Value = TypeVar("Value")
 
 
 class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):
-    data: frozendict[Key, Value]
+
     __slots__ = ()

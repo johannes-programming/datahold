@@ -9,7 +9,6 @@ __all__ = ["DataObject"]
 
 
 class DataObject(BaseDataObject, Copyable):
-    data: Any
 
     __slots__ = ()
 

@@ -2,6 +2,7 @@ import collections
 from abc import abstractmethod
 from typing import *
 
+import setdoc
 from frozendict import frozendict
 
 from datahold._utils.wrapping import wraps
@@ -18,7 +19,6 @@ class BaseDataDict(
     BaseDataObject,
     collections.abc.Mapping[Key, Value],
 ):
-    data: frozendict[Key, Value]
     __slots__ = ()
 
     @wraps(dict[Key, Value])
@@ -86,6 +86,15 @@ class BaseDataDict(
     def __ror__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return dict[Key, Value](self.data).__ror__(*args, **kwargs)
+
+    @property
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self) -> frozendict[Key, Value]: ...
+
+    @data.setter
+    @abstractmethod
+    def data(self: Self, value: Any) -> None: ...
 
     @classmethod
     @wraps(dict[Key, Value])

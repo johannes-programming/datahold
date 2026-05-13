@@ -12,5 +12,5 @@ Value = TypeVar("Value")
 
 
 class FrozenDataDict(FrozenDataObject, BaseDataDict[Key, Value]):
-    data: frozendict[Key, Value]
+
     __slots__ = ()

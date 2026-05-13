@@ -2,6 +2,8 @@ import collections
 from abc import abstractmethod
 from typing import *
 
+import setdoc
+
 from datahold._utils.wrapping import wraps
 
 from .BaseDataObject import BaseDataObject
@@ -15,7 +17,6 @@ class BaseDataSet(
     BaseDataObject,
     collections.abc.Set[Item],
 ):
-    data: frozenset[Item]
     __slots__ = ()
 
     @wraps(set[Item])
@@ -103,6 +104,11 @@ class BaseDataSet(
     def __xor__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return set[Item](self.data).__xor__(*args, **kwargs)
+
+    @property
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self) -> frozenset[Item]: ...
 
     @wraps(set[Item])
     def difference(self: Self, *args: Any, **kwargs: Any) -> Any:

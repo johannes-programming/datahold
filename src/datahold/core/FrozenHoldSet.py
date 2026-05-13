@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 
 
 class FrozenHoldSet(FrozenHoldObject, FrozenDataSet, BaseHoldSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()
 
     @setdoc.basic

@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 
 
 class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @setdoc.basic

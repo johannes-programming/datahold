@@ -9,5 +9,4 @@ Item = TypeVar("Item")
 
 
 class BaseHoldList(BaseHoldObject, BaseDataList[Item]):
-    data: tuple[Item, ...]
     __slots__ = ()

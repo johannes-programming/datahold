@@ -14,7 +14,7 @@ Item = TypeVar("Item")
 
 
 class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @wraps(list[Item])

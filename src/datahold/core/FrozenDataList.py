@@ -9,5 +9,5 @@ Item = TypeVar("Item")
 
 
 class FrozenDataList(FrozenDataObject, BaseDataList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()

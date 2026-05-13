@@ -14,7 +14,7 @@ Item = TypeVar("Item")
 
 
 class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()
 
     @wraps(set[Item])

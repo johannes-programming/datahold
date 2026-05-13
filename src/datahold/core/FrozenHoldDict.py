@@ -14,7 +14,7 @@ Value = TypeVar("Value")
 
 
 class FrozenHoldDict(FrozenHoldObject, FrozenDataDict, BaseHoldDict[Key, Value]):
-    data: frozendict[Key, Value]
+
     __slots__ = ()
 
     @setdoc.basic
