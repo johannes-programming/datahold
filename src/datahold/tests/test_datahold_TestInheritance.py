@@ -1,8 +1,6 @@
 import unittest
 from typing import Self
 
-from frozendict import frozendict
-
 from datahold.core.BaseDataDict import BaseDataDict
 from datahold.core.BaseDataList import BaseDataList
 from datahold.core.BaseDataSet import BaseDataSet
