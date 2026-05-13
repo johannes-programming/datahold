@@ -10,6 +10,7 @@ __all__ = ["FrozenHoldObject"]
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
     __slots__ = ()
+    _data: Any
 
     @property
     @setdoc.basic
