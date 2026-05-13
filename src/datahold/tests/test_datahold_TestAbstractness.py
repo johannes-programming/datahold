@@ -2,23 +2,22 @@ import unittest
 from inspect import isabstract
 from typing import Self
 
-from frozendict import frozendict
-
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
 from datahold.core.DataObject import DataObject
 from datahold.core.DataSet import DataSet
-from datahold.core.FrozenDataDict import FrozenDataDict
-from datahold.core.FrozenDataList import FrozenDataList
-from datahold.core.FrozenDataObject import FrozenDataObject
-from datahold.core.FrozenDataSet import FrozenDataSet
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldObject import FrozenHoldObject
-from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
+from datahold.core.HoldObject import HoldObject
 from datahold.core.HoldSet import HoldSet
+from datahold.frozen.FrozenDataDict import FrozenDataDict
+from datahold.frozen.FrozenDataList import FrozenDataList
+from datahold.frozen.FrozenDataObject import FrozenDataObject
+from datahold.frozen.FrozenDataSet import FrozenDataSet
+from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold.frozen.FrozenHoldObject import FrozenHoldObject
+from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 __all__ = ["TestAbstractness"]
 
@@ -37,8 +36,8 @@ class TestAbstractness(unittest.TestCase):
         self.assertTrue(isabstract(FrozenDataSet))
 
         # hold
-        self.assertFalse(isabstract(FrozenHoldObject))
-        # self.assertFalse(isabstract(HoldObject))
+        self.assertTrue(isabstract(FrozenHoldObject))
+        self.assertTrue(isabstract(HoldObject))
 
     def test_concrete_classes(self: Self) -> None:
         FrozenHoldDict({"a": 1})

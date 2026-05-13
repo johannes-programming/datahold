@@ -45,7 +45,7 @@ class TestData(unittest.TestCase):
                 continue
             if getattr(member, "__isabstractmethod__", False):
                 continue
-            if attrname == "__subclasshook__":
+            if attrname in ("__init_subclass__", "__subclasshook__"):
                 continue
             doc = getattr(member, "__doc__", None)
             error = "%r inside %r has no docstring" % (attrname, name)
