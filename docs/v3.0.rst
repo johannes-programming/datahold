@@ -6,7 +6,8 @@ This project wraps common mutable datastructures for inheritance with modificati
 Installation
 ------------
 
-To install ``datahold``, you can use ``pip``. Open your terminal and run:
+To install ``datahold``, you can use ``pip``.
+Open your terminal and run:
 
 .. code-block:: shell
 
@@ -15,8 +16,8 @@ To install ``datahold``, you can use ``pip``. Open your terminal and run:
 Features
 --------
 
-``class datahold.BaseDataDict[Key, Value](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It implements all methods and classmethods of ``dict`` that cannot change the underlying instance
@@ -38,18 +39,8 @@ This magic method implements ``key in self``. It works as follows:
 
 Docsting and signature are somewhat imprecise because they mimic the original method of ``dict``.
 
-``__ge__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
-``__getitem__(*args: Any, **kwargs: Any) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
-``__gt__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: Key, /) -> Value``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -58,18 +49,8 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
-``__le__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
 ``__len__() -> Any``
 ^^^^^^^^^^^^^^^^^^^^
-
-See ``BaseDataDict`` and ``__contains__`` for more information.
-
-``__lt__(value: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -98,8 +79,8 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 This abstract ``property`` is inherited from ``BaseDataObject`` and reannotated.
 
-``fromkeys(iterable: Any, value: Any = None, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``fromkeys(iterable: Iterable[Key], value: Any = None, /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``fromkeys`` is the only ``classmethod`` of ``dict``
 and therefore also of ``BaseDataDict``.
@@ -110,7 +91,7 @@ It works as follows:
     @classmethod
     def fromkeys(cls: type[Self], iterable: Any, value: Any = None, /) -> Any:
         "Create a new dictionary with keys from iterable and values set to value."
-        return cls[Key, Value](dict[Key, Value].fromkeys(iterable, value))
+        return cls(dict[Key, Value].fromkeys(iterable, value))
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
@@ -134,30 +115,30 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
-``class datahold.BaseDataList[Item](data: Iterable, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
-It works analogously to ``BaseDataDict``.
+It works analogously to ``BaseDataDict[Key, Value]``.
 It data property is annotated as ``tuple[Item, ...]``.
-It implements the methods ``__add__``, ``__contains__``, ``__ge__``, ``__getitem__``, ``__gt__``,
-``__iter__``, ``__le__``, ``__len__``, ``__lt__``, ``__mul__``,
-``__repr__``, ``__reversed__``, ``__rmul__``, ``count``, and ``index`` accordingly.
+It implements the methods ``__add__``, ``__contains__``, ``__getitem__``,
+``__iter__``, ``__len__``, ``__mul__``, ``__repr__``, ``__reversed__``, ``__rmul__``,
+``count``, and ``index`` accordingly.
 It has no classmethod to implement.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseDataObject(*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class is the ancestor of all other classes in datahold.
+This abstract base class is the ancestor of all other classes in ``datahold``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``__eq__(self: Self, other: object) -> types.NotImplementedType | bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__eq__(other: object) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self == other``.
 Here, it establishes a standard for all its descendents.
@@ -165,10 +146,90 @@ It should only ever be overwritten with an extensional equivalent.
 
 .. code-block:: python
 
-    def __eq__(self: Self, other: object) -> types.NotImplementedType | bool:
+    def __eq__(self: Self, other: object) -> Any:
         "This magic method implements self==other."
         if isinstance(other, BaseDataObject):
             return self.data.__eq__(other.data)
+        else:
+            return NotImplemented
+
+``__ge__(other: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self >= other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __ge__(self: Self, other: Any) -> Any:
+        "This magic method implements self>=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__ge__(other.data)
+        else:
+            return NotImplemented
+
+``__gt__(other: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self > other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __gt__(self: Self, other: Any) -> Any:
+        "This magic method implements self>other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__gt__(other.data)
+        else:
+            return NotImplemented
+
+``__le__(other: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self <= other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __le__(self: Self, other: Any) -> Any:
+        "This magic method implements self<=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__le__(other.data)
+        else:
+            return NotImplemented
+
+``__lt__(other: Any) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self < other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __lt__(self: Self, other: Any) -> Any:
+        "This magic method implements self<other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__lt__(other.data)
+        else:
+            return NotImplemented
+
+``__ne__(other: object) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self != other``.
+Here, it establishes a standard for all its descendents.
+It should only ever be overwritten with an extensional equivalent.
+
+.. code-block:: python
+
+    def __ne__(self: Self, other: object) -> Any:
+        "This magic method implements self!=other."
+        if isinstance(other, BaseDataObject):
+            return self.data.__ne__(other.data)
         else:
             return NotImplemented
 
@@ -177,14 +238,13 @@ It should only ever be overwritten with an extensional equivalent.
 
 This property is abstract.
 
-``class datahold.BaseDataSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseDataSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
-It implements the methods ``__and__``, ``__contains__``, ``__ge__``, ``__gt__``,
-``__iter__``, ``__le__``, ``__len__``, ``__lt__``,
-``__or__``, ``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__sub__``, ``__xor__``,
+It implements the methods ``__and__``, ``__contains__``, ``__iter__``, ``__len__``, ``__or__``,
+``__rand__``, ``__repr__``, ``__ror__``, ``__rsub__``, ``__rxor__``, ``__sub__``, ``__xor__``,
 ``difference``, ``intersection``, ``isdisjoint``, ``issubset``, ``issuperset``,
 ``symmetric_difference``, and ``union`` accordingly.
 It has no classmethod to implement.
@@ -192,8 +252,8 @@ It has no classmethod to implement.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseHoldDict[Key, Value](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataDict[Key, Value]``.
 
@@ -207,8 +267,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 This abstract ``property`` is inherited from both parent classes.
 
-``class datahold.BaseHoldList[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataList[Item]``.
 
@@ -222,16 +282,16 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 This abstract ``property`` is inherited from both parent classes.
 
-``class datahold.BaseHoldObject(*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseDataObject``.
 
 ``__slots__ = ("_data",)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseHoldSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.BaseHoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataSet[Item]``.
 
@@ -245,8 +305,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 This abstract ``property`` is inherited from both parent classes.
 
-``class datahold.DataDict[Key, Value](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits
 from DataObject, ``BaseDataDict[Key, Value]``, and ``collections.abc.MutableMapping[Key, Value]``.
@@ -263,7 +323,7 @@ The implementation of ``__contains__`` works like this:
 
 Docsting and signature are somewhat imprecise because they mimic the original method of ``dict``.
 The other methods -
-``__contains__``, ``__ge__``, ``__getitem__``, ``__gt__``, ``__iter__``, ``__le__``, ``__len__``, ``__lt__``,
+``__contains__``, ``__getitem__``, ``__iter__``, ``__len__``,
 ``__or__``, ``__repr__``, ``__reversed__``, ``__ror__``,
 ``get``, ``items``, ``keys``, and ``values`` - work analogously.
 ``fromkeys`` - the only ``classmethod`` - works as follows:
@@ -278,14 +338,14 @@ The other methods -
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.DataList[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.DataObject(*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DataObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -295,66 +355,66 @@ The other methods -
 
 This method returns ``type(self)(self.data)``.
 
-``class datahold.DataSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``class datahold.FrozenDataDict[Key, Value](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataList[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataObject(*args: Any, **kwargs: Any)``
+``class datahold.DataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.FrozenHoldDict[Key, Value](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldList[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldObject(*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDataSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.HoldDict[Key, Value](data: Iterable = (), **kwargs: Any)``
+``class datahold.FrozenHoldList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.FrozenHoldObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.FrozenHoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.HoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
@@ -362,24 +422,24 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.HoldList[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.HoldObject(*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.HoldSet[Item](*args: Any, **kwargs: Any)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.HoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^

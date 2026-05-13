@@ -2,9 +2,8 @@ import collections
 from abc import abstractmethod
 from typing import *
 
+import setdoc
 from frozendict import frozendict
-
-from datahold._utils.wrapping import wraps
 
 from .BaseDataObject import BaseDataObject
 
@@ -21,109 +20,61 @@ class BaseDataDict(
     data: frozendict[Key, Value]
     __slots__ = ()
 
-    @wraps(dict[Key, Value])
-    def __contains__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__contains__(*args, **kwargs)
+    @setdoc.setdoc(dict.__contains__.__doc__)
+    def __contains__(self: Self, key: Any, /) -> Any:
+        return dict(self.data).__contains__(key)
 
-    @wraps(dict[Key, Value])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__eq__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__format__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__ge__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __getitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__getitem__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__gt__(*args, **kwargs)
+    @setdoc.setdoc(dict.__getitem__.__doc__)
+    def __getitem__(self: Self, key: Key, /) -> Value:
+        return dict(self.data).__getitem__(key)
 
     @abstractmethod
-    @wraps(dict[Key, Value])
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ...
+    @setdoc.setdoc(dict.__init__.__doc__)
+    def __init__(self: Self, data: Any = (), /, **kwargs: Value) -> None: ...
 
-    @wraps(dict[Key, Value])
-    def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__iter__(*args, **kwargs)
+    @setdoc.setdoc(dict.__iter__.__doc__)
+    def __iter__(self: Self, /) -> Iterable[Key]:
+        return dict(self.data).__iter__()
 
-    @wraps(dict[Key, Value])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__le__(*args, **kwargs)
+    @setdoc.setdoc(dict.__len__.__doc__)
+    def __len__(self: Self, /) -> int:
+        return dict(self.data).__len__()
 
-    @wraps(dict[Key, Value])
-    def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__len__(*args, **kwargs)
+    @setdoc.setdoc(dict.__or__.__doc__)
+    def __or__(self: Self, value: Any, /) -> Any:
+        return dict(self.data).__or__(value)
 
-    @wraps(dict[Key, Value])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__lt__(*args, **kwargs)
+    @setdoc.setdoc(dict.__repr__.__doc__)
+    def __repr__(self: Self, /) -> str:
+        return dict(self.data).__repr__()
 
-    @wraps(dict[Key, Value])
-    def __or__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__or__(*args, **kwargs)
+    @setdoc.setdoc(dict.__reversed__.__doc__)
+    def __reversed__(self: Self, /) -> Iterable[Key]:
+        return dict(self.data).__reversed__()
 
-    @wraps(dict[Key, Value])
-    def __repr__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__repr__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __reversed__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__reversed__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __ror__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__ror__(*args, **kwargs)
-
-    @wraps(dict[Key, Value])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).__str__(*args, **kwargs)
+    @setdoc.setdoc(dict.__ror__.__doc__)
+    def __ror__(self: Self, value: Any, /) -> Any:
+        return dict(self.data).__ror__(value)
 
     @classmethod
-    @wraps(dict[Key, Value])
-    def fromkeys(cls: type[Self], *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return cls[Key, Value](dict[Key, Value].fromkeys(*args, **kwargs))
+    @setdoc.setdoc(dict.fromkeys.__doc__)
+    def fromkeys(
+        cls: type[Self], iterable: Iterable[Key], value: Any = None, /
+    ) -> Self:
+        return cls(dict.fromkeys(iterable, value))
 
-    @wraps(dict[Key, Value])
-    def get(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).get(*args, **kwargs)
+    @setdoc.setdoc(dict.get.__doc__)
+    def get(self: Self, key: Any, default: Any = None, /) -> Any:
+        return dict(self.data).get(key, default)
 
-    @wraps(dict[Key, Value])
-    def items(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).items(*args, **kwargs)
+    @setdoc.setdoc(dict.items.__doc__)
+    def items(self: Self, /) -> Iterable[tuple[Key, Value]]:
+        return dict(self.data).items()
 
-    @wraps(dict[Key, Value])
-    def keys(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).keys(*args, **kwargs)
+    @setdoc.setdoc(dict.keys.__doc__)
+    def keys(self: Self, /) -> Iterable[Key]:
+        return dict(self.data).keys()
 
-    @wraps(dict[Key, Value])
-    def values(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return dict[Key, Value](self.data).values(*args, **kwargs)
+    @setdoc.setdoc(dict.values.__doc__)
+    def values(self: Self, /) -> Iterable[Value]:
+        return dict(self.data).values()

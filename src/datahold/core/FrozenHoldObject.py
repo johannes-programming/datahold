@@ -7,7 +7,8 @@ __all__ = ["FrozenHoldObject"]
 
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
-    data: Any
+
+    _data: Any
     __slots__ = ()
 
     @property

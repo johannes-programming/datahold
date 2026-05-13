@@ -16,5 +16,5 @@ class FrozenHoldSet(FrozenHoldObject, FrozenDataSet, BaseHoldSet[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable, /) -> None:
+    def __init__(self: Self, data: Iterable[Item], /) -> None:
         self._data = frozenset[Item](data)
