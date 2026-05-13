@@ -2,7 +2,7 @@ from typing import *
 
 import setdoc
 
-from .BaseHoldSet import BaseHoldSet
+from ..base.BaseHoldSet import BaseHoldSet
 from .DataSet import DataSet
 from .HoldObject import HoldObject
 
@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 
 
 class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()
 
     @property

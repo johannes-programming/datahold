@@ -1,20 +1,21 @@
+from abc import abstractmethod
 from typing import *
 
 import setdoc
 
-from .BaseHoldList import BaseHoldList
+from ..base.BaseHoldList import BaseHoldList
 from .FrozenDataList import FrozenDataList
 from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable, /) -> None:
+    def __init__(self: Self, data: Iterable[Item], /) -> None:
         self._data = tuple[Item, ...](data)

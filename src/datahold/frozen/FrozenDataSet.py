@@ -1,13 +1,14 @@
+from abc import abstractmethod
 from typing import *
 
-from .BaseDataSet import BaseDataSet
+from ..base.BaseDataSet import BaseDataSet
 from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenDataSet"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenDataSet(FrozenDataObject, BaseDataSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()

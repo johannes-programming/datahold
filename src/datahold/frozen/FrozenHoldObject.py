@@ -1,13 +1,14 @@
 from typing import *
 
-from .BaseHoldObject import BaseHoldObject
+from ..base.BaseHoldObject import BaseHoldObject
 from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenHoldObject"]
 
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
-    data: Any
+
+    _data: Any
     __slots__ = ()
 
     @property

@@ -2,7 +2,7 @@ from typing import *
 
 import setdoc
 
-from .BaseHoldList import BaseHoldList
+from ..base.BaseHoldList import BaseHoldList
 from .DataList import DataList
 from .HoldObject import HoldObject
 
@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 
 
 class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @property
