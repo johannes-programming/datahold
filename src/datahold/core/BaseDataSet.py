@@ -1,155 +1,192 @@
-import collections
+import collections.abc
 from abc import abstractmethod
 from typing import *
 
-from datahold._utils.wrapping import wraps
+import setdoc
 
 from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseDataSet"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
+Item_ = TypeVar("Item_")
 
 
 class BaseDataSet(
     BaseDataObject,
     collections.abc.Set[Item],
 ):
-    data: frozenset[Item]
     __slots__ = ()
 
-    @wraps(set[Item])
-    def __and__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__and__(*args, **kwargs)
+    @setdoc.setdoc(set.__and__.__doc__)
+    def __and__(
+        self: Self,
+        value: frozenset[object] | set[object],
+        /,
+    ) -> set[Item]:
+        return set(self.data).__and__(value)
 
-    @wraps(set[Item])
-    def __contains__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__contains__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__eq__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__format__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__ge__(*args, **kwargs)
-
-    @wraps(set[Item])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__gt__(*args, **kwargs)
+    @setdoc.setdoc(set.__contains__.__doc__)
+    def __contains__(self: Self, value: object, /) -> bool:
+        return set(self.data).__contains__(value)
 
     @abstractmethod
-    @wraps(set[Item])
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ...
+    @setdoc.setdoc(set.__init__.__doc__)
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
 
-    @wraps(set[Item])
-    def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__iter__(*args, **kwargs)
+    @setdoc.setdoc(set.__iter__.__doc__)
+    def __iter__(self: Self, /) -> Iterable[Item]:
+        return set(self.data).__iter__()
 
-    @wraps(set[Item])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__le__(*args, **kwargs)
+    @setdoc.setdoc(set.__len__.__doc__)
+    def __len__(self: Self, /) -> int:
+        return set(self.data).__len__()
 
-    @wraps(set[Item])
-    def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__len__(*args, **kwargs)
+    @setdoc.setdoc(set.__or__.__doc__)
+    def __or__(
+        self: Self,
+        value: frozenset[Item_] | set[Item_],
+        /,
+    ) -> set[Item | Item_]:
+        return set(self.data).__or__(value)
 
-    @wraps(set[Item])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__lt__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__rand__.__doc__)
+    def __rand__(
+        self: Self,
+        value: frozenset[object],
+        /,
+    ) -> frozenset[Item]: ...
 
-    @wraps(set[Item])
-    def __or__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__or__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__rand__.__doc__)
+    def __rand__(
+        self: Self,
+        value: set[object],
+        /,
+    ) -> set[Item]: ...
+    @setdoc.setdoc(set.__rand__.__doc__)
+    def __rand__(
+        self: Self,
+        value: frozenset[object] | set[object],
+        /,
+    ) -> frozenset[object] | set[object]:
+        other: Any
+        return set(self.data).__rand__(other)
 
-    @wraps(set[Item])
-    def __rand__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__rand__(*args, **kwargs)
+    @setdoc.setdoc(set.__repr__.__doc__)
+    def __repr__(self: Self, /) -> str:
+        return set(self.data).__repr__()
 
-    @wraps(set[Item])
-    def __repr__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__repr__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__ror__.__doc__)
+    def __ror__(
+        self: Self,
+        value: frozenset[Item_],
+        /,
+    ) -> frozenset[Item | Item_]: ...
+    @overload
+    @setdoc.setdoc(set.__ror__.__doc__)
+    def __ror__(
+        self: Self,
+        value: set[Item_],
+        /,
+    ) -> set[Item | Item_]: ...
+    @setdoc.setdoc(set.__ror__.__doc__)
+    def __ror__(
+        self: Self,
+        value: frozenset[Item_] | set[Item_],
+        /,
+    ) -> frozenset[Item | Item_] | set[Item | Item_]:
+        return set(self.data).__ror__(value)
 
-    @wraps(set[Item])
-    def __ror__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__ror__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__rsub__.__doc__)
+    def __rsub__(
+        self: Self,
+        value: frozenset[object],
+        /,
+    ) -> frozenset[Item]: ...
+    @overload
+    @setdoc.setdoc(set.__rsub__.__doc__)
+    def __rsub__(
+        self: Self,
+        value: set[object],
+        /,
+    ) -> set[Item]: ...
 
-    @wraps(set[Item])
-    def __rsub__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__rsub__(*args, **kwargs)
+    @setdoc.setdoc(set.__rsub__.__doc__)
+    def __rsub__(
+        self: Self,
+        value: frozenset[object] | set[object],
+        /,
+    ) -> frozenset[Item] | set[Item]:
+        return set(self.data).__rsub__(value)
 
-    @wraps(set[Item])
-    def __rxor__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__rxor__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__rxor__.__doc__)
+    def __rxor__(
+        self: Self,
+        value: frozenset[Item_],
+        /,
+    ) -> frozenset[Item | Item_]: ...
 
-    @wraps(set[Item])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__str__(*args, **kwargs)
+    @overload
+    @setdoc.setdoc(set.__rxor__.__doc__)
+    def __rxor__(
+        self: Self,
+        value: set[Item_],
+        /,
+    ) -> set[Item | Item_]: ...
 
-    @wraps(set[Item])
-    def __sub__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__sub__(*args, **kwargs)
+    @setdoc.setdoc(set.__rxor__.__doc__)
+    def __rxor__(
+        self: Self,
+        value: frozenset[Item_] | set[Item_],
+        /,
+    ) -> frozenset[Item | Item_] | set[Item | Item_]:
+        return set(self.data).__rxor__(value)
 
-    @wraps(set[Item])
-    def __xor__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).__xor__(*args, **kwargs)
+    @setdoc.setdoc(set.__sub__.__doc__)
+    def __sub__(
+        self: Self,
+        value: Any,
+        /,
+    ) -> Any:
+        return set(self.data).__sub__(value)
 
-    @wraps(set[Item])
-    def difference(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).difference(*args, **kwargs)
+    @setdoc.setdoc(set.__xor__.__doc__)
+    def __xor__(self: Self, value: Any, /) -> Any:
+        return set(self.data).__xor__(value)
 
-    @wraps(set[Item])
-    def intersection(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).intersection(*args, **kwargs)
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozenset[Item]: ...
 
-    @wraps(set[Item])
-    def isdisjoint(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).isdisjoint(*args, **kwargs)
+    @setdoc.setdoc(set.difference.__doc__)
+    def difference(self: Self, /, *others: Iterable[Item]) -> set[Item]:
+        return set(self.data).difference(*others)
 
-    @wraps(set[Item])
-    def issubset(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).issubset(*args, **kwargs)
+    @setdoc.setdoc(set.intersection.__doc__)
+    def intersection(self: Self, /, *others: Iterable[Item]) -> set[Item]:
+        return set(self.data).intersection(*others)
 
-    @wraps(set[Item])
-    def issuperset(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).issuperset(*args, **kwargs)
+    @setdoc.setdoc(set.isdisjoint.__doc__)
+    def isdisjoint(self: Self, other: Any, /) -> Any:
+        return set(self.data).isdisjoint(other)
 
-    @wraps(set[Item])
-    def symmetric_difference(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).symmetric_difference(*args, **kwargs)
+    @setdoc.setdoc(set.issubset.__doc__)
+    def issubset(self: Self, other: Any, /) -> Any:
+        return set(self.data).issubset(other)
 
-    @wraps(set[Item])
-    def union(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return set[Item](self.data).union(*args, **kwargs)
+    @setdoc.setdoc(set.issuperset.__doc__)
+    def issuperset(self: Self, other: Any, /) -> Any:
+        return set(self.data).issuperset(other)
+
+    @setdoc.setdoc(set.symmetric_difference.__doc__)
+    def symmetric_difference(self: Self, other: Any, /) -> Any:
+        return set(self.data).symmetric_difference(other)
+
+    @setdoc.setdoc(set.union.__doc__)
+    def union(self: Self, /, *others: Any) -> set[Item]:
+        return set(self.data).union(*others)

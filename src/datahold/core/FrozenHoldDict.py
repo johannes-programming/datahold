@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import *
 
 import setdoc
@@ -9,14 +10,18 @@ from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class FrozenHoldDict(FrozenHoldObject, FrozenDataDict, BaseHoldDict[Key, Value]):
-    data: frozendict[Key, Value]
+
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Any, /, **kwargs: Any) -> None:
+    def __init__(self: Self, data: Any, /, **kwargs: Value) -> None:
         self._data = frozendict[Key, Value](data, **kwargs)
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozendict[Key, Value]: ...

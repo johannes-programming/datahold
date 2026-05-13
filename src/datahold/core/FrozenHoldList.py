@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import *
 
 import setdoc
@@ -8,13 +9,17 @@ from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):
-    data: tuple[Item, ...]
+
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable, /) -> None:
+    def __init__(self: Self, data: Iterable[Item], /) -> None:
         self._data = tuple[Item, ...](data)
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> tuple[Item, ...]: ...

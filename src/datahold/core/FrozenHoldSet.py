@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import *
 
 import setdoc
@@ -12,9 +13,13 @@ Item = TypeVar("Item")
 
 
 class FrozenHoldSet(FrozenHoldObject, FrozenDataSet, BaseHoldSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable, /) -> None:
+    def __init__(self: Self, data: Iterable[Item], /) -> None:
         self._data = frozenset[Item](data)
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozenset[Item]: ...

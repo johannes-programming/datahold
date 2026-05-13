@@ -1,11 +1,6 @@
 import unittest
 from typing import Any, Self
 
-from frozendict import frozendict
-
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldSet import HoldSet

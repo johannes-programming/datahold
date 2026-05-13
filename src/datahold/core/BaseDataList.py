@@ -1,115 +1,80 @@
 import collections
+import sys
 from abc import abstractmethod
 from typing import *
 
-from datahold._utils.wrapping import wraps
+import setdoc
 
 from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseDataList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
+Item_ = TypeVar("Item_")
 
 
 class BaseDataList(
     BaseDataObject,
     collections.abc.Sequence[Item],
 ):
-    data: tuple[Item, ...]
     __slots__ = ()
 
-    @wraps(list[Item])
-    def __add__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__add__(*args, **kwargs)
+    @setdoc.setdoc(list.__add__.__doc__)
+    def __add__(self: Self, value: list[Item_], /) -> list[Item | Item_]:
+        return list(self.data).__add__(value)
 
-    @wraps(list[Item])
-    def __contains__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__contains__(*args, **kwargs)
+    @setdoc.setdoc(list.__contains__.__doc__)
+    def __contains__(self: Self, value: object, /) -> bool:
+        return list(self.data).__contains__(value)
 
-    @wraps(list[Item])
-    def __eq__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__eq__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __format__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__format__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __ge__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__ge__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __getitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__getitem__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def __gt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__gt__(*args, **kwargs)
+    @setdoc.setdoc(list.__getitem__.__doc__)
+    def __getitem__(self: Self, key: SupportsIndex | int, /) -> Item:
+        return list(self.data).__getitem__(key)
 
     @abstractmethod
-    @wraps(list[Item])
-    def __init__(self: Self, *args: Any, **kwargs: Any) -> None:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        ...
+    @setdoc.setdoc(list.__init__.__doc__)
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
 
-    @wraps(list[Item])
-    def __iter__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__iter__(*args, **kwargs)
+    @setdoc.setdoc(list.__iter__.__doc__)
+    def __iter__(self: Self, /) -> Iterable[Item]:
+        return list(self.data).__iter__()
 
-    @wraps(list[Item])
-    def __le__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__le__(*args, **kwargs)
+    @setdoc.setdoc(list.__len__.__doc__)
+    def __len__(self: Self, /) -> int:
+        return list(self.data).__len__()
 
-    @wraps(list[Item])
-    def __len__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__len__(*args, **kwargs)
+    @setdoc.setdoc(list.__mul__.__doc__)
+    def __mul__(self: Self, value: SupportsIndex, /) -> list[Item]:
+        return list(self.data).__mul__(value)
 
-    @wraps(list[Item])
-    def __lt__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__lt__(*args, **kwargs)
+    @setdoc.setdoc(list.__repr__.__doc__)
+    def __repr__(self: Self, /) -> str:
+        return list(self.data).__repr__()
 
-    @wraps(list[Item])
-    def __mul__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__mul__(*args, **kwargs)
+    @setdoc.setdoc(list.__reversed__.__doc__)
+    def __reversed__(self: Self, /) -> Iterable[Item]:
+        return list(self.data).__reversed__()
 
-    @wraps(list[Item])
-    def __repr__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__repr__(*args, **kwargs)
+    @setdoc.setdoc(list.__rmul__.__doc__)
+    def __rmul__(self: Self, value: SupportsIndex, /) -> list[Item]:
+        return list(self.data).__rmul__(value)
 
-    @wraps(list[Item])
-    def __reversed__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__reversed__(*args, **kwargs)
+    @setdoc.setdoc(list.count.__doc__)
+    def count(self: Self, value: object, /) -> int:
+        value_: Any
+        value_ = value
+        return list(self.data).count(value_)
 
-    @wraps(list[Item])
-    def __rmul__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__rmul__(*args, **kwargs)
+    @property
+    @abstractmethod
+    def data(self: Self) -> tuple[Item, ...]: ...
 
-    @wraps(list[Item])
-    def __str__(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).__str__(*args, **kwargs)
-
-    @wraps(list[Item])
-    def count(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).count(*args, **kwargs)
-
-    @wraps(list[Item])
-    def index(self: Self, *args: Any, **kwargs: Any) -> Any:
-        "This doc string is overwritten together with the signature to match the original as closely as possible."
-        return list[Item](self.data).index(*args, **kwargs)
+    @setdoc.setdoc(list.index.__doc__)
+    def index(
+        self: Self,
+        value: Any,
+        start: SupportsIndex = 0,
+        end: SupportsIndex = sys.maxsize,
+        /,
+    ) -> int:
+        return list(self.data).index(value, start, end)
