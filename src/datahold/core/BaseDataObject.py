@@ -9,7 +9,6 @@ __all__ = ["BaseDataObject"]
 
 class BaseDataObject(metaclass=ABCMeta):
 
-    data: Any
     __slots__ = ()
 
     @setdoc.basic

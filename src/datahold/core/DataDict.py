@@ -1,4 +1,5 @@
 import collections
+from abc import abstractmethod
 from typing import *
 
 import setdoc
@@ -24,82 +25,92 @@ class DataDict(
     def __delitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.__delitem__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @setdoc.basic
     def __init__(self: Self, data: Any = (), /, **kwargs: Any) -> None:
-        self.data = frozendict[Key, Value](data, **kwargs)
+        self.data = frozendict(data, **kwargs)
 
     @wraps(dict[Key, Value])
     def __ior__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.__ior__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @wraps(dict[Key, Value])
     def __setitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.__setitem__(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @wraps(dict[Key, Value])
     def clear(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.clear(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
+
+    @property
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self) -> frozendict[Key, Value]: ...
+
+    @data.setter
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self, value: Any) -> None: ...
 
     @wraps(dict[Key, Value])
     def pop(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.pop(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @wraps(dict[Key, Value])
     def popitem(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.popitem(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @wraps(dict[Key, Value])
     def setdefault(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.setdefault(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
 
     @wraps(dict[Key, Value])
     def update(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: dict[Key, Value]
-        data = dict[Key, Value](self.data)
+        data: Any
+        data = dict(self.data)
         ans = data.update(*args, **kwargs)
-        self.data = frozendict[Key, Value](data)
+        self.data = frozendict(data)
         return ans
