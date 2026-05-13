@@ -3,6 +3,10 @@ Overview
 
 This project wraps common mutable datastructures for inheritance with modification.
 
+.. container:: warning
+
+    **Warning:** The major version ``1`` of ``datahold`` has reached end-of-life.
+
 Links
 -----
 
