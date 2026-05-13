@@ -6,5 +6,5 @@ __all__ = ["BaseHoldObject"]
 
 
 class BaseHoldObject(BaseDataObject):
-    data: Any
+    _data: Any
     __slots__ = ("_data",)

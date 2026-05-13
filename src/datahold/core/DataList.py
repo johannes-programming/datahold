@@ -21,7 +21,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def __delitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.__delitem__(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -31,7 +31,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def __iadd__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.__iadd__(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -41,7 +41,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def __imul__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.__imul__(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -55,7 +55,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def __setitem__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.__setitem__(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -65,7 +65,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def append(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.append(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -75,7 +75,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def clear(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.clear(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -85,7 +85,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def extend(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.extend(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -95,7 +95,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def insert(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.insert(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -105,7 +105,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def pop(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.pop(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -115,7 +115,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def remove(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.remove(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -125,7 +125,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def reverse(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.reverse(*args, **kwargs)
         self.data = tuple[Item, ...](data)
@@ -135,7 +135,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     def sort(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         ans: Any
-        data: list[Item]
+        data: Any
         data = list[Item](self.data)
         ans = data.sort(*args, **kwargs)
         self.data = tuple[Item, ...](data)

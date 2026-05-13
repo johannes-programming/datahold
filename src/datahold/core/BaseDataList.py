@@ -15,7 +15,6 @@ class BaseDataList(
     BaseDataObject,
     collections.abc.Sequence[Item],
 ):
-    data: tuple[Item, ...]
     __slots__ = ()
 
     @wraps(list[Item])
@@ -88,6 +87,10 @@ class BaseDataList(
     def __rmul__(self: Self, *args: Any, **kwargs: Any) -> Any:
         "This doc string is overwritten together with the signature to match the original as closely as possible."
         return list[Item](self.data).__rmul__(*args, **kwargs)
+    
+    @property
+    @abstractmethod
+    def data(self:Self)->tuple[Item, ...]:...
 
     @wraps(list[Item])
     def count(self: Self, *args: Any, **kwargs: Any) -> Any:
