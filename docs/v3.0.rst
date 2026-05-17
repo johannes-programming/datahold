@@ -417,6 +417,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``class datahold.HoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This class inherits from ``HoldObject``, ``DataDict[Key, Value]``, and ``BaseHoldDict[Key, Value]``.
+
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
@@ -424,6 +426,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``HoldObject``, ``DataList[Item]``, and ``BaseHoldList[Item]``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -433,6 +437,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``class datahold.HoldObject(data: Any, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This class inherits from ``DataObject`` and ``BaseHoldObject``.
+
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
@@ -440,6 +446,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``HoldObject``, ``DataSet[Item]``, and ``BaseHoldSet[Item]``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
