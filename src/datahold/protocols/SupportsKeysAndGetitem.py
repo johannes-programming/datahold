@@ -3,7 +3,7 @@ from typing import *
 __all__ = ["SupportsKeyAndGetitem"]
 
 Key = TypeVar("Key")
-Value = TypeVar("Value")
+Value = TypeVar("Value", covariant=True)
 
 class SupportsKeyAndGetitem(Protocol, Generic[Key,Value]):
     def __getitem__(self:Self, key:Key) -> Value:
