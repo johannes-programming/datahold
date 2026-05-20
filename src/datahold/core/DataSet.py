@@ -9,6 +9,7 @@ from .DataObject import DataObject
 __all__ = ["DataSet"]
 
 Item = TypeVar("Item")
+Item_ = TypeVar("Item_")
 
 
 class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
@@ -16,8 +17,8 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
     __slots__ = ()
 
     @setdoc.setdoc(set.__iand__.__doc__)
-    def __iand__(self: Self, value: Any, /) -> set[Item]:
-        ans: Any
+    def __iand__(self: Self, value: frozenset[object] | set[object], /) -> set[Item]:
+        ans: set[Item]
         data: set[Item]
         data = set(self.data)
         ans = data.__iand__(value)
@@ -29,17 +30,25 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.__ior__.__doc__)
-    def __ior__(self: Self, value: Any, /) -> set:
-        ans: Any
-        data: set[Item]
+    def __ior__(
+        self: Self,
+        value: frozenset[Item_] | set[Item_],
+        /,
+    ) -> set[Item | Item_]:
+        ans: set[Item | Item_]
+        data: Any
         data = set(self.data)
         ans = data.__ior__(value)
         self.data = frozenset(data)
         return ans
 
     @setdoc.setdoc(set.__isub__.__doc__)
-    def __isub__(self: Self, value: Any, /) -> set:
-        ans: set
+    def __isub__(
+        self: Self,
+        value: frozenset[object] | set[object],
+        /,
+    ) -> set[Item]:
+        ans: set[Item]
         data: set[Item]
         data = set(self.data)
         ans = data.__isub__(value)
@@ -47,9 +56,11 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
         return ans
 
     @setdoc.setdoc(set.__ixor__.__doc__)
-    def __ixor__(self: Self, value: Any, /) -> set:
-        ans: set
-        data: set[Item]
+    def __ixor__(
+        self: Self, value: frozenset[Item_] | set[Item_], /
+    ) -> set[Item | Item_]:
+        ans: set[Item | Item_]
+        data: Any
         data = set(self.data)
         ans = data.__ixor__(value)
         self.data = frozenset(data)
@@ -70,7 +81,7 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.difference_update.__doc__)
-    def difference_update(self: Self, /, *others: Iterable[Item]) -> None:
+    def difference_update(self: Self, /, *others: Iterable[object]) -> None:
         data: set[Item]
         data = set(self.data)
         data.difference_update(*others)
@@ -84,7 +95,7 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.intersection_update.__doc__)
-    def intersection_update(self: Self, /, *others: Iterable[Item]) -> None:
+    def intersection_update(self: Self, /, *others: Iterable[object]) -> None:
         data: set[Item]
         data = set(self.data)
         data.intersection_update(*others)
@@ -100,7 +111,7 @@ class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
         return ans
 
     @setdoc.setdoc(set.remove.__doc__)
-    def remove(self: Self, item: Item, /) -> Any:
+    def remove(self: Self, item: Item, /) -> None:
         data: set[Item]
         data = set(self.data)
         data.remove(item)

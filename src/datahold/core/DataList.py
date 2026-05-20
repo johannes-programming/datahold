@@ -16,15 +16,15 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
     __slots__ = ()
 
     @setdoc.setdoc(list.__delitem__.__doc__)
-    def __delitem__(self: Self, key: Any, /) -> None:
+    def __delitem__(self: Self, key: SupportsIndex | slice, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.__delitem__(key)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.__iadd__.__doc__)
-    def __iadd__(self: Self, value: Iterable[Item], /) -> list:
-        ans: Any
+    def __iadd__(self: Self, value: Iterable[Item], /) -> list[Item]:
+        ans: list[Item]
         data: list[Item]
         data = list(self.data)
         ans = data.__iadd__(value)
@@ -32,7 +32,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
         return ans
 
     @setdoc.setdoc(list.__imul__.__doc__)
-    def __imul__(self: Self, value: SupportsIndex, /) -> list:
+    def __imul__(self: Self, value: SupportsIndex, /) -> list[Item]:
         ans: Any
         data: list[Item]
         data = list(self.data)
@@ -45,8 +45,8 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
         self.data = tuple(data)
 
     @setdoc.setdoc(list.__setitem__.__doc__)
-    def __setitem__(self: Self, key: Any, value: Item, /) -> None:
-        data: list[Item]
+    def __setitem__(self: Self, key: SupportsIndex | slice, value: Item, /) -> None:
+        data: Any
         data = list(self.data)
         data.__setitem__(key, value)
         self.data = tuple(data)
@@ -73,7 +73,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
         self.data = tuple(data)
 
     @setdoc.setdoc(list.insert.__doc__)
-    def insert(self: Self, index: SupportsIndex, object: Any, /) -> None:
+    def insert(self: Self, index: SupportsIndex, object: Item, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.insert(index, object)
@@ -103,7 +103,7 @@ class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[I
         self.data = tuple(data)
 
     @setdoc.setdoc(list.sort.__doc__)
-    def sort(self: Self, key: Any = None, reverse: bool = False) -> None:
+    def sort(self: Self, key: Optional[Callable] = None, reverse: bool = False) -> None:
         data: list[Item]
         data = list(self.data)
         data.sort(key=key, reverse=reverse)

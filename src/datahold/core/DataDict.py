@@ -10,7 +10,9 @@ from .DataObject import DataObject
 __all__ = ["DataDict"]
 
 Key = TypeVar("Key")
+Key_ = TypeVar("Key_")
 Value = TypeVar("Value")
+Value_ = TypeVar("Value_")
 
 MISSING = object()
 
@@ -33,9 +35,11 @@ class DataDict(
         self.data = frozendict(data, **kwargs)
 
     @setdoc.setdoc(dict.__ior__.__doc__)
-    def __ior__(self: Self, value: Any, /) -> dict:
-        ans: Any
-        data: dict[Key, Value]
+    def __ior__(
+        self: Self, value: dict[Key_, Value_], /
+    ) -> dict[Key | Key_, Value | Value_]:
+        ans: dict[Key | Key_, Value | Value_]
+        data: Any
         data = dict(self.data)
         ans = data.__ior__(value)
         self.data = frozendict(data)
@@ -61,12 +65,14 @@ class DataDict(
 
     @overload
     @setdoc.setdoc(dict.pop.__doc__)
-    def pop(self: Self, key: Any, default: Any, /) -> Any: ...
+    def pop(self: Self, key: Hashable, default: Value_, /) -> Value | Value_: ...
 
     @setdoc.setdoc(dict.pop.__doc__)
-    def pop(self: Self, key: Any, default: Any = MISSING, /) -> Any:
-        ans: Any
-        data: dict[Key, Value]
+    def pop(
+        self: Self, key: Hashable, default: Value_ | object = MISSING, /
+    ) -> Value | Value_:
+        ans: Value | Value_
+        data: Any
         data = dict(self.data)
         if default is MISSING:
             ans = data.pop(key)
@@ -84,7 +90,7 @@ class DataDict(
         return ans
 
     @setdoc.setdoc(dict.setdefault.__doc__)
-    def setdefault(self: Self, key: Any, default: Any = None, /) -> Any:
+    def setdefault(self: Self, key: Key, default: Any = None, /) -> Any:
         ans: Any
         data: dict[Key, Value]
         data = dict(self.data)
