@@ -28,10 +28,6 @@ class BaseDataList(
     def __add__(self: Self, value: tuple[Item_, ...], /) -> tuple[Item | Item_, ...]:
         return self.data.__add__(value)
 
-    @setdoc.setdoc(list.__contains__.__doc__)
-    def __contains__(self: Self, value: Any, /) -> Any:
-        return self.data.__contains__(value)
-
     @setdoc.setdoc(list.__getitem__.__doc__)
     def __getitem__(self: Self, key: Any, /) -> Item:
         return self.data.__getitem__(key)
@@ -39,14 +35,6 @@ class BaseDataList(
     @abstractmethod
     @setdoc.setdoc(list.__init__.__doc__)
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
-
-    @setdoc.setdoc(list.__iter__.__doc__)
-    def __iter__(self: Self, /) -> Iterable[Item]:
-        return self.data.__iter__()
-
-    @setdoc.setdoc(list.__len__.__doc__)
-    def __len__(self: Self, /) -> int:
-        return self.data.__len__()
 
     @setdoc.setdoc(list.__mul__.__doc__)
     def __mul__(self: Self, value: Any, /) -> Any:

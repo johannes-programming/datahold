@@ -6,16 +6,17 @@ import collections.abc
 import setdoc
 from frozendict import frozendict
 
-from .BaseDataObject import BaseDataObject
+from .BaseDataCollection import BaseDataCollection
 
 __all__ = ["BaseDataDict"]
 
 Key = TypeVar("Key", covariant=True)
 Value = TypeVar("Value", covariant=True)
+Value_ = TypeVar("Value_")
 
 
 class BaseDataDict(
-    BaseDataObject,
+    BaseDataCollection,
     Generic[Key, Value],
 ):
     data: frozendict[Key, Value]
@@ -25,25 +26,13 @@ class BaseDataDict(
     def Repr() -> type:
         return dict
 
-    @setdoc.setdoc(dict.__contains__.__doc__)
-    def __contains__(self: Self, key: Any, /) -> Any:
-        return self.data.__contains__(key)
-
     @setdoc.setdoc(dict.__getitem__.__doc__)
-    def __getitem__(self: Self, key: Any, /) -> Value:
+    def __getitem__(self: Self, key: Hashable, /) -> Value:
         return self.data.__getitem__(key)
 
     @abstractmethod
     @setdoc.setdoc(dict.__init__.__doc__)
     def __init__(self: Self, data: Any = (), /, **kwargs: Value) -> None: ...
-
-    @setdoc.setdoc(dict.__iter__.__doc__)
-    def __iter__(self: Self, /) -> Iterable[Key]:
-        return self.data.__iter__()
-
-    @setdoc.setdoc(dict.__len__.__doc__)
-    def __len__(self: Self, /) -> int:
-        return self.data.__len__()
 
     @setdoc.setdoc(dict.__or__.__doc__)
     def __or__(self: Self, value: Any, /) -> Any:
@@ -64,8 +53,20 @@ class BaseDataDict(
     ) -> Self:
         return cls(dict.fromkeys(iterable, value))
 
+    @overload
     @setdoc.setdoc(dict.get.__doc__)
-    def get(self: Self, key: Any, default: Any = None, /) -> Any:
+    def get(self: Self, key: Hashable, /) -> Optional[Value]: ...
+
+    @setdoc.setdoc(dict.get.__doc__)
+    def get(self: Self, key: Hashable, default: Value_, /) -> Value|Value_: ...
+
+    @setdoc.setdoc(dict.get.__doc__)
+    def get(
+            self: Self, 
+            key: Hashable, 
+            default: Optional[Value_] = None, 
+            /,
+    ) -> Optional[Value|Value_]:
         return self.data.get(key, default)
 
     @setdoc.setdoc(dict.items.__doc__)
