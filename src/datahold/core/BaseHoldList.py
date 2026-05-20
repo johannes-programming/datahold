@@ -5,7 +5,7 @@ from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class BaseHoldList(BaseHoldObject, BaseDataList[Item]):

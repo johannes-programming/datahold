@@ -8,7 +8,7 @@ from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseDataSet"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class BaseDataSet(
@@ -17,6 +17,10 @@ class BaseDataSet(
 ):
     data: frozenset[Item]
     __slots__ = ()
+
+    @staticmethod
+    def Repr() -> type:
+        return set
 
     @setdoc.setdoc(set.__and__.__doc__)
     def __and__(self: Self, value: Any, /) -> Any:
@@ -45,10 +49,6 @@ class BaseDataSet(
     @setdoc.setdoc(set.__rand__.__doc__)
     def __rand__(self: Self, value: Any, /) -> Any:
         return set(self.data).__rand__(value)
-
-    @setdoc.setdoc(set.__repr__.__doc__)
-    def __repr__(self: Self, /) -> str:
-        return set(self.data).__repr__()
 
     @setdoc.setdoc(set.__ror__.__doc__)
     def __ror__(self: Self, value: Any, /) -> Any:

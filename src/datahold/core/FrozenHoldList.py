@@ -8,7 +8,7 @@ from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):

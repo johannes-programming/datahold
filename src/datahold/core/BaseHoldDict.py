@@ -7,8 +7,8 @@ from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):

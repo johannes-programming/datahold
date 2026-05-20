@@ -7,8 +7,8 @@ from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenDataDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class FrozenDataDict(FrozenDataObject, BaseDataDict[Key, Value]):

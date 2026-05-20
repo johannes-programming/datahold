@@ -8,7 +8,7 @@ from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldSet"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldSet(FrozenHoldObject, FrozenDataSet, BaseHoldSet[Item]):

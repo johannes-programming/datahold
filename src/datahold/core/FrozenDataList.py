@@ -5,7 +5,7 @@ from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenDataList"]
 
-Item = TypeVar("Item")
+Item = TypeVar("Item", covariant=True)
 
 
 class FrozenDataList(FrozenDataObject, BaseDataList[Item]):

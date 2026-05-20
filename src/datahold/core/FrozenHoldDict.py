@@ -9,8 +9,8 @@ from .FrozenHoldObject import FrozenHoldObject
 
 __all__ = ["FrozenHoldDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class FrozenHoldDict(FrozenHoldObject, FrozenDataDict, BaseHoldDict[Key, Value]):

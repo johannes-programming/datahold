@@ -1,6 +1,7 @@
-import collections
+
 from abc import abstractmethod
 from typing import *
+import collections.abc
 
 import setdoc
 from frozendict import frozendict
@@ -9,24 +10,28 @@ from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseDataDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class BaseDataDict(
     BaseDataObject,
-    collections.abc.Mapping[Key, Value],
+    Generic[Key, Value],
 ):
     data: frozendict[Key, Value]
     __slots__ = ()
 
+    @staticmethod
+    def Repr() -> type:
+        return dict
+
     @setdoc.setdoc(dict.__contains__.__doc__)
     def __contains__(self: Self, key: Any, /) -> Any:
-        return dict(self.data).__contains__(key)
+        return self.data.__contains__(key)
 
     @setdoc.setdoc(dict.__getitem__.__doc__)
-    def __getitem__(self: Self, key: Key, /) -> Value:
-        return dict(self.data).__getitem__(key)
+    def __getitem__(self: Self, key: Any, /) -> Value:
+        return self.data.__getitem__(key)
 
     @abstractmethod
     @setdoc.setdoc(dict.__init__.__doc__)
@@ -34,27 +39,23 @@ class BaseDataDict(
 
     @setdoc.setdoc(dict.__iter__.__doc__)
     def __iter__(self: Self, /) -> Iterable[Key]:
-        return dict(self.data).__iter__()
+        return self.data.__iter__()
 
     @setdoc.setdoc(dict.__len__.__doc__)
     def __len__(self: Self, /) -> int:
-        return dict(self.data).__len__()
+        return self.data.__len__()
 
     @setdoc.setdoc(dict.__or__.__doc__)
     def __or__(self: Self, value: Any, /) -> Any:
-        return dict(self.data).__or__(value)
-
-    @setdoc.setdoc(dict.__repr__.__doc__)
-    def __repr__(self: Self, /) -> str:
-        return dict(self.data).__repr__()
+        return self.data.__or__(value)
 
     @setdoc.setdoc(dict.__reversed__.__doc__)
     def __reversed__(self: Self, /) -> Iterable[Key]:
-        return dict(self.data).__reversed__()
+        return self.data.__reversed__()
 
     @setdoc.setdoc(dict.__ror__.__doc__)
     def __ror__(self: Self, value: Any, /) -> Any:
-        return dict(self.data).__ror__(value)
+        return self.data.__ror__(value)
 
     @classmethod
     @setdoc.setdoc(dict.fromkeys.__doc__)
@@ -65,16 +66,17 @@ class BaseDataDict(
 
     @setdoc.setdoc(dict.get.__doc__)
     def get(self: Self, key: Any, default: Any = None, /) -> Any:
-        return dict(self.data).get(key, default)
+        return self.data.get(key, default)
 
     @setdoc.setdoc(dict.items.__doc__)
     def items(self: Self, /) -> Iterable[tuple[Key, Value]]:
-        return dict(self.data).items()
+        return self.data.items()
 
     @setdoc.setdoc(dict.keys.__doc__)
     def keys(self: Self, /) -> Iterable[Key]:
-        return dict(self.data).keys()
+        return self.data.keys()
 
     @setdoc.setdoc(dict.values.__doc__)
     def values(self: Self, /) -> Iterable[Value]:
-        return dict(self.data).values()
+        return self.data.values()
+collections.abc.Mapping.register(BaseDataDict)

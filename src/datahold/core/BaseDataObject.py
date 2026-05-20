@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import *
+from datarepr import datarepr
 
 import setdoc
 
@@ -9,6 +10,11 @@ __all__ = ["BaseDataObject"]
 class BaseDataObject(metaclass=ABCMeta):
 
     __slots__ = ()
+
+    @staticmethod
+    @abstractmethod
+    def Repr() -> type:
+        ...
 
     @setdoc.basic
     def __eq__(self: Self, other: object) -> Any:
@@ -55,6 +61,10 @@ class BaseDataObject(metaclass=ABCMeta):
             return self.data.__ne__(other.data)
         else:
             return NotImplemented
+    
+    @setdoc.basic
+    def __repr__(self:Self)->str:
+        return datarepr(type(self).__name__, self.Repr()(self))
 
     @property
     @abstractmethod
