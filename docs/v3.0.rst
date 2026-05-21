@@ -16,8 +16,13 @@ Open your terminal and run:
 Features
 --------
 
-``class datahold.BaseDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``datahold.base``
+'''''''''''''''''
+
+The classes in ``datahold.base`` can also be accessed dircetly from ``datahold``.
+
+``class datahold.base.BaseDataDict.BaseDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It implements all methods and classmethods of ``dict`` that cannot change the underlying instance
@@ -117,8 +122,8 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
-``class datahold.BaseDataList[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataList.BaseDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict[Key, Value]``.
@@ -131,8 +136,8 @@ It has no classmethod to implement.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseDataObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataObject.BaseDataObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class is the ancestor of all other classes in ``datahold``.
 
@@ -240,8 +245,8 @@ It should only ever be overwritten with an extensional equivalent.
 
 This property is abstract.
 
-``class datahold.BaseDataSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataSet.BaseDataSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict``.
@@ -254,8 +259,8 @@ It has no classmethod to implement.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseHoldDict.BaseHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataDict[Key, Value]``.
 
@@ -269,8 +274,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 This abstract ``property`` is inherited from both parent classes.
 
-``class datahold.BaseHoldList[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseHoldList.BaseHoldList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataList[Item]``.
 
@@ -284,16 +289,16 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 This abstract ``property`` is inherited from both parent classes.
 
-``class datahold.BaseHoldObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseHoldObject.BaseHoldObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseDataObject``.
 
 ``__slots__ = ("_data",)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``class datahold.BaseHoldSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseHoldSet.BaseHoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataSet[Item]``.
 
@@ -306,6 +311,11 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract ``property`` is inherited from both parent classes.
+
+``datahold.core``
+'''''''''''''''''
+
+The classes in ``datahold.core`` can also be accessed dircetly from ``datahold``.
 
 ``class datahold.DataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -360,61 +370,8 @@ This method returns ``type(self)(self.data)``.
 ``class datahold.DataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``class datahold.FrozenDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataList[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenDataSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldList[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-The slot layout of the class is dictated by ``BaseHoldObject``.
-
-``class datahold.FrozenHoldSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-The slot layout of the class is dictated by ``BaseHoldObject``.
 
 ``class datahold.HoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -456,11 +413,72 @@ This class inherits from ``HoldObject``, ``DataSet[Item]``, and ``BaseHoldSet[It
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
+``datahold.frozen``
+'''''''''''''''''''
+
+The classes in ``datahold.frozen`` can also be accessed dircetly from ``datahold``.
+
+``class datahold.frozen.FrozenDataDict.FrozenDataDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenDataList.FrozenDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenDataObject.FrozenDataObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenDataSet.FrozenDataSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenHoldDict.FrozenHoldDict[Key, Value](data: Any = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.frozen.FrozenHoldList.FrozenHoldList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.frozen.FrozenHoldObject.FrozenHoldObject(data: Any, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
+``class datahold.frozen.FrozenHoldSet.FrozenHoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldObject``.
+
 ``datahold.tests``
-~~~~~~~~~~~~~~~~~~
+''''''''''''''''''
 
 ``datahold.tests.test() -> unittest.TextTestResult``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project can be tested through its ``test`` function.
 
