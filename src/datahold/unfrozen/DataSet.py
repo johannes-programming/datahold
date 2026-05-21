@@ -3,7 +3,7 @@ from typing import *
 
 import setdoc
 
-from .BaseDataSet import BaseDataSet
+from ..base.BaseDataSet import BaseDataSet
 from .DataObject import DataObject
 
 __all__ = ["DataSet"]

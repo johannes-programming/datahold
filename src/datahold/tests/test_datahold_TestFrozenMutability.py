@@ -1,9 +1,9 @@
 import unittest
 from typing import Any, Self
 
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldSet import FrozenHoldSet
+from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 
 class TestFrozenMutability(unittest.TestCase):

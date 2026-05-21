@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import *
 
-from .BaseDataList import BaseDataList
+from ..base.BaseDataList import BaseDataList
 from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenDataList"]

@@ -1,12 +1,12 @@
 import unittest
 from typing import Any, Self
 
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldSet import FrozenHoldSet
-from datahold.core.HoldDict import HoldDict
-from datahold.core.HoldList import HoldList
-from datahold.core.HoldSet import HoldSet
+from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold.frozen.FrozenHoldSet import FrozenHoldSet
+from datahold.unfrozen.HoldDict import HoldDict
+from datahold.unfrozen.HoldList import HoldList
+from datahold.unfrozen.HoldSet import HoldSet
 
 __all__ = ["TestCopy"]
 

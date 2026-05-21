@@ -3,7 +3,7 @@ from typing import *
 
 import setdoc
 
-from .BaseDataObject import BaseDataObject
+from ..base.BaseDataObject import BaseDataObject
 
 __all__ = ["FrozenDataObject"]
 

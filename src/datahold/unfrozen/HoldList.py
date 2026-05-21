@@ -2,7 +2,7 @@ from typing import *
 
 import setdoc
 
-from .BaseHoldList import BaseHoldList
+from ..base.BaseHoldList import BaseHoldList
 from .DataList import DataList
 from .HoldObject import HoldObject
 

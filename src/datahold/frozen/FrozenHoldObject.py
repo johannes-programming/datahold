@@ -1,6 +1,6 @@
 from typing import *
 
-from .BaseHoldObject import BaseHoldObject
+from ..base.BaseHoldObject import BaseHoldObject
 from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenHoldObject"]

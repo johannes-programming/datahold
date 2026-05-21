@@ -32,7 +32,13 @@ class TestObject(unittest.TestCase):
         slot: str
         for mute, slot, root in iterprod(MUTES, SLOTS, ROOTS):
             from_ = mute + slot + root
-            name = "datahold.core." + from_
+            name = "datahold."
+            if mute:
+                name += mute.lower()
+            else:
+                name+= "unfrozen"
+            name+="."
+            name+=from_
             module = __import__(name=name)
             cls = getattr(module, from_)
             self._test_cls(cls)

@@ -4,7 +4,7 @@ from typing import *
 import setdoc
 from frozendict import frozendict
 
-from .BaseHoldDict import BaseHoldDict
+from ..base.BaseHoldDict import BaseHoldDict
 from .FrozenDataDict import FrozenDataDict
 from .FrozenHoldObject import FrozenHoldObject
 

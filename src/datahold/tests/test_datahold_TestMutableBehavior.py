@@ -1,9 +1,9 @@
 import unittest
 from typing import Any, Self
 
-from datahold.core.HoldDict import HoldDict
-from datahold.core.HoldList import HoldList
-from datahold.core.HoldSet import HoldSet
+from datahold.unfrozen.HoldDict import HoldDict
+from datahold.unfrozen.HoldList import HoldList
+from datahold.unfrozen.HoldSet import HoldSet
 
 
 class TestMutableBehavior(unittest.TestCase):

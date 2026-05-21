@@ -3,7 +3,7 @@ from typing import *
 
 import setdoc
 
-from .BaseDataList import BaseDataList
+from ..base.BaseDataList import BaseDataList
 from .DataObject import DataObject
 
 __all__ = ["DataList"]

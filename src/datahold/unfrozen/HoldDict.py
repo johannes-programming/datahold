@@ -3,7 +3,7 @@ from typing import *
 import setdoc
 from frozendict import frozendict
 
-from .BaseHoldDict import BaseHoldDict
+from ..base.BaseHoldDict import BaseHoldDict
 from .DataDict import DataDict
 from .HoldObject import HoldObject
 

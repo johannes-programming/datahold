@@ -4,7 +4,7 @@ from typing import *
 import setdoc
 from frozendict import frozendict
 
-from .BaseDataDict import BaseDataDict
+from ..base.BaseDataDict import BaseDataDict
 from .DataObject import DataObject
 
 __all__ = ["DataDict"]

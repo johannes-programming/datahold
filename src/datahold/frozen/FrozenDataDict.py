@@ -3,7 +3,7 @@ from typing import *
 
 from frozendict import frozendict
 
-from .BaseDataDict import BaseDataDict
+from ..base.BaseDataDict import BaseDataDict
 from .FrozenDataObject import FrozenDataObject
 
 __all__ = ["FrozenDataDict"]

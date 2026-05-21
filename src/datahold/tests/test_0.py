@@ -1,23 +1,22 @@
 import unittest
 from typing import *
 
-from datahold import core
-from datahold.core import *
+from datahold import unfrozen
 
 
 class TestData(unittest.TestCase):
     def test_constructor_abc(self: Self) -> None:
         with self.assertRaises(Exception):
-            core.DataDict.DataDict()
+            unfrozen.DataDict.DataDict()
         with self.assertRaises(Exception):
-            core.DataList.DataList()
+            unfrozen.DataList.DataList()
         with self.assertRaises(Exception):
-            core.DataSet.DataSet()
+            unfrozen.DataSet.DataSet()
 
     def test_constructor_core(self: Self) -> None:
-        core.HoldDict.HoldDict()
-        core.HoldList.HoldList()
-        core.HoldSet.HoldSet()
+        unfrozen.HoldDict.HoldDict()
+        unfrozen.HoldList.HoldList()
+        unfrozen.HoldSet.HoldSet()
 
     def test_doc(self: Self) -> None:
         name: str
@@ -37,7 +36,7 @@ class TestData(unittest.TestCase):
         member: Any
         module: Any
         obj: Any
-        module = getattr(core, name)
+        module = getattr(unfrozen, name)
         cls = getattr(module, name)
         for attrname in dir(cls):
             member = getattr(cls, attrname)
