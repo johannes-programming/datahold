@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import *
+from typing import Any, Self
 
 import setdoc
 

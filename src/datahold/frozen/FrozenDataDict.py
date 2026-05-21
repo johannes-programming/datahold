@@ -1,7 +1,4 @@
-from abc import abstractmethod
-from typing import *
-
-from frozendict import frozendict
+from typing import TypeVar
 
 from ..base.BaseDataDict import BaseDataDict
 from .FrozenDataObject import FrozenDataObject

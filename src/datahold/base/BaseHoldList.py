@@ -1,5 +1,4 @@
-from abc import abstractmethod
-from typing import *
+from typing import TypeVar
 
 from .BaseDataList import BaseDataList
 from .BaseHoldObject import BaseHoldObject

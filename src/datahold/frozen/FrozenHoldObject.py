@@ -1,4 +1,4 @@
-from typing import *
+from typing import Any, Self
 
 from ..base.BaseHoldObject import BaseHoldObject
 from .FrozenDataObject import FrozenDataObject

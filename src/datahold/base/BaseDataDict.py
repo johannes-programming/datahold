@@ -1,9 +1,8 @@
-import collections.abc
 from abc import abstractmethod
-from typing import *
+from collections.abc import Hashable, Iterable, Mapping
+from typing import Any, Generic, Optional, Self, TypeVar
 
 import setdoc
-from frozendict import frozendict
 
 from .BaseDataObject import BaseDataObject
 
@@ -90,4 +89,4 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
         return dict(self.data).values()
 
 
-collections.abc.Mapping.register(BaseDataDict)
+Mapping.register(BaseDataDict)

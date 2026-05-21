@@ -1,5 +1,5 @@
-from abc import abstractmethod
-from typing import *
+from collections.abc import Iterable
+from typing import Self, TypeVar
 
 import setdoc
 

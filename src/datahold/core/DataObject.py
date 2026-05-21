@@ -1,4 +1,4 @@
-from typing import *
+from typing import Any, Self
 
 import setdoc
 from copyable import Copyable

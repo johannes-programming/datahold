@@ -1,4 +1,4 @@
-from typing import *
+from typing import Any, Self, TypeVar
 
 import setdoc
 from frozendict import frozendict

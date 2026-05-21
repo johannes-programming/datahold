@@ -1,5 +1,5 @@
-import collections
-from typing import *
+from collections.abc import Hashable, MutableMapping
+from typing import Any, Self, TypeVar, overload
 
 import setdoc
 from frozendict import frozendict
@@ -17,9 +17,7 @@ Value_ = TypeVar("Value_")
 MISSING = object()
 
 
-class DataDict(
-    DataObject, BaseDataDict[Key, Value], collections.abc.MutableMapping[Key, Value]
-):
+class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value]):
     data: frozendict[Key, Value]
     __slots__ = ()
 

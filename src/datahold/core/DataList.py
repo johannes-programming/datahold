@@ -1,5 +1,5 @@
-import collections
-from typing import *
+from collections.abc import Callable, Iterable, MutableSequence
+from typing import Any, Optional, Self, SupportsIndex, TypeVar
 
 import setdoc
 
@@ -11,7 +11,7 @@ __all__ = ["DataList"]
 Item = TypeVar("Item")
 
 
-class DataList(DataObject, BaseDataList[Item], collections.abc.MutableSequence[Item]):
+class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
     data: tuple[Item, ...]
     __slots__ = ()
 
