@@ -1,8 +1,7 @@
 from abc import abstractmethod
 from typing import *
 
-from frozendict import frozendict
-
+import types
 from .BaseDataDict import BaseDataDict
 from .FrozenDataObject import FrozenDataObject
 
@@ -17,4 +16,4 @@ class FrozenDataDict(FrozenDataObject, BaseDataDict[Key, Value]):
 
     @property
     @abstractmethod
-    def data(self: Self) -> frozendict[Key, Value]: ...
+    def data(self: Self) -> types.MappingProxyType[Key, Value]: ...

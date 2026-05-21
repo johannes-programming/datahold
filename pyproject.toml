@@ -22,7 +22,6 @@ dependencies = [
     "cmp3>=1.0,<2",
     "copyable>=1.1,<2",
     "datarepr>=1.2,<2",
-    "frozendict>=2.4.6,<3",
     "iterprod>=1.1,<2",
     "setdoc>=1.2.20,<2",
 ]

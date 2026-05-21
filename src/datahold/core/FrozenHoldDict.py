@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import *
 
 import setdoc
-from frozendict import frozendict
+import types
 
 from .BaseHoldDict import BaseHoldDict
 from .FrozenDataDict import FrozenDataDict
@@ -20,8 +20,8 @@ class FrozenHoldDict(FrozenHoldObject, FrozenDataDict, BaseHoldDict[Key, Value])
 
     @setdoc.basic
     def __init__(self: Self, data: Any, /, **kwargs: Value) -> None:
-        self._data = frozendict[Key, Value](data, **kwargs)
+        self._data = types.MappingProxyType(dict(data, **kwargs))
 
     @property
     @abstractmethod
-    def data(self: Self) -> frozendict[Key, Value]: ...
+    def data(self: Self) -> types.MappingProxyType[Key, Value]: ...

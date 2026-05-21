@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import *
 
 import setdoc
-from frozendict import frozendict
+import types
 
 from .BaseDataObject import BaseDataObject
 
@@ -60,7 +60,7 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
 
     @property
     @abstractmethod
-    def data(self: Self) -> frozendict[Key, Value]: ...
+    def data(self: Self) -> types.MappingProxyType[Key, Value]: ...
 
     @classmethod
     @setdoc.setdoc(dict.fromkeys.__doc__)

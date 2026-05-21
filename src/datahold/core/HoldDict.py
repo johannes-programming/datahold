@@ -1,8 +1,7 @@
 from typing import *
 
 import setdoc
-from frozendict import frozendict
-
+import types
 from .BaseHoldDict import BaseHoldDict
 from .DataDict import DataDict
 from .HoldObject import HoldObject
@@ -19,9 +18,9 @@ class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozendict[Key, Value]:
+    def data(self: Self) -> types.MappingProxyType[Key, Value]:
         return self._data
 
     @data.setter
     def data(self: Self, value: Any) -> None:
-        self._data = frozendict[Key, Value](value)
+        self._data = types.MappingProxyType[Key, Value](value)
