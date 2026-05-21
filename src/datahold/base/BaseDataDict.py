@@ -1,9 +1,9 @@
-import collections.abc
+from collections.abc import Mapping, Iterable
+from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from abc import abstractmethod
 from typing import *
 
 import setdoc
-from frozendict import frozendict
 
 from .BaseDataObject import BaseDataObject
 
@@ -29,7 +29,12 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
 
     @abstractmethod
     @setdoc.setdoc(dict.__init__.__doc__)
-    def __init__(self: Self, data: Any = (), /, **kwargs: Value) -> None: ...
+    def __init__(
+        self: Self, 
+        data: Iterable | SupportsKeysAndGetitem[Key, Value] = (), 
+        /, 
+        **kwargs: Value,
+    ) -> None: ...
 
     @setdoc.setdoc(dict.__iter__.__doc__)
     def __iter__(self: Self, /) -> Iterable[Key]:
@@ -90,4 +95,4 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
         return dict(self.data).values()
 
 
-collections.abc.Mapping.register(BaseDataDict)
+Mapping.register(BaseDataDict)

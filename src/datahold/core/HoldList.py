@@ -1,4 +1,5 @@
-from typing import *
+from typing import Self, TypeVar
+from collections.abc import Iterable
 
 import setdoc
 
@@ -21,5 +22,5 @@ class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
         return self._data
 
     @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = tuple[Item, ...](value)
+    def data(self: Self, value: Iterable[Item]) -> None:
+        self._data = tuple(value)
