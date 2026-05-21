@@ -4,6 +4,7 @@ from typing import Any, Generic, Optional, Self, TypeVar
 
 import setdoc
 
+from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseDataDict"]
@@ -23,12 +24,19 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
         return dict(self.data).__contains__(key)
 
     @setdoc.setdoc(dict.__getitem__.__doc__)
-    def __getitem__(self: Self, key: Any, /) -> Value:
-        return dict(self.data).__getitem__(key)
+    def __getitem__(self: Self, key: Hashable, /) -> Value:
+        key_: Any
+        key_ = key
+        return dict(self.data).__getitem__(key_)
 
     @abstractmethod
     @setdoc.setdoc(dict.__init__.__doc__)
-    def __init__(self: Self, data: Any = (), /, **kwargs: Value) -> None: ...
+    def __init__(
+        self: Self,
+        data: Iterable | SupportsKeysAndGetitem[Key, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None: ...
 
     @setdoc.setdoc(dict.__iter__.__doc__)
     def __iter__(self: Self, /) -> Iterable[Key]:

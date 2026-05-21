@@ -1,6 +1,7 @@
 from abc import abstractmethod
+from collections.abc import Iterable
 from collections.abc import Set as AbstractSet
-from typing import Any, Iterable, Self, TypeVar, overload
+from typing import Any, Self, TypeVar, overload
 
 import setdoc
 
@@ -147,39 +148,47 @@ class BaseDataSet(BaseDataObject, AbstractSet[Item]):
     @setdoc.setdoc(set.__sub__.__doc__)
     def __sub__(
         self: Self,
-        value: Any,
+        value: frozenset[object] | set[object],
         /,
-    ) -> Any:
+    ) -> set[Item]:
         return set(self.data).__sub__(value)
 
     @setdoc.setdoc(set.__xor__.__doc__)
-    def __xor__(self: Self, value: Any, /) -> Any:
+    def __xor__(
+        self: Self,
+        value: frozenset[Item_] | set[Item_],
+        /,
+    ) -> set[Item | Item_]:
         return set(self.data).__xor__(value)
 
     @setdoc.setdoc(set.difference.__doc__)
-    def difference(self: Self, /, *others: Iterable[Item]) -> set[Item]:
+    def difference(self: Self, /, *others: Iterable[object]) -> set[Item]:
         return set(self.data).difference(*others)
 
     @setdoc.setdoc(set.intersection.__doc__)
-    def intersection(self: Self, /, *others: Iterable[Item]) -> set[Item]:
+    def intersection(self: Self, /, *others: Iterable[object]) -> set[Item]:
         return set(self.data).intersection(*others)
 
     @setdoc.setdoc(set.isdisjoint.__doc__)
-    def isdisjoint(self: Self, other: Any, /) -> Any:
+    def isdisjoint(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).isdisjoint(other)
 
     @setdoc.setdoc(set.issubset.__doc__)
-    def issubset(self: Self, other: Any, /) -> Any:
+    def issubset(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).issubset(other)
 
     @setdoc.setdoc(set.issuperset.__doc__)
-    def issuperset(self: Self, other: Any, /) -> Any:
+    def issuperset(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).issuperset(other)
 
     @setdoc.setdoc(set.symmetric_difference.__doc__)
-    def symmetric_difference(self: Self, other: Any, /) -> Any:
+    def symmetric_difference(
+        self: Self,
+        other: Iterable[Item_],
+        /,
+    ) -> set[Item | Item_]:
         return set(self.data).symmetric_difference(other)
 
     @setdoc.setdoc(set.union.__doc__)
-    def union(self: Self, /, *others: Any) -> set[Item]:
+    def union(self: Self, /, *others: Iterable[Item_]) -> set[Item | Item_]:
         return set(self.data).union(*others)

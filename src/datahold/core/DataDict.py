@@ -1,10 +1,11 @@
-from collections.abc import Hashable, MutableMapping
+from collections.abc import Hashable, Iterable, MutableMapping
 from typing import Any, Self, TypeVar, overload
 
 import setdoc
 from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
+from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataObject import DataObject
 
 __all__ = ["DataDict"]
@@ -29,8 +30,15 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         self.data = frozendict(data)
 
     @setdoc.basic
-    def __init__(self: Self, data: Any = (), /, **kwargs: Value) -> None:
-        self.data = frozendict(data, **kwargs)
+    def __init__(
+        self: Self,
+        data: Iterable[tuple[Key, Value]] | SupportsKeysAndGetitem[Key, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None:
+        data_: Any
+        data_ = data
+        self.data = frozendict(data_, **kwargs)
 
     @setdoc.setdoc(dict.__ior__.__doc__)
     def __ior__(
@@ -88,7 +96,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         return ans
 
     @setdoc.setdoc(dict.setdefault.__doc__)
-    def setdefault(self: Self, key: Key, default: Any = None, /) -> Any:
+    def setdefault(self: Self, key: Key, default: Any = None, /) -> Value:
         ans: Any
         data: dict[Key, Value]
         data = dict(self.data)
@@ -97,10 +105,13 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         return ans
 
     @setdoc.setdoc(dict.update.__doc__)
-    def update(self: Self, other: Any, /, **kwargs: Any) -> Any:
-        ans: Any
+    def update(
+        self: Self,
+        other: SupportsKeysAndGetitem[Key, Value],
+        /,
+        **kwargs: Value,
+    ) -> None:
         data: dict[Key, Value]
         data = dict(self.data)
-        ans = data.update(other, **kwargs)
+        data.update(other, **kwargs)
         self.data = frozendict(data)
-        return ans
