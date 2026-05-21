@@ -1,6 +1,6 @@
-import collections.abc
 from abc import abstractmethod
-from typing import *
+from collections.abc import Set as AbstractSet
+from typing import Any, Iterable, Self, TypeVar, overload
 
 import setdoc
 
@@ -12,10 +12,7 @@ Item = TypeVar("Item", covariant=True)
 Item_ = TypeVar("Item_")
 
 
-class BaseDataSet(
-    BaseDataObject,
-    collections.abc.Set[Item],
-):
+class BaseDataSet(BaseDataObject, AbstractSet[Item]):
     __slots__ = ()
 
     @setdoc.setdoc(set.__and__.__doc__)

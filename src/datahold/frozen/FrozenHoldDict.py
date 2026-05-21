@@ -1,5 +1,4 @@
-from abc import abstractmethod
-from typing import *
+from typing import Any, Self, TypeVar
 
 import setdoc
 from frozendict import frozendict
@@ -20,4 +19,4 @@ class FrozenHoldDict(FrozenHoldObject, FrozenDataDict, BaseHoldDict[Key, Value])
 
     @setdoc.basic
     def __init__(self: Self, data: Any, /, **kwargs: Value) -> None:
-        self._data = frozendict[Key, Value](data, **kwargs)
+        self._data = frozendict(data, **kwargs)

@@ -1,4 +1,4 @@
-from typing import *
+from typing import Any
 
 from ..base.BaseHoldObject import BaseHoldObject
 from .DataObject import DataObject

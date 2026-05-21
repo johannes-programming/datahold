@@ -1,5 +1,5 @@
-from abc import abstractmethod
-from typing import *
+from collections.abc import Iterable
+from typing import Self, TypeVar
 
 import setdoc
 
@@ -18,4 +18,4 @@ class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item], /) -> None:
-        self._data = tuple[Item, ...](data)
+        self._data = tuple(data)

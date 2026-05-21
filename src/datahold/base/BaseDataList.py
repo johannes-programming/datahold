@@ -1,7 +1,7 @@
-import collections
 import sys
 from abc import abstractmethod
-from typing import *
+from collections.abc import Iterable, Sequence
+from typing import Any, Self, SupportsIndex, TypeVar
 
 import setdoc
 
@@ -15,7 +15,7 @@ Item_ = TypeVar("Item_")
 
 class BaseDataList(
     BaseDataObject,
-    collections.abc.Sequence[Item],
+    Sequence[Item],
 ):
     __slots__ = ()
 

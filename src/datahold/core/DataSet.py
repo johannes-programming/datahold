@@ -1,5 +1,5 @@
-import collections
-from typing import *
+from collections.abc import Iterable, MutableSet
+from typing import Any, Self, TypeVar
 
 import setdoc
 
@@ -12,7 +12,7 @@ Item = TypeVar("Item")
 Item_ = TypeVar("Item_")
 
 
-class DataSet(DataObject, BaseDataSet[Item], collections.abc.MutableSet[Item]):
+class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
     data: frozenset[Item]
     __slots__ = ()
 

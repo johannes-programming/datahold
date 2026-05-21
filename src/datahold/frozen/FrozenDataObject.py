@@ -1,5 +1,5 @@
-import collections
-from typing import *
+from collections.abc import Hashable
+from typing import Self
 
 import setdoc
 
@@ -8,7 +8,7 @@ from ..base.BaseDataObject import BaseDataObject
 __all__ = ["FrozenDataObject"]
 
 
-class FrozenDataObject(BaseDataObject, collections.abc.Hashable):
+class FrozenDataObject(BaseDataObject, Hashable):
 
     __slots__ = ()
 
