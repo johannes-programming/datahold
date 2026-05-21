@@ -28,7 +28,7 @@ class BaseDataList(
         return list(self.data).__contains__(value)
 
     @setdoc.setdoc(list.__getitem__.__doc__)
-    def __getitem__(self: Self, key: SupportsIndex | int, /) -> Item:
+    def __getitem__(self: Self, key: SupportsIndex, /) -> Item:
         return list(self.data).__getitem__(key)
 
     @abstractmethod

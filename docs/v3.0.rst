@@ -39,8 +39,8 @@ This magic method implements ``key in self``. It works as follows:
 
 The docsting is somewhat imprecise because it mimics the original method of ``dict``.
 
-``__getitem__(key: Any, /) -> Value``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: Hashable, /) -> Value``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 

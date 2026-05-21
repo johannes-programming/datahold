@@ -1,4 +1,5 @@
-from typing import Any, Self, TypeVar
+from collections.abc import Iterable
+from typing import Self, TypeVar
 
 import setdoc
 
@@ -21,5 +22,5 @@ class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
         return self._data
 
     @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = frozenset[Item](value)
+    def data(self: Self, value: Iterable[Item]) -> None:
+        self._data = frozenset(value)
