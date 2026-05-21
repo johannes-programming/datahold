@@ -8,9 +8,9 @@ __all__ = ["FrozenHoldObject"]
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
 
-    _data: Any
+    _data: Hashable
     __slots__ = ()
 
     @property
-    def data(self: Self) -> Any:
+    def data(self: Self) -> Hashable:
         return self._data

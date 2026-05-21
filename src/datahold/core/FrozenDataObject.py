@@ -10,7 +10,6 @@ __all__ = ["FrozenDataObject"]
 
 class FrozenDataObject(BaseDataObject, collections.abc.Hashable):
 
-    data: Any
     __slots__ = ()
 
     @setdoc.basic
