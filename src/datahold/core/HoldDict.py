@@ -1,8 +1,8 @@
+import types
+import typing
 from collections.abc import Iterable
-from typing import Any, Self, TypeVar
 
 import setdoc
-from frozendict import frozendict
 
 from ..base.BaseHoldDict import BaseHoldDict
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
@@ -11,8 +11,8 @@ from .HoldObject import HoldObject
 
 __all__ = ["HoldDict"]
 
-Key = TypeVar("Key")
-Value = TypeVar("Value")
+Key = typing.TypeVar("Key")
+Value = typing.TypeVar("Value")
 
 
 class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
@@ -21,14 +21,12 @@ class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozendict[Key, Value]:
+    def data(self: typing.Self) -> types.MappingProxyType[Key, Value]:
         return self._data
 
     @data.setter
     def data(
-        self: Self,
+        self: typing.Self,
         value: Iterable[tuple[Key, Value]] | SupportsKeysAndGetitem[Key, Value],
     ) -> None:
-        data_: Any
-        data_ = value
-        self._data = frozendict(data_)
+        self._data = types.MappingProxyType(dict(value))

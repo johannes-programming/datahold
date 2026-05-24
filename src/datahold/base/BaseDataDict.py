@@ -1,9 +1,9 @@
+import types
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Mapping
 from typing import Any, Generic, Optional, Self, TypeVar
 
 import setdoc
-from frozendict import frozendict
 
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .BaseDataObject import BaseDataObject
@@ -69,7 +69,7 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
 
     @property
     @abstractmethod
-    def data(self: Self) -> frozendict[Key, Value]: ...
+    def data(self: Self) -> types.MappingProxyType[Key, Value]: ...
 
     @classmethod
     @setdoc.setdoc(dict.fromkeys.__doc__)

@@ -1,7 +1,6 @@
+import types
 import typing
 from abc import abstractmethod
-
-from frozendict import frozendict
 
 from .BaseDataDict import BaseDataDict
 from .BaseHoldObject import BaseHoldObject
@@ -17,4 +16,4 @@ class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):
 
     @property
     @abstractmethod
-    def data(self: typing.Self) -> frozendict[Key, Value]: ...
+    def data(self: typing.Self) -> types.MappingProxyType[Key, Value]: ...

@@ -1,8 +1,8 @@
+import types
 from collections.abc import Hashable, Iterable, MutableMapping
 from typing import Any, Self, TypeVar, overload
 
 import setdoc
-from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
@@ -19,7 +19,7 @@ MISSING = object()
 
 
 class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value]):
-    data: frozendict[Key, Value]
+    data: types.MappingProxyType[Key, Value]
     __slots__ = ()
 
     @setdoc.setdoc(dict.__delitem__.__doc__)
@@ -27,7 +27,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: dict[Key, Value]
         data = dict(self.data)
         data.__delitem__(key)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
 
     @setdoc.basic
     def __init__(
@@ -36,9 +36,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         /,
         **kwargs: Value,
     ) -> None:
-        data_: Any
-        data_ = data
-        self.data = frozendict(data_, **kwargs)
+        self.data = types.MappingProxyType(dict(data, **kwargs))
 
     @setdoc.setdoc(dict.__ior__.__doc__)
     def __ior__(
@@ -48,7 +46,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: Any
         data = dict(self.data)
         ans = data.__ior__(value)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
         return ans
 
     @setdoc.setdoc(dict.__setitem__.__doc__)
@@ -56,14 +54,14 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: dict[Key, Value]
         data = dict(self.data)
         data.__setitem__(key, value)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
 
     @setdoc.setdoc(dict.clear.__doc__)
     def clear(self: Self, /) -> None:
         data: dict[Key, Value]
         data = dict(self.data)
         data.clear()
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
 
     @overload
     @setdoc.setdoc(dict.pop.__doc__)
@@ -84,7 +82,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
             ans = data.pop(key)
         else:
             ans = data.pop(key, default)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
         return ans
 
     @setdoc.setdoc(dict.popitem.__doc__)
@@ -92,7 +90,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: dict[Key, Value]
         data = dict(self.data)
         ans = data.popitem()
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
         return ans
 
     @setdoc.setdoc(dict.setdefault.__doc__)
@@ -101,7 +99,7 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: dict[Key, Value]
         data = dict(self.data)
         ans = data.setdefault(key, default)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
         return ans
 
     @setdoc.setdoc(dict.update.__doc__)
@@ -114,4 +112,4 @@ class DataDict(DataObject, BaseDataDict[Key, Value], MutableMapping[Key, Value])
         data: dict[Key, Value]
         data = dict(self.data)
         data.update(other, **kwargs)
-        self.data = frozendict(data)
+        self.data = types.MappingProxyType(data)
