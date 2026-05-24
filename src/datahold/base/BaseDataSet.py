@@ -161,6 +161,10 @@ class BaseDataSet(BaseDataObject, AbstractSet[Item]):
     ) -> set[Item | Item_]:
         return set(self.data).__xor__(value)
 
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozenset[Item]: ...
+
     @setdoc.setdoc(set.difference.__doc__)
     def difference(self: Self, /, *others: Iterable[object]) -> set[Item]:
         return set(self.data).difference(*others)

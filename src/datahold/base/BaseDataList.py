@@ -65,6 +65,10 @@ class BaseDataList(
         value_ = value
         return list(self.data).count(value_)
 
+    @property
+    @abstractmethod
+    def data(self: Self) -> tuple[Item, ...]: ...
+
     @setdoc.setdoc(list.index.__doc__)
     def index(
         self: Self,
