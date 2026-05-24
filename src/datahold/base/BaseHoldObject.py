@@ -1,4 +1,4 @@
-from typing import Any
+import typing
 
 from .BaseDataObject import BaseDataObject
 
@@ -6,5 +6,5 @@ __all__ = ["BaseHoldObject"]
 
 
 class BaseHoldObject(BaseDataObject):
-    data: Any
+    data: typing.Any
     __slots__ = ("_data",)

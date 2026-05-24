@@ -3,6 +3,7 @@ from collections.abc import Hashable, Iterable, Mapping
 from typing import Any, Generic, Optional, Self, TypeVar
 
 import setdoc
+from frozendict import frozendict
 
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .BaseDataObject import BaseDataObject
@@ -65,6 +66,10 @@ class BaseDataDict(BaseDataObject, Generic[Key, Value]):
         self: Self, value: dict[Key_, Value_], /
     ) -> dict[Key | Key_, Value | Value_]:
         return dict(self.data).__ror__(value)
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozendict[Key, Value]: ...
 
     @classmethod
     @setdoc.setdoc(dict.fromkeys.__doc__)
