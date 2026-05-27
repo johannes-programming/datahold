@@ -1,0 +1,102 @@
+.ONESHELL:
+.PHONY: all add amend beautiful black build canonicalize clean commit commit-version dist echo isort jacobus py311 py312 py313 py314 py315 pypi rebase reset test toml_sorted upload version
+SHELL := /bin/zsh
+
+all: beautiful commit-version
+
+add:
+	git add -A;
+
+amend: add
+	git commit --amend --no-edit;
+
+beautiful: canonicalize isort black jacobus toml_sorted
+
+black: py312
+	conda run -n py312 pip install 'black>=24.5,<26' >/dev/null;
+	conda run -n py312 black --line-length=79 . ;
+
+build: py312
+	conda run -n py312 pip install 'build>=1.3,<2' >/dev/null;
+	conda run -n py312 python -m build;
+
+canonicalize: py311
+	conda run -n py311 python make/canonicalize.py -- .;
+
+clean:
+	rm -fr 'dist/';
+	rm -fr 'out/';
+
+commit: add
+	git commit --allow-empty $(PARAMS);
+
+commit-version: add py312
+	conda run -n py312 pip install 'toml-get<2,>=1.1' >/dev/null;
+	git commit --allow-empty "$$(conda run -n py312 python -m toml_get @make/toml_get.txt)";
+
+dist: beautiful clean build
+
+echo:
+	echo $(PARAMS);
+
+isort: py312
+	conda run -n py312 pip install 'isort<7,>=6.0' >/dev/null;
+	conda run -n py312 isort . ;
+
+jacobus: py312
+	conda run -n py312 pip install 'jacobus<3,>=2.3' >/dev/null;
+	conda run -n py312 python -m jacobus @make/jacobus.txt;
+	conda run -n py312 python -m jacobus @make/jacobus_empty.txt;
+	cat make/manifest.txt >> MANIFEST.in;
+	conda run -n py312 python -m jacobus @make/jacobus_sort.txt;
+
+py311:
+	conda run -n base python make/env.py py311 --python=3.11;
+
+py312:
+	conda run -n base python make/env.py py312 --python=3.12;
+
+py313:
+	conda run -n base python make/env.py py313 --python=3.13;
+
+py314:
+	conda run -n base python make/env.py py314 --python=3.14;
+
+py315:
+	conda run -n base python make/env.py py315 --python=3.15;
+
+pypi: dist upload
+
+rebase:
+	git rebase --empty=drop --interactive $(PARAMS);
+
+reset:
+	git reset HEAD~1 ;
+
+test: dist py312
+	mkdir dist/out/ ;
+	conda run -n py312 pip install "style-checker<0.2,>=0.1.7";
+	conda run -n py312 python -m style_checker -- "**/*.py" > dist/out/style_checker_out.txt 2> dist/out/style_checker_err.txt || true;
+	conda run -n base python make/env.py test_datahold_mypy --python=3.12 --recreate >/dev/null;
+	conda run -n test_datahold_mypy pip install dist/*.tar.gz >/dev/null;
+	conda run -n test_datahold_mypy python run_introspection.py > dist/out/introspection_out.txt 2> dist/out/introspection_err.txt || true;
+	conda run -n test_datahold_mypy pip install "mypy<3,>=2.4" >/dev/null;
+	conda run -n test_datahold_mypy python -m mypy --exclude build --exclude dist --exclude make --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
+	conda run -n test_datahold_mypy python -m mypy --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
+	conda run -n py312 pip install "mypy<3,>=2.4";
+	conda run -n py312 python -m mypy --strict make > dist/out/mypy_make_out.txt 2> dist/out/mypy_make_err.txt || true;
+	conda run -n base python make/env.py test_datahold_tests --python=3.12 --recreate >/dev/null;
+	conda run -n test_datahold_tests pip install dist/*.tar.gz >/dev/null;
+	conda run -n test_datahold_tests python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
+	zip -r dist/out.zip dist/out;
+
+toml_sorted: py312
+	conda run -n py312 pip install 'toml-sorted<3,>=2.2' >/dev/null;
+	conda run -n py312 python -m toml_sorted @make/toml_sorted_pyproject.txt;
+	conda run -n py312 python -m toml_sorted @make/toml_sorted_testdata.txt;
+
+upload: py312
+	conda run -n py312 pip install 'twine<7,>=5.2' >/dev/null;
+	conda run -n py312 twine upload 'dist/*';
+
+version: all pypi
