@@ -1,7 +1,7 @@
 import sys
 from abc import abstractmethod
 from collections.abc import Sequence
-from typing import Any, Generic, Self, TypeVar
+from typing import Any, Generic, Self, TypeVar, cast
 
 import setdoc
 
@@ -10,13 +10,14 @@ from .BaseDataObject import BaseDataObject
 __all__ = ["BaseDataList"]
 
 Item = TypeVar("Item", covariant=True)
+Item_ = TypeVar("Item_")
 
 
 class BaseDataList(BaseDataObject, Generic[Item]):
     __slots__ = ()
 
     @setdoc.setdoc(list.__add__.__doc__)
-    def __add__(self: Self, value: Any, /) -> Any:
+    def __add__(self: Self, value: list[Item_], /) -> list[Item | Item_]:
         return list(self.data).__add__(value)
 
     @setdoc.setdoc(list.__contains__.__doc__)
@@ -57,9 +58,7 @@ class BaseDataList(BaseDataObject, Generic[Item]):
 
     @setdoc.setdoc(list.count.__doc__)
     def count(self: Self, value: Any, /) -> Any:
-        value_: Any
-        value_ = value
-        return list(self.data).count(value_)
+        return list(self.data).count(value)
 
     @setdoc.setdoc(list.index.__doc__)
     def index(
