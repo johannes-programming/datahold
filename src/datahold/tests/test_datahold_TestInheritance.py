@@ -1,30 +1,28 @@
 import unittest
 from typing import Self
 
-from frozendict import frozendict
-
-from datahold.core.BaseDataDict import BaseDataDict
-from datahold.core.BaseDataList import BaseDataList
-from datahold.core.BaseDataSet import BaseDataSet
-from datahold.core.BaseHoldDict import BaseHoldDict
-from datahold.core.BaseHoldList import BaseHoldList
-from datahold.core.BaseHoldSet import BaseHoldSet
+from datahold.base.BaseDataDict import BaseDataDict
+from datahold.base.BaseDataList import BaseDataList
+from datahold.base.BaseDataSet import BaseDataSet
+from datahold.base.BaseHoldDict import BaseHoldDict
+from datahold.base.BaseHoldList import BaseHoldList
+from datahold.base.BaseHoldSet import BaseHoldSet
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
 from datahold.core.DataObject import DataObject
 from datahold.core.DataSet import DataSet
-from datahold.core.FrozenDataDict import FrozenDataDict
-from datahold.core.FrozenDataList import FrozenDataList
-from datahold.core.FrozenDataObject import FrozenDataObject
-from datahold.core.FrozenDataSet import FrozenDataSet
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldObject import FrozenHoldObject
-from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldObject import HoldObject
 from datahold.core.HoldSet import HoldSet
+from datahold.frozen.FrozenDataDict import FrozenDataDict
+from datahold.frozen.FrozenDataList import FrozenDataList
+from datahold.frozen.FrozenDataObject import FrozenDataObject
+from datahold.frozen.FrozenDataSet import FrozenDataSet
+from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold.frozen.FrozenHoldObject import FrozenHoldObject
+from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 
 class TestInheritance(unittest.TestCase):

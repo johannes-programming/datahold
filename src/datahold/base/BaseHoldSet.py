@@ -1,13 +1,13 @@
-from typing import *
+import typing
+from abc import abstractmethod
 
 from .BaseDataSet import BaseDataSet
 from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldSet"]
 
-Item = TypeVar("Item")
+Item = typing.TypeVar("Item")
 
 
 class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
-    data: frozenset[Item]
     __slots__ = ()

@@ -1,9 +1,9 @@
-from typing import *
+from typing import Any, Self
 
 import setdoc
 from copyable import Copyable
 
-from .BaseDataObject import BaseDataObject
+from ..base.BaseDataObject import BaseDataObject
 
 __all__ = ["DataObject"]
 
