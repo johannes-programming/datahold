@@ -20,5 +20,5 @@ class FrozenHoldDict(
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Any, /, **kwargs: Value) -> None:
+    def __init__(self: Self, data: Any, /, **kwargs: Any) -> None:
         self._data = frozendict(data, **kwargs)

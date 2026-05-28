@@ -18,4 +18,4 @@ class FrozenHoldSet(FrozenHoldObject, FrozenDataSet[Item], BaseHoldSet[Item]):
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item], /) -> None:
-        self._data = frozenset[Item](data)
+        self._data = frozenset(data)
