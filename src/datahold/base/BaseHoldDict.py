@@ -1,12 +1,12 @@
-import typing
+from typing import TypeVar
 
 from .BaseDataDict import BaseDataDict
 from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldDict"]
 
-Key = typing.TypeVar("Key", covariant=True)
-Value = typing.TypeVar("Value", covariant=True)
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
 
 class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):

@@ -1,97 +1,130 @@
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableMapping
-from typing import Any, Self, TypeVar, overload
+from typing import Any, Final, Optional, Self, TypeVar, overload
 
 import setdoc
 from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
+from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataObject import DataObject
 
 __all__ = ["DataDict"]
 
-Key = TypeVar("Key")
+Key = TypeVar("Key", bound=Hashable)
 Value = TypeVar("Value")
+Value_ = TypeVar("Value_")
 
-MISSING = object()
+MISSING: Final[object] = object()
 
 
-class DataDict(DataObject, BaseDataDict[Key, Value]):
+class DataDict(
+    DataObject,
+    BaseDataDict[Key, Value],
+    MutableMapping[Key | str, Optional[Value]],
+):
     __slots__ = ()
 
-    @setdoc.setdoc(dict.__delitem__.__doc__)
-    def __delitem__(self: Self, key: Any, /) -> None:
-        data: Any
-        data = dict(self.data)
-        data.__delitem__(key)
-        self.data = frozendict(data)
+    @setdoc.basic
+    def __delitem__(self: Self, key: Hashable, /) -> None:
+        self.data = self.data.delete(key)  # type: ignore[arg-type]
 
     @setdoc.basic
     def __init__(
         self: Self,
-        data: Any = (),
+        data: (
+            SupportsKeysAndGetitem[Key | str, Optional[Value]]
+            | Iterable[tuple[Key | str, Optional[Value]]]
+        ) = (),
         /,
-        **kwargs: Value,
+        **kwargs: Optional[Value],
     ) -> None:
-        data_: Any
-        data_ = data
-        self.data = frozendict(data_, **kwargs)
+        self.data = frozendict(data, **kwargs)  # type: ignore[arg-type]
 
-    @setdoc.setdoc(dict.__ior__.__doc__)
-    def __ior__(self: Self, value: Any, /) -> Any:
-        ans: Any
-        data: Any
-        data = dict(self.data)
-        ans = data.__ior__(value)
-        self.data = frozendict(data)
-        return ans
+    @setdoc.basic
+    def __ior__(
+        self: Self,
+        other: BaseDataDict[Key, Value],
+        /,
+    ) -> Self:
+        self.data |= other.data
+        return self
 
     @setdoc.setdoc(dict.__setitem__.__doc__)
-    def __setitem__(self: Self, key: Any, value: Any, /) -> None:
-        data: Any
-        data = dict(self.data)
-        data.__setitem__(key, value)
-        self.data = frozendict(data)
+    def __setitem__(
+        self: Self,
+        key: Key | str,
+        value: Optional[Value],
+        /,
+    ) -> None:
+        self.data = self.data.set(key, value)
 
     @setdoc.setdoc(dict.clear.__doc__)
     def clear(self: Self, /) -> None:
-        data: Any
-        data = dict(self.data)
-        data.clear()
-        self.data = frozendict(data)
+        self.data = frozendict()
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
+
+    @data.setter
+    @abstractmethod
+    def data(
+        self: Self,
+        value: (
+            SupportsKeysAndGetitem[Key | str, Optional[Value]]
+            | Iterable[tuple[Key | str, Optional[Value]]]
+        ),
+    ) -> None: ...
 
     @overload
     @setdoc.setdoc(dict.pop.__doc__)
-    def pop(self: Self, key: Any, /) -> Any: ...
+    def pop(self: Self, key: Hashable, /) -> Optional[Value]: ...
 
     @overload
     @setdoc.setdoc(dict.pop.__doc__)
-    def pop(self: Self, key: Any, default: Any, /) -> Any: ...
+    def pop(
+        self: Self,
+        key: Hashable,
+        default: Value_,
+        /,
+    ) -> Optional[Value | Value_]: ...
 
     @setdoc.setdoc(dict.pop.__doc__)
-    def pop(self: Self, key: Any, default: Any = MISSING, /) -> Any:
-        ans: Any
-        data: Any
+    def pop(
+        self: Self,
+        key: Hashable,
+        default: Any = MISSING,
+        /,
+    ) -> Optional[Value | Value_]:
+        ans: Optional[Value | Value_]
+        data: dict[Key | str, Optional[Value]]
         data = dict(self.data)
         if default is MISSING:
-            ans = data.pop(key)
+            ans = data.pop(key)  # type: ignore[arg-type]
         else:
-            ans = data.pop(key, default)
+            ans = data.pop(key, default)  # type: ignore[arg-type]
         self.data = frozendict(data)
         return ans
 
     @setdoc.setdoc(dict.popitem.__doc__)
-    def popitem(self: Self, /) -> Any:
-        data: Any
+    def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
+        ans: tuple[Key | str, Optional[Value]]
+        data: dict[Key | str, Optional[Value]]
         data = dict(self.data)
         ans = data.popitem()
         self.data = frozendict(data)
         return ans
 
     @setdoc.setdoc(dict.setdefault.__doc__)
-    def setdefault(self: Self, key: Any, default: Any = None, /) -> Any:
-        ans: Any
-        data: Any
+    def setdefault(
+        self: Self,
+        key: Key | str,
+        default: Optional[Value] = None,
+        /,
+    ) -> Optional[Value]:
+        ans: Optional[Value]
+        data: dict[Key | str, Optional[Value]]
         data = dict(self.data)
         ans = data.setdefault(key, default)
         self.data = frozendict(data)
@@ -100,14 +133,14 @@ class DataDict(DataObject, BaseDataDict[Key, Value]):
     @setdoc.setdoc(dict.update.__doc__)
     def update(
         self: Self,
-        other: Any,
+        other: (
+            SupportsKeysAndGetitem[Key | str, Optional[Value]]
+            | Iterable[tuple[Key | str, Optional[Value]]]
+        ) = (),
         /,
-        **kwargs: Any,
-    ) -> Any:
-        data: Any
+        **kwargs: Optional[Value],
+    ) -> None:
+        data: dict[Key | str, Optional[Value]]
         data = dict(self.data)
         data.update(other, **kwargs)
         self.data = frozendict(data)
-
-
-MutableMapping.register(DataDict)

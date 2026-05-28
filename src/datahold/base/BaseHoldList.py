@@ -1,11 +1,11 @@
-import typing
+from typing import TypeVar
 
 from .BaseDataList import BaseDataList
 from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldList"]
 
-Item = typing.TypeVar("Item", covariant=True)
+Item = TypeVar("Item", covariant=True)
 
 
 class BaseHoldList(BaseHoldObject, BaseDataList[Item]):

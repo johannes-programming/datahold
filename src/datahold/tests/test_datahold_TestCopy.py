@@ -1,5 +1,5 @@
 import unittest
-from typing import Any, Self
+from typing import Any, Self, cast
 
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
@@ -42,8 +42,8 @@ class TestCopy(unittest.TestCase):
                 self.assertIsInstance(copy_obj, cls)
 
     def test_mutable_copy_returns_same_type_and_is_shallow(self: Self) -> None:
-        d: HoldDict[Any, Any]
-        d_copy: HoldDict[Any, Any]
+        d: HoldDict[str, dict[str, int]]
+        d_copy: HoldDict[str, dict[str, int]]
         d = HoldDict({"a": {"x": 1}})
         d_copy = d.copy()
         self.assertIsInstance(d_copy, type(d))
@@ -51,8 +51,8 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(dict(d_copy), dict(d))
 
         # shallow: inner object is shared
-        d["a"]["x"] = 2
-        self.assertEqual(d_copy["a"]["x"], 2)
+        cast(dict[str, int], d["a"])["x"] = 2
+        self.assertEqual(cast(dict[str, int], d_copy["a"])["x"], 2)
 
     def test_list_copy(self: Self) -> None:
         lst: HoldList[Any]
