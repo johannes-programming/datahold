@@ -1,7 +1,7 @@
 import sys
 from abc import abstractmethod
-from collections.abc import Sequence
-from typing import Any, Generic, Self, TypeVar, cast
+from collections.abc import Sequence, Iterable, Iterator
+from typing import Any, Generic, Self, TypeVar, SupportsIndex, cast
 
 import setdoc
 
@@ -21,51 +21,51 @@ class BaseDataList(BaseDataObject, Generic[Item]):
         return list(self.data).__add__(value)
 
     @setdoc.setdoc(list.__contains__.__doc__)
-    def __contains__(self: Self, value: Any, /) -> Any:
+    def __contains__(self: Self, value: object, /) -> bool:
         return list(self.data).__contains__(value)
 
     @setdoc.setdoc(list.__getitem__.__doc__)
-    def __getitem__(self: Self, key: Any, /) -> Any:
-        return list(self.data).__getitem__(key)
+    def __getitem__(self: Self, key: SupportsIndex, /) -> Item:
+        return cast(Item, list(self.data).__getitem__(key))
 
     @abstractmethod
     @setdoc.setdoc(list.__init__.__doc__)
-    def __init__(self: Self, data: Any = (), /) -> None: ...
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
 
     @setdoc.setdoc(list.__iter__.__doc__)
-    def __iter__(self: Self, /) -> Any:
+    def __iter__(self: Self, /) -> Iterator[Item]:
         return list(self.data).__iter__()
 
     @setdoc.setdoc(list.__len__.__doc__)
-    def __len__(self: Self, /) -> Any:
+    def __len__(self: Self, /) -> int:
         return list(self.data).__len__()
 
     @setdoc.setdoc(list.__mul__.__doc__)
-    def __mul__(self: Self, value: Any, /) -> Any:
+    def __mul__(self: Self, value: SupportsIndex, /) -> list[Item]:
         return list(self.data).__mul__(value)
 
     @setdoc.setdoc(list.__repr__.__doc__)
-    def __repr__(self: Self, /) -> Any:
+    def __repr__(self: Self, /) -> str:
         return list(self.data).__repr__()
 
     @setdoc.setdoc(list.__reversed__.__doc__)
-    def __reversed__(self: Self, /) -> Any:
+    def __reversed__(self: Self, /) -> Iterator[Item]:
         return list(self.data).__reversed__()
 
     @setdoc.setdoc(list.__rmul__.__doc__)
-    def __rmul__(self: Self, value: Any, /) -> Any:
+    def __rmul__(self: Self, value: SupportsIndex, /) -> list[Item]:
         return list(self.data).__rmul__(value)
 
     @setdoc.setdoc(list.count.__doc__)
-    def count(self: Self, value: Any, /) -> Any:
+    def count(self: Self, value: object, /) -> int:
         return list(self.data).count(value)
 
     @setdoc.setdoc(list.index.__doc__)
     def index(
         self: Self,
         value: Any,
-        start: Any = 0,
-        end: Any = sys.maxsize,
+        start: SupportsIndex = 0,
+        end: SupportsIndex = sys.maxsize,
         /,
     ) -> int:
         return list(self.data).index(value, start, end)
