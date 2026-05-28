@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from collections.abc import Iterable, Iterator
 from collections.abc import Set as AbstractSet
-from typing import Any, Generic, Self, TypeVar, cast, overload
+from typing import Any, Generic, Self, TypeVar, overload
 
 import setdoc
 

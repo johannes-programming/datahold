@@ -1,5 +1,3 @@
-import typing
-
 from .BaseDataObject import BaseDataObject
 
 __all__ = ["BaseHoldObject"]

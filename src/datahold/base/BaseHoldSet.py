@@ -1,12 +1,11 @@
-import typing
-from abc import abstractmethod
+from typing import TypeVar
 
 from .BaseDataSet import BaseDataSet
 from .BaseHoldObject import BaseHoldObject
 
 __all__ = ["BaseHoldSet"]
 
-Item = typing.TypeVar("Item")
+Item = TypeVar("Item")
 
 
 class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
