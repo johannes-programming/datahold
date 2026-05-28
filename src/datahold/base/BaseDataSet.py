@@ -170,35 +170,35 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         return set(self.data).__xor__(other)
 
     @setdoc.setdoc(set.difference.__doc__)
-    def difference(self: Self, /, *others: Any) -> Any:
+    def difference(self: Self, /, *others: Iterable[object]) -> set[Item]:
         return set(self.data).difference(*others)
 
     @setdoc.setdoc(set.intersection.__doc__)
-    def intersection(self: Self, /, *others: Any) -> Any:
+    def intersection(self: Self, /, *others: Iterable[object]) -> set[Item]:
         return set(self.data).intersection(*others)
 
     @setdoc.setdoc(set.isdisjoint.__doc__)
-    def isdisjoint(self: Self, other: Any, /) -> Any:
+    def isdisjoint(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).isdisjoint(other)
 
     @setdoc.setdoc(set.issubset.__doc__)
-    def issubset(self: Self, other: Any, /) -> Any:
+    def issubset(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).issubset(other)
 
     @setdoc.setdoc(set.issuperset.__doc__)
-    def issuperset(self: Self, other: Any, /) -> Any:
+    def issuperset(self: Self, other: Iterable[object], /) -> bool:
         return set(self.data).issuperset(other)
 
     @setdoc.setdoc(set.symmetric_difference.__doc__)
     def symmetric_difference(
         self: Self,
-        other: Any,
+        other: Iterable[Item_],
         /,
-    ) -> Any:
+    ) -> set[Item|Item_]:
         return set(self.data).symmetric_difference(other)
 
     @setdoc.setdoc(set.union.__doc__)
-    def union(self: Self, /, *others: Any) -> Any:
+    def union(self: Self, /, *others: Iterable[Item_]) -> set[Item|Item_]:
         return set(self.data).union(*others)
 
 
