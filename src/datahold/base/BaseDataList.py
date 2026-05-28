@@ -26,7 +26,7 @@ class BaseDataList(BaseDataObject, Generic[Item]):
 
     @setdoc.setdoc(list.__getitem__.__doc__)
     def __getitem__(self: Self, key: SupportsIndex, /) -> Item:
-        return cast(Item, list(self.data).__getitem__(key))
+        return list(self.data).__getitem__(key)
 
     @abstractmethod
     @setdoc.setdoc(list.__init__.__doc__)
@@ -58,17 +58,21 @@ class BaseDataList(BaseDataObject, Generic[Item]):
 
     @setdoc.setdoc(list.count.__doc__)
     def count(self: Self, value: object, /) -> int:
-        return list(self.data).count(value)
+        return list(self.data).count(cast(Any, value))
+    
+    @property
+    @abstractmethod
+    def data(self: Self) -> tuple[Item, ...]: ...
 
     @setdoc.setdoc(list.index.__doc__)
     def index(
         self: Self,
-        value: Any,
+        value: object,
         start: SupportsIndex = 0,
         end: SupportsIndex = sys.maxsize,
         /,
     ) -> int:
-        return list(self.data).index(value, start, end)
+        return list(self.data).index(cast(Any, value), start, end)
 
 
 Sequence.register(BaseDataList)  # type: ignore[type-abstract]
