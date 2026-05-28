@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from collections.abc import Set as AbstractSet
 from collections.abc import Iterable, Iterator
-from typing import Any, Generic, Self, TypeVar, overload, cast
+from collections.abc import Set as AbstractSet
+from typing import Any, Generic, Self, TypeVar, cast, overload
 
 import setdoc
 
@@ -18,12 +18,11 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
 
     @overload
     @setdoc.basic
-    def __and__(self: Self, other: frozenset[object], /) -> set[Item]:...
+    def __and__(self: Self, other: frozenset[object], /) -> set[Item]: ...
 
     @overload
     @setdoc.basic
-    def __and__(self: Self, other: set[object], /) -> set[Item]:...
-
+    def __and__(self: Self, other: set[object], /) -> set[Item]: ...
 
     @setdoc.basic
     def __and__(
@@ -51,12 +50,14 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
 
     @overload
     @setdoc.basic
-    def __or__(self: Self, other: frozenset[Item_], /) -> set[Item|Item_]:...
+    def __or__(
+        self: Self, other: frozenset[Item_], /
+    ) -> set[Item | Item_]: ...
 
     @overload
     @setdoc.basic
-    def __or__(self: Self, other: set[Item_], /) -> set[Item|Item_]:...
-    
+    def __or__(self: Self, other: set[Item_], /) -> set[Item | Item_]: ...
+
     @setdoc.basic
     def __or__(
         self: Self,
@@ -64,20 +65,18 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         /,
     ) -> Any:
         return set(self.data).__or__(other)
-    
+
     @overload
-    @setdoc.basic 
+    @setdoc.basic
     def __rand__(
         self: Self, other: frozenset[object], /
-    ) -> frozenset[Item]:...
-    
+    ) -> frozenset[Item]: ...
+
     @overload
-    @setdoc.basic 
-    def __rand__(
-        self: Self, other: set[object], /
-    ) -> set[Item]:...
-    
-    @setdoc.basic 
+    @setdoc.basic
+    def __rand__(self: Self, other: set[object], /) -> set[Item]: ...
+
+    @setdoc.basic
     def __rand__(
         self: Self,
         other: Any,
@@ -95,7 +94,7 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         self: Self,
         other: frozenset[Item_],
         /,
-    ) -> frozenset[Item|Item_]: ...
+    ) -> frozenset[Item | Item_]: ...
 
     @overload
     @setdoc.basic
@@ -103,7 +102,7 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         self: Self,
         other: set[Item_],
         /,
-    ) -> set[Item|Item_]:...
+    ) -> set[Item | Item_]: ...
 
     @setdoc.basic
     def __ror__(
@@ -116,11 +115,10 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
     @overload
     @setdoc.basic
     def __rsub__(
-        self: Self, 
+        self: Self,
         other: frozenset[Item_],
         /,
-    ) -> frozenset[Item_]:
-        ...
+    ) -> frozenset[Item_]: ...
 
     @overload
     @setdoc.basic
@@ -128,10 +126,9 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         self: Self,
         other: set[Item_],
         /,
-    ) -> set[Item_]:
-        ...
+    ) -> set[Item_]: ...
 
-    @setdoc.basic 
+    @setdoc.basic
     def __rsub__(
         self: Self,
         other: Any,
@@ -140,23 +137,23 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         return set(self.data).__rsub__(other)  # type: ignore[attr-defined]
 
     @overload
-    @setdoc.basic 
-    def __rxor__(self: Self, other: frozenset[Item_], /) -> frozenset[Item|Item_]:
-        ...
+    @setdoc.basic
+    def __rxor__(
+        self: Self, other: frozenset[Item_], /
+    ) -> frozenset[Item | Item_]: ...
 
     @overload
-    @setdoc.basic 
-    def __rxor__(self: Self, other: set[Item_], /) -> set[Item|Item_]:
-        ...
+    @setdoc.basic
+    def __rxor__(self: Self, other: set[Item_], /) -> set[Item | Item_]: ...
 
-    @setdoc.basic 
+    @setdoc.basic
     def __rxor__(self: Self, other: Any, /) -> Any:
-        return set(self.data).__rxor__(other)# type: ignore[attr-defined] 
+        return set(self.data).__rxor__(other)  # type: ignore[attr-defined]
 
-    @setdoc.basic 
+    @setdoc.basic
     def __sub__(
         self: Self,
-        other: frozenset[object]|set[object],
+        other: frozenset[object] | set[object],
         /,
     ) -> set[Item]:
         return set(self.data).__sub__(other)
@@ -164,9 +161,9 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
     @setdoc.basic
     def __xor__(
         self: Self,
-        other: frozenset[Item_]|set[Item_],
+        other: frozenset[Item_] | set[Item_],
         /,
-    ) -> set[Item|Item_]:
+    ) -> set[Item | Item_]:
         return set(self.data).__xor__(other)
 
     @setdoc.setdoc(set.difference.__doc__)
@@ -194,11 +191,11 @@ class BaseDataSet(BaseDataObject, Generic[Item]):
         self: Self,
         other: Iterable[Item_],
         /,
-    ) -> set[Item|Item_]:
+    ) -> set[Item | Item_]:
         return set(self.data).symmetric_difference(other)
 
     @setdoc.setdoc(set.union.__doc__)
-    def union(self: Self, /, *others: Iterable[Item_]) -> set[Item|Item_]:
+    def union(self: Self, /, *others: Iterable[Item_]) -> set[Item | Item_]:
         return set(self.data).union(*others)
 
 

@@ -1,7 +1,7 @@
 import sys
 from abc import abstractmethod
-from collections.abc import Sequence, Iterable, Iterator
-from typing import Any, Generic, Self, TypeVar, SupportsIndex, cast
+from collections.abc import Iterable, Iterator, Sequence
+from typing import Any, Generic, Self, SupportsIndex, TypeVar, cast
 
 import setdoc
 
@@ -59,7 +59,7 @@ class BaseDataList(BaseDataObject, Generic[Item]):
     @setdoc.setdoc(list.count.__doc__)
     def count(self: Self, value: object, /) -> int:
         return list(self.data).count(cast(Any, value))
-    
+
     @property
     @abstractmethod
     def data(self: Self) -> tuple[Item, ...]: ...
