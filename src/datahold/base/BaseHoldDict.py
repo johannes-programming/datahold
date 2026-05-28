@@ -14,7 +14,3 @@ Value = typing.TypeVar("Value", covariant=True)
 
 class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):
     __slots__ = ()
-
-    @property
-    @abstractmethod
-    def data(self: typing.Self) -> frozendict[Key, Value]: ...

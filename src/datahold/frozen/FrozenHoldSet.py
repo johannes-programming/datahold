@@ -12,7 +12,7 @@ __all__ = ["FrozenHoldSet"]
 Item = TypeVar("Item")
 
 
-class FrozenHoldSet(FrozenHoldObject, FrozenDataSet, BaseHoldSet[Item]):
+class FrozenHoldSet(FrozenHoldObject, FrozenDataSet[Item], BaseHoldSet[Item]):
 
     __slots__ = ()
 

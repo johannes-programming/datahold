@@ -11,7 +11,3 @@ Item = typing.TypeVar("Item")
 
 class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
     __slots__ = ()
-
-    @property
-    @abstractmethod
-    def data(self: typing.Self) -> frozenset[Item]: ...

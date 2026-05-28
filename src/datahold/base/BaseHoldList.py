@@ -11,7 +11,3 @@ Item = typing.TypeVar("Item", covariant=True)
 
 class BaseHoldList(BaseHoldObject, BaseDataList[Item]):
     __slots__ = ()
-
-    @property
-    @abstractmethod
-    def data(self: typing.Self) -> tuple[Item, ...]: ...

@@ -1,4 +1,4 @@
-from collections.abc import Iterable, MutableSet
+from collections.abc import MutableSet
 from typing import Any, Self, TypeVar
 
 import setdoc
@@ -9,15 +9,13 @@ from .DataObject import DataObject
 __all__ = ["DataSet"]
 
 Item = TypeVar("Item")
-Item_ = TypeVar("Item_")
 
 
-class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
-    data: frozenset[Item]
+class DataSet(DataObject, BaseDataSet[Item]):
     __slots__ = ()
 
     @setdoc.setdoc(set.__iand__.__doc__)
-    def __iand__(self: Self, value: frozenset[object] | set[object], /) -> set[Item]:
+    def __iand__(self: Self, value: Any, /) -> Any:
         ans: set[Item]
         data: set[Item]
         data = set(self.data)
@@ -26,16 +24,16 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
         return ans
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, data: Any = (), /) -> None:
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.__ior__.__doc__)
     def __ior__(
         self: Self,
-        value: frozenset[Item_] | set[Item_],
+        value: Any,
         /,
-    ) -> set[Item | Item_]:
-        ans: set[Item | Item_]
+    ) -> Any:
+        ans: Any
         data: Any
         data = set(self.data)
         ans = data.__ior__(value)
@@ -45,9 +43,9 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
     @setdoc.setdoc(set.__isub__.__doc__)
     def __isub__(
         self: Self,
-        value: frozenset[object] | set[object],
+        value: Any,
         /,
-    ) -> set[Item]:
+    ) -> Any:
         ans: set[Item]
         data: set[Item]
         data = set(self.data)
@@ -56,10 +54,8 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
         return ans
 
     @setdoc.setdoc(set.__ixor__.__doc__)
-    def __ixor__(
-        self: Self, value: frozenset[Item_] | set[Item_], /
-    ) -> set[Item | Item_]:
-        ans: set[Item | Item_]
+    def __ixor__(self: Self, value: Any, /) -> Any:
+        ans: Any
         data: Any
         data = set(self.data)
         ans = data.__ixor__(value)
@@ -67,7 +63,7 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
         return ans
 
     @setdoc.setdoc(set.add.__doc__)
-    def add(self: Self, item: Item, /) -> None:
+    def add(self: Self, item: Any, /) -> None:
         data: set[Item]
         data = set(self.data)
         data.add(item)
@@ -81,21 +77,21 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.difference_update.__doc__)
-    def difference_update(self: Self, /, *others: Iterable[object]) -> None:
+    def difference_update(self: Self, /, *others: Any) -> None:
         data: set[Item]
         data = set(self.data)
         data.difference_update(*others)
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.discard.__doc__)
-    def discard(self: Self, item: Item, /) -> None:
+    def discard(self: Self, item: Any, /) -> None:
         data: set[Item]
         data = set(self.data)
         data.discard(item)
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.intersection_update.__doc__)
-    def intersection_update(self: Self, /, *others: Iterable[object]) -> None:
+    def intersection_update(self: Self, /, *others: Any) -> None:
         data: set[Item]
         data = set(self.data)
         data.intersection_update(*others)
@@ -111,22 +107,25 @@ class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
         return ans
 
     @setdoc.setdoc(set.remove.__doc__)
-    def remove(self: Self, item: Item, /) -> None:
+    def remove(self: Self, item: Any, /) -> None:
         data: set[Item]
         data = set(self.data)
         data.remove(item)
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.symmetric_difference_update.__doc__)
-    def symmetric_difference_update(self: Self, other: Iterable[Item], /) -> None:
+    def symmetric_difference_update(self: Self, other: Any, /) -> None:
         data: set[Item]
         data = set(self.data)
         data.symmetric_difference_update(other)
         self.data = frozenset(data)
 
     @setdoc.setdoc(set.update.__doc__)
-    def update(self: Self, /, *others: Iterable[Item]) -> None:
+    def update(self: Self, /, *others: Any) -> None:
         data: set[Item]
         data = set(self.data)
         data.update(*others)
         self.data = frozenset(data)
+
+
+MutableSet.register(DataSet)

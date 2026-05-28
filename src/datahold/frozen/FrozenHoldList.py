@@ -12,7 +12,9 @@ __all__ = ["FrozenHoldList"]
 Item = TypeVar("Item", covariant=True)
 
 
-class FrozenHoldList(FrozenHoldObject, FrozenDataList, BaseHoldList[Item]):
+class FrozenHoldList(
+    FrozenHoldObject, FrozenDataList[Item], BaseHoldList[Item]
+):
 
     __slots__ = ()
 

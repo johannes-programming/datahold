@@ -42,8 +42,8 @@ class TestCopy(unittest.TestCase):
                 self.assertIsInstance(copy_obj, cls)
 
     def test_mutable_copy_returns_same_type_and_is_shallow(self: Self) -> None:
-        d: HoldDict
-        d_copy: HoldDict
+        d: HoldDict[Any, Any]
+        d_copy: HoldDict[Any, Any]
         d = HoldDict({"a": {"x": 1}})
         d_copy = d.copy()
         self.assertIsInstance(d_copy, type(d))
@@ -55,8 +55,8 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(d_copy["a"]["x"], 2)
 
     def test_list_copy(self: Self) -> None:
-        lst: HoldList
-        lst_copy: HoldList
+        lst: HoldList[Any]
+        lst_copy: HoldList[Any]
         lst = HoldList([[1], [2]])
         lst_copy = lst.copy()
         self.assertIsInstance(lst_copy, type(lst))
@@ -67,8 +67,8 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(lst_copy[0], [1, 99])
 
     def test_set_copy(self: Self) -> None:
-        s: HoldSet
-        s_copy: HoldSet
+        s: HoldSet[Any]
+        s_copy: HoldSet[Any]
         s = HoldSet({1, 2, 3})
         s_copy = s.copy()
         self.assertIsInstance(s_copy, type(s))

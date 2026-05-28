@@ -13,8 +13,8 @@ from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 class TestDataAttribute(unittest.TestCase):
     def test_dict_data_is_immutable_mapping(self: Self) -> None:
-        f: FrozenHoldDict
-        m: HoldDict
+        f: FrozenHoldDict[Any, Any]
+        m: HoldDict[Any, Any]
         obj: Any
         f = FrozenHoldDict({"a": 1})
         m = HoldDict({"a": 1})
@@ -27,8 +27,8 @@ class TestDataAttribute(unittest.TestCase):
                 obj.data["b"] = 2
 
     def test_list_data_is_tuple(self: Self) -> None:
-        f: FrozenHoldList
-        m: HoldList
+        f: FrozenHoldList[Any]
+        m: HoldList[Any]
         o: Any
         f = FrozenHoldList([1, 2, 3])
         m = HoldList([1, 2, 3])
@@ -39,8 +39,8 @@ class TestDataAttribute(unittest.TestCase):
                 o.data.append(4)
 
     def test_set_data_is_frozenset(self: Self) -> None:
-        f: FrozenHoldSet
-        m: HoldSet
+        f: FrozenHoldSet[Any]
+        m: HoldSet[Any]
         obj: Any
         f = FrozenHoldSet({1, 2, 3})
         m = HoldSet({1, 2, 3})

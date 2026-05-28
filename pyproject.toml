@@ -35,7 +35,7 @@ license-files = [
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "3.0.29"
+version = "3.0.30"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"
@@ -46,10 +46,4 @@ Website = "http://datahold.johannes-programming.online/"
 [tool.mypy]
 files = []
 python_version = "3.11"
-strict = false
-
-[[tool.mypy.overrides]]
-module = "datahold.base.BaseDataSet"
-disable_error_code = [
-    "attr-defined",
-]
+strict = true

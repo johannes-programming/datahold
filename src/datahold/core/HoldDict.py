@@ -1,11 +1,9 @@
-from collections.abc import Iterable
 from typing import Any, Self, TypeVar
 
 import setdoc
 from frozendict import frozendict
 
 from ..base.BaseHoldDict import BaseHoldDict
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataDict import DataDict
 from .HoldObject import HoldObject
 
@@ -21,14 +19,12 @@ class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozendict[Key, Value]:
+    def data(self: Self) -> Any:
         return self._data
 
     @data.setter
     def data(
         self: Self,
-        value: Iterable[tuple[Key, Value]] | SupportsKeysAndGetitem[Key, Value],
+        value: Any,
     ) -> None:
-        data_: Any
-        data_ = value
-        self._data = frozendict(data_)
+        self._data = frozendict(value)

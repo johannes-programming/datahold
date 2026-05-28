@@ -11,19 +11,18 @@ __all__ = ["DataList"]
 Item = TypeVar("Item")
 
 
-class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
-    data: tuple[Item, ...]
+class DataList(DataObject, BaseDataList[Item]):
     __slots__ = ()
 
     @setdoc.setdoc(list.__delitem__.__doc__)
-    def __delitem__(self: Self, key: SupportsIndex | slice, /) -> None:
+    def __delitem__(self: Self, key: Any, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.__delitem__(key)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.__iadd__.__doc__)
-    def __iadd__(self: Self, value: Iterable[Item], /) -> list[Item]:
+    def __iadd__(self: Self, value: Any, /) -> Any:
         ans: list[Item]
         data: list[Item]
         data = list(self.data)
@@ -32,7 +31,7 @@ class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
         return ans
 
     @setdoc.setdoc(list.__imul__.__doc__)
-    def __imul__(self: Self, value: SupportsIndex, /) -> list[Item]:
+    def __imul__(self: Self, value: Any, /) -> Any:
         ans: Any
         data: list[Item]
         data = list(self.data)
@@ -41,18 +40,18 @@ class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
         return ans
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, data: Any = (), /) -> None:
         self.data = tuple(data)
 
     @setdoc.setdoc(list.__setitem__.__doc__)
-    def __setitem__(self: Self, key: SupportsIndex | slice, value: Item, /) -> None:
+    def __setitem__(self: Self, key: Any, value: Any, /) -> None:
         data: Any
         data = list(self.data)
         data.__setitem__(key, value)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.append.__doc__)
-    def append(self: Self, value: Item, /) -> None:
+    def append(self: Self, value: Any, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.append(value)
@@ -66,21 +65,21 @@ class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
         self.data = tuple(data)
 
     @setdoc.setdoc(list.extend.__doc__)
-    def extend(self: Self, iterable: Iterable[Item], /) -> None:
+    def extend(self: Self, iterable: Any, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.extend(iterable)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.insert.__doc__)
-    def insert(self: Self, index: SupportsIndex, object: Item, /) -> None:
+    def insert(self: Self, index: Any, object: Any, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.insert(index, object)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.pop.__doc__)
-    def pop(self: Self, index: SupportsIndex = -1, /) -> Item:
+    def pop(self: Self, index: Any = -1, /) -> Any:
         ans: Item
         data: list[Item]
         data = list(self.data)
@@ -89,7 +88,7 @@ class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
         return ans
 
     @setdoc.setdoc(list.remove.__doc__)
-    def remove(self: Self, value: Item) -> None:
+    def remove(self: Self, value: Any) -> None:
         data: list[Item]
         data = list(self.data)
         data.remove(value)
@@ -103,8 +102,11 @@ class DataList(DataObject, BaseDataList[Item], MutableSequence[Item]):
         self.data = tuple(data)
 
     @setdoc.setdoc(list.sort.__doc__)
-    def sort(self: Self, key: Optional[Callable] = None, reverse: bool = False) -> None:
+    def sort(self: Self, key: Any = None, reverse: Any = False) -> None:
         data: list[Item]
         data = list(self.data)
         data.sort(key=key, reverse=reverse)
         self.data = tuple(data)
+
+
+MutableSequence.register(DataList)
