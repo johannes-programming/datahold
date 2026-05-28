@@ -1,8 +1,9 @@
-from typing import *
+from collections.abc import Iterable
+from typing import Self, TypeVar
 
 import setdoc
 
-from .BaseHoldSet import BaseHoldSet
+from ..base.BaseHoldSet import BaseHoldSet
 from .DataSet import DataSet
 from .HoldObject import HoldObject
 
@@ -12,7 +13,7 @@ Item = TypeVar("Item")
 
 
 class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
-    data: frozenset[Item]
+
     __slots__ = ()
 
     @property
@@ -21,5 +22,5 @@ class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
         return self._data
 
     @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = frozenset[Item](value)
+    def data(self: Self, value: Iterable[Item]) -> None:
+        self._data = frozenset(value)

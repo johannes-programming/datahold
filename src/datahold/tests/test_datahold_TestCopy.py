@@ -1,14 +1,12 @@
 import unittest
-from typing import Any, Self
+from typing import Any, Self, cast
 
-from frozendict import frozendict
-
-from datahold.core.FrozenHoldDict import FrozenHoldDict
-from datahold.core.FrozenHoldList import FrozenHoldList
-from datahold.core.FrozenHoldSet import FrozenHoldSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldSet import HoldSet
+from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 __all__ = ["TestCopy"]
 
@@ -44,8 +42,8 @@ class TestCopy(unittest.TestCase):
                 self.assertIsInstance(copy_obj, cls)
 
     def test_mutable_copy_returns_same_type_and_is_shallow(self: Self) -> None:
-        d: HoldDict
-        d_copy: HoldDict
+        d: HoldDict[str, dict[str, int]]
+        d_copy: HoldDict[str, dict[str, int]]
         d = HoldDict({"a": {"x": 1}})
         d_copy = d.copy()
         self.assertIsInstance(d_copy, type(d))
@@ -53,12 +51,12 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(dict(d_copy), dict(d))
 
         # shallow: inner object is shared
-        d["a"]["x"] = 2
-        self.assertEqual(d_copy["a"]["x"], 2)
+        cast(dict[str, int], d["a"])["x"] = 2
+        self.assertEqual(cast(dict[str, int], d_copy["a"])["x"], 2)
 
     def test_list_copy(self: Self) -> None:
-        lst: HoldList
-        lst_copy: HoldList
+        lst: HoldList[Any]
+        lst_copy: HoldList[Any]
         lst = HoldList([[1], [2]])
         lst_copy = lst.copy()
         self.assertIsInstance(lst_copy, type(lst))
@@ -69,8 +67,8 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(lst_copy[0], [1, 99])
 
     def test_set_copy(self: Self) -> None:
-        s: HoldSet
-        s_copy: HoldSet
+        s: HoldSet[Any]
+        s_copy: HoldSet[Any]
         s = HoldSet({1, 2, 3})
         s_copy = s.copy()
         self.assertIsInstance(s_copy, type(s))

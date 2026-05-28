@@ -1,4 +1,4 @@
-from typing import *
+from typing import TypeVar
 
 from .BaseDataSet import BaseDataSet
 from .BaseHoldObject import BaseHoldObject
@@ -9,5 +9,4 @@ Item = TypeVar("Item")
 
 
 class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
-    data: frozenset[Item]
     __slots__ = ()
