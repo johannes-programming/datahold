@@ -130,8 +130,8 @@ See ``BaseDataDict`` and ``__contains__`` for more information.
 
 See ``BaseDataDict`` and ``__contains__`` for more information.
 
-``class datahold.base.BaseDataList.BaseDataList[Item](data: Any = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataList.BaseDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``BaseDataObject``.
 It works analogously to ``BaseDataDict[Key, Value]``.
@@ -143,6 +143,60 @@ It has no classmethod to implement.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
+
+``__add__(other: list[Item_], /) -> list[Item | Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``self + other``.
+
+``__contains__(other: object, /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``other in self``.
+
+``__getitem__(index: SupportsIndex, /) -> Item``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``self[index]``.
+
+``__iter__() -> Iterator[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``iter(self)``.
+
+``__len__() -> int``
+^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``len(self)``.
+
+``__mul__(other: SupportsIndex, /) -> list[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``self * other``.
+
+``__repr__() -> str``
+^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``repr(self)``.
+
+``__reversed__() -> Iterator[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``reversed(self)``.
+
+``__rmul__(value: SupportsIndex, /) -> list[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method is to be overwritten to implement ``other * self``.
+
+``count(value: object, /) -> int``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``data() -> tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``index(value: object, start: SupportsIndex = 0, end: SupportsIndex = sys.maxsize, /) -> int``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``class datahold.base.BaseDataObject.BaseDataObject(data: Any, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
