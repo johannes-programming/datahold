@@ -36,9 +36,9 @@ class BaseDataSet(BaseDataCollection[Item], Generic[Item]):
     ) -> Self:
         return type(self)(self.data | other.data)
 
-    @setdoc.setdoc(set.__repr__.__doc__)
+    @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({set(self.data)})"
+        return "%s(%r)" % (type(self).__name__, set(self.data))
 
     @setdoc.basic
     def __sub__(

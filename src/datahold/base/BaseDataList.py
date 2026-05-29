@@ -22,6 +22,10 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     def __add__(self: Self, other: Iterable[Item], /) -> Self:
         return type(self)(self.data + tuple(other))
 
+    @setdoc.basic
+    def __contains__(self: Self, other: object) -> bool:
+        return other in self.data
+
     @overload
     @setdoc.basic
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
@@ -49,7 +53,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({list(self.data)})"
+        return "%s(%r)" % (type(self).__name__, list(self.data))
 
     @setdoc.basic
     def __reversed__(self: Self, /) -> Iterator[Item]:

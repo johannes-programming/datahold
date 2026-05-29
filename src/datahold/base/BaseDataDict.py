@@ -31,12 +31,12 @@ class BaseDataDict(
 
     __slots__ = ()
 
-    @setdoc.setdoc(dict.__getitem__.__doc__)
+    @setdoc.basic
     def __getitem__(self: Self, key: Hashable, /) -> Optional[Value]:
         return self.data[key]  # type: ignore[index]
 
     @abstractmethod
-    @setdoc.setdoc(dict.__init__.__doc__)
+    @setdoc.basic
     def __init__(
         self: Self,
         data: (
@@ -55,11 +55,11 @@ class BaseDataDict(
     ) -> Self:
         return type(self)(self.data | other.data)
 
-    @setdoc.setdoc(dict.__repr__.__doc__)
+    @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({dict(self)})"
+        return "%s(%r)" % (type(self).__name__, dict(self))
 
-    @setdoc.setdoc(dict.__reversed__.__doc__)
+    @setdoc.basic
     def __reversed__(self: Self, /) -> Iterator[Key | str]:
         return reversed(self.data)
 

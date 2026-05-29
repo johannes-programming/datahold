@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from collections.abc import Collection, Iterator
+from collections.abc import Collection, Hashable, Iterator
 from typing import Self, TypeVar
 
 import setdoc
@@ -16,7 +16,7 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    def __contains__(self: Self, other: object, /) -> bool:
+    def __contains__(self: Self, other: Hashable, /) -> bool:
         return other in self.data
 
     @setdoc.basic
