@@ -60,11 +60,11 @@ class BaseDataSet(BaseDataCollection[Item], Generic[Item]):
     @abstractmethod
     def data(self: Self) -> frozenset[Item]: ...
 
-    @setdoc.setdoc(set.difference.__doc__)
+    @setdoc.basic
     def difference(self: Self, /, *others: Iterable[Hashable]) -> Self:
         return type(self)(self.data.difference(*others))
 
-    @setdoc.setdoc(set.intersection.__doc__)
+    @setdoc.basic
     def intersection(self: Self, /, *others: Iterable[Hashable]) -> Self:
         return type(self)(self.data.intersection(*others))
 
@@ -80,7 +80,7 @@ class BaseDataSet(BaseDataCollection[Item], Generic[Item]):
     def issuperset(self: Self, other: Iterable[Hashable], /) -> bool:
         return self.data.issuperset(other)
 
-    @setdoc.setdoc(set.symmetric_difference.__doc__)
+    @setdoc.basic
     def symmetric_difference(
         self: Self,
         other: Iterable[Item],
@@ -88,7 +88,7 @@ class BaseDataSet(BaseDataCollection[Item], Generic[Item]):
     ) -> Self:
         return type(self)(self.data.symmetric_difference(other))
 
-    @setdoc.setdoc(set.union.__doc__)
+    @setdoc.basic
     def union(self: Self, /, *others: Iterable[Item]) -> Self:
         return type(self)(self.data.union(*others))
 

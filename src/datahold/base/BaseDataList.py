@@ -63,7 +63,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
         return type(self)(other * self.data)
 
-    @setdoc.setdoc(list.count.__doc__)
+    @setdoc.basic
     def count(self: Self, item: Hashable, /) -> int:
         return self.data.count(cast(Any, item))
 
@@ -71,7 +71,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     @abstractmethod
     def data(self: Self) -> tuple[Item, ...]: ...
 
-    @setdoc.setdoc(list.index.__doc__)
+    @setdoc.basic
     def index(
         self: Self,
         item: Hashable,

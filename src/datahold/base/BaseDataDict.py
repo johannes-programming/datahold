@@ -65,6 +65,7 @@ class BaseDataDict(
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
 
     @classmethod
@@ -77,7 +78,7 @@ class BaseDataDict(
     ) -> Self:
         return cls(dict.fromkeys(iterable, value))
 
-    @setdoc.setdoc(dict.get.__doc__)
+    @setdoc.basic
     def get(
         self: Self,
         key: Hashable,
