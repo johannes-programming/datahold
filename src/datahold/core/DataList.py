@@ -71,8 +71,8 @@ class DataList(
         self.data = tuple(data)
 
     @setdoc.setdoc(list.append.__doc__)
-    def append(self: Self, value: Item, /) -> None:
-        self.data += (value,)
+    def append(self: Self, item: Item, /) -> None:
+        self.data += (item,)
 
     @setdoc.setdoc(list.clear.__doc__)
     def clear(self: Self, /) -> None:
@@ -99,10 +99,10 @@ class DataList(
         return ans
 
     @setdoc.setdoc(list.remove.__doc__)
-    def remove(self: Self, value: object) -> None:
+    def remove(self: Self, item: object, /) -> None:
         data: list[Item]
         data = list(self.data)
-        data.remove(value)  # type: ignore[arg-type]
+        data.remove(item)  # type: ignore[arg-type]
         self.data = tuple(data)
 
     @setdoc.setdoc(list.reverse.__doc__)

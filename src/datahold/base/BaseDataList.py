@@ -64,8 +64,8 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
         return type(self)(other * self.data)
 
     @setdoc.setdoc(list.count.__doc__)
-    def count(self: Self, value: Hashable, /) -> int:
-        return self.data.count(cast(Any, value))
+    def count(self: Self, item: Hashable, /) -> int:
+        return self.data.count(cast(Any, item))
 
     @property
     @abstractmethod
@@ -74,9 +74,9 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     @setdoc.setdoc(list.index.__doc__)
     def index(
         self: Self,
-        value: Hashable,
+        item: Hashable,
         start: SupportsIndex = 0,
         end: SupportsIndex = sys.maxsize,
         /,
     ) -> int:
-        return self.data.index(cast(Any, value), start, end)
+        return self.data.index(cast(Any, item), start, end)
