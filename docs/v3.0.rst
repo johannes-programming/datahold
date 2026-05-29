@@ -272,8 +272,8 @@ It has no classmethod to implement.
 
 This magic method implements ``self & other``.
 
-``__contains__(other: object, /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__contains__(other: Hashable, /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataSet`` and ``__and__`` for more information.
 
@@ -525,8 +525,8 @@ See ``DataList`` for more information.
 
 See ``DataList`` for more information.
 
-``insert(index: SupportsIndex, object: Item, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``insert(index: SupportsIndex, item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``DataList`` for more information.
 
@@ -666,8 +666,8 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 The setter accepts ``Iterable[Item]``.
 
-``class datahold.HoldSet.HoldSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.core.HoldSet.HoldSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``HoldObject``, ``DataSet[Item]``, and ``BaseHoldSet[Item]``.
 

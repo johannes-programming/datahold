@@ -83,10 +83,10 @@ class DataList(
         self.data += tuple(iterable)
 
     @setdoc.setdoc(list.insert.__doc__)
-    def insert(self: Self, index: SupportsIndex, object: Item, /) -> None:
+    def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
         data: list[Item]
         data = list(self.data)
-        data.insert(index, object)
+        data.insert(index, item)
         self.data = tuple(data)
 
     @setdoc.setdoc(list.pop.__doc__)

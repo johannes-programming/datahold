@@ -23,7 +23,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
         return type(self)(self.data + tuple(other))
 
     @setdoc.basic
-    def __contains__(self: Self, other: object) -> bool:
+    def __contains__(self: Self, other: object, /) -> bool:
         return other in self.data
 
     @overload
