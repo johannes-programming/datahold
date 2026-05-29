@@ -21,14 +21,16 @@ The typing conforms strictly to ``mypy``.
 Features
 --------
 
+Inherited features are not mentioned again, unless something changed.
+
 ``datahold.base``
 '''''''''''''''''
 
 The classes in ``datahold.base`` can also be accessed dircetly from ``datahold``.
 
 
-``class datahold.base.BaseDataObject.BaseDataObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataObject.BaseDataObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class is the ancestor of all other classes in ``datahold``.
 
@@ -70,8 +72,8 @@ This magic method implements ``self != other``.
 
 This property is abstract.
 
-``class datahold.base.BaseDataCollection.BaseDataCollection(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataCollection.BaseDataCollection(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__contains__(other: Hashable, /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -347,8 +349,8 @@ See ``BaseDataSet`` and ``__and__`` for more information.
 
 See ``BaseDataSet`` and ``__and__`` for more information.
 
-``class datahold.base.BaseHoldObject.BaseHoldObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseHoldObject.BaseHoldObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract ``class`` inherits from ``BaseDataObject``.
 
@@ -405,8 +407,8 @@ This abstract ``property`` is inherited from both parent classes.
 
 The classes in ``datahold.core`` can also be accessed dircetly from ``datahold``.
 
-``class datahold.core.DataObject.DataObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.core.DataObject.DataObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -628,8 +630,8 @@ See ``DataSet`` for more information.
 
 See ``DataSet`` for more information.
 
-``class datahold.core.HoldObject.HoldObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.core.HoldObject.HoldObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``DataObject`` and ``BaseHoldObject``.
 
@@ -686,8 +688,8 @@ The setter accepts ``Iterable[Item]``.
 
 The classes in ``datahold.frozen`` can also be accessed dircetly from ``datahold``.
 
-``class datahold.frozen.FrozenDataObject.FrozenDataObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.frozen.FrozenDataObject.FrozenDataObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -715,16 +717,11 @@ See the corresponding base class for more information.
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``class datahold.frozen.FrozenHoldObject.FrozenHoldObject(data: Any, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.frozen.FrozenHoldObject.FrozenHoldObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
-
-``data: Any``
-^^^^^^^^^^^^^
-
-See the corresponding base class for more information.
 
 ``class datahold.frozen.FrozenHoldDict.FrozenHoldDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]], /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
