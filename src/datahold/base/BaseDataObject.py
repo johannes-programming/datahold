@@ -38,7 +38,7 @@ class BaseDataObject(metaclass=ABCMeta):
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Any, /) -> None: ...
+    def __init__(self: Self, data: Self, /) -> None: ...
 
     @setdoc.basic
     def __le__(self: Self, other: Any, /) -> Any:
