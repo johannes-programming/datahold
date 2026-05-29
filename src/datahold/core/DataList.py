@@ -1,5 +1,6 @@
+from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
-from typing import Any, Optional, Self, SupportsIndex, TypeVar, overload
+from typing import Any, Self, SupportsIndex, TypeVar, overload
 
 import setdoc
 
@@ -77,6 +78,17 @@ class DataList(
     @setdoc.setdoc(list.clear.__doc__)
     def clear(self: Self, /) -> None:
         self.data = ()
+
+    @property
+    @abstractmethod
+    def data(self: Self) -> tuple[Item, ...]: ...
+
+    @data.setter
+    @abstractmethod
+    def data(
+        self: Self,
+        value: Iterable[Item],
+    ) -> None: ...
 
     @setdoc.setdoc(list.extend.__doc__)
     def extend(self: Self, iterable: Iterable[Item], /) -> None:

@@ -67,4 +67,5 @@ class BaseDataObject(metaclass=ABCMeta):
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> Hashable: ...
