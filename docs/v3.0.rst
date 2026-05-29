@@ -26,7 +26,7 @@ Inherited features are not mentioned again, unless something changed.
 ``datahold.base``
 '''''''''''''''''
 
-The classes in ``datahold.base`` can also be accessed dircetly from ``datahold``.
+The classes in ``datahold.base`` can also be accessed directly from ``datahold``.
 
 
 ``class datahold.base.BaseDataObject.BaseDataObject(data: Self, /)``
@@ -70,10 +70,13 @@ This magic method implements ``self != other``.
 ``data: Hashable``
 ^^^^^^^^^^^^^^^^^^
 
-This property is abstract.
+This abstract property is at the center of this class and of its descendants.
 
 ``class datahold.base.BaseDataCollection.BaseDataCollection[Item](data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
 ``__contains__(other: Hashable, /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -223,7 +226,7 @@ See ``BaseDataList`` and ``__add__`` for more information.
 
 See ``BaseDataList`` and ``__add__`` for more information.
 
-``count(value: Hashable, /) -> int``
+``count(item: Hashable, /) -> int``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataList`` and ``__add__`` for more information.
@@ -233,8 +236,8 @@ See ``BaseDataList`` and ``__add__`` for more information.
 
 This abstract ``property`` is inherited from ``BaseDataObject`` and reannotated.
 
-``index(value: Hashable, start: SupportsIndex = 0, end: SupportsIndex = sys.maxsize, /) -> int``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``index(item: Hashable, start: SupportsIndex = 0, end: SupportsIndex = sys.maxsize, /) -> int``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``BaseDataList`` and ``__add__`` for more information.
 
@@ -355,7 +358,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``datahold.core``
 '''''''''''''''''
 
-The classes in ``datahold.core`` can also be accessed dircetly from ``datahold``.
+The classes in ``datahold.core`` can also be accessed directly from ``datahold``.
 
 ``class datahold.core.DataObject.DataObject(data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -482,8 +485,8 @@ See ``DataList`` for more information.
 
 See ``DataList`` for more information.
 
-``remove(value: object) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``remove(item: object, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``DataList`` for more information.
 
@@ -631,7 +634,7 @@ The setter accepts ``Iterable[Item]``.
 ``datahold.frozen``
 '''''''''''''''''''
 
-The classes in ``datahold.frozen`` can also be accessed dircetly from ``datahold``.
+The classes in ``datahold.frozen`` can also be accessed directly from ``datahold``.
 
 ``class datahold.frozen.FrozenDataObject.FrozenDataObject(data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

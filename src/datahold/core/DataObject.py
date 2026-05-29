@@ -1,4 +1,4 @@
-from typing import Any, Self
+from typing import Self
 
 import setdoc
 from copyable import Copyable
@@ -9,7 +9,6 @@ __all__ = ["DataObject"]
 
 
 class DataObject(BaseDataObject, Copyable):
-    data: Any
 
     __slots__ = ()
 
