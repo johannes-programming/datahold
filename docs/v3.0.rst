@@ -454,13 +454,8 @@ See ``DataDict`` for more information.
 
 The setter accepts ``SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]]``.
 
-``pop(key: Hashable, /) -> Optional[Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See ``DataDict`` for more information.
-
-``pop(key: Hashable, default: Value_, /) -> Optional[Value | Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``pop(key: Hashable, /) -> Optional[Value]`` ``pop(key: Hashable, default: Value_, /) -> Optional[Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 See ``DataDict`` for more information.
 
