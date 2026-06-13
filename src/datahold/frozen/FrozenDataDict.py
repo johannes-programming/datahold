@@ -1,0 +1,14 @@
+from collections.abc import Hashable
+from typing import TypeVar
+
+from ..base.BaseDataDict import BaseDataDict
+from .FrozenDataObject import FrozenDataObject
+
+__all__ = ["FrozenDataDict"]
+
+Key = TypeVar("Key", bound=Hashable, covariant=True)
+Value = TypeVar("Value", covariant=True)
+
+
+class FrozenDataDict(FrozenDataObject, BaseDataDict[Key, Value]):
+    __slots__ = ()
