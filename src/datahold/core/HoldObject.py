@@ -1,3 +1,5 @@
+"""Provide HoldObject."""
+
 from ..base.BaseHoldObject import BaseHoldObject
 from .DataObject import DataObject
 

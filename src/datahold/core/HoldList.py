@@ -1,3 +1,5 @@
+"""Provide HoldList."""
+
 from collections.abc import Iterable
 from typing import Self, TypeVar
 
