@@ -1,3 +1,5 @@
+"""Provide SupportsKeysAndGetitem."""
+
 from collections.abc import Hashable, Iterable
 from typing import Any, Protocol, Self, TypeVar
 

@@ -1,3 +1,5 @@
+"""Provide DataDict."""
+
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableMapping
 from typing import Any, Final, Optional, Self, TypeVar, overload
