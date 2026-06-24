@@ -1,3 +1,5 @@
+"""Provide FrozenDataList."""
+
 from typing import TypeVar
 
 from ..base.BaseDataList import BaseDataList

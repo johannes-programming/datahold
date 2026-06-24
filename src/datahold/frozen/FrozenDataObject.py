@@ -1,3 +1,5 @@
+"""Provide FrozenDataObject."""
+
 from collections.abc import Hashable
 from typing import Self
 

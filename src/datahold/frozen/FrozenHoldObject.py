@@ -1,3 +1,5 @@
+"""Provide FrozenHoldObject."""
+
 from typing import Any, Self
 
 from ..base.BaseHoldObject import BaseHoldObject

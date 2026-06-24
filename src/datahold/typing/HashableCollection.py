@@ -1,3 +1,5 @@
+"""Provide HashableCollection."""
+
 from collections.abc import Collection
 from typing import Protocol, Self, TypeVar
 

@@ -1,3 +1,5 @@
+"""Provide FrozenHoldDict."""
+
 from collections.abc import Hashable, Iterable
 from typing import Optional, Self, TypeVar
 

@@ -1,3 +1,5 @@
+"""Provide BaseDataCollection."""
+
 from abc import abstractmethod
 from collections.abc import Collection, Hashable, Iterator
 from typing import Self, TypeVar
