@@ -1,11 +1,11 @@
 """Provide FrozenDataList."""
 
+__all__ = ["FrozenDataList"]
+
 from typing import TypeVar
 
 from ..base.BaseDataList import BaseDataList
 from .FrozenDataObject import FrozenDataObject
-
-__all__ = ["FrozenDataList"]
 
 Item = TypeVar("Item", covariant=True)
 

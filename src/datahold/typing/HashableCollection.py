@@ -1,11 +1,12 @@
 """Provide HashableCollection."""
 
+__all__ = ["HashableCollection"]
+
 from collections.abc import Collection
 from typing import Protocol, Self, TypeVar
 
 import setdoc
 
-__all__ = ["HashableCollection"]
 Item = TypeVar("Item", covariant=True)
 
 

@@ -1,5 +1,7 @@
 """Provide BaseDataCollection."""
 
+__all__ = ["BaseDataCollection"]
+
 from abc import abstractmethod
 from collections.abc import Collection, Hashable, Iterator
 from typing import Self, TypeVar
@@ -8,8 +10,6 @@ import setdoc
 
 from ..typing.HashableCollection import HashableCollection
 from .BaseDataObject import BaseDataObject
-
-__all__ = ["BaseDataCollection"]
 
 Item = TypeVar("Item", covariant=True)
 

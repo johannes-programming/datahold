@@ -1,5 +1,7 @@
 """Provide FrozenHoldList."""
 
+__all__ = ["FrozenHoldList"]
+
 from collections.abc import Iterable
 from typing import Self, TypeVar
 
@@ -8,8 +10,6 @@ import setdoc
 from ..base.BaseHoldList import BaseHoldList
 from .FrozenDataList import FrozenDataList
 from .FrozenHoldObject import FrozenHoldObject
-
-__all__ = ["FrozenHoldList"]
 
 Item = TypeVar("Item", covariant=True)
 

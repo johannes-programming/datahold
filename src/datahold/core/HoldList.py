@@ -1,5 +1,7 @@
 """Provide HoldList."""
 
+__all__ = ["HoldList"]
+
 from collections.abc import Iterable
 from typing import Self, TypeVar
 
@@ -8,8 +10,6 @@ import setdoc
 from ..base.BaseHoldList import BaseHoldList
 from .DataList import DataList
 from .HoldObject import HoldObject
-
-__all__ = ["HoldList"]
 
 Item = TypeVar("Item")
 

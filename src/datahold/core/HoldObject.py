@@ -1,9 +1,9 @@
 """Provide HoldObject."""
 
+__all__ = ["HoldObject"]
+
 from ..base.BaseHoldObject import BaseHoldObject
 from .DataObject import DataObject
-
-__all__ = ["HoldObject"]
 
 
 class HoldObject(DataObject, BaseHoldObject):

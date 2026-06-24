@@ -1,13 +1,13 @@
 """Provide FrozenDataObject."""
 
+__all__ = ["FrozenDataObject"]
+
 from collections.abc import Hashable
 from typing import Self
 
 import setdoc
 
 from ..base.BaseDataObject import BaseDataObject
-
-__all__ = ["FrozenDataObject"]
 
 
 class FrozenDataObject(BaseDataObject, Hashable):

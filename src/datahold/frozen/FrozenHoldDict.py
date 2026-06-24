@@ -1,5 +1,7 @@
 """Provide FrozenHoldDict."""
 
+__all__ = ["FrozenHoldDict"]
+
 from collections.abc import Hashable, Iterable
 from typing import Optional, Self, TypeVar
 
@@ -10,8 +12,6 @@ from ..base.BaseHoldDict import BaseHoldDict
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .FrozenDataDict import FrozenDataDict
 from .FrozenHoldObject import FrozenHoldObject
-
-__all__ = ["FrozenHoldDict"]
 
 Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)

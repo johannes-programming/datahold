@@ -1,11 +1,11 @@
 """Provide BaseHoldList."""
 
+__all__ = ["BaseHoldList"]
+
 from typing import TypeVar
 
 from .BaseDataList import BaseDataList
 from .BaseHoldObject import BaseHoldObject
-
-__all__ = ["BaseHoldList"]
 
 Item = TypeVar("Item", covariant=True)
 
