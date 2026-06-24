@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__all__ = ["BaseDataDict"]
+
 from abc import abstractmethod
 from collections.abc import (
     Hashable,
@@ -19,8 +21,6 @@ from frozendict import frozendict
 
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .BaseDataCollection import BaseDataCollection
-
-__all__ = ["BaseDataDict"]
 
 Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)

@@ -1,5 +1,7 @@
 """Provide HoldDict."""
 
+__all__ = ["HoldDict"]
+
 from collections.abc import Hashable, Iterable
 from typing import Optional, Self, TypeVar
 
@@ -10,8 +12,6 @@ from ..base.BaseHoldDict import BaseHoldDict
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataDict import DataDict
 from .HoldObject import HoldObject
-
-__all__ = ["HoldDict"]
 
 Key = TypeVar("Key", bound=Hashable)
 Value = TypeVar("Value")

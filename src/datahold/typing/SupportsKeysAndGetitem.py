@@ -1,9 +1,10 @@
 """Provide SupportsKeysAndGetitem."""
 
+__all__ = ["SupportsKeysAndGetitem"]
+
 from collections.abc import Hashable, Iterable
 from typing import Any, Protocol, Self, TypeVar
 
-__all__ = ["SupportsKeysAndGetitem"]
 Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)
 

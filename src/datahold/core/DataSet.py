@@ -1,5 +1,7 @@
 """Provide DataSet."""
 
+__all__ = ["DataSet"]
+
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableSet, Set
 from typing import Self, TypeVar
@@ -8,8 +10,6 @@ import setdoc
 
 from ..base.BaseDataSet import BaseDataSet
 from .DataObject import DataObject
-
-__all__ = ["DataSet"]
 
 Item = TypeVar("Item", bound=Hashable)
 
