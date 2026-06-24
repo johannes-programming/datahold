@@ -1,3 +1,5 @@
+"""Provide FrozenHoldList."""
+
 from collections.abc import Iterable
 from typing import Self, TypeVar
 

@@ -1,3 +1,5 @@
+"""Provide BaseDataObject."""
+
 from abc import ABCMeta, abstractmethod
 from collections.abc import Hashable
 from typing import Any, Self

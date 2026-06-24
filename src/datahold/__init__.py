@@ -1,3 +1,5 @@
+"""Provide __init__."""
+
 from datahold.base.BaseDataDict import BaseDataDict
 from datahold.base.BaseDataList import BaseDataList
 from datahold.base.BaseDataObject import BaseDataObject

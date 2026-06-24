@@ -1,3 +1,5 @@
+"""Provide DataSet."""
+
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableSet, Set
 from typing import Self, TypeVar

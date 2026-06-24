@@ -1,3 +1,5 @@
+"""Provide DataList."""
+
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
 from typing import Any, Self, SupportsIndex, TypeVar, overload
