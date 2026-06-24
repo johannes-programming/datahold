@@ -1,5 +1,7 @@
 """Provide DataDict."""
 
+__all__ = ["DataDict"]
+
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableMapping
 from typing import Any, Final, Optional, Self, TypeVar, overload
@@ -10,8 +12,6 @@ from frozendict import frozendict
 from ..base.BaseDataDict import BaseDataDict
 from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataObject import DataObject
-
-__all__ = ["DataDict"]
 
 Key = TypeVar("Key", bound=Hashable)
 Value = TypeVar("Value")

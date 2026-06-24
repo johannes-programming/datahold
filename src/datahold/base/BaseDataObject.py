@@ -1,12 +1,12 @@
 """Provide BaseDataObject."""
 
+__all__ = ["BaseDataObject"]
+
 from abc import ABCMeta, abstractmethod
 from collections.abc import Hashable
 from typing import Any, Self
 
 import setdoc
-
-__all__ = ["BaseDataObject"]
 
 
 class BaseDataObject(metaclass=ABCMeta):

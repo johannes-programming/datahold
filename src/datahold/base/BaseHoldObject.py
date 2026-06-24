@@ -1,8 +1,8 @@
 """Provide BaseHoldObject."""
 
-from .BaseDataObject import BaseDataObject
-
 __all__ = ["BaseHoldObject"]
+
+from .BaseDataObject import BaseDataObject
 
 
 class BaseHoldObject(BaseDataObject):
