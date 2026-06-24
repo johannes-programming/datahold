@@ -1,11 +1,11 @@
 """Provide FrozenHoldObject."""
 
+__all__ = ["FrozenHoldObject"]
+
 from typing import Any, Self
 
 from ..base.BaseHoldObject import BaseHoldObject
 from .FrozenDataObject import FrozenDataObject
-
-__all__ = ["FrozenHoldObject"]
 
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):

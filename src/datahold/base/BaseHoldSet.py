@@ -1,12 +1,12 @@
 """Provide BaseHoldSet."""
 
+__all__ = ["BaseHoldSet"]
+
 from collections.abc import Hashable
 from typing import TypeVar
 
 from .BaseDataSet import BaseDataSet
 from .BaseHoldObject import BaseHoldObject
-
-__all__ = ["BaseHoldSet"]
 
 Item = TypeVar("Item", bound=Hashable)
 

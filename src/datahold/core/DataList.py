@@ -1,5 +1,7 @@
 """Provide DataList."""
 
+__all__ = ["DataList"]
+
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
 from typing import Any, Self, SupportsIndex, TypeVar, overload
@@ -8,8 +10,6 @@ import setdoc
 
 from ..base.BaseDataList import BaseDataList
 from .DataObject import DataObject
-
-__all__ = ["DataList"]
 
 Item = TypeVar("Item")
 

@@ -1,5 +1,7 @@
 """Provide HoldSet."""
 
+__all__ = ["HoldSet"]
+
 from collections.abc import Hashable, Iterable
 from typing import Self, TypeVar
 
@@ -8,8 +10,6 @@ import setdoc
 from ..base.BaseHoldSet import BaseHoldSet
 from .DataSet import DataSet
 from .HoldObject import HoldObject
-
-__all__ = ["HoldSet"]
 
 Item = TypeVar("Item", bound=Hashable)
 

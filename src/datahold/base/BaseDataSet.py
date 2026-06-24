@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__all__ = ["BaseDataSet"]
+
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Set
 from typing import Self, TypeVar, cast
@@ -9,8 +11,6 @@ from typing import Self, TypeVar, cast
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
-
-__all__ = ["BaseDataSet"]
 
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
@@ -44,7 +44,7 @@ class BaseDataSet(BaseDataCollection[Item], Set[Item]):
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return "%s(%r)" % (type(self).__name__, set(self.data))
+        return f"{type(self).__name__}({set(self.data)!r})"
 
     @setdoc.basic
     def __ror__(

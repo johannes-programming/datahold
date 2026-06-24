@@ -1,5 +1,7 @@
 """Provide DataObject."""
 
+__all__ = ["DataObject"]
+
 from abc import abstractmethod
 from collections.abc import Hashable
 from typing import Any, Self
@@ -8,8 +10,6 @@ import setdoc
 from copyable import Copyable
 
 from ..base.BaseDataObject import BaseDataObject
-
-__all__ = ["DataObject"]
 
 
 class DataObject(BaseDataObject, Copyable):

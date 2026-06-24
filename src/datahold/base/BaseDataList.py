@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__all__ = ["BaseDataList"]
+
 import sys
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Iterator, Sequence
@@ -10,8 +12,6 @@ from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
-
-__all__ = ["BaseDataList"]
 
 Item = TypeVar("Item", covariant=True)
 Item_ = TypeVar("Item_")
@@ -55,7 +55,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return "%s(%r)" % (type(self).__name__, list(self.data))
+        return f"{type(self).__name__}({list(self.data)!r})"
 
     @setdoc.basic
     def __reversed__(self: Self, /) -> Iterator[Item]:
