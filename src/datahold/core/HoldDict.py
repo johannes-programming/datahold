@@ -27,6 +27,7 @@ class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
         return self._data
 
     @data.setter
+    @setdoc.basic
     def data(
         self: Self,
         value: (

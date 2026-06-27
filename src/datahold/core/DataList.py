@@ -73,37 +73,39 @@ class DataList(
         data[key] = value
         self.data = tuple(data)
 
-    @setdoc.setdoc(list.append.__doc__)
+    @setdoc.basic
     def append(self: Self, item: Item, /) -> None:
         self.data += (item,)
 
-    @setdoc.setdoc(list.clear.__doc__)
+    @setdoc.basic
     def clear(self: Self, /) -> None:
         self.data = ()
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> tuple[Item, ...]: ...
 
     @data.setter
     @abstractmethod
+    @setdoc.basic
     def data(
         self: Self,
         value: Iterable[Item],
     ) -> None: ...
 
-    @setdoc.setdoc(list.extend.__doc__)
+    @setdoc.basic
     def extend(self: Self, iterable: Iterable[Item], /) -> None:
         self.data += tuple(iterable)
 
-    @setdoc.setdoc(list.insert.__doc__)
+    @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.insert(index, item)
         self.data = tuple(data)
 
-    @setdoc.setdoc(list.pop.__doc__)
+    @setdoc.basic
     def pop(self: Self, index: SupportsIndex = -1, /) -> Item:
         ans: Item
         data: list[Item]
@@ -112,18 +114,18 @@ class DataList(
         self.data = tuple(data)
         return ans
 
-    @setdoc.setdoc(list.remove.__doc__)
+    @setdoc.basic
     def remove(self: Self, item: object, /) -> None:
         data: list[Item]
         data = list(self.data)
         data.remove(item)  # type: ignore[arg-type]
         self.data = tuple(data)
 
-    @setdoc.setdoc(list.reverse.__doc__)
+    @setdoc.basic
     def reverse(self: Self) -> None:
         self.data = tuple(self.data[::-1])
 
-    @setdoc.setdoc(list.sort.__doc__)
+    @setdoc.basic
     def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:
         data: list[Item]
         data = list(self.data)

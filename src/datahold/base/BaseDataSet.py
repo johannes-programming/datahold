@@ -84,6 +84,7 @@ class BaseDataSet(BaseDataCollection[Item], Set[Item]):
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> frozenset[Item]: ...
 
     @setdoc.basic
@@ -94,15 +95,15 @@ class BaseDataSet(BaseDataCollection[Item], Set[Item]):
     def intersection(self: Self, /, *others: Iterable[Hashable]) -> Self:
         return type(self)(self.data.intersection(*others))
 
-    @setdoc.setdoc(set.isdisjoint.__doc__)
+    @setdoc.basic
     def isdisjoint(self: Self, other: Iterable[Hashable], /) -> bool:
         return self.data.isdisjoint(other)
 
-    @setdoc.setdoc(set.issubset.__doc__)
+    @setdoc.basic
     def issubset(self: Self, other: Iterable[Hashable], /) -> bool:
         return self.data.issubset(other)
 
-    @setdoc.setdoc(set.issuperset.__doc__)
+    @setdoc.basic
     def issuperset(self: Self, other: Iterable[Hashable], /) -> bool:
         return self.data.issuperset(other)
 
