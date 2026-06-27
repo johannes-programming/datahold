@@ -71,7 +71,7 @@ class BaseDataDict(
     def data(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
 
     @classmethod
-    @setdoc.setdoc(dict.fromkeys.__doc__)
+    @setdoc.basic
     def fromkeys(
         cls: type[Self],
         iterable: Iterable[Key | str],
