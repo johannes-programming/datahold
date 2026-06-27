@@ -1,0 +1,6 @@
+__all__: list[str] = []
+import enum
+
+
+class Missing(enum.Enum):
+    missing = None
