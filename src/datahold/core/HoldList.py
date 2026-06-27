@@ -24,5 +24,6 @@ class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
         return self._data
 
     @data.setter
+    @setdoc.basic
     def data(self: Self, value: Iterable[Item]) -> None:
         self._data = tuple(value)

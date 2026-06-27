@@ -24,5 +24,6 @@ class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
         return self._data
 
     @data.setter
+    @setdoc.basic
     def data(self: Self, value: Iterable[Item]) -> None:
         self._data = frozenset(value)
