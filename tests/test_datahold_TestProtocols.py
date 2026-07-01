@@ -1,3 +1,5 @@
+__all__: list[str] = ["TestProtocols"]
+
 import unittest
 from collections.abc import (
     Mapping,
@@ -15,8 +17,6 @@ from datahold.core.HoldSet import HoldSet
 from datahold.frozen.FrozenHoldDict import FrozenHoldDict
 from datahold.frozen.FrozenHoldList import FrozenHoldList
 from datahold.frozen.FrozenHoldSet import FrozenHoldSet
-
-__all__ = ["TestProtocols"]
 
 
 class TestProtocols(unittest.TestCase):

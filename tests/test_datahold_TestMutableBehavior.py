@@ -1,11 +1,11 @@
+__all__: list[str] = ["TestMutableBehavior"]
+
 import unittest
 from typing import Any, Self
 
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldSet import HoldSet
-
-__all__ = ["TestMutableBehavior"]
 
 
 class TestMutableBehavior(unittest.TestCase):

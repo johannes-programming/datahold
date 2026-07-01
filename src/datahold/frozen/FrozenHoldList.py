@@ -1,6 +1,6 @@
 """Provide FrozenHoldList."""
 
-__all__ = ["FrozenHoldList"]
+__all__: list[str] = ["FrozenHoldList"]
 
 from collections.abc import Iterable
 from typing import Self, TypeVar

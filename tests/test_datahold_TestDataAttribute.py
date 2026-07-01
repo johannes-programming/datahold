@@ -1,3 +1,4 @@
+__all__: list[str] = ["TestDataAttribute"]
 import unittest
 from typing import Any, Self
 

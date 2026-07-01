@@ -1,6 +1,6 @@
 """Provide DataObject."""
 
-__all__ = ["DataObject"]
+__all__: list[str] = ["DataObject"]
 
 from abc import abstractmethod
 from collections.abc import Hashable

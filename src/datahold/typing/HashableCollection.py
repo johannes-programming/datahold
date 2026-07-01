@@ -1,6 +1,6 @@
 """Provide HashableCollection."""
 
-__all__ = ["HashableCollection"]
+__all__: list[str] = ["HashableCollection"]
 
 from collections.abc import Collection
 from typing import Protocol, Self, TypeVar

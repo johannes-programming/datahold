@@ -1,6 +1,6 @@
 """Provide DataDict."""
 
-__all__ = ["DataDict"]
+__all__: list[str] = ["DataDict"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableMapping

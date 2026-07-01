@@ -1,6 +1,6 @@
 """Provide FrozenDataList."""
 
-__all__ = ["FrozenDataList"]
+__all__: list[str] = ["FrozenDataList"]
 
 from typing import TypeVar
 

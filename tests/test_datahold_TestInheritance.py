@@ -1,3 +1,5 @@
+__all__: list[str] = ["TestInheritance"]
+
 import unittest
 from typing import Self
 
@@ -23,8 +25,6 @@ from datahold.frozen.FrozenHoldDict import FrozenHoldDict
 from datahold.frozen.FrozenHoldList import FrozenHoldList
 from datahold.frozen.FrozenHoldObject import FrozenHoldObject
 from datahold.frozen.FrozenHoldSet import FrozenHoldSet
-
-__all__ = ["TestInheritance"]
 
 
 class TestInheritance(unittest.TestCase):

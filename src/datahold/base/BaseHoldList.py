@@ -1,6 +1,6 @@
 """Provide BaseHoldList."""
 
-__all__ = ["BaseHoldList"]
+__all__: list[str] = ["BaseHoldList"]
 
 from typing import TypeVar
 

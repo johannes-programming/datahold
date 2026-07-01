@@ -1,6 +1,6 @@
 """Provide DataList."""
 
-__all__ = ["DataList"]
+__all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
