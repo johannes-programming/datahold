@@ -1,4 +1,7 @@
+"""Provide Missing."""
+
 __all__: list[str] = []
+
 import enum
 
 
