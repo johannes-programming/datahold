@@ -1,6 +1,6 @@
 """Provide BaseHoldObject."""
 
-__all__ = ["BaseHoldObject"]
+__all__: list[str] = ["BaseHoldObject"]
 
 from .BaseDataObject import BaseDataObject
 

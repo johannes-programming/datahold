@@ -1,9 +1,9 @@
+__all__: list[str] = ["TestData"]
+
 import unittest
 from typing import Any, Self
 
 from datahold import core
-
-__all__ = ["TestData"]
 
 
 class TestData(unittest.TestCase):

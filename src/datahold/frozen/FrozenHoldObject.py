@@ -1,6 +1,6 @@
 """Provide FrozenHoldObject."""
 
-__all__ = ["FrozenHoldObject"]
+__all__: list[str] = ["FrozenHoldObject"]
 
 from typing import Any, Self
 

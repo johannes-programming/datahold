@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-__all__ = ["BaseDataList"]
+__all__: list[str] = ["BaseDataList"]
 
 import sys
 from abc import abstractmethod

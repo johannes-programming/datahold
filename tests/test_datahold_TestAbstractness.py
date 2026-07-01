@@ -1,3 +1,4 @@
+__all__: list[str] = ["TestAbstractness"]
 import unittest
 from inspect import isabstract
 from typing import Self
@@ -18,8 +19,6 @@ from datahold.frozen.FrozenHoldDict import FrozenHoldDict
 from datahold.frozen.FrozenHoldList import FrozenHoldList
 from datahold.frozen.FrozenHoldObject import FrozenHoldObject
 from datahold.frozen.FrozenHoldSet import FrozenHoldSet
-
-__all__ = ["TestAbstractness"]
 
 
 class TestAbstractness(unittest.TestCase):
