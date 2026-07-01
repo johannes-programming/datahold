@@ -13,10 +13,6 @@ __all__ = [
     "DataList",
     "DataObject",
     "DataSet",
-    "HoldDict",
-    "HoldList",
-    "HoldObject",
-    "HoldSet",
     "FrozenDataDict",
     "FrozenDataList",
     "FrozenDataObject",
@@ -25,6 +21,10 @@ __all__ = [
     "FrozenHoldList",
     "FrozenHoldObject",
     "FrozenHoldSet",
+    "HoldDict",
+    "HoldList",
+    "HoldObject",
+    "HoldSet",
 ]
 
 from datahold.base.BaseDataDict import BaseDataDict
