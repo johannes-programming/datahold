@@ -1,6 +1,6 @@
 """Provide BaseHoldSet."""
 
-__all__ = ["BaseHoldSet"]
+__all__: list[str] = ["BaseHoldSet"]
 
 from collections.abc import Hashable
 from typing import TypeVar

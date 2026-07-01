@@ -1,6 +1,6 @@
 """Provide BaseDataObject."""
 
-__all__ = ["BaseDataObject"]
+__all__: list[str] = ["BaseDataObject"]
 
 from abc import ABCMeta, abstractmethod
 from collections.abc import Hashable

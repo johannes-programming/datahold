@@ -1,10 +1,10 @@
+__all__: list[str] = ["TestDataholdGenerics"]
+
 import unittest
 from collections.abc import MutableMapping, MutableSequence, MutableSet
 from typing import Any, Self, get_args, get_origin
 
 import datahold
-
-__all__ = ["TestDataholdGenerics"]
 
 
 class TestDataholdGenerics(unittest.TestCase):

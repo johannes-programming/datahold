@@ -1,3 +1,5 @@
+__all__: list[str] = ["TestCopy"]
+
 import unittest
 from typing import Any, Self, cast
 
@@ -7,8 +9,6 @@ from datahold.core.HoldSet import HoldSet
 from datahold.frozen.FrozenHoldDict import FrozenHoldDict
 from datahold.frozen.FrozenHoldList import FrozenHoldList
 from datahold.frozen.FrozenHoldSet import FrozenHoldSet
-
-__all__ = ["TestCopy"]
 
 
 class TestCopy(unittest.TestCase):
