@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-__all__ = ["BaseDataSet"]
+__all__: list[str] = ["BaseDataSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Set

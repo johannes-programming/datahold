@@ -1,6 +1,6 @@
 """Provide DataSet."""
 
-__all__ = ["DataSet"]
+__all__: list[str] = ["DataSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, MutableSet, Set

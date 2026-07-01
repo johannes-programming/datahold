@@ -1,9 +1,8 @@
+__all__: list[str] = ["TestObject"]
 import unittest
 from typing import Any, Self
 
 from iterprod import iterprod
-
-__all__ = ["TestObject"]
 
 METHODS: tuple[str, ...]
 MUTES: tuple[str, ...]

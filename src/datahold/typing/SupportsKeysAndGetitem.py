@@ -1,6 +1,6 @@
 """Provide SupportsKeysAndGetitem."""
 
-__all__ = ["SupportsKeysAndGetitem"]
+__all__: list[str] = ["SupportsKeysAndGetitem"]
 
 from collections.abc import Hashable, Iterable
 from typing import Any, Protocol, Self, TypeVar
