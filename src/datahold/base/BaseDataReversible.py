@@ -1,35 +1,35 @@
-"""Provide BaseDataIterable."""
+"""Provide BaseDataReversible."""
 
 from __future__ import annotations
 
-__all__ = ["BaseDataIterable"]
+__all__ = ["BaseDataReversible"]
 
 from abc import abstractmethod
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator, Reversible
 from typing import Final, Protocol, Self, TypeVar
 
 import setdoc
 
-from .BaseDataObject import BaseDataObject
+from .BaseDataIterable import BaseDataIterable
 
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(Iterable[Item], Protocol[Item]):
-    """Provide hashable iterable protocol."""
+class Data(Reversible[Item], Protocol[Item]):
+    """Provide hashable reversible protocol."""
 
     @setdoc.basic
     def __hash__(self: Self) -> int: ...
 
 
-class BaseDataIterable(BaseDataObject, Iterable[Item]):
+class BaseDataReversible(BaseDataIterable[Item], Reversible[Item]):
     __slots__ = ()
 
     Data: type[Data] = Data  # type: ignore[type-abstract, type-arg]
 
     @setdoc.basic
-    def __iter__(self: Self, /) -> Iterator[Item]:
-        return iter(self.data)
+    def __reversed__(self: Self, /) -> Iterator[Item]:
+        return reversed(self.data)
 
     @property
     @abstractmethod
