@@ -2,10 +2,11 @@
 
 __all__: list[str] = ["HashableCollection"]
 
-from collections.abc import Collection
 from typing import Protocol, Self, TypeVar
 
 import setdoc
+
+from .Collection import Collection
 
 Item = TypeVar("Item", covariant=True)
 

@@ -3,11 +3,12 @@
 __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Collection, Hashable, Iterator
+from collections.abc import Hashable, Iterator
 from typing import Self, TypeVar
 
 import setdoc
 
+from ..typing.Collection import Collection
 from ..typing.HashableCollection import HashableCollection
 from .BaseDataObject import BaseDataObject
 
