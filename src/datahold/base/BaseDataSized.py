@@ -17,7 +17,7 @@ class BaseDataSized(BaseDataObject, Sized):
     __slots__ = ()
 
     class Data(
-        BaseDataObject.Data,  # type: ignore[misc, valid-type]
+        BaseDataObject.Data,
         Sized,
         Protocol,
     ):
