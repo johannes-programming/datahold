@@ -7,7 +7,7 @@ __all__: list[str] = ["BaseDataList"]
 import sys
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Sequence
-from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
+from typing import Any, Final, Self, SupportsIndex, TypeVar, cast, overload
 
 import setdoc
 
@@ -16,13 +16,15 @@ from .BaseDataReversible import BaseDataReversible
 
 Item = TypeVar("Item", covariant=True)
 
+Data_ = tuple[Item, ...]
+
 
 class BaseDataList(
     BaseDataReversible[Item], BaseDataCollection[Item], Sequence[Item]
 ):
     __slots__ = ()
 
-    Data = tuple[Item, ...]  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Data_]] = Data_
 
     @setdoc.basic
     def __add__(self: Self, other: Iterable[Item], /) -> Self:
@@ -72,7 +74,7 @@ class BaseDataList(
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> Data_[Item]: ...
 
     @setdoc.basic
     def index(
