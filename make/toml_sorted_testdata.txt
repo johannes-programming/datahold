@@ -1,2 +1,7 @@
 --sort
+--sort
+--all-keys
+--sort
+--all-keys
+--key=names
 tests/testdata.toml
