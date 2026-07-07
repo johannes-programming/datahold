@@ -22,7 +22,7 @@ class BaseDataSequence(
 ):
     __slots__ = ()
 
-    Data: Final[type[Sequence]] = Sequence  # type: ignore[misc,name-defined,type-arg]
+    Data: Final[type[Sequence]] = Sequence  # type: ignore[type-abstract,type-arg]
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
