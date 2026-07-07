@@ -29,7 +29,7 @@ class BaseDataCollection(BaseDataIterable[Item], Collection[Item]):
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:
-        return other in self.data
+        return other in self.data  # type: ignore[attr-defined]
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
@@ -38,4 +38,5 @@ class BaseDataCollection(BaseDataIterable[Item], Collection[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> Data[Item]:  # type: ignore[valid-type]
+        ...

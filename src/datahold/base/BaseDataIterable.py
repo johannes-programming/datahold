@@ -34,4 +34,5 @@ class BaseDataIterable(BaseDataObject, Iterable[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> Data[Item]:  # type: ignore[valid-type]
+        ...
