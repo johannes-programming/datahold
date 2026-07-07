@@ -1,25 +1,34 @@
 """Provide BaseDataCollection."""
 
+from __future__ import annotations
+
 __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Collection, Hashable, Iterator
-from typing import Self, TypeVar
+from collections.abc import Collection, Iterator
+from typing import Final, Protocol, Self, TypeVar
 
 import setdoc
 
-from ..typing.HashableCollection import HashableCollection
-from .BaseDataObject import BaseDataObject
+from .BaseDataContainer import BaseDataContainer
 
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataCollection(BaseDataObject, Collection[Item]):
+class Data(
+    BaseDataContainer.Data,  # type: ignore[misc, valid-type]
+    Collection[Item],
+    Protocol[Item],
+):
+    """Provide hashable collection protocol."""
+
+    ...
+
+
+class BaseDataCollection(BaseDataContainer, Collection[Item]):
     __slots__ = ()
 
-    @setdoc.basic
-    def __contains__(self: Self, other: Hashable, /) -> bool:
-        return other in self.data
+    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> Iterator[Item]:
@@ -32,4 +41,5 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> HashableCollection[Item]: ...
+    def data(self: Self) -> Data[Item]:  # type: ignore[valid-type]
+        ...
