@@ -1,15 +1,6 @@
-"""Provide HashableCollection."""
-
 __all__: list[str] = ["HashableCollection"]
+from typing import Final
 
-from collections.abc import Collection
-from typing import Protocol, Self, TypeVar
+from datahold.base.BaseDataCollection import Data
 
-import setdoc
-
-Item = TypeVar("Item", covariant=True)
-
-
-class HashableCollection(Collection[Item], Protocol[Item]):
-    @setdoc.basic
-    def __hash__(self: Self) -> int: ...
+HashableCollection: Final[type[Data]] = Data
