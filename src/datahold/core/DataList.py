@@ -14,7 +14,7 @@ from .DataObject import DataObject
 Item = TypeVar("Item")
 
 
-class DataList(  # type: ignore[misc]
+class DataList(
     DataObject,
     BaseDataList[Item],
     MutableSequence[Item],

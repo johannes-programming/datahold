@@ -7,7 +7,7 @@ __all__: list[str] = ["BaseDataSequence"]
 import sys
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Sequence
-from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
+from typing import Any, Final, Self, SupportsIndex, TypeVar, cast, overload
 
 import setdoc
 
@@ -17,12 +17,12 @@ from .BaseDataReversible import BaseDataReversible
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataSequence(  # type: ignore[misc]
+class BaseDataSequence(
     BaseDataReversible[Item], BaseDataCollection[Item], Sequence[Item]
 ):
     __slots__ = ()
 
-    Data: Final[type[Sequence]] = Sequence  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Sequence]] = Sequence  # type: ignore[misc,name-defined,type-arg]
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
@@ -41,7 +41,7 @@ class BaseDataSequence(  # type: ignore[misc]
         self: Self, index: SupportsIndex | slice, /
     ) -> Item | Self:
         if isinstance(index, SupportsIndex):
-            return self.data[index]
+            return self.data[index]  # type: ignore[call-overload,no-any-return]
         else:
             return type(self)(self.data[index])
 
@@ -59,6 +59,7 @@ class BaseDataSequence(  # type: ignore[misc]
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> Sequence[Item]: ...
 
     @setdoc.basic
@@ -69,4 +70,4 @@ class BaseDataSequence(  # type: ignore[misc]
         end: SupportsIndex = sys.maxsize,
         /,
     ) -> int:
-        return self.data.index(cast(Any, item), start, end)
+        return self.data.index(cast(Any, item), start, end)  # type: ignore[arg-type]
