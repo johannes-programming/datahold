@@ -15,7 +15,7 @@ from .BaseDataObject import BaseDataObject
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(Container[Hashable], Protocol[Item]):
+class Data(Container[Hashable], Protocol):
     """Provide hashable collection protocol."""
 
     @setdoc.basic
@@ -25,7 +25,7 @@ class Data(Container[Hashable], Protocol[Item]):
 class BaseDataContainer(BaseDataObject, Container[Hashable]):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Data]] = Data  # type: ignore[type-abstract]
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:

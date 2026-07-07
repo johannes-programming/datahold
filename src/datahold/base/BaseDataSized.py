@@ -15,7 +15,7 @@ from .BaseDataObject import BaseDataObject
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(Sized, Protocol[Item]):
+class Data(Sized, Protocol):
     """Provide hashable sized protocol."""
 
     @setdoc.basic
@@ -25,7 +25,7 @@ class Data(Sized, Protocol[Item]):
 class BaseDataSized(BaseDataObject, Sized):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Data]] = Data  # type: ignore[type-abstract]
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:

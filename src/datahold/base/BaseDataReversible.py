@@ -6,7 +6,7 @@ __all__ = ["BaseDataReversible"]
 
 from abc import abstractmethod
 from collections.abc import Iterator, Reversible
-from typing import Final, Protocol, Self, TypeVar
+from typing import Protocol, Self, TypeVar
 
 import setdoc
 

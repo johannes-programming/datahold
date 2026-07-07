@@ -6,7 +6,7 @@ __all__ = ["BaseDataDict"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable
-from typing import Optional, Self, TypeVar
+from typing import Final, Optional, Self, TypeVar
 
 import setdoc
 from frozendict import frozendict
@@ -15,12 +15,16 @@ from .BaseDataMapping import BaseDataMapping
 
 Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)
-Value_ = TypeVar("Value_")
+
+
+Data = frozendict[Key | str, Optional[Value]]
 
 
 class BaseDataDict(BaseDataMapping[Key, Value]):
 
     __slots__ = ()
+
+    Data: Final[type[Data]] = Data  # type: ignore[misc, type-arg]
 
     @setdoc.basic
     def __or__(
@@ -28,14 +32,14 @@ class BaseDataDict(BaseDataMapping[Key, Value]):
         other: BaseDataDict[Key, Value],
         /,
     ) -> Self:
-        return type(self)(self.data | other.data)
+        return type(self)(self.data | other.data)  # type: ignore[operator]
 
     # __ror__ is unnecessary because of how __or__ is defined
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
+    def data(self: Self) -> Data[Key, Value]: ...  # type: ignore[valid-type]
 
     @classmethod
     @setdoc.basic
