@@ -6,81 +6,24 @@ __all__: list[str] = ["BaseDataSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Set
-from typing import Self, TypeVar, cast
+from typing import Protocol, Self, TypeVar
 
 import setdoc
 
-from .BaseDataCollection import BaseDataCollection
+from .BaseDataAbstractSet import BaseDataAbstractSet
 
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
 
-class BaseDataSet(BaseDataCollection[Item], Set[Item]):
+class Data(Set[Item], Protocol[Item]):
+    """Provide hashable abstract set protocol."""
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int: ...
+
+
+class BaseDataSet(BaseDataAbstractSet[Item]):
     __slots__ = ()
-
-    @setdoc.basic
-    def __and__(
-        self: Self,
-        other: Set[Hashable],
-        /,
-    ) -> Self:
-        return type(self)(self.data & frozenset(other))
-
-    @abstractmethod
-    @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
-
-    @setdoc.basic
-    def __or__(self: Self, other: Set[Item], /) -> Self:  # type: ignore[override]
-        return type(self)(self.data | frozenset(other))
-
-    @setdoc.basic
-    def __rand__(
-        self: Self,
-        other: Set[Hashable],
-        /,
-    ) -> Self:
-        return type(self)(cast(frozenset[Item], frozenset(other) & self.data))
-
-    @setdoc.basic
-    def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({set(self.data)!r})"
-
-    @setdoc.basic
-    def __ror__(
-        self: Self,
-        other: Set[Item],
-        /,
-    ) -> Self:
-        return type(self)(frozenset(other) | self.data)
-
-    @setdoc.basic
-    def __rsub__(
-        self: Self,
-        other: Set[Hashable],
-        /,
-    ) -> Self:
-        return type(self)(cast(frozenset[Item], frozenset(other) - self.data))
-
-    @setdoc.basic
-    def __rxor__(
-        self: Self,
-        other: Set[Item],
-        /,
-    ) -> Self:
-        return type(self)(frozenset(other) ^ self.data)
-
-    @setdoc.basic
-    def __sub__(
-        self: Self,
-        other: Set[Hashable],
-        /,
-    ) -> Self:
-        return type(self)(self.data - frozenset(other))
-
-    @setdoc.basic
-    def __xor__(self: Self, other: Set[Item], /) -> Self:  # type: ignore[override]
-        return type(self)(self.data ^ frozenset(other))
 
     @property
     @abstractmethod
@@ -94,10 +37,6 @@ class BaseDataSet(BaseDataCollection[Item], Set[Item]):
     @setdoc.basic
     def intersection(self: Self, /, *others: Iterable[Hashable]) -> Self:
         return type(self)(self.data.intersection(*others))
-
-    @setdoc.basic
-    def isdisjoint(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.data.isdisjoint(other)
 
     @setdoc.basic
     def issubset(self: Self, other: Iterable[Hashable], /) -> bool:
