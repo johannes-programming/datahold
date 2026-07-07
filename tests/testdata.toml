@@ -15,7 +15,22 @@ names = [
 ]
 
 [test_object]
-METHODS = ["__format__", "__str__"]
-MUTES = ["", "Base", "Frozen"]
-ROOTS = ["Object", "Dict", "List", "Set"]
-SLOTS = ["Data", "Hold"]
+METHODS = [
+    "__format__",
+    "__str__",
+]
+MUTES = [
+    "",
+    "Base",
+    "Frozen",
+]
+ROOTS = [
+    "Object",
+    "Dict",
+    "List",
+    "Set",
+]
+SLOTS = [
+    "Data",
+    "Hold",
+]
