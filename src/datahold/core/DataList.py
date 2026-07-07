@@ -4,7 +4,7 @@ __all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
-from typing import Any, Self, SupportsIndex, TypeVar, overload
+from typing import Any, Final, Self, SupportsIndex, TypeVar, overload
 
 import setdoc
 
@@ -14,12 +14,17 @@ from .DataObject import DataObject
 Item = TypeVar("Item")
 
 
+Data_ = tuple[Item, ...]
+
+
 class DataList(
     DataObject,
     BaseDataList[Item],
     MutableSequence[Item],
 ):
     __slots__ = ()
+
+    Data: Final[type[Data_]] = Data_
 
     @setdoc.basic
     def __delitem__(self: Self, other: SupportsIndex | slice, /) -> None:
@@ -84,7 +89,7 @@ class DataList(
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> tuple[Item, ...]: ...
+    def data(self: Self) -> Data_[Item]: ...
 
     @data.setter
     @abstractmethod
