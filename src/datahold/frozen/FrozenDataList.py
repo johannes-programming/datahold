@@ -10,6 +10,6 @@ from .FrozenDataObject import FrozenDataObject
 Item = TypeVar("Item", covariant=True)
 
 
-class FrozenDataList(FrozenDataObject, BaseDataList[Item]):  # type: ignore[misc]
+class FrozenDataList(FrozenDataObject, BaseDataList[Item]):
 
     __slots__ = ()
