@@ -50,9 +50,11 @@ class TestData(unittest.TestCase):
                 continue
             if attrname in ("__init_subclass__", "__subclasshook__"):
                 continue
+            if getattr(member, "__module__", None) == "collections.abc":
+                continue
             doc = getattr(member, "__doc__", None)
             error = "%r inside %r has no docstring" % (attrname, name)
-            self.assertNotEqual(doc, None, error)
+            self.assertIsNotNone(doc, error)
         try:
             obj = cls()
         except TypeError:
