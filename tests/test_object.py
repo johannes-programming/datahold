@@ -1,5 +1,6 @@
 __all__: list[str] = ["TestObject"]
 import unittest
+from importlib import import_module
 from typing import Any, Self
 
 from iterprod import iterprod
@@ -24,7 +25,6 @@ class TestObject(unittest.TestCase):
     def test_object(self: Self) -> None:
         cls: type
         clsname: str
-        import_: Any
         importname: str
         mute: str
         root: str
@@ -37,8 +37,7 @@ class TestObject(unittest.TestCase):
             else:
                 importname += "core"
             importname += "." + clsname
-            import_ = __import__(name=importname)
-            cls = getattr(import_, clsname)
+            cls = getattr(import_module(name=importname), clsname)
             self._test_cls(cls)
 
 
