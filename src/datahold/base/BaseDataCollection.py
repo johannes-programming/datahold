@@ -11,11 +11,15 @@ from typing import Final, Protocol, Self, TypeVar
 import setdoc
 
 from .BaseDataContainer import BaseDataContainer
+from .BaseDataIterable import BaseDataIterable
+from .BaseDataSized import BaseDataSized
 
 Item = TypeVar("Item", covariant=True)
 
 
 class Data(
+    BaseDataSized.Data,  # type: ignore[misc, valid-type]
+    BaseDataIterable.Data[Item],  # type: ignore[misc, valid-type]
     BaseDataContainer.Data,  # type: ignore[misc, valid-type]
     Collection[Item],
     Protocol[Item],
@@ -25,7 +29,12 @@ class Data(
     ...
 
 
-class BaseDataCollection(BaseDataContainer, Collection[Item]):
+class BaseDataCollection(
+    BaseDataSized,
+    BaseDataIterable[Item],
+    BaseDataContainer,
+    Collection[Item],
+):
     __slots__ = ()
 
     Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
