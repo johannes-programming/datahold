@@ -14,10 +14,10 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 from .BaseDataReversible import BaseDataReversible
 
-Item = TypeVar("Item", covariant=True)
+Item = TypeVar("Item", covariant=True)  # type: ignore[misc]
 
 
-class BaseDataList(
+class BaseDataList(  # type: ignore[misc]
     BaseDataReversible[Item], BaseDataCollection[Item], Sequence[Item]
 ):
     __slots__ = ()

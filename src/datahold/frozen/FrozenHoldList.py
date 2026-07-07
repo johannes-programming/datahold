@@ -14,7 +14,7 @@ from .FrozenHoldObject import FrozenHoldObject
 Item = TypeVar("Item", covariant=True)
 
 
-class FrozenHoldList(
+class FrozenHoldList(  # type: ignore[misc]
     FrozenHoldObject, FrozenDataList[Item], BaseHoldList[Item]
 ):
 
