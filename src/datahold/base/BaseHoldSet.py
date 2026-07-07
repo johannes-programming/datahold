@@ -11,5 +11,5 @@ from .BaseHoldObject import BaseHoldObject
 Item = TypeVar("Item", bound=Hashable)
 
 
-class BaseHoldSet(BaseHoldObject, BaseDataSet[Item]):
+class BaseHoldSet(BaseDataSet[Item], BaseHoldObject):
     __slots__ = ()

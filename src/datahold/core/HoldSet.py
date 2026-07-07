@@ -14,7 +14,7 @@ from .HoldObject import HoldObject
 Item = TypeVar("Item", bound=Hashable)
 
 
-class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
+class HoldSet(DataSet[Item], HoldObject, BaseHoldSet[Item]):
 
     __slots__ = ()
 

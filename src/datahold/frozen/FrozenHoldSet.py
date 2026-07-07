@@ -14,7 +14,7 @@ from .FrozenHoldObject import FrozenHoldObject
 Item = TypeVar("Item", bound=Hashable)
 
 
-class FrozenHoldSet(FrozenHoldObject, FrozenDataSet[Item], BaseHoldSet[Item]):
+class FrozenHoldSet(FrozenDataSet[Item], FrozenHoldObject, BaseHoldSet[Item]):
 
     __slots__ = ()
 

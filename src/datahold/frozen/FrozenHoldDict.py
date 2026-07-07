@@ -18,7 +18,7 @@ Value = TypeVar("Value", covariant=True)
 
 
 class FrozenHoldDict(
-    FrozenHoldObject, FrozenDataDict[Key, Value], BaseHoldDict[Key, Value]
+    FrozenDataDict[Key, Value], FrozenHoldObject, BaseHoldDict[Key, Value]
 ):
 
     __slots__ = ()

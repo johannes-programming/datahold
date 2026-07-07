@@ -15,7 +15,7 @@ Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldList(
-    FrozenHoldObject, FrozenDataList[Item], BaseHoldList[Item]
+    FrozenDataList[Item], FrozenHoldObject, BaseHoldList[Item]
 ):
 
     __slots__ = ()

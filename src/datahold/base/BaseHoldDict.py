@@ -12,5 +12,5 @@ Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)
 
 
-class BaseHoldDict(BaseHoldObject, BaseDataDict[Key, Value]):
+class BaseHoldDict(BaseDataDict[Key, Value], BaseHoldObject):
     __slots__ = ()

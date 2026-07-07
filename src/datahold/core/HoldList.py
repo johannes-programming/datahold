@@ -14,7 +14,7 @@ from .HoldObject import HoldObject
 Item = TypeVar("Item")
 
 
-class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
+class HoldList(DataList[Item], HoldObject, BaseHoldList[Item]):
 
     __slots__ = ()
 
