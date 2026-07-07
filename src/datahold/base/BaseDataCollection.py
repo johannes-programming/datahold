@@ -5,12 +5,14 @@ from __future__ import annotations
 __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Collection, Hashable
+from collections.abc import Collection
 from typing import Final, Protocol, Self, TypeVar
 
 import setdoc
 
+from .BaseDataContainer import BaseDataContainer
 from .BaseDataIterable import BaseDataIterable
+from .BaseDataSized import BaseDataSized
 
 Item = TypeVar("Item", covariant=True)
 
@@ -22,18 +24,15 @@ class Data(Collection[Item], Protocol[Item]):
     def __hash__(self: Self) -> int: ...
 
 
-class BaseDataCollection(BaseDataIterable[Item], Collection[Item]):
+class BaseDataCollection(
+    BaseDataSized,
+    BaseDataIterable[Item],
+    BaseDataContainer,
+    Collection[Item],
+):
     __slots__ = ()
 
     Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
-
-    @setdoc.basic
-    def __contains__(self: Self, other: Hashable, /) -> bool:
-        return other in self.data  # type: ignore[attr-defined]
-
-    @setdoc.basic
-    def __len__(self: Self, /) -> int:
-        return len(self.data)
 
     @property
     @abstractmethod
