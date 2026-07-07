@@ -4,11 +4,11 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataList"]
 
+from abc import abstractmethod
 from collections.abc import Iterable
 from typing import Final, Self, SupportsIndex, TypeVar, cast, overload
 
 import setdoc
-from abc import abstractmethod
 
 from .BaseDataSequence import BaseDataSequence
 
@@ -33,7 +33,7 @@ class BaseDataList(BaseDataSequence[Item]):
     @setdoc.basic
     def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
         return type(self)(other * self.data)  # type: ignore[operator]
-    
+
     @property
     @abstractmethod
     @setdoc.basic
