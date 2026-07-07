@@ -52,9 +52,7 @@ class BaseDataMapping(
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({dict(self)!r})"
 
-    @setdoc.basic
-    def __reversed__(self: Self, /) -> Iterator[Key | str]:
-        return reversed(self.data)
+    # Mapping already defines: __reversed__ = None
 
     @property
     @abstractmethod

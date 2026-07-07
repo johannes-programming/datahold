@@ -30,6 +30,8 @@ class BaseDataDict(BaseDataMapping[Key, Value]):
     ) -> Self:
         return type(self)(self.data | other.data)
 
+    # __ror__ is unnecessary because of how __or__ is defined
+
     @property
     @abstractmethod
     @setdoc.basic
