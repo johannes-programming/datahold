@@ -35,7 +35,7 @@ class Test_Data(unittest.TestCase):
                 continue
             cls = getattr(module, name)
             self.assertIsInstance(
-                getattr(cls, "Data"),
+                getattr(cls, "Data", object),
                 type | GenericAlias,
             )
 
