@@ -6,7 +6,7 @@ __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
 from collections.abc import Collection, Iterator
-from typing import Final, Protocol, Self, TypeVar
+from typing import Final, Self, TypeVar
 
 import setdoc
 
@@ -17,18 +17,6 @@ from .BaseDataSized import BaseDataSized
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(
-    BaseDataSized.Data,  # type: ignore[misc, valid-type]
-    BaseDataIterable.Data[Item],  # type: ignore[misc, valid-type]
-    BaseDataContainer.Data,  # type: ignore[misc, valid-type]
-    Collection[Item],
-    Protocol[Item],
-):
-    """Provide hashable collection protocol."""
-
-    ...
-
-
 class BaseDataCollection(
     BaseDataSized,
     BaseDataIterable[Item],
@@ -37,7 +25,7 @@ class BaseDataCollection(
 ):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Collection]] = Collection  # type: ignore[type-abstract, type-arg]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> Iterator[Item]:
@@ -50,5 +38,5 @@ class BaseDataCollection(
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]:  # type: ignore[valid-type]
+    def data(self: Self) -> Collection[Item]:  # type: ignore[valid-type]
         ...

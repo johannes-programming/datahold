@@ -6,23 +6,13 @@ __all__ = ["BaseDataIterable"]
 
 from abc import abstractmethod
 from collections.abc import Iterable, Iterator
-from typing import Final, Protocol, Self, TypeVar
+from typing import Final, Self, TypeVar
 
 import setdoc
 
 from .BaseDataObject import BaseDataObject
 
 Item = TypeVar("Item", covariant=True)
-
-
-class Data(
-    BaseDataObject.Data,  # type: ignore[misc, valid-type]
-    Iterable[Item],
-    Protocol[Item],
-):
-    """Provide hashable iterable protocol."""
-
-    ...
 
 
 class BaseDataIterable(BaseDataObject, Iterable[Item]):
@@ -37,5 +27,5 @@ class BaseDataIterable(BaseDataObject, Iterable[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]:  # type: ignore[valid-type]
+    def data(self: Self) -> Iterable[Item]:  # type: ignore[valid-type]
         ...

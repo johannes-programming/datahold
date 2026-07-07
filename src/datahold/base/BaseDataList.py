@@ -6,7 +6,7 @@ __all__: list[str] = ["BaseDataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Self, SupportsIndex, TypeVar
+from typing import Final, Protocol, Self, SupportsIndex, TypeVar
 
 import setdoc
 
@@ -15,8 +15,16 @@ from .BaseDataSequence import BaseDataSequence
 Item = TypeVar("Item", covariant=True)
 
 
+class Data(tuple[Item, ...], Protocol[Item]):
+    """Provide hashable sequence protocol."""
+
+    ...
+
+
 class BaseDataList(BaseDataSequence[Item]):
     __slots__ = ()
+
+    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
 
     @setdoc.basic
     def __add__(self: Self, other: Iterable[Item], /) -> Self:
@@ -33,4 +41,4 @@ class BaseDataList(BaseDataSequence[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> tuple[Item, ...]: ...
+    def data(self: Self) -> Data[Item]: ...

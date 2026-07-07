@@ -7,7 +7,7 @@ __all__: list[str] = ["BaseDataSequence"]
 import sys
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Iterator, Sequence
-from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
+from typing import Any, Final, Self, SupportsIndex, TypeVar, cast, overload
 
 import setdoc
 
@@ -17,15 +17,6 @@ from .BaseDataReversible import BaseDataReversible
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(
-    BaseDataReversible.Data[Item],  # type: ignore[misc, valid-type]
-    BaseDataCollection.Data[Item],  # type: ignore[misc, valid-type]
-):
-    """Provide hashable sequence protocol."""
-
-    ...
-
-
 class BaseDataSequence(
     BaseDataReversible[Item],
     BaseDataCollection[Item],
@@ -33,7 +24,7 @@ class BaseDataSequence(
 ):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract, type-arg]
+    Data: Final[type[Sequence]] = Sequence  # type: ignore[type-abstract, type-arg]
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
@@ -75,7 +66,7 @@ class BaseDataSequence(
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> Sequence[Item]: ...
 
     @setdoc.basic
     def index(

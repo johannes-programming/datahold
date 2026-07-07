@@ -3,7 +3,6 @@
 __all__: list[str] = ["BaseDataObject"]
 
 from abc import ABCMeta, abstractmethod
-from collections.abc import Hashable
 from typing import Any, Final, Self
 
 import setdoc
@@ -13,7 +12,7 @@ class BaseDataObject(metaclass=ABCMeta):
 
     __slots__ = ()
 
-    Data: Final[type[Hashable]] = Hashable  # type: ignore[type-abstract]
+    Data: Final[type[object]] = object  # type: ignore[type-abstract]
 
     @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> Any:
@@ -72,4 +71,4 @@ class BaseDataObject(metaclass=ABCMeta):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Hashable: ...
+    def data(self: Self) -> object: ...
