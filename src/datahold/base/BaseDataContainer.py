@@ -15,9 +15,10 @@ from .BaseDataObject import BaseDataObject
 Item = TypeVar("Item", covariant=True)
 
 
-class Data(Container[Hashable], Protocol[Item]):
+class Data(Container[Hashable], Hashable, Protocol):
     """Provide hashable collection protocol."""
 
+    @abstractmethod
     @setdoc.basic
     def __hash__(self: Self) -> int: ...
 
