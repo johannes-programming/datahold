@@ -6,27 +6,22 @@ __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
 from collections.abc import Sized
-from typing import Final, Protocol, Self
+from typing import Protocol, Self
 
 import setdoc
 
 from .BaseDataObject import BaseDataObject
 
 
-class Data(
-    BaseDataObject.Data,  # type: ignore[misc, valid-type]
-    Sized,
-    Protocol,
-):
-    """Provide hashable sized protocol."""
-
-    ...
-
-
 class BaseDataSized(BaseDataObject, Sized):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract]
+    class Data(
+        BaseDataObject.Data,  # type: ignore[misc, valid-type]
+        Sized,
+        Protocol,
+    ):
+        """Provide hashable sized protocol."""
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:

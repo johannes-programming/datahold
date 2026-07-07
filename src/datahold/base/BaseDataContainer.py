@@ -6,28 +6,25 @@ __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
 from collections.abc import Container, Hashable
-from typing import Final, Protocol, Self
+from typing import Protocol, Self
 
 import setdoc
 
 from .BaseDataObject import BaseDataObject
 
 
-class Data(
-    BaseDataObject.Data,  # type: ignore[misc, valid-type]
-    Container[Hashable],
-    Protocol,
-):
-    """Provide hashable container protocol."""
-
-    @setdoc.basic
-    def __hash__(self: Self) -> int: ...
-
-
 class BaseDataContainer(BaseDataObject, Container[Hashable]):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-abstract]
+    class Data(
+        BaseDataObject.Data,  # type: ignore[misc, valid-type]
+        Container[Hashable],
+        Protocol,
+    ):
+        """Provide hashable container protocol."""
+
+        @setdoc.basic
+        def __hash__(self: Self) -> int: ...
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:

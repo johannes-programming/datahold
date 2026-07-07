@@ -6,6 +6,7 @@ import unittest
 from functools import cached_property
 from importlib import import_module
 from pathlib import Path
+from types import GenericAlias
 from typing import Any, Self, cast
 
 
@@ -30,7 +31,10 @@ class Test_Data(unittest.TestCase):
         for name in Lazy.lazy.test_Data_["names"]:
             module = import_module(f"datahold.base.{name}")
             cls = getattr(module, name)
-            self.assertIsInstance(getattr(cls, "Data"), type)
+            self.assertIsInstance(
+                getattr(cls, "Data"),
+                type | GenericAlias,
+            )
 
 
 if __name__ == "__main__":
