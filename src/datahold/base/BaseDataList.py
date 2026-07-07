@@ -6,18 +6,20 @@ __all__: list[str] = ["BaseDataList"]
 
 import sys
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable, Iterator, Sequence
+from collections.abc import Hashable, Iterable, Sequence
 from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
 
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
+from .BaseDataReversible import BaseDataReversible
 
 Item = TypeVar("Item", covariant=True)
-Item_ = TypeVar("Item_")
 
 
-class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
+class BaseDataList(  # type: ignore[misc]
+    BaseDataReversible[Item], BaseDataCollection[Item], Sequence[Item]
+):
     __slots__ = ()
 
     @setdoc.basic
@@ -56,10 +58,6 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.data)!r})"
-
-    @setdoc.basic
-    def __reversed__(self: Self, /) -> Iterator[Item]:
-        return reversed(self.data)
 
     @setdoc.basic
     def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
