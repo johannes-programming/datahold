@@ -6,6 +6,8 @@ names = [
     "BaseDataIterable",
     "BaseDataList",
     "BaseDataObject",
+    "BaseDataReversible",
+    "BaseDataSequence",
     "BaseDataSet",
     "BaseDataSized",
     "BaseHoldDict",
