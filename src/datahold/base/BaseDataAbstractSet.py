@@ -6,7 +6,7 @@ __all__: list[str] = ["BaseDataAbstractSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Set
-from typing import Any, Final, Protocol, Self, TypeVar, cast
+from typing import Final, Protocol, Self, TypeVar, cast
 
 import setdoc
 
@@ -15,17 +15,31 @@ from .BaseDataCollection import BaseDataCollection
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
 
-class Data(Set[Item], Protocol[Item]):  # type: ignore[misc]
-    """Provide hashable abstract set protocol."""
-
+class Data(BaseDataCollection.Data[Item], Protocol[Item]):
     @setdoc.basic
-    def __hash__(self: Self) -> int: ...
+    def __and__(self: Self, other: Set[Hashable], /) -> Self: ...
+    @setdoc.basic
+    def __or__(self: Self, other: Set[Item], /) -> Self: ...
+    @setdoc.basic
+    def __rand__(self: Self, other: Set[Hashable], /) -> Self: ...
+    @setdoc.basic
+    def __ror__(self: Self, other: Set[Item], /) -> Self: ...
+    @setdoc.basic
+    def __rsub__(self: Self, other: Set[Hashable], /) -> Self: ...
+    @setdoc.basic
+    def __rxor__(self: Self, other: Set[Item], /) -> Self: ...
+    @setdoc.basic
+    def __sub__(self: Self, other: Set[Hashable], /) -> Self: ...
+    @setdoc.basic
+    def __xor__(self: Self, other: Set[Item], /) -> Self: ...
+    @setdoc.basic
+    def isdisjoint(self: Self, other: Iterable[Hashable], /) -> bool: ...
 
 
 class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data  # type: ignore[type-arg,type-abstract,valid-type]
+    Data: Final[type[Data]] = Data  # type: ignore[type-arg,type-abstract]
 
     @setdoc.basic
     def __and__(
@@ -66,10 +80,10 @@ class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
     @setdoc.basic
     def __rsub__(
         self: Self,
-        other: Set[Hashable],
+        other: Set[Item],
         /,
     ) -> Self:
-        return type(self)(cast(frozenset[Item], frozenset(other) - self.data))
+        return type(self)(frozenset(other) - frozenset(self))  # type: ignore[operator]
 
     @setdoc.basic
     def __rxor__(
