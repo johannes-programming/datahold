@@ -14,6 +14,8 @@ Item = TypeVar("Item", covariant=True)
 
 
 class Data(Collection[Item], Protocol[Item]):
+    """Provide hashable collection protocol."""
+
     @setdoc.basic
     def __hash__(self: Self) -> int: ...
 
