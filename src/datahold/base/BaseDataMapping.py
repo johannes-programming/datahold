@@ -9,7 +9,6 @@ from collections.abc import (
     Hashable,
     ItemsView,
     Iterable,
-    Iterator,
     KeysView,
     Mapping,
     ValuesView,
