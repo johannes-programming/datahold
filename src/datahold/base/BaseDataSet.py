@@ -15,7 +15,7 @@ from .BaseDataAbstractSet import BaseDataAbstractSet
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
 
-class Data(Set[Item], Protocol[Item]):
+class Data(Set[Item], Protocol[Item]):  # type: ignore[misc]
     """Provide hashable abstract set protocol."""
 
     @setdoc.basic

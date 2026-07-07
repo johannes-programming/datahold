@@ -6,7 +6,7 @@ __all__: list[str] = ["BaseDataAbstractSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable, Set
-from typing import Final, Protocol, Self, TypeVar, cast
+from typing import Any, Final, Protocol, Self, TypeVar, cast
 
 import setdoc
 
@@ -15,7 +15,7 @@ from .BaseDataCollection import BaseDataCollection
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
 
-class Data(Set[Item], Protocol[Item]):
+class Data(Set[Item], Protocol[Item]):  # type: ignore[misc]
     """Provide hashable abstract set protocol."""
 
     @setdoc.basic
@@ -25,7 +25,7 @@ class Data(Set[Item], Protocol[Item]):
 class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
     __slots__ = ()
 
-    Data: Final[type[Data]] = Data
+    Data: Final[type[Data]] = Data  # type: ignore[type-arg,type-abstract,valid-type]
 
     @setdoc.basic
     def __and__(
@@ -33,7 +33,7 @@ class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
         other: Set[Hashable],
         /,
     ) -> Self:
-        return type(self)(self.data & frozenset(other))
+        return type(self)(self.data & frozenset(other))  # type: ignore[operator]
 
     @abstractmethod
     @setdoc.basic
@@ -85,17 +85,17 @@ class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
         other: Set[Hashable],
         /,
     ) -> Self:
-        return type(self)(self.data - frozenset(other))
+        return type(self)(self.data - frozenset(other))  # type: ignore[operator]
 
     @setdoc.basic
     def __xor__(self: Self, other: Set[Item], /) -> Self:  # type: ignore[override]
-        return type(self)(self.data ^ frozenset(other))
+        return type(self)(self.data ^ frozenset(other))  # type: ignore[operator]
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> Data[Item]: ...  # type: ignore[valid-type]
 
     @setdoc.basic
     def isdisjoint(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.data.isdisjoint(other)
+        return self.data.isdisjoint(other)  # type: ignore[attr-defined,no-any-return]
