@@ -14,7 +14,7 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 from .BaseDataReversible import BaseDataReversible
 
-Item = TypeVar("Item", covariant=True)  # type: ignore[misc]
+Item = TypeVar("Item", covariant=True)
 
 
 class BaseDataList(  # type: ignore[misc]
