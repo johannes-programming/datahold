@@ -1,24 +1,52 @@
 __all__: list[str] = ["TestObject"]
+import enum
+import io
+import tomllib
 import unittest
+from functools import cached_property
 from importlib import import_module
-from typing import Any, Self
+from pathlib import Path
+from typing import Any, Self, cast
 
 from iterprod import iterprod
 
-METHODS: tuple[str, ...]
-MUTES: tuple[str, ...]
-ROOTS: tuple[str, ...]
-SLOTS: tuple[str, ...]
-METHODS = ("__format__", "__str__")
-MUTES = ("", "Base", "Frozen")
-ROOTS = ("Object", "Dict", "List", "Set")
-SLOTS = ("Data", "Hold")
+
+class Lazy(enum.Enum):
+    lazy = None
+
+    @cached_property
+    def METHODS(self: Self) -> tuple[str, ...]:
+        return cast(tuple[str, ...], self.test_object["METHODS"])
+
+    @cached_property
+    def MUTES(self: Self) -> tuple[str, ...]:
+        return cast(tuple[str, ...], self.test_object["MUTES"])
+
+    @cached_property
+    def ROOTS(self: Self) -> tuple[str, ...]:
+        return cast(tuple[str, ...], self.test_object["ROOTS"])
+
+    @cached_property
+    def SLOTS(self: Self) -> tuple[str, ...]:
+        return cast(tuple[str, ...], self.test_object["SLOTS"])
+
+    @cached_property
+    def data(self: Self) -> dict[str, Any]:
+        file: Path
+        stream: io.BufferedReader
+        file = Path(__file__).parent / "testdata.toml"
+        with file.open("rb") as stream:
+            return tomllib.load(stream)
+
+    @cached_property
+    def test_object(self: Self) -> dict[str, Any]:
+        return cast(dict[str, Any], self.data["test_object"])
 
 
 class TestObject(unittest.TestCase):
     def _test_cls(self: Self, cls: type) -> None:
         method: Any
-        for method in METHODS:
+        for method in Lazy.lazy.METHODS:
             with self.subTest(cls=cls):
                 self.assertIs(getattr(cls, method), getattr(object, method))
 
@@ -29,7 +57,9 @@ class TestObject(unittest.TestCase):
         mute: str
         root: str
         slot: str
-        for mute, slot, root in iterprod(MUTES, SLOTS, ROOTS):
+        for mute, slot, root in iterprod(
+            Lazy.lazy.MUTES, Lazy.lazy.SLOTS, Lazy.lazy.ROOTS
+        ):
             clsname = mute + slot + root
             importname = "datahold."
             if mute:
