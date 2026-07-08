@@ -6,9 +6,8 @@ import unittest
 from functools import cached_property
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Self, cast
-
-from iterprod import iterprod
+from types import ModuleType
+from typing import Any, Optional, Self, cast
 
 
 class Lazy(enum.Enum):
@@ -19,18 +18,6 @@ class Lazy(enum.Enum):
         return cast(tuple[str, ...], self.test_object["METHODS"])
 
     @cached_property
-    def MUTES(self: Self) -> tuple[str, ...]:
-        return cast(tuple[str, ...], self.test_object["MUTES"])
-
-    @cached_property
-    def ROOTS(self: Self) -> tuple[str, ...]:
-        return cast(tuple[str, ...], self.test_object["ROOTS"])
-
-    @cached_property
-    def SLOTS(self: Self) -> tuple[str, ...]:
-        return cast(tuple[str, ...], self.test_object["SLOTS"])
-
-    @cached_property
     def data(self: Self) -> dict[str, Any]:
         file: Path
         stream: io.BufferedReader
@@ -38,9 +25,42 @@ class Lazy(enum.Enum):
         with file.open("rb") as stream:
             return tomllib.load(stream)
 
+    @classmethod
+    def get_module(cls: type[Self], typename: str) -> Optional[ModuleType]:
+        for pkgname, prefix in cls.lazy.subpackages.items():
+            if typename.startswith(prefix):
+                break
+        else:
+            pkgname = "core"
+        try:
+            return import_module(f"datahold.{pkgname}.{typename}")
+        except ImportError:
+            return None
+
+    @classmethod
+    def get_type(cls: type[Self], typename: str, /) -> Optional[type[Any]]:
+        module: Optional[ModuleType]
+        module = cls.get_module(typename=typename)
+        if module is None:
+            return None
+        else:
+            return cast(type[Any], getattr(module, typename))
+
+    @cached_property
+    def subpackages(self: Self) -> dict[str, str]:
+        return cast(dict[str, str], self.varia["subpackages"])
+
     @cached_property
     def test_object(self: Self) -> dict[str, Any]:
         return cast(dict[str, Any], self.data["test_object"])
+
+    @cached_property
+    def typenames(self: Self) -> list[str]:
+        return cast(list[str], self.varia["typenames"])
+
+    @cached_property
+    def varia(self: Self) -> dict[str, Any]:
+        return cast(dict[str, Any], self.data["varia"])
 
 
 class TestObject(unittest.TestCase):
@@ -51,23 +71,10 @@ class TestObject(unittest.TestCase):
                 self.assertIs(getattr(cls, method), getattr(object, method))
 
     def test_object(self: Self) -> None:
-        cls: type
-        clsname: str
-        importname: str
-        mute: str
-        root: str
-        slot: str
-        for mute, slot, root in iterprod(
-            Lazy.lazy.MUTES, Lazy.lazy.SLOTS, Lazy.lazy.ROOTS
-        ):
-            clsname = mute + slot + root
-            importname = "datahold."
-            if mute:
-                importname += mute.lower()
-            else:
-                importname += "core"
-            importname += "." + clsname
-            cls = getattr(import_module(name=importname), clsname)
+        cls: type[Any]
+        typename: str
+        for typename in Lazy.lazy.typenames:
+            cls = cast(type[Any], Lazy.lazy.get_type(typename))
             self._test_cls(cls)
 
 

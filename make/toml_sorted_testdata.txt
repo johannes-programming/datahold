@@ -2,9 +2,6 @@
 --sort
 --all-keys
 --sort
---key=test_Data_
---key=names
---sort
 --key=test_object
 --sort
 --key=varia
