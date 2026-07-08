@@ -4,7 +4,7 @@ __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
 from collections.abc import Collection, Hashable, Iterator
-from typing import Protocol, Self, TypeVar
+from typing import Protocol, Self, TypeVar, runtime_checkable
 
 import setdoc
 
@@ -17,9 +17,12 @@ DataItem = TypeVar("DataItem", covariant=True)
 class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
-    class Data(Collection[DataItem], Protocol[DataItem]):
+    @runtime_checkable
+    class Data(Collection[DataItem], BaseDataObject.Data, Protocol[DataItem]):
+        @abstractmethod
         @setdoc.basic
         def __hash__(self: Self) -> int: ...
+        @abstractmethod
         @setdoc.basic
         def __init__(self: Self, data: Self, /) -> None: ...
 
