@@ -19,7 +19,7 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
 
     @runtime_checkable
     class Data(
-        Collection[DataItem], BaseDataObject.Data, Protocol[DataItem]
+        BaseDataObject.Data, Collection[DataItem], Protocol[DataItem]
     ): ...
 
     @setdoc.basic
