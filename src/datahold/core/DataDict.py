@@ -20,8 +20,8 @@ Value_ = TypeVar("Value_")
 
 
 class DataDict(
-    DataObject,
     BaseDataDict[Key, Value],
+    DataObject,
     MutableMapping[Key | str, Optional[Value]],
 ):
     __slots__ = ()

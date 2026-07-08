@@ -14,7 +14,7 @@ from .DataObject import DataObject
 Item = TypeVar("Item", bound=Hashable)
 
 
-class DataSet(DataObject, BaseDataSet[Item], MutableSet[Item]):
+class DataSet(BaseDataSet[Item], DataObject, MutableSet[Item]):
     __slots__ = ()
 
     @setdoc.basic

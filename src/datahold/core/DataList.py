@@ -15,8 +15,8 @@ Item = TypeVar("Item")
 
 
 class DataList(
-    DataObject,
     BaseDataList[Item],
+    DataObject,
     MutableSequence[Item],
 ):
     __slots__ = ()

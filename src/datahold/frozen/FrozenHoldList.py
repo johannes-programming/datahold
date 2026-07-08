@@ -15,11 +15,19 @@ Item = TypeVar("Item", covariant=True)
 
 
 class FrozenHoldList(
-    FrozenHoldObject, FrozenDataList[Item], BaseHoldList[Item]
+    FrozenDataList[Item],
+    BaseHoldList[Item],
+    FrozenHoldObject,
 ):
 
     __slots__ = ()
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item], /) -> None:
+        self._data: tuple[Item, ...]
         self._data = tuple(data)
+
+    @property
+    @setdoc.basic
+    def data(self: Self) -> tuple[Item, ...]:
+        return self._data

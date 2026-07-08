@@ -12,5 +12,5 @@ Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)
 
 
-class FrozenDataDict(FrozenDataObject, BaseDataDict[Key, Value]):
+class FrozenDataDict(BaseDataDict[Key, Value], FrozenDataObject):
     __slots__ = ()
