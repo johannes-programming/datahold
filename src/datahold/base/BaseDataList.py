@@ -14,7 +14,6 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 
 Item = TypeVar("Item", covariant=True)
-Item_ = TypeVar("Item_")
 
 
 class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
