@@ -6,5 +6,10 @@
 --key=names
 --sort
 --key=test_object
+--sort
+--key=varia
+--sort
+--key=varia
+--key=typenames
 --
 tests/testdata.toml

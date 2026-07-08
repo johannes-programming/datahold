@@ -14,6 +14,8 @@ class BaseDataObject(metaclass=ABCMeta):
     __slots__ = ()
 
     class Data(Protocol):
+        """Provide object data protocol."""
+
         @setdoc.basic
         def __hash__(self: Self) -> int: ...
         @setdoc.basic

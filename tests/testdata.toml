@@ -34,3 +34,36 @@ SLOTS = [
     "Data",
     "Hold",
 ]
+
+[varia]
+typenames = [
+    "BaseDataCollection",
+    "BaseDataDict",
+    "BaseDataList",
+    "BaseDataObject",
+    "BaseDataSet",
+    "BaseHoldDict",
+    "BaseHoldList",
+    "BaseHoldObject",
+    "BaseHoldSet",
+    "DataDict",
+    "DataList",
+    "DataObject",
+    "DataSet",
+    "FrozenDataDict",
+    "FrozenDataList",
+    "FrozenDataObject",
+    "FrozenDataSet",
+    "FrozenHoldDict",
+    "FrozenHoldList",
+    "FrozenHoldObject",
+    "FrozenHoldSet",
+    "HoldDict",
+    "HoldList",
+    "HoldObject",
+    "HoldSet",
+]
+
+[varia.subpackages]
+base = "Base"
+frozen = "Frozen"
