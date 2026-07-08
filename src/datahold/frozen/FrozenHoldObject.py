@@ -2,7 +2,8 @@
 
 __all__: list[str] = ["FrozenHoldObject"]
 
-from typing import Any, Self
+from collections.abc import Hashable
+from typing import Self
 
 import setdoc
 
@@ -12,10 +13,10 @@ from .FrozenDataObject import FrozenDataObject
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
 
-    _data: Any
+    _data: Hashable
     __slots__ = ()
 
     @property
     @setdoc.basic
-    def data(self: Self) -> Any:
+    def data(self: Self) -> Hashable:
         return self._data
