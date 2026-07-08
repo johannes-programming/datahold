@@ -71,6 +71,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> tuple[Item, ...]: ...
 
     @setdoc.basic

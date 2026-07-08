@@ -31,4 +31,5 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> HashableCollection[Item]: ...
