@@ -10,8 +10,9 @@ import setdoc
 from ..base.BaseHoldObject import BaseHoldObject
 from .FrozenDataObject import FrozenDataObject
 
+
 # do we really need this class/this file?
-# consider removal 
+# consider removal
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
 
     _data: Hashable

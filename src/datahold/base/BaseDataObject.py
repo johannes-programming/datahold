@@ -13,6 +13,8 @@ class BaseDataObject(metaclass=ABCMeta):
 
     __slots__ = ()
 
+    Data = Hashable
+
     @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> Any:
         if isinstance(other, BaseDataObject):

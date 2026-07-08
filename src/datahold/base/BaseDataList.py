@@ -14,10 +14,13 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 
 Item = TypeVar("Item", covariant=True)
+Data_ = tuple[Item, ...]
 
 
 class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     __slots__ = ()
+
+    Data = Data_
 
     @setdoc.basic
     def __add__(self: Self, other: Iterable[Item], /) -> Self:

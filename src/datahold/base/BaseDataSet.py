@@ -18,6 +18,8 @@ Item = TypeVar("Item", bound=Hashable, covariant=True)
 class BaseDataSet(BaseDataCollection[Item], Set[Item]):
     __slots__ = ()
 
+    Data = frozenset
+
     @setdoc.basic
     def __and__(
         self: Self,

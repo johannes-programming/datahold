@@ -17,6 +17,8 @@ Item = TypeVar("Item", covariant=True)
 class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
+    Data = HashableCollection
+
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:
         return other in self.data

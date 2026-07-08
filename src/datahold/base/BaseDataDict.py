@@ -23,6 +23,7 @@ from .BaseDataCollection import BaseDataCollection
 
 Key = TypeVar("Key", bound=Hashable, covariant=True)
 Value = TypeVar("Value", covariant=True)
+Data_ = frozendict[Key | str, Optional[Value]]
 Value_ = TypeVar("Value_")
 
 
@@ -31,6 +32,8 @@ class BaseDataDict(
 ):
 
     __slots__ = ()
+
+    Data = Data_  # type: ignore[assignment]
 
     @setdoc.basic
     def __getitem__(self: Self, key: Hashable, /) -> Optional[Value]:
