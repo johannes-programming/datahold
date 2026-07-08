@@ -11,20 +11,17 @@ import setdoc
 from .BaseDataObject import BaseDataObject
 
 Item = TypeVar("Item", covariant=True)
-
-
-class Data(Collection[Item], Protocol[Item]):
-    @setdoc.basic
-    def __hash__(self: Self) -> int: ...
-
-
-Data_ = Data
+DataItem = TypeVar("DataItem", covariant=True)
 
 
 class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
-    Data = Data
+    class Data(Collection[DataItem], Protocol[DataItem]):
+        @setdoc.basic
+        def __hash__(self: Self) -> int: ...
+        @setdoc.basic
+        def __init__(self: Self, data: Self, /) -> None: ...
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:
@@ -41,4 +38,4 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data_[Item]: ...
+    def data(self: Self) -> Data[Item]: ...

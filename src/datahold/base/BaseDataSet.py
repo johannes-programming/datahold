@@ -18,7 +18,7 @@ Item = TypeVar("Item", bound=Hashable, covariant=True)
 class BaseDataSet(BaseDataCollection[Item], Set[Item]):
     __slots__ = ()
 
-    Data = frozenset
+    Data = frozenset  # type: ignore[assignment]
 
     @setdoc.basic
     def __and__(

@@ -20,7 +20,7 @@ Data_ = tuple[Item, ...]
 class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     __slots__ = ()
 
-    Data = Data_
+    Data = Data_  # type: ignore[assignment]
 
     @setdoc.basic
     def __add__(self: Self, other: Iterable[Item], /) -> Self:
