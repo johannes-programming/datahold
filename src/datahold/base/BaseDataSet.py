@@ -59,10 +59,10 @@ class BaseDataSet(BaseDataCollection[Item], Set[Item]):
     @setdoc.basic
     def __rsub__(
         self: Self,
-        other: Set[Hashable],
+        other: Set[Item],
         /,
     ) -> Self:
-        return type(self)(cast(frozenset[Item], frozenset(other) - self.data))
+        return type(self)(frozenset(other) - self.data)
 
     @setdoc.basic
     def __rxor__(
