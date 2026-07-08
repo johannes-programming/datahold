@@ -18,13 +18,9 @@ class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
     @runtime_checkable
-    class Data(Collection[DataItem], BaseDataObject.Data, Protocol[DataItem]):
-        @abstractmethod
-        @setdoc.basic
-        def __hash__(self: Self) -> int: ...
-        @abstractmethod
-        @setdoc.basic
-        def __init__(self: Self, data: Self, /) -> None: ...
+    class Data(
+        Collection[DataItem], BaseDataObject.Data, Protocol[DataItem]
+    ): ...
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:
