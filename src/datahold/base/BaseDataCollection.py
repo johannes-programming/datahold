@@ -3,36 +3,35 @@
 __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Collection, Hashable, Iterator
+from collections.abc import Collection
 from typing import Protocol, Self, TypeVar, runtime_checkable
 
 import setdoc
 
-from .BaseDataObject import BaseDataObject
+from .BaseDataContainer import BaseDataContainer
+from .BaseDataIterable import BaseDataIterable
+from .BaseDataSized import BaseDataSized
 
 Item = TypeVar("Item", covariant=True)
 DataItem = TypeVar("DataItem", covariant=True)
 
 
-class BaseDataCollection(BaseDataObject, Collection[Item]):
+class BaseDataCollection(
+    BaseDataSized,
+    BaseDataIterable[Item],
+    BaseDataContainer,
+    Collection[Item],
+):
     __slots__ = ()
 
     @runtime_checkable
     class Data(
-        BaseDataObject.Data, Collection[DataItem], Protocol[DataItem]
+        BaseDataSized.Data,
+        BaseDataIterable.Data[DataItem],
+        BaseDataContainer.Data,
+        Collection[DataItem],
+        Protocol[DataItem],
     ): ...
-
-    @setdoc.basic
-    def __contains__(self: Self, other: Hashable, /) -> bool:
-        return other in self.data
-
-    @setdoc.basic
-    def __iter__(self: Self, /) -> Iterator[Item]:
-        return iter(self.data)
-
-    @setdoc.basic
-    def __len__(self: Self, /) -> int:
-        return len(self.data)
 
     @property
     @abstractmethod
