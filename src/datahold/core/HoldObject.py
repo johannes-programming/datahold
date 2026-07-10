@@ -1,11 +1,10 @@
-from typing import *
+"""Provide HoldObject."""
 
-from .BaseHoldObject import BaseHoldObject
+__all__: list[str] = ["HoldObject"]
+
+from ..base.BaseHoldObject import BaseHoldObject
 from .DataObject import DataObject
-
-__all__ = ["HoldObject"]
 
 
 class HoldObject(DataObject, BaseHoldObject):
-    data: Any
     __slots__ = ()

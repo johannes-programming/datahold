@@ -1,18 +1,21 @@
-from typing import *
+"""Provide HoldSet."""
+
+__all__: list[str] = ["HoldSet"]
+
+from collections.abc import Hashable, Iterable
+from typing import Self, TypeVar
 
 import setdoc
 
-from .BaseHoldSet import BaseHoldSet
+from ..base.BaseHoldSet import BaseHoldSet
 from .DataSet import DataSet
 from .HoldObject import HoldObject
 
-__all__ = ["HoldSet"]
-
-Item = TypeVar("Item")
+Item = TypeVar("Item", bound=Hashable)
 
 
-class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
-    data: frozenset[Item]
+class HoldSet(DataSet[Item], BaseHoldSet[Item], HoldObject):
+
     __slots__ = ()
 
     @property
@@ -21,5 +24,6 @@ class HoldSet(HoldObject, DataSet[Item], BaseHoldSet[Item]):
         return self._data
 
     @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = frozenset[Item](value)
+    @setdoc.basic
+    def data(self: Self, value: Iterable[Item]) -> None:
+        self._data = frozenset(value)

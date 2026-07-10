@@ -280,12 +280,12 @@ A common ABC for ``OkayList``, ``OkayDict``, and ``OkaySet``. Child of ``Scaevol
 - ``__bool__`` is implemented as ``bool(self._data)`` because neither ``list``, ``dict``, nor ``set`` have a ``__bool__`` method defined.
 - The comparison operations are overwritten:
 
-  * ``__eq__`` returns ``self._data == type(self._data)(other)``.
-  * ``__ne__`` negates ``__eq__``.
-  * ``__ge__`` returns ``type(self)(other) <= self`` (inherited from ``scaevola.Scaevola``).
-  * ``__gt__`` returns ``not (self == other) and (self >= other)``.
-  * ``__lt__`` returns ``not (self == other) and (self <= other)``.
-  * ``__le__`` returns ``self._data <= type(self)(other)._data``.
+    * ``__eq__`` returns ``self._data == type(self._data)(other)``.
+    * ``__ne__`` negates ``__eq__``.
+    * ``__ge__`` returns ``type(self)(other) <= self`` (inherited from ``scaevola.Scaevola``).
+    * ``__gt__`` returns ``not (self == other) and (self >= other)``.
+    * ``__lt__`` returns ``not (self == other) and (self <= other)``.
+    * ``__le__`` returns ``self._data <= type(self)(other)._data``.
 
 Modify ``__eq__`` or ``__le__`` as needed to change the behavior of the other comparison methods.
 
