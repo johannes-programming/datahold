@@ -1,0 +1,257 @@
+[test_object]
+METHODS = [
+    "__format__",
+    "__str__",
+]
+
+[types.BaseDataCollection.parents]
+Collection = true
+
+[types.BaseDataDict.parents]
+Mapping = true
+
+[types.BaseDataList.parents]
+Sequence = true
+
+[types.BaseDataObject.parents]
+Hashable = false
+
+[types.BaseDataSet.parents]
+Set = true
+
+[types.BaseHoldDict.parents]
+BaseHoldObject = true
+Mapping = true
+
+[types.BaseHoldList.parents]
+BaseHoldObject = true
+Sequence = true
+
+[types.BaseHoldObject.parents]
+BaseDataObject = true
+
+[types.BaseHoldSet.parents]
+BaseHoldObject = true
+Set = true
+
+[types.DataDict]
+Data = "frozendict"
+isabstract = true
+n_type_params = 2
+
+[types.DataDict.constructor.empty]
+valid = false
+
+[types.DataDict.parents]
+BaseDataDict = true
+DataObject = true
+MutableMapping = true
+
+[types.DataList]
+Data = "tuple"
+isabstract = true
+n_type_params = 1
+
+[types.DataList.constructor.empty]
+valid = false
+
+[types.DataList.parents]
+BaseDataList = true
+DataObject = true
+MutableSequence = true
+Sequence = true
+
+[types.DataObject]
+Data = "Hashable"
+isabstract = true
+
+[types.DataObject.parents]
+
+[types.DataSet]
+Data = "frozenset"
+isabstract = true
+n_type_params = 1
+
+[types.DataSet.constructor.empty]
+valid = false
+
+[types.DataSet.parents]
+BaseDataSet = true
+DataObject = true
+MutableSet = true
+Set = true
+
+[types.FrozenDataDict]
+Data = "frozendict"
+isabstract = true
+
+[types.FrozenDataDict.parents]
+FrozenDataObject = true
+
+[types.FrozenDataList]
+Data = "tuple"
+isabstract = true
+
+[types.FrozenDataList.parents]
+FrozenDataObject = true
+
+[types.FrozenDataObject]
+Data = "Hashable"
+isabstract = true
+
+[types.FrozenDataObject.parents]
+
+[types.FrozenDataSet]
+Data = "frozenset"
+isabstract = true
+
+[types.FrozenDataSet.parents]
+FrozenDataObject = true
+
+[types.FrozenHoldDict.constructor.concrete]
+args = [
+    { a = 1 },
+]
+
+[types.FrozenHoldDict.constructor.concrete-1.kwargs]
+a = 1
+
+[types.FrozenHoldDict.parents]
+FrozenHoldObject = true
+Mapping = true
+MutableMapping = false
+
+[types.FrozenHoldList.constructor.concrete]
+args = [
+    [
+        1,
+        2,
+    ],
+]
+repr = "FrozenHoldList([1, 2])"
+
+[types.FrozenHoldList.parents]
+BaseHoldList = true
+FrozenDataList = true
+FrozenHoldObject = true
+MutableSequence = false
+Sequence = true
+
+[types.FrozenHoldObject]
+Data = "Hashable"
+isabstract = true
+
+[types.FrozenHoldObject.parents]
+
+[types.FrozenHoldSet.constructor.concrete]
+args = [
+    [
+        1,
+        2,
+    ],
+]
+valid = true
+
+[types.FrozenHoldSet.parents]
+FrozenHoldObject = true
+MutableSet = false
+Set = true
+
+[types.HoldDict]
+Data = "frozendict"
+n_type_params = 2
+
+[types.HoldDict.constructor.concrete.kwargs]
+a = 1
+
+[types.HoldDict.constructor.empty]
+args = []
+
+[types.HoldDict.parents]
+BaseHoldDict = true
+HoldObject = true
+Mapping = true
+MutableMapping = true
+
+[types.HoldList]
+Data = "tuple"
+n_type_params = 1
+
+[types.HoldList.constructor.empty]
+args = []
+
+[types.HoldList.constructor.concrete]
+args = [
+    [
+        1,
+        2,
+    ],
+]
+
+[types.HoldList.constructor.protocols]
+args = [
+    [
+        1,
+        2,
+        3,
+    ],
+]
+
+[types.HoldList.parents]
+BaseHoldList = true
+HoldObject = true
+MutableSequence = true
+Sequence = true
+
+[types.HoldObject]
+Data = "Hashable"
+isabstract = true
+
+[types.HoldObject.parents]
+
+[types.HoldSet]
+Date = "frozenset"
+n_type_params = 1
+
+[types.HoldSet.constructor.empty]
+args = []
+
+[types.HoldSet.constructor.concrete]
+args = [
+    [
+        1,
+        2,
+    ],
+]
+
+[types.HoldSet.constructor.protocols]
+args = [
+    [
+        1,
+        2,
+        3,
+    ],
+]
+
+[types.HoldSet.parents]
+BaseHoldSet = true
+HoldObject = true
+MutableSet = true
+Set = true
+
+[varia]
+MUTES = [
+    "",
+    "Base",
+    "Frozen",
+]
+ROOTS = [
+    "Dict",
+    "List",
+    "Object",
+    "Set",
+]
+SLOTS = [
+    "Data",
+    "Hold",
+]
