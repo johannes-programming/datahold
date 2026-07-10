@@ -60,59 +60,6 @@ Inherited features are not mentioned again, unless something changed.
 
 The classes in ``datahold.base`` can also be accessed directly from ``datahold``.
 
-``class datahold.base.BaseDataObject.BaseDataObject(data: Self, /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This abstract base class is the ancestor of all other classes in ``datahold``.
-
-``class datahold.base.BaseDataObject.BaseDataObject.Data()``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This protocol inherits from ``typing.Protocol``.
-
-``__hash__() -> int``
-"""""""""""""""""""""
-
-This method implements ``hash(self)``.
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
-``__eq__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self == other``.
-
-``__ge__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self >= other``.
-
-``__gt__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self > other``.
-
-``__le__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self <= other``.
-
-``__lt__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self < other``.
-
-``__ne__(other: Any, /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self != other``.
-
-``data: Hashable``
-^^^^^^^^^^^^^^^^^^
-
-This abstract property is at the center of this class and of its descendants.
-
 ``class datahold.base.BaseDataCollection.BaseDataCollection[Item](data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -253,6 +200,59 @@ This magic method implements ``iter(self)``.
 
 ``data: BaseDataIterable.Data[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is at the center of this class and of its descendants.
+
+``class datahold.base.BaseDataObject.BaseDataObject(data: Self, /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class is the ancestor of all other classes in ``datahold``.
+
+``class datahold.base.BaseDataObject.BaseDataObject.Data()``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This protocol inherits from ``typing.Protocol``.
+
+``__hash__() -> int``
+"""""""""""""""""""""
+
+This method implements ``hash(self)``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__eq__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self == other``.
+
+``__ge__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self >= other``.
+
+``__gt__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self > other``.
+
+``__le__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self <= other``.
+
+``__lt__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self < other``.
+
+``__ne__(other: Any, /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self != other``.
+
+``data: BaseDataObject.Data``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is at the center of this class and of its descendants.
 
