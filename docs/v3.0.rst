@@ -118,10 +118,10 @@ This abstract property is at the center of this class and of its descendants.
 
 This abstract base class inherits from ``BaseDataObject`` and ``Collection[Item]``.
 
-``class datahold.base.BaseDataCollection.BaseDataCollection.Data[Item]()``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``class datahold.base.BaseDataCollection.BaseDataCollection.Data[DataItem]()``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This protocol inherits from ``collections.abc.Collection[Item]``, from ``BaseDataObject.Data`` and from ``typing.Protocol[Item]``.
+This protocol inherits from ``collections.abc.Collection[DataItem]``, from ``BaseDataObject.Data`` and from ``typing.Protocol[DataItem]``.
 
 ``__hash__() -> int``
 """""""""""""""""""""
@@ -159,8 +159,8 @@ This magic method implements ``iter(self)``.
     def __len__(self: Self, /) -> int:
         return len(self.data)
 
-``data: HashableCollection[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``data: BaseDataCollection.Data[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is at the center of this class and of its descendants.
 
