@@ -17,9 +17,12 @@ Item = TypeVar("Item", covariant=True)
 class BaseDataCollection(BaseDataObject, Collection[Item]):
     __slots__ = ()
 
-    class Data(Collection[DataItem], Protocol[DataItem]):
-        @setdoc.basic
-        def __hash__(self: Self) -> int: ...
+    class Data(
+        Collection[DataItem],
+        BaseDataObject.Data,
+        Protocol[DataItem],
+    ):
+        """Provide collection data protocol."""
 
     @setdoc.basic
     def __contains__(self: Self, other: Hashable, /) -> bool:

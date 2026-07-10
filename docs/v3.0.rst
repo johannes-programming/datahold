@@ -121,7 +121,7 @@ This abstract base class inherits from ``BaseDataObject`` and ``Collection[Item]
 ``class datahold.base.BaseDataCollection.BaseDataCollection.Data[Item]()``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This protocol inherits from ``collections.abc.Collection[Item]`` and from ``typing.Protocol[Item]``.
+This protocol inherits from ``collections.abc.Collection[Item]``, from ``BaseDataObject.Data`` and from ``typing.Protocol[Item]``.
 
 ``__hash__() -> int``
 """""""""""""""""""""
@@ -648,16 +648,6 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 '''''''''''''''''''
 
 The protocols in ``datahold.typing`` are used by ``datahold`` itself.
-
-``class datahold.base.BaseDataCollection.BaseDataCollection.Data[Item]``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This protocol inherits from ``collections.abc.Collection[Item]`` and from ``typing.Protocol[Item]``.
-
-``__hash__() -> int``
-^^^^^^^^^^^^^^^^^^^^^
-
-This method implements ``hash(self)``.
 
 ``class datahold.typing.SupportsKeysAndGetitem.SupportsKeysAndGetitem[Key, Value]``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
