@@ -1,3 +1,3 @@
-"""Provide _utils."""
+"""Provide typing."""
 
 __all__: list[str] = []
