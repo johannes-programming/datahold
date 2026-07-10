@@ -1,5 +1,7 @@
 """Provide BaseDataReversible."""
 
+from __future__ import annotations
+
 __all__ = ["BaseDataReversible"]
 
 from abc import abstractmethod
@@ -28,7 +30,7 @@ class BaseDataReversible(
         """Provide reversible data protocol."""
 
     @setdoc.basic
-    def __reversed__(self: Self) -> Iterator[Item]:
+    def __reversed__(self: Self, /) -> Iterator[Item]:
         return reversed(self.data)
 
     @property
