@@ -159,8 +159,8 @@ This magic method implements ``iter(self)``.
     def __len__(self: Self, /) -> int:
         return len(self.data)
 
-``data: HashableCollection[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``data: BaseDataCollection.Data[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is at the center of this class and of its descendants.
 
