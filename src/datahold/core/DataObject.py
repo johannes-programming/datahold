@@ -1,18 +1,31 @@
-from typing import *
+"""Provide DataObject."""
+
+__all__: list[str] = ["DataObject"]
+
+from abc import abstractmethod
+from collections.abc import Hashable
+from typing import Any, Self
 
 import setdoc
 from copyable import Copyable
 
-from .BaseDataObject import BaseDataObject
-
-__all__ = ["DataObject"]
+from ..base.BaseDataObject import BaseDataObject
 
 
 class DataObject(BaseDataObject, Copyable):
-    data: Any
 
     __slots__ = ()
 
     @setdoc.basic
     def copy(self: Self) -> Self:
-        return type(self)(self.data)
+        return type(self)(self)
+
+    @property
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self) -> Hashable: ...
+
+    @data.setter
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self, value: Any) -> None: ...

@@ -1,18 +1,21 @@
-from typing import *
+"""Provide HoldList."""
+
+__all__: list[str] = ["HoldList"]
+
+from collections.abc import Iterable
+from typing import Self, TypeVar
 
 import setdoc
 
-from .BaseHoldList import BaseHoldList
+from ..base.BaseHoldList import BaseHoldList
 from .DataList import DataList
 from .HoldObject import HoldObject
-
-__all__ = ["HoldList"]
 
 Item = TypeVar("Item")
 
 
-class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
-    data: tuple[Item, ...]
+class HoldList(DataList[Item], BaseHoldList[Item], HoldObject):
+
     __slots__ = ()
 
     @property
@@ -21,5 +24,6 @@ class HoldList(HoldObject, DataList[Item], BaseHoldList[Item]):
         return self._data
 
     @data.setter
-    def data(self: Self, value: Any) -> None:
-        self._data = tuple[Item, ...](value)
+    @setdoc.basic
+    def data(self: Self, value: Iterable[Item]) -> None:
+        self._data = tuple(value)
