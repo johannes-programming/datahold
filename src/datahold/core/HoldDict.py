@@ -17,7 +17,7 @@ Key = TypeVar("Key", bound=Hashable)
 Value = TypeVar("Value")
 
 
-class HoldDict(HoldObject, DataDict[Key, Value], BaseHoldDict[Key, Value]):
+class HoldDict(DataDict[Key, Value], BaseHoldDict[Key, Value], HoldObject):
 
     __slots__ = ()
 

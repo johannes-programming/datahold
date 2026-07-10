@@ -11,6 +11,6 @@ from .FrozenDataObject import FrozenDataObject
 Item = TypeVar("Item", bound=Hashable, covariant=True)
 
 
-class FrozenDataSet(FrozenDataObject, BaseDataSet[Item]):
+class FrozenDataSet(BaseDataSet[Item], FrozenDataObject):
 
     __slots__ = ()

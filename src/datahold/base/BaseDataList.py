@@ -14,7 +14,6 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 
 Item = TypeVar("Item", covariant=True)
-Item_ = TypeVar("Item_")
 
 
 class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
@@ -71,6 +70,7 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
 
     @property
     @abstractmethod
+    @setdoc.basic
     def data(self: Self) -> tuple[Item, ...]: ...
 
     @setdoc.basic

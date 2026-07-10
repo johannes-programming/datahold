@@ -18,7 +18,9 @@ Value = TypeVar("Value", covariant=True)
 
 
 class FrozenHoldDict(
-    FrozenHoldObject, FrozenDataDict[Key, Value], BaseHoldDict[Key, Value]
+    FrozenDataDict[Key, Value],
+    BaseHoldDict[Key, Value],
+    FrozenHoldObject,
 ):
 
     __slots__ = ()
@@ -29,8 +31,17 @@ class FrozenHoldDict(
         data: (
             SupportsKeysAndGetitem[Key | str, Optional[Value]]
             | Iterable[tuple[Key | str, Optional[Value]]]
-        ),
+        ) = (),
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._data = frozendict(data, **kwargs)  # type: ignore[arg-type]
+        self._data: frozendict[Key | str, Optional[Value]]
+        self._data = frozendict(
+            data,  # type: ignore[arg-type]
+            **kwargs,
+        )
+
+    @property
+    @setdoc.basic
+    def data(self: Self) -> frozendict[Key | str, Optional[Value]]:
+        return self._data

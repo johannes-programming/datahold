@@ -1,14 +1,14 @@
 Overview
 --------
 
-This project wraps common mutable datastructures for inheritance with modification.
+This project wraps common mutable data structures for inheritance with modification.
 
 Of course, similar base classes are provided by ``collections``.
 They were also the main inspiration for this project.
-But they suffer from one principle problem:
+But they suffer from one principal problem:
 They necessitate overwriting multiple methods
 to effectively customize the data holder.
-This project allow to create a customized data holder
+This project allows creating a customized data holder
 by only overwriting the ``data`` property.
 All proper methods and magic methods in the classes of this project
 use the getter (and in the mutable ``core`` classes also the setter) of the ``data`` property.
@@ -106,7 +106,7 @@ This abstract property is at the center of this class and of its descendants.
 ``class datahold.base.BaseDataCollection.BaseDataCollection[Item](data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataObject``and ``Collection[Item]``.
+This abstract base class inherits from ``BaseDataObject`` and ``Collection[Item]``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -248,7 +248,7 @@ This abstract ``property`` is inherited from ``BaseDataObject`` and reannotated.
 ``class datahold.base.BaseDataSet.BaseDataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataObject``.
+This abstract base class inherits from ``BaseDataCollection[Item]`` and from ``Set[Item]``.
 It works analogously to ``BaseDataDict``.
 Its ``data`` property is annotated as ``frozenset[Item]``.
 It has no classmethod to implement.
@@ -318,7 +318,7 @@ This abstract ``class`` inherits from ``BaseDataObject``.
 ``class datahold.base.BaseHoldDict.BaseHoldDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataDict[Key, Value]``.
+This abstract ``class`` inherits from ``BaseDataDict[Key, Value]`` and from ``BaseHoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -328,7 +328,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``class datahold.base.BaseHoldList.BaseHoldList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataList[Item]``.
+This abstract ``class`` inherits from ``BaseDataList[Item]`` and from ``BaseHoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -338,7 +338,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 ``class datahold.base.BaseHoldSet.BaseHoldSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract ``class`` inherits from ``BaseHoldObject`` and from ``BaseDataSet[Item]``.
+This abstract ``class`` inherits from ``BaseDataSet[Item]`` and from ``BaseHoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -364,7 +364,7 @@ This method returns ``type(self)(self)``.
 ``class datahold.core.DataDict.DataDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``DataObject``, ``BaseDataDict[Key, Value]``, and ``collections.abc.MutableMapping[Key | str, Optional[Value]]``.
+This abstract base class inherits from ``BaseDataDict[Key, Value]``, from ``DataObject``, and from ``collections.abc.MutableMapping[Key | str, Optional[Value]]``.
 It inherits the non-mutating mapping operations from ``BaseDataDict`` and implements the mutating operations below.
 
 ``__slots__ = ()``
@@ -408,7 +408,7 @@ The setter accepts ``SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterab
 ``class datahold.core.DataList.DataList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``DataObject``, ``BaseDataList[Item]``, and ``collections.abc.MutableSequence[Item]``.
+This class inherits from ``BaseDataList[Item]``, ``DataObject``, and ``collections.abc.MutableSequence[Item]``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -452,7 +452,7 @@ This class inherits from ``DataObject``, ``BaseDataList[Item]``, and ``collectio
 ``class datahold.core.DataSet.DataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``DataObject`` and ``BaseDataSet[Item]``.
+This class inherits from ``BaseDataSet[Item]``, from ``DataObject``, and from ``MutableSet[Item]``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -504,7 +504,7 @@ The setter accepts ``Iterable[Item]``.
 ``class datahold.core.HoldObject.HoldObject(data: Self, /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``DataObject`` and ``BaseHoldObject``.
+This class inherits from ``DataObject`` and from ``BaseHoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -512,7 +512,7 @@ This class inherits from ``DataObject`` and ``BaseHoldObject``.
 ``class datahold.core.HoldDict.HoldDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``HoldObject``, ``DataDict[Key, Value]``, and ``BaseHoldDict[Key, Value]``.
+This class inherits from ``DataDict[Key, Value]``, from ``BaseHoldDict[Key, Value]``, and from ``HoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -527,7 +527,7 @@ The setter accepts ``SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterab
 ``class datahold.core.HoldList.HoldList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``HoldObject``, ``DataList[Item]``, and ``BaseHoldList[Item]``.
+This class inherits from ``DataList[Item]``, from ``BaseHoldList[Item]``, and from ``HoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -542,7 +542,7 @@ The setter accepts ``Iterable[Item]``.
 ``class datahold.core.HoldSet.HoldSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``HoldObject``, ``DataSet[Item]``, and ``BaseHoldSet[Item]``.
+This class inherits from ``DataSet[Item]``, from ``BaseHoldSet[Item]``, and from ``HoldObject``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -628,7 +628,7 @@ The protocols in ``datahold.typing`` are used by ``datahold`` itself.
 ``class datahold.typing.HashableCollection.HashableCollection[Item]``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This protocol inherits from ``collections.abc.Collection[Item]`` and ``typing.Protocol[Item]``.
+This protocol inherits from ``collections.abc.Collection[Item]`` and from ``typing.Protocol[Item]``.
 
 ``__hash__() -> int``
 ^^^^^^^^^^^^^^^^^^^^^

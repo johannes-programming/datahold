@@ -9,7 +9,6 @@ from collections.abc import (
     Hashable,
     ItemsView,
     Iterable,
-    Iterator,
     KeysView,
     Mapping,
     ValuesView,
@@ -61,9 +60,9 @@ class BaseDataDict(
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({dict(self)!r})"
 
-    @setdoc.basic
-    def __reversed__(self: Self, /) -> Iterator[Key | str]:
-        return reversed(self.data)
+    # Mapping already defines: __reversed__ = None
+
+    # __ror__ is unnecessary because of how __or__ is defined
 
     @property
     @abstractmethod

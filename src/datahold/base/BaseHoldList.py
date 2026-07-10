@@ -10,5 +10,5 @@ from .BaseHoldObject import BaseHoldObject
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseHoldList(BaseHoldObject, BaseDataList[Item]):
+class BaseHoldList(BaseDataList[Item], BaseHoldObject):
     __slots__ = ()

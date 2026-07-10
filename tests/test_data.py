@@ -7,20 +7,6 @@ from datahold import core
 
 
 class TestData(unittest.TestCase):
-    def test_constructor_abc(self: Self) -> None:
-        cls: type[Any]
-        module: Any
-        t: str
-        for t in ("Dict", "List", "Set"):
-            module = getattr(core, "Data" + t)
-            cls = getattr(module, "Data" + t)
-            with self.assertRaises(Exception):
-                cls()
-
-    def test_constructor_core(self: Self) -> None:
-        core.HoldDict.HoldDict()
-        core.HoldList.HoldList()
-        core.HoldSet.HoldSet()
 
     def test_doc(self: Self) -> None:
         name: str

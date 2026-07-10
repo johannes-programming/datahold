@@ -12,10 +12,6 @@ from datahold.frozen.FrozenHoldSet import FrozenHoldSet
 
 
 class TestCopy(unittest.TestCase):
-    def test_frozen_have_no_copy(self: Self) -> None:
-        self.assertFalse(hasattr(FrozenHoldDict({"a": 1}), "copy"))
-        self.assertFalse(hasattr(FrozenHoldList([1, 2]), "copy"))
-        self.assertFalse(hasattr(FrozenHoldSet({1, 2}), "copy"))
 
     def test_frozen_have_no_copy_2(self: Self) -> None:
         """
