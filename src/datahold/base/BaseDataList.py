@@ -6,8 +6,16 @@ __all__: list[str] = ["BaseDataList"]
 
 import sys
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable, Iterator, Sequence
-from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
+from collections.abc import Hashable, Iterable, Sequence
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Self,
+    SupportsIndex,
+    TypeVar,
+    cast,
+    overload,
+)
 
 import setdoc
 
@@ -62,9 +70,8 @@ class BaseDataList(
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.data)!r})"
 
-    @setdoc.basic
-    def __reversed__(self: Self, /) -> Iterator[Item]:
-        return reversed(self.data)
+    if TYPE_CHECKING:
+        __reversed__ = BaseDataReversible.__reversed__
 
     @setdoc.basic
     def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
