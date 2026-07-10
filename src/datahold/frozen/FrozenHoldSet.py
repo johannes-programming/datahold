@@ -23,7 +23,7 @@ class FrozenHoldSet(
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item], /) -> None:
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
         self._data: frozenset[Item]
         self._data = frozenset(data)
 

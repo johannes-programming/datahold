@@ -596,7 +596,7 @@ See the corresponding base class for more information.
 
 This ``property`` is inherited from ``BaseDataObject`` and implemented.
 
-``class datahold.frozen.FrozenHoldDict.FrozenHoldDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]], /, **kwargs: Optional[Value])``
+``class datahold.frozen.FrozenHoldDict.FrozenHoldDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
@@ -604,7 +604,7 @@ This ``property`` is inherited from ``BaseDataObject`` and implemented.
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.frozen.FrozenHoldList.FrozenHoldList[Item](data: Iterable[Item], /)``
+``class datahold.frozen.FrozenHoldList.FrozenHoldList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``
@@ -612,7 +612,7 @@ The slot layout of the class is dictated by ``BaseHoldObject``.
 
 The slot layout of the class is dictated by ``BaseHoldObject``.
 
-``class datahold.frozen.FrozenHoldSet.FrozenHoldSet[Item](data: Iterable[Item], /)``
+``class datahold.frozen.FrozenHoldSet.FrozenHoldSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``__slots__ = ()``

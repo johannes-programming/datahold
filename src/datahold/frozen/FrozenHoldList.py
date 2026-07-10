@@ -23,7 +23,7 @@ class FrozenHoldList(
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item], /) -> None:
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
         self._data: tuple[Item, ...]
         self._data = tuple(data)
 
