@@ -43,10 +43,6 @@ class BaseDataObject(metaclass=ABCMeta):
         except Exception:
             return NotImplemented
 
-    @abstractmethod
-    @setdoc.basic
-    def __init__(self: Self, data: Self, /) -> None: ...
-
     @setdoc.basic
     def __le__(self: Self, other: Any, /) -> Any:
         if not isinstance(other, BaseDataObject):
