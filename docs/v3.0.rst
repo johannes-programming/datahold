@@ -6,7 +6,7 @@ This project wraps common mutable data structures for inheritance with modificat
 Of course, similar base classes are provided by ``collections``.
 They were also the main inspiration for this project.
 But they suffer from one principal problem:
-They necessitate overwriting multiple methods
+They necessitate overriding multiple methods
 to effectively customize the data holder.
 This project allows creating a customized data holder
 by only overwriting the ``data`` property.
