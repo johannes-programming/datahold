@@ -16,6 +16,11 @@ class DataObject(BaseDataObject, Copyable):
 
     __slots__ = ()
 
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self:Self, data:Self, /)->None:
+        ...
+
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
