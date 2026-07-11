@@ -3,35 +3,30 @@
 __all__: list[str] = ["BaseDataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Collection
+from collections.abc import Iterable, Iterator
 from typing import Protocol, Self, TypeVar
 
 import setdoc
 
-from .BaseDataContainer import BaseDataContainer
-from .BaseDataIterable import BaseDataIterable
-from .BaseDataSized import BaseDataSized
+from .BaseDataObject import BaseDataObject
 
 DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataCollection(
-    BaseDataSized,
-    BaseDataIterable[Item],
-    BaseDataContainer,
-    Collection[Item],
-):
+class BaseDataIterable(BaseDataObject, Iterable[Item]):
     __slots__ = ()
 
     class Data(
-        BaseDataSized.Data,
-        BaseDataIterable.Data[DataItem],
-        BaseDataContainer.Data,
-        Collection[DataItem],
+        BaseDataObject.Data,
+        Iterable[DataItem],
         Protocol[DataItem],
     ):
         """Provide collection data protocol."""
+
+    @setdoc.basic
+    def __iter__(self: Self, /) -> Iterator[Item]:
+        return iter(self.data)
 
     @property
     @abstractmethod

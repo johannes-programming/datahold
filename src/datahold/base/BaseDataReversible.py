@@ -1,37 +1,37 @@
-"""Provide BaseDataCollection."""
+"""Provide BaseDataReversible."""
 
-__all__: list[str] = ["BaseDataCollection"]
+from __future__ import annotations
+
+__all__: list[str] = ["BaseDataReversible"]
 
 from abc import abstractmethod
-from collections.abc import Collection
+from collections.abc import Iterator, Reversible
 from typing import Protocol, Self, TypeVar
 
 import setdoc
 
-from .BaseDataContainer import BaseDataContainer
 from .BaseDataIterable import BaseDataIterable
-from .BaseDataSized import BaseDataSized
 
 DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataCollection(
-    BaseDataSized,
+class BaseDataReversible(
     BaseDataIterable[Item],
-    BaseDataContainer,
-    Collection[Item],
+    Reversible[Item],
 ):
     __slots__ = ()
 
     class Data(
-        BaseDataSized.Data,
         BaseDataIterable.Data[DataItem],
-        BaseDataContainer.Data,
-        Collection[DataItem],
+        Reversible[DataItem],
         Protocol[DataItem],
     ):
-        """Provide collection data protocol."""
+        """Provide reversible data protocol."""
+
+    @setdoc.basic
+    def __reversed__(self: Self, /) -> Iterator[Item]:
+        return reversed(self.data)
 
     @property
     @abstractmethod
