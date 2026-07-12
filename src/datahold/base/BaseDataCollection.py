@@ -3,7 +3,8 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataCollection"]
 from abc import abstractmethod
 from collections.abc import Container, Hashable, Iterable, Iterator, Sized, Collection
-from typing import Never, Protocol, Self, TypeVar
+from typing import Never, Protocol, Self, TypeVar, Any
+from BaseDataFgettable import BaseDataFgettable
 
 import setdoc
 
@@ -11,7 +12,17 @@ DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataCollection(Collection[Item]):
+class Fget(
+    Hashable,
+    Sized,
+    Iterable[DataItem],
+    Container[Never],  # every TypeError is worked around
+    Protocol[DataItem],
+):
+    ...
+Fget.__name__ = "Data"
+setdoc.basic(Fget)
+class BaseDataCollection(BaseDataFgettable[Fget[Item]], Collection[Item]):
     """Act as a base class for concrete set implementations backed by a data attribute."""
 
     # this abc exists to provide the easiest possible template for a Set
@@ -20,33 +31,21 @@ class BaseDataCollection(Collection[Item]):
 
     __slots__ = ()
 
-    @setdoc.basic
-    class Data(
-        Hashable,
-        Sized,
-        Iterable[DataItem],
-        Container[Never],  # every TypeError is worked around
-        Protocol[DataItem],
-    ):
-        """Define the protocol that the data property must satisfy."""
+    Data = Fget
 
     @setdoc.basic
     def __contains__(self: Self, other: object) -> bool:
         try:
             return other in self.data
         except TypeError:
-            return other in tuple(self)
+            return other in (x for x in self)
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> BaseDataCollection.Data[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data:Iterable[Item], /) -> None: ...
+    def __fset__(self: Self, data:Iterable[Any], /) -> None: ...
 
     @setdoc.basic
-    def __init__(self:Self, data:Iterable[Item] = (), /) -> None:
+    def __init__(self:Self, data:Iterable[Any] = (), /) -> None:
         self.__fset__(data)
 
     @setdoc.basic
@@ -56,8 +55,3 @@ class BaseDataCollection(Collection[Item]):
     @setdoc.basic
     def __len__(self: Self) -> int:
         return len(self.data)
-
-    @property
-    @setdoc.basic
-    def data(self: Self) -> BaseDataCollection.Data[Item]:
-        return self.__fget__()

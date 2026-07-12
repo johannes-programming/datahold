@@ -6,7 +6,6 @@ from typing import TypeVar
 from .BaseDataCollection import BaseDataCollection
 
 
-DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
 
 class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):

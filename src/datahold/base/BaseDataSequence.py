@@ -2,11 +2,12 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataSequence"]
 from abc import abstractmethod
-from collections.abc import Container, Hashable, Iterable, Sequence, Sized
+from collections.abc import  Iterable, Sequence
 from typing import Protocol, Self, TypeVar, overload
 
 import setdoc
 from .BaseDataCollection import BaseDataCollection
+from .BaseDataFgettable import BaseDataFgettable
 
 DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
@@ -14,7 +15,28 @@ Item = TypeVar("Item", covariant=True)
 
 
 
-class BaseDataSequence(BaseDataCollection[Item], Sequence[Item]):
+class Fget(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: int) -> DataItem: ...
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: slice) -> Iterable[DataItem]: ...
+
+    def __getitem__(
+        self: Self, index: int | slice
+    ) -> DataItem | Iterable[DataItem]: ...
+Fget.__name__ = "Data"
+setdoc.basic(Fget)
+
+
+class BaseDataSequence(
+    BaseDataFgettable[Fget[Item]], 
+    BaseDataCollection[Item], 
+    Sequence[Item],
+):
     """Act as a base class for concrete sequence implementations backed by a data attribute."""
 
     # this abc exists to provide the easiest possible template for a Sequence
@@ -23,26 +45,10 @@ class BaseDataSequence(BaseDataCollection[Item], Sequence[Item]):
 
     __slots__ = ()
 
-    @setdoc.basic
-    class Data(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
+    Data=Fget
 
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, index: int) -> DataItem: ...
-
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, index: slice) -> Iterable[DataItem]: ...
-
-        def __getitem__(
-            self: Self, index: int | slice
-        ) -> DataItem | Iterable[DataItem]: ...
 
     __contains__ = Sequence[object].__contains__
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> BaseDataSequence.Data[Item]: ...
 
     @overload
     @setdoc.basic
@@ -62,8 +68,3 @@ class BaseDataSequence(BaseDataCollection[Item], Sequence[Item]):
             return type(self)(self.data[index])
         else:
             return self.data[index]
-
-    @property
-    @setdoc.basic
-    def data(self: Self) -> BaseDataSequence.Data[Item]:
-        return self.__fget__()

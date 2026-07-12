@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 __all__: list[str] = ["BaseDataMapping"]
-from abc import abstractmethod
 from collections.abc import (
-    Container,
     Hashable,
-    Iterable,
     Mapping,
-    Sized,
 )
 from typing import Protocol, Self, TypeVar
 from .BaseDataCollection import BaseDataCollection
+from .BaseDataFgettable import BaseDataFgettable
 
 import setdoc
 
@@ -20,10 +17,24 @@ Key = TypeVar("Key", covariant=True)
 Value = TypeVar("Value", covariant=True)
 
 
-class Container_(Container[Hashable]): ...
+
+
+class Fget(
+    BaseDataCollection.Data, 
+    Protocol[DataKey, DataValue],
+):
+    """Define the protocol that the data property must satisfy."""
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: Hashable) -> DataValue: ...
+Fget.__name__ = "Data"
+setdoc.basic(Fget)
+
+class BaseDataFgettable_(BaseDataFgettable[Fget]): ...
 
 
 class BaseDataMapping(  # type: ignore[type-var]
+    BaseDataFgettable_,
     BaseDataCollection[Key],
     Mapping[Key, Value],
 ):
@@ -35,31 +46,15 @@ class BaseDataMapping(  # type: ignore[type-var]
 
     __slots__ = ()
 
-    @setdoc.basic
-    class Data(
-        Hashable, Sized, Iterable[DataKey], Protocol[DataKey, DataValue]
-    ):
-        """Define the protocol that the data property must satisfy."""
-
-        @setdoc.basic
-        def __getitem__(self: Self, key: Hashable) -> DataValue: ...
+    Data=Fget
 
     @setdoc.basic
-    def __contains__(self:Self, other: DataKey, /) -> bool:
+    def __contains__(self:Self, other: object, /) -> bool:
         try:
             return Mapping.__contains__(self, other)
         except TypeError:
             return other in tuple(self)
 
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> BaseDataMapping.Data[Key, Value]: ...
-
     @setdoc.basic
     def __getitem__(self: Self, key: Hashable, /) -> Value:
         return self.data[key]
-
-    @property
-    @setdoc.basic
-    def data(self: Self) -> BaseDataMapping.Data[Key, Value]:
-        return self.__fget__()
