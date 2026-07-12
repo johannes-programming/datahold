@@ -9,7 +9,9 @@ and verifies signatures of all methods one by one against expected values.
 import inspect
 import unittest
 from collections.abc import Container, Set
-from typing import Optional, cast
+from typing import Optional, Self, cast
+
+import setdoc
 
 from datahold.base.BaseDataAbstractSet import BaseDataAbstractSet
 
@@ -23,12 +25,13 @@ class TestBaseDataAbstractSet(unittest.TestCase):
         class ConcreteSet(BaseDataAbstractSet[int]):
             """Concrete set backed by frozenset data for hashability."""
 
-            def __init__(self, items: list[int]) -> None:
-                self._data: frozenset[int] = frozenset(items)
-
-            @property
-            def data(self) -> BaseDataAbstractSet.Data[int]:
+            @setdoc.basic
+            def __fget__(self: Self) -> BaseDataAbstractSet.Data[int]:
                 return self._data
+
+            @setdoc.basic
+            def __init__(self: Self, items: list[int]) -> None:
+                self._data: frozenset[int] = frozenset(items)
 
         self.ConcreteSet = ConcreteSet
         self.instance: ConcreteSet = ConcreteSet([10, 20, 30])

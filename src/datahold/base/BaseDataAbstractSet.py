@@ -40,6 +40,10 @@ class BaseDataAbstractSet(Container_, Set[Item]):
         except TypeError:
             return other in tuple(self)
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> BaseDataAbstractSet.Data[Item]: ...
+
     @setdoc.basic
     def __iter__(self: Self) -> Iterator[Item]:
         return iter(self.data)
@@ -49,6 +53,6 @@ class BaseDataAbstractSet(Container_, Set[Item]):
         return len(self.data)
 
     @property
-    @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> BaseDataAbstractSet.Data[Item]: ...
+    def data(self: Self) -> BaseDataAbstractSet.Data[Item]:
+        return self.__fget__()
