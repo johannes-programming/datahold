@@ -9,7 +9,15 @@ from functools import cached_property
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Optional, Self, cast, get_args, get_origin
+from typing import (
+    Any,
+    Optional,
+    Self,
+    cast,
+    get_args,
+    get_origin,
+    runtime_checkable,
+)
 
 
 class Lazy(enum.Enum):
@@ -143,9 +151,12 @@ class TestAbstractness(unittest.TestCase):
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
         cls: Optional[type[Any]]
+        childdatatype: type[Any]
+        parentdatatype: type[Any]
         parenttype: type[Any]
         x: Any
         y: Any
+        z: Any
         cls = Lazy.get_type(typename)
         if cls is None:
             raise Exception
@@ -157,7 +168,21 @@ class TestAbstractness(unittest.TestCase):
                 self.go_constructor(cls, **y)
         for x, y in kwargs.get("parents", {}).items():
             parenttype = Lazy.get_parenttype(x)
-            self.assertEqual(issubclass(cls, parenttype), y)
+            self.assertEqual(y, issubclass(cls, parenttype))
+            if not hasattr(parenttype, "Data"):
+                continue
+            if isinstance(parenttype.Data, type):
+                parentdatatype = parenttype.Data
+            else:
+                parentdatatype = get_origin(parenttype.Data)
+            if isinstance(cls.Data, type):
+                childdatatype = cls.Data
+            else:
+                childdatatype = get_origin(cls.Data)
+            self.assertEqual(
+                y,
+                issubclass(childdatatype, parentdatatype),
+            )
         self.assertNotEqual(
             typename.startswith("Base") or typename.startswith("Frozen"),
             hasattr(cls, "copy"),

@@ -4,7 +4,7 @@ __all__ = ["BaseDataCollection"]
 
 from abc import abstractmethod
 from collections.abc import Container, Iterable, Iterator, Sized
-from typing import Protocol, Self, TypeVar
+from typing import Protocol, Self, TypeVar, runtime_checkable
 
 import setdoc
 
@@ -22,6 +22,7 @@ class BaseDataCollection(
 ):
     __slots__ = ()
 
+    @runtime_checkable
     class Data(
         Sized,
         Iterable[DataItem],

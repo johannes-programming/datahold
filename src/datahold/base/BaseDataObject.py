@@ -3,7 +3,8 @@
 __all__: list[str] = ["BaseDataObject"]
 
 from abc import ABCMeta, abstractmethod
-from typing import Any, Protocol, Self
+from collections.abc import Hashable
+from typing import Any, Protocol, Self, runtime_checkable
 
 import setdoc
 
@@ -12,11 +13,11 @@ class BaseDataObject(metaclass=ABCMeta):
 
     __slots__ = ()
 
-    class Data(Protocol):
+    @runtime_checkable
+    class Data(Hashable, Protocol):
         """Provide hashable data protocol."""
 
-        @setdoc.basic
-        def __hash__(self: Self) -> int: ...
+        ...
 
     @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> Any:
@@ -75,4 +76,4 @@ class BaseDataObject(metaclass=ABCMeta):
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data: ...
+    def data(self: Self) -> Hashable: ...
