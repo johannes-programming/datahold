@@ -18,7 +18,7 @@ class BaseDataSequence(Container_, Sequence[Item]):
     """Act as a base class for concrete sequence implementations backed by a data attribute."""
 
     # this abc exists to provide the easiest possible template for a Sequence
-    # a subclass must only override ``__init__`` and ``data``
+    # a subclass must only override ``__fget__`` and ``__fset__``
     # and it is immediately non-abstract
 
     __slots__ = ()
@@ -45,6 +45,10 @@ class BaseDataSequence(Container_, Sequence[Item]):
     @setdoc.basic
     def __fget__(self: Self) -> BaseDataSequence.Data[Item]: ...
 
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: Iterable[Item], /) -> None: ...
+
     @overload
     @setdoc.basic
     def __getitem__(self: Self, index: int) -> Item: ...
@@ -60,18 +64,11 @@ class BaseDataSequence(Container_, Sequence[Item]):
             # index cannot be an int now because subclassing slice is impossible
             # we are forced to assume a constructor signature
             # the subtype of BaseDataSequence might be immutable
-            return type(self)(self.data[index])
+            other = type(self)()
+            other.__fset__(self.data[index])
+            return other
         else:
             return self.data[index]
-
-    @abstractmethod
-    @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        # Implementing an (abstract) __init__ is necessary
-        # because of __getitem__
-        # Iterable[Item] is more practical than Data[Item]
-        # as annotation for data
-        ...
 
     @setdoc.basic
     def __len__(self: Self) -> int:
