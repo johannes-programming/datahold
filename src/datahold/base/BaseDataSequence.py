@@ -23,6 +23,7 @@ class BaseDataSequence(Container_, Sequence[Item]):
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data(Hashable, Sized, Protocol[DataItem]):
         """Define the protocol that the data property must satisfy."""
 

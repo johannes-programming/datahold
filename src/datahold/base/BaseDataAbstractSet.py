@@ -23,6 +23,7 @@ class BaseDataAbstractSet(Container_, Set[Item]):
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data(
         Hashable,
         Sized,

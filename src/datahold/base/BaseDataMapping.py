@@ -35,6 +35,7 @@ class BaseDataMapping(  # type: ignore[type-var]
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data(
         Hashable, Sized, Iterable[DataKey], Protocol[DataKey, DataValue]
     ):
