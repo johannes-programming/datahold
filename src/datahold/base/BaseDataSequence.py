@@ -17,6 +17,10 @@ class Container_(Container[object]): ...
 class BaseDataSequence(Container_, Sequence[Item]):
     """Act as a base class for concrete sequence implementations backed by a data attribute."""
 
+    # this abc exists to provide the easiest possible template for a Sequence
+    # a subclass must only override ``__init__`` and ``data``
+    # and it is immediately non-abstract
+
     __slots__ = ()
 
     class Data(Hashable, Sized, Protocol[DataItem]):
@@ -58,7 +62,8 @@ class BaseDataSequence(Container_, Sequence[Item]):
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        # Implementing __init__ is necessary because of __getitem__
+        # Implementing an (abstract) __init__ is necessary
+        # because of __getitem__
         # Iterable[Item] is more practical than Data[Item]
         # as annotation for data
         ...
