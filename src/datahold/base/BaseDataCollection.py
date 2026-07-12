@@ -26,7 +26,7 @@ class BaseDataCollection(BaseDataFgettable[Fget[Item]], Collection[Item]):
     """Act as a base class for concrete set implementations backed by a data attribute."""
 
     # this abc exists to provide the easiest possible template for a Set
-    # a subclass must only override ``__fget__``
+    # a subclass must only override __fget__ and __fset__
     # and it is immediately non-abstract
 
     __slots__ = ()
