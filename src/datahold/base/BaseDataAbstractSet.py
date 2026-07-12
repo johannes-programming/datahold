@@ -16,8 +16,9 @@ class Container_(Container[object]): ...
 
 class BaseDataAbstractSet(Container_, Set[Item]):
     """Act as a base class for concrete set implementations backed by a data attribute."""
+
     # this abc exists to provide the easiest possible template for a Set
-    # a subclass must only override ``data`` 
+    # a subclass must only override ``data``
     # and it is immediately non-abstract
 
     __slots__ = ()

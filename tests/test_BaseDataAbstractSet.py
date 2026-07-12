@@ -11,7 +11,7 @@ import unittest
 from collections.abc import Container, Set
 from typing import Optional, cast
 
-from datahold.core.BaseDataAbstractSet import BaseDataAbstractSet
+from datahold.base.BaseDataAbstractSet import BaseDataAbstractSet
 
 
 class TestBaseDataAbstractSet(unittest.TestCase):
