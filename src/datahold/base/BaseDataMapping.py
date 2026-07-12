@@ -6,11 +6,11 @@ from collections.abc import (
     Container,
     Hashable,
     Iterable,
-    Iterator,
     Mapping,
     Sized,
 )
 from typing import Protocol, Self, TypeVar
+from .BaseDataCollection import BaseDataCollection
 
 import setdoc
 
@@ -24,13 +24,13 @@ class Container_(Container[Hashable]): ...
 
 
 class BaseDataMapping(  # type: ignore[type-var]
-    Container_,
+    BaseDataCollection[Key],
     Mapping[Key, Value],
 ):
     """Act as a base class for concrete mapping implementations backed by a data attribute."""
 
     # this abc exists to provide the easiest possible template for a Mapping
-    # a subclass must only override ``__fget__``
+    # a subclass must only override __fget__ and __fset__
     # and it is immediately non-abstract
 
     __slots__ = ()
@@ -44,23 +44,20 @@ class BaseDataMapping(  # type: ignore[type-var]
         @setdoc.basic
         def __getitem__(self: Self, key: Hashable) -> DataValue: ...
 
-    __contains__ = Mapping[Hashable, Value].__contains__
+    @setdoc.basic
+    def __contains__(self:Self, other: DataKey, /) -> bool:
+        try:
+            return Mapping.__contains__(self, other)
+        except TypeError:
+            return other in tuple(self)
 
     @abstractmethod
     @setdoc.basic
     def __fget__(self: Self) -> BaseDataMapping.Data[Key, Value]: ...
 
     @setdoc.basic
-    def __getitem__(self: Self, key: Hashable) -> Value:
+    def __getitem__(self: Self, key: Hashable, /) -> Value:
         return self.data[key]
-
-    @setdoc.basic
-    def __iter__(self: Self) -> Iterator[Key]:
-        return iter(self.data)
-
-    @setdoc.basic
-    def __len__(self: Self) -> int:
-        return len(self.data)
 
     @property
     @setdoc.basic
