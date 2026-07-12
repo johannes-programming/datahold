@@ -12,7 +12,7 @@ import unittest
 from collections.abc import Container, Sequence
 from typing import Optional, cast
 
-from datahold.core.BaseDataSequence import BaseDataSequence
+from datahold.base.BaseDataSequence import BaseDataSequence
 
 
 class TestBaseDataSequence(unittest.TestCase):

@@ -49,7 +49,7 @@ class BaseDataSequence(Container_, Sequence[Item]):
     def __getitem__(self: Self, index: slice) -> Self: ...
 
     @setdoc.basic
-    def __getitem__(self: Self, index: slice | int) -> Item | Self:
+    def __getitem__(self: Self, index: int | slice) -> Item | Self:
         # Sequence.__getitem__ reveals "Overload(def [_T_co] (typing.Sequence[_T_co], int) -> _T_co, def [_T_co] (typing.Sequence[_T_co], slice[int | None, int | None, int | None]) -> typing.Sequence[_T_co])"
         if isinstance(index, slice):
             # index cannot be an int now because subclassing slice is impossible
