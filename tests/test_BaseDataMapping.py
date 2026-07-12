@@ -12,6 +12,8 @@ import unittest
 from collections.abc import Container, Mapping
 from typing import Optional, Self, cast
 
+import setdoc
+
 from datahold.base.BaseDataMapping import BaseDataMapping
 
 
@@ -24,20 +26,24 @@ class TestBaseDataMapping(unittest.TestCase):
         class HashableDict(dict):  # type: ignore[type-arg]
             """A dict subclass made hashable for Data protocol compliance."""
 
+            @setdoc.basic
             def __hash__(self: Self) -> int:  # type: ignore[override]
                 return hash(frozenset(self.items()))
 
         class ConcreteMapping(BaseDataMapping[str, int]):
             """Concrete mapping backed by HashableDict data for hashability."""
 
-            def __init__(self, items: dict[str, int] | None = None) -> None:
+            @setdoc.basic
+            def __fget__(self: Self) -> BaseDataMapping.Data[str, int]:
+                return self._data
+
+            @setdoc.basic
+            def __init__(
+                self: Self, items: dict[str, int] | None = None
+            ) -> None:
                 if items is None:
                     items = {}
                 self._data: HashableDict = HashableDict(items)
-
-            @property
-            def data(self) -> BaseDataMapping.Data[str, int]:
-                return self._data
 
         self.ConcreteMapping = ConcreteMapping
         self.instance: ConcreteMapping = ConcreteMapping(

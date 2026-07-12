@@ -46,6 +46,10 @@ class BaseDataMapping(  # type: ignore[type-var]
 
     __contains__ = Mapping[Hashable, Value].__contains__
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> BaseDataMapping.Data[Key, Value]: ...
+
     @setdoc.basic
     def __getitem__(self: Self, key: Hashable) -> Value:
         return self.data[key]
@@ -59,6 +63,6 @@ class BaseDataMapping(  # type: ignore[type-var]
         return len(self.data)
 
     @property
-    @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> BaseDataMapping.Data[Key, Value]: ...
+    def data(self: Self) -> BaseDataMapping.Data[Key, Value]:
+        return self.__fget__()
