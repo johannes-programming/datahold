@@ -41,6 +41,10 @@ class BaseDataSequence(Container_, Sequence[Item]):
 
     __contains__ = Sequence[object].__contains__
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> BaseDataSequence.Data[Item]: ...
+
     @overload
     @setdoc.basic
     def __getitem__(self: Self, index: int) -> Item: ...
@@ -74,6 +78,6 @@ class BaseDataSequence(Container_, Sequence[Item]):
         return len(self.data)
 
     @property
-    @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> BaseDataSequence.Data[Item]: ...
+    def data(self: Self) -> BaseDataSequence.Data[Item]:
+        return self.__fget__()

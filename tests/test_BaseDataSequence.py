@@ -10,7 +10,9 @@ from __future__ import annotations
 import inspect
 import unittest
 from collections.abc import Container, Sequence
-from typing import Optional, cast
+from typing import Optional, Self, cast
+
+import setdoc
 
 from datahold.base.BaseDataSequence import BaseDataSequence
 
@@ -18,18 +20,19 @@ from datahold.base.BaseDataSequence import BaseDataSequence
 class TestBaseDataSequence(unittest.TestCase):
     """Test case for BaseDataSequence abstract base class."""
 
-    def setUp(self) -> None:
+    def setUp(self: Self) -> None:
         """Create a concrete subclass and instance for testing."""
 
         class ConcreteSequence(BaseDataSequence[int]):
             """Concrete sequence backed by tuple data for hashability."""
 
-            def __init__(self, items: list[int]) -> None:
-                self._data: tuple[int, ...] = tuple(items)
-
-            @property
-            def data(self) -> BaseDataSequence.Data[int]:
+            @setdoc.basic
+            def __fget__(self: Self) -> BaseDataSequence.Data[int]:
                 return self._data
+
+            @setdoc.basic
+            def __init__(self: Self, items: list[int]) -> None:
+                self._data: tuple[int, ...] = tuple(items)
 
         self.ConcreteSequence = ConcreteSequence
         self.instance: ConcreteSequence = ConcreteSequence([10, 20, 30])
