@@ -38,7 +38,7 @@ class BaseDataAbstractSet(Container_, Set[Item]):
         try:
             return other in self.data
         except TypeError:
-            return False
+            return other in tuple(self)
 
     @setdoc.basic
     def __iter__(self: Self) -> Iterator[Item]:
