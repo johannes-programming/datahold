@@ -1,15 +1,2 @@
---sort
---sort
---all-keys
---sort
---key=types
---all-keys
---key=parents
---sort
---key=types
---all-keys
---sort
---key=varia
---all-keys
 --
 tests/testdata.toml
