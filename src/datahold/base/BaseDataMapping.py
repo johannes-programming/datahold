@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 __all__: list[str] = ["BaseDataMapping"]
-from collections.abc import Hashable, Mapping
-from typing import Protocol, Self, TypeVar
+from abc import abstractmethod
+from collections.abc import Container, Hashable, Iterable, Mapping, Sized
+from typing import Never, Protocol, Self, TypeVar
 
 import setdoc
 
@@ -15,7 +16,10 @@ Value = TypeVar("Value", covariant=True)
 
 
 class Fget(
-    BaseDataCollection.Data,
+    Hashable,
+    Sized,
+    Iterable[DataKey],
+    Container[Never],  # never actually called but necessary for typing
     Protocol[DataKey, DataValue],
 ):
     """Define the protocol that the data property must satisfy."""
@@ -45,9 +49,9 @@ class BaseDataMapping(  # type: ignore[type-var]
         except TypeError:
             return other in tuple(self)
 
+    @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Fget:
-        return super().__fget__()
+    def __fget__(self: Self) -> Fget[Key, Value]: ...
 
     @setdoc.basic
     def __getitem__(self: Self, key: Hashable, /) -> Value:

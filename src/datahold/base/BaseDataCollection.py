@@ -43,7 +43,7 @@ class BaseDataCollection(Collection[Item]):
         try:
             return other in self.__fget__()
         except TypeError:
-            return other in (x for x in self)
+            return other in (x for x in self)  # type: ignore[operator]
 
     @abstractmethod
     @setdoc.basic

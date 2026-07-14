@@ -12,7 +12,7 @@ Key = TypeVar("Key")
 Value = TypeVar("Value")
 
 
-class DataMapping(  # type: ignore[type-var]
+class DataMapping(  
     BaseDataMapping[Key | str, Optional[Value]],
     MutableMapping[Key | str, Optional[Value]],
 ):

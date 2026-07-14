@@ -4,7 +4,7 @@ from typing import Any, Optional, Self
 
 from frozendict import frozendict
 
-from datahold.core import SlotDict
+from datahold.core.SlotDict import SlotDict
 
 
 class Test_SlotDict(unittest.TestCase):

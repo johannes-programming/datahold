@@ -2,31 +2,30 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataSequence"]
 from abc import abstractmethod
-from collections.abc import Iterable, Sequence
+from collections.abc import Sequence
 from typing import Protocol, Self, TypeVar, overload
 
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
-from .BaseDataFgettable import BaseDataFgettable
+from .BaseDataCollection import Fget as BaseDataCollectionFget
 
-DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
 
 
-class Fget(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
+class Fget(BaseDataCollectionFget[Item], Protocol[Item]):
 
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, index: int) -> DataItem: ...
+    def __getitem__(self: Self, index: int) -> Item: ...
 
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, index: slice) -> Sequence[DataItem]: ...
+    def __getitem__(self: Self, index: slice) -> Sequence[Item]: ...
 
     def __getitem__(
         self: Self, index: int | slice
-    ) -> DataItem | Iterable[DataItem]: ...
+    ) -> Item | Sequence[Item]: ...
 
 
 Fget.__name__ = "Data"
@@ -44,6 +43,14 @@ class BaseDataSequence(
     Data = Fget
 
     __contains__ = Sequence[object].__contains__
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Fget[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: Sequence[Item], /) -> None: ...
 
     @overload
     @setdoc.basic
