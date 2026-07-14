@@ -4,6 +4,7 @@ __all__: list[str] = ["BaseDataDict"]
 
 from abc import abstractmethod
 from collections.abc import Iterable
+from types import NotImplementedType
 from typing import Optional, Self, TypeVar
 
 import setdoc
@@ -26,6 +27,13 @@ class BaseDataDict(BaseDataMapping[Key | str, Optional[Value]]):
     __slots__ = ()
 
     Data = frozendict
+
+    @setdoc.basic
+    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(self, BaseDataDict):
+            return self.__fget__() == other.__fget__()
+        else:
+            return NotImplemented
 
     @abstractmethod
     @setdoc.basic
