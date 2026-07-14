@@ -52,4 +52,4 @@ class BaseDataMapping(  # type: ignore[type-var]
 
     @setdoc.basic
     def __getitem__(self: Self, key: Hashable, /) -> Value:
-        return self.data[key]
+        return self.__fget__()[key]

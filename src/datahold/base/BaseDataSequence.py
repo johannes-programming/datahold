@@ -60,9 +60,9 @@ class BaseDataSequence(
             # index cannot be an int now because subclassing slice is impossible
             # we are forced to assume a constructor signature
             # the subtype of BaseDataSequence might be immutable
-            return type(self)(self.data[index])
+            return type(self)(self.__fget__()[index])
         else:
-            return self.data[index]
+            return self.__fget__()[index]
 
     @setdoc.basic
     def __init__(self: Self, data: Sequence[Item], /) -> None:

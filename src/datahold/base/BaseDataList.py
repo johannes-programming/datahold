@@ -24,7 +24,7 @@ class BaseDataList(BaseDataSequence[Item]):
 
     @setdoc.basic
     def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
-        return type(self)(self.data + tuple(other))
+        return type(self)(self.__fget__() + tuple(other))
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
@@ -71,6 +71,6 @@ class BaseDataList(BaseDataSequence[Item]):
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
-        return type(self)(self.data * other)
+        return type(self)(self.__fget__() * other)
 
     __rmul__ = __mul__
