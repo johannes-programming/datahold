@@ -47,7 +47,7 @@ class BaseDataCollection(Collection[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
+    def __fget__(self: Self) -> Fget[Item]: ...
 
     @abstractmethod
     @setdoc.basic

@@ -7,7 +7,6 @@ from typing import Protocol, Self, TypeVar
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
-from .BaseDataFgettable import BaseDataFgettable
 
 DataKey = TypeVar("DataKey", covariant=True)
 DataValue = TypeVar("DataValue", covariant=True)
