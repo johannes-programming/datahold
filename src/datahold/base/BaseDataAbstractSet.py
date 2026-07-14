@@ -3,16 +3,13 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataAbstractSet"]
 from collections.abc import Set
 from typing import TypeVar
-from .BaseDataCollection import BaseDataCollection
 
+from .BaseDataCollection import BaseDataCollection
 
 Item = TypeVar("Item", covariant=True)
 
-class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
-    """Act as a base class for concrete set implementations backed by a data attribute."""
 
-    # this abc exists to provide the easiest possible template for a Set
-    # a subclass must only override __fget__ and __fset__
-    # and it is immediately non-abstract
+class BaseDataAbstractSet(BaseDataCollection[Item], Set[Item]):
+    """Act as base class for (abstract) set implementation """ """which only has to override __fget__ and __fset__ to work immediately."""
 
     __slots__ = ()

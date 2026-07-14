@@ -2,9 +2,15 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataCollection"]
 from abc import abstractmethod
-from collections.abc import Container, Hashable, Iterable, Iterator, Sized, Collection
-from typing import Never, Protocol, Self, TypeVar, Any
-from BaseDataFgettable import BaseDataFgettable
+from collections.abc import (
+    Collection,
+    Container,
+    Hashable,
+    Iterable,
+    Iterator,
+    Sized,
+)
+from typing import Never, Protocol, Self, TypeVar
 
 import setdoc
 
@@ -18,23 +24,22 @@ class Fget(
     Iterable[DataItem],
     Container[Never],  # every TypeError is worked around
     Protocol[DataItem],
-):
-    ...
+): ...
+
+
 Fget.__name__ = "Data"
 setdoc.basic(Fget)
-class BaseDataCollection(BaseDataFgettable[Fget[Item]], Collection[Item]):
-    """Act as a base class for concrete set implementations backed by a data attribute."""
 
-    # this abc exists to provide the easiest possible template for a Set
-    # a subclass must only override __fget__ and __fset__
-    # and it is immediately non-abstract
+
+class BaseDataCollection(Collection[Item]):
+    """Act as base class for collection implementation """ """which only has to override __fget__ and __fset__ to work immediately."""
 
     __slots__ = ()
 
     Data = Fget
 
     @setdoc.basic
-    def __contains__(self: Self, other: object) -> bool:
+    def __contains__(self: Self, other: object, /) -> bool:
         try:
             return other in self.data
         except TypeError:
@@ -42,11 +47,11 @@ class BaseDataCollection(BaseDataFgettable[Fget[Item]], Collection[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __fset__(self: Self, data:Iterable[Any], /) -> None: ...
+    def __fget__(self: Self) -> Data[Item]: ...
 
+    @abstractmethod
     @setdoc.basic
-    def __init__(self:Self, data:Iterable[Any] = (), /) -> None:
-        self.__fset__(data)
+    def __fset__(self: Self, data: Never, /) -> None: ...
 
     @setdoc.basic
     def __iter__(self: Self) -> Iterator[Item]:
