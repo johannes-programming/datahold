@@ -33,7 +33,7 @@ class BaseDataMapping(  # type: ignore[type-var]
     BaseDataCollection[Key],
     Mapping[Key, Value],
 ):
-    """Act as base class for mapping implementation """ """which only has to override __fget__ and __fset__ to work immediately."""
+    """Act as base class for mapping implementation which only has to override __fget__ and __fset__ to work immediately."""
 
     __slots__ = ()
 

@@ -14,7 +14,7 @@ Item = TypeVar("Item", covariant=True)
 
 
 class BaseDataSet(BaseDataAbstractSet[Item]):
-    """Act as base class for set-like implementation """ """which only has to override __fget__ and __fset__ to work immediately."""
+    """Act as base class for set-like implementation which only has to override __fget__ and __fset__ to work immediately."""
 
     __slots__ = ()
 

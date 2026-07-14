@@ -32,7 +32,7 @@ setdoc.basic(Fget)
 
 
 class BaseDataCollection(Collection[Item]):
-    """Act as base class for collection implementation """ """which only has to override __fget__ and __fset__ to work immediately."""
+    """Act as base class for collection implementation which only has to override __fget__ and __fset__ to work immediately."""
 
     __slots__ = ()
 
