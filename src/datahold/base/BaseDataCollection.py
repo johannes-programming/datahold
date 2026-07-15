@@ -2,61 +2,39 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataCollection"]
 from abc import abstractmethod
-from collections.abc import (
-    Collection,
-    Container,
-    Hashable,
-    Iterable,
-    Iterator,
-    Sized,
-)
-from typing import Never, Protocol, Self, TypeVar
+from collections.abc import Collection, Container, Iterable, Iterator, Sized
+from typing import Never, Protocol, Self
 
 import setdoc
-
-DataItem = TypeVar("DataItem", covariant=True)
-Item = TypeVar("Item", covariant=True)
-
-
-class Fget(
-    Hashable,
-    Sized,
-    Iterable[DataItem],
-    Container[Never],  # every TypeError is worked around
-    Protocol[DataItem],
-): ...
-
-
-Fget.__name__ = "Data"
-setdoc.basic(Fget)
-
-
-class BaseDataCollection(Collection[Item]):
-    """Act as base class for collection implementation which only has to override __fget__ and __fset__ to work immediately."""
+class BaseDataCollection[Item](Collection[Item]):
+    """Act as base class for collection implementation which only has to override __data__ to work immediately."""
 
     __slots__ = ()
 
-    Data = Fget
+    @setdoc.basic
+    class Data[DataItem](
+        Sized,
+        Iterable[DataItem],
+        Container[Never],  # every TypeError is worked around
+        Protocol[DataItem],
+    ):
+        ...
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
         try:
-            return other in self.__fget__()
+            return other in self.__data__()
         except TypeError:
             return other in (x for x in self)  # type: ignore[operator]
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Fget[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: Never, /) -> None: ...
+    def __data__(self: Self) -> Data[Item]: ...
 
     @setdoc.basic
     def __iter__(self: Self) -> Iterator[Item]:
-        return iter(self.__fget__())
+        return iter(self.__data__())
 
     @setdoc.basic
     def __len__(self: Self) -> int:
-        return len(self.__fget__())
+        return len(self.__data__())

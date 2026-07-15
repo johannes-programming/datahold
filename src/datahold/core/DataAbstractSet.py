@@ -2,17 +2,17 @@ from __future__ import annotations
 
 __all__: list[str] = ["DataAbstractSet"]
 
+from abc import abstractmethod
 from collections.abc import MutableSet
-from typing import Self, TypeVar
+from typing import Protocol, Self, TypeVar
 
 import setdoc
 
 from ..base.BaseDataAbstractSet import BaseDataAbstractSet
 
-Item = TypeVar("Item")
 
 
-class DataAbstractSet(  # type: ignore[type-var]
+class DataAbstractSet[Item](  # type: ignore[type-var]
     BaseDataAbstractSet[Item],
     MutableSet[Item],
 ):
@@ -20,10 +20,20 @@ class DataAbstractSet(  # type: ignore[type-var]
 
     __slots__ = ()
 
+    class Data[DataItem](BaseDataAbstractSet.Data[DataItem], Protocol[DataItem]):
+        @setdoc.basic
+        def add(self: Self, item: DataItem, /) -> None: ...
+        @setdoc.basic
+        def discard(self: Self, item: DataItem, /) -> None: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> Data[Item]: ...
+
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
-        self.__fset__(self.__fget__().union((item,)))
+        self.__data__().add(item)
 
     @setdoc.basic
     def discard(self: Self, item: Item, /) -> None:
-        self.__fset__(self.__fget__().difference((item,)))
+        self.__data__().discard((item,))

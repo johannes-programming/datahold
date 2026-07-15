@@ -6,17 +6,18 @@ from __future__ import annotations
 
 __all__: list[str] = ["DataSequence"]
 
-from collections.abc import MutableSequence
-from typing import Self, SupportsIndex, TypeVar
+from abc import abstractmethod
+from collections.abc import MutableSequence, Iterable
+from typing import Optional, Self, SupportsIndex, overload
 
 import setdoc
 
 from ..base.BaseDataSequence import BaseDataSequence
 
-Item = TypeVar("Item")
+Slice = slice[Optional[int], Optional[int], Optional[int]]
 
 
-class DataSequence(  # type: ignore[type-var]
+class DataSequence[Item](
     BaseDataSequence[Item],
     MutableSequence[Item],
 ):
@@ -25,22 +26,72 @@ class DataSequence(  # type: ignore[type-var]
     __slots__ = ()
 
     @setdoc.basic
-    def __delitem__(self: Self, index: SupportsIndex, /) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        del data[index]
-        self.__fset__(data)
+    class Data[DataItem](BaseDataSequence.Data[DataItem]):
+        @overload
+        @setdoc.basic
+        def __delitem__(self: Self, key: SupportsIndex, /) -> None: 
+            ...
+        @overload
+        @setdoc.basic
+        def __delitem__(self: Self, key: Slice, /) -> None: 
+            ...
+        @setdoc.basic
+        def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None:
+            ...
+        @overload
+        @setdoc.basic
+        def __setitem__(
+            self: Self, key: SupportsIndex, value: Item, /
+        ) -> None: 
+            ...
+        @overload
+        @setdoc.basic
+        def __setitem__(self: Self, key: Slice, value: Iterable[Item], /) -> None:
+            ...
+        @setdoc.basic
+        def __setitem__(
+            self: Self, key: SupportsIndex | Slice, value: Item | Iterable[Item], /
+        ) -> None:
+            ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self:Self) -> Data[Item]:
+        ...
+
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: SupportsIndex, /) -> None: 
+        ...
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: Slice, /) -> None: 
+        # def __delitem__(self, slice[int | None, int | None, int | None], /) -> None
+        ...
+    @setdoc.basic
+    def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None:
+        del self.__data__()[key]
+
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: SupportsIndex, value: Item, /
+    ) -> None: 
+        # def [_T] (list[_T], typing.SupportsIndex, _T)
+        ...
+
+    @overload
+    @setdoc.basic
+    def __setitem__(self: Self, key: Slice, value: Iterable[Item], /) -> None:
+        # def [_T] (list[_T], slice[typing.SupportsIndex | None, typing.SupportsIndex | None, typing.SupportsIndex | None], typing.Iterable[_T])
+        ...
 
     @setdoc.basic
-    def __setitem__(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data[index] = item
-        self.__fset__(data)
+    def __setitem__(
+        self: Self, key: SupportsIndex | Slice, value: Item | Iterable[Item], /
+    ) -> None:
+        self.__data__()[key] = value
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data.insert(index, item)
-        self.__fset__(data)
+        self.__data__().insert(index, item)

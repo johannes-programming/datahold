@@ -1,28 +1,29 @@
+from __future__ import annotations
 __all__: list[str] = ["FrozenSlotDict"]
-from typing import Optional, Self, TypeVar
+from typing import Optional, Self
 
 import setdoc
 from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
 
-Key = TypeVar("Key", covariant=True)
-Value = TypeVar("Value", covariant=True)
 
-
-class FrozenSlotDict(BaseDataDict[Key, Value]):
+class FrozenSlotDict[Key, Value](BaseDataDict[Key, Value]):
     __slots__ = ("_data",)
 
-    @setdoc.basic
-    def __fget__(self: Self) -> frozendict[Key | str, Optional[Value]]:
-        return self._data
+    type Data[DataKey, DataValue] = frozendict[DataKey|str, Optional[DataValue]]
 
     @setdoc.basic
-    def __fset__(
-        self: Self, data: frozendict[Key | str, Optional[Value]], /
-    ) -> None:
-        self._data = frozendict(data)
-
+    def __data__(self:Self) -> Data[Key, Value]:
+        return self.__data__()
+    
     @setdoc.basic
-    def __hash__(self: Self) -> int:
-        return hash(self.__fget__())
+    def __init__(
+        self:Self, 
+        data:BaseDataDict.Init[Key, Value]=(), 
+        /, 
+        **kwargs:Optional[Value],
+    ):
+        self._data:FrozenSlotDict.Data[Key, Value]=frozendict(data, **kwargs)
+    
+

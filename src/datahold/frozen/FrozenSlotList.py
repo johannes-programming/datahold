@@ -1,25 +1,27 @@
+from __future__ import annotations
 __all__: list[str] = ["FrozenSlotList"]
-
-from typing import Self, TypeVar
+from typing import Self
 
 import setdoc
 
 from ..base.BaseDataList import BaseDataList
 
-Item = TypeVar("Item", covariant=True)
 
-
-class FrozenSlotList(BaseDataList[Item]):
+class FrozenSlotList[Item](BaseDataList[Item]):
     __slots__ = ("_data",)
 
-    @setdoc.basic
-    def __fget__(self: Self) -> tuple[Item, ...]:
-        return self._data
+    type Data[DataItem] = tuple[DataItem, ...]
 
     @setdoc.basic
-    def __fset__(self: Self, data: tuple[Item, ...], /) -> None:
-        self._data = data
-
+    def __data__(self:Self) -> Data[Item]:
+        return self.__data__()
+    
     @setdoc.basic
-    def __hash__(self: Self) -> int:
-        return hash(self.__fget__())
+    def __init__(
+        self:Self, 
+        data:BaseDataList.Init[Item]=(),
+        /,
+    ):
+        self._data:FrozenSlotList.Data[Item]=tuple(data)
+    
+

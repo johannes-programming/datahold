@@ -8,49 +8,38 @@ from typing import Protocol, Self, TypeVar, overload
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
-from .BaseDataCollection import Fget as BaseDataCollectionFget
 
+DataItem = TypeVar("DataItem", covariant=True)
 Item = TypeVar("Item", covariant=True)
-
-
-class Fget(BaseDataCollectionFget[Item], Protocol[Item]):
-
-    @overload
-    @setdoc.basic
-    def __getitem__(self: Self, index: int) -> Item: ...
-
-    @overload
-    @setdoc.basic
-    def __getitem__(self: Self, index: slice) -> Sequence[Item]: ...
-
-    def __getitem__(
-        self: Self, index: int | slice
-    ) -> Item | Sequence[Item]: ...
-
-
-Fget.__name__ = "Data"
-setdoc.basic(Fget)
 
 
 class BaseDataSequence(
     BaseDataCollection[Item],
     Sequence[Item],
 ):
-    """Act as base class for sequence implementation which only has to override __fget__ and __fset__ to work immediately."""
+    """Act as base class for sequence implementation which only has to override __data__ and __init__ to work immediately."""
 
     __slots__ = ()
 
-    Data = Fget
+    class Data(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
 
-    __contains__ = Sequence[object].__contains__
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, index: int, /) -> Item: ...
+
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, index: slice, /) -> Sequence[Item]: ...
+
+        def __getitem__(
+            self: Self, index: int | slice, /
+        ) -> Item | Sequence[Item]: ...
+    
+    Init = Sequence
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Fget[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: Sequence[Item], /) -> None: ...
+    def __data__(self: Self) -> Data[Item]: ...
 
     @overload
     @setdoc.basic
@@ -71,6 +60,6 @@ class BaseDataSequence(
         else:
             return self.__fget__()[index]
 
+    @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Sequence[Item], /) -> None:
-        self.__fset__(data)
+    def __init__(self: Self, data: Sequence[Item], /) -> None: ...

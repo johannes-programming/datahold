@@ -1,26 +1,29 @@
+from __future__ import annotations
 __all__: list[str] = ["SlotDict"]
-from typing import Optional, Self, TypeVar
+from typing import Optional, Self
 
 import setdoc
-from frozendict import frozendict
 
-from ..base.BaseDataDict import BaseDataDict
-
-Key = TypeVar("Key", covariant=True)
-Value = TypeVar("Value", covariant=True)
+from .DataDict import DataDict
 
 
-class SlotDict(BaseDataDict[Key, Value]):
-    """Work as a dict-like class."""
+
+class SlotDict[Key, Value](DataDict[Key, Value]):
+    """Provide dict-like class."""
 
     __slots__ = ("_data",)
 
+    type Data[DataKey, DataValue] = dict[DataKey | str, Optional[DataValue]]
+
     @setdoc.basic
-    def __fget__(self: Self) -> frozendict[Key | str, Optional[Value]]:
+    def __data__(self: Self) -> Data[Key, Value]:
         return self._data
 
     @setdoc.basic
-    def __fset__(
-        self: Self, data: frozendict[Key | str, Optional[Value]], /
+    def __init__(
+        self:Self, 
+        data:DataDict.Init[Key, Value] = (), 
+        /, 
+        **kwargs:Optional[Value],
     ) -> None:
-        self._data: frozendict[Key | str, Optional[Value]] = data
+        self._data :SlotDict.Data[Key, Value] = dict(data, **kwargs)

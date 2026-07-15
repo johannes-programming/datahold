@@ -4,54 +4,75 @@ __all__: list[str] = ["BaseDataSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable
-from typing import Self, TypeVar
+from typing import Protocol, Self
 
 import setdoc
 
 from .BaseDataAbstractSet import BaseDataAbstractSet
 
-Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataSet(BaseDataAbstractSet[Item]):
-    """Act as base class for set-like implementation which only has to override __fget__ and __fset__ to work immediately."""
+class BaseDataSet[Item](BaseDataAbstractSet[Item]):
+    """Act as base class for set-like implementation which only has to override __data__ and __init__ to work immediately."""
 
     __slots__ = ()
 
-    Data = frozenset
+    @setdoc.basic
+    class Data[DataItem](
+        BaseDataAbstractSet.Data[DataItem], 
+        Protocol[DataItem],
+    ):
+        @setdoc.basic
+        def difference(
+            self: Self, *others: Iterable[Hashable]
+        ) -> Iterable[DataItem]: ...
+        @setdoc.basic
+        def intersection(
+            self: Self, *others: Iterable[Hashable]
+        ) -> Iterable[DataItem]: ...
+        @setdoc.basic
+        def issubset(self: Self, other: Iterable[Hashable], /) -> bool: ...
+        @setdoc.basic
+        def issuperset(self: Self, other: Iterable[Hashable], /) -> bool: ...
+        @setdoc.basic
+        def symmetric_difference(
+            self: Self, other: Iterable[Item], /
+        ) -> Iterable[DataItem]: ...
+        @setdoc.basic
+        def union(
+            self: Self, *others: Iterable[Item]
+        ) -> Iterable[DataItem]: ...
+    
+    Init = Iterable
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> frozenset[Item]: ...
+    def __data__(self: Self) -> Data[Item]: ...
 
     @abstractmethod
     @setdoc.basic
-    def __fset__(self: Self, data: frozenset[Item], /) -> None: ...
-
-    @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        self.__fset__(frozenset(data))
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def difference(self: Self, *others: Iterable[Hashable]) -> Self:
-        return type(self)(self.__fget__().difference(*others))
+        return type(self)(self.__data__().difference(*others))
 
     @setdoc.basic
     def intersection(self: Self, *others: Iterable[Hashable]) -> Self:
-        return type(self)(self.__fget__().intersection(*others))
+        return type(self)(self.__data__().intersection(*others))
 
     @setdoc.basic
     def issubset(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.__fget__().issubset(other)
+        return self.__data__().issubset(other)
 
     @setdoc.basic
-    def issubset(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.__fget__().issuperset(other)
+    def issuperset(self: Self, other: Iterable[Hashable], /) -> bool:
+        return self.__data__().issuperset(other)
 
     @setdoc.basic
     def symmetric_difference(self: Self, other: Iterable[Item], /) -> Self:
-        return type(self)(self.__fget__().symmetric_difference(other))
+        return type(self)(self.__data__().symmetric_difference(other))
 
     @setdoc.basic
     def union(self: Self, *others: Iterable[Item]) -> Self:
-        return type(self)(self.__fget__().union(*others))
+        return type(self)(self.__data__().union(*others))

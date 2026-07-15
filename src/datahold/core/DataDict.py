@@ -1,32 +1,46 @@
 __all__: list[str] = ["DataDict"]
+from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Self, TypeVar
+from typing import Optional, Protocol, Self
 
 import setdoc
-from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .DataMapping import DataMapping
-
-Key = TypeVar("Key")
-Value = TypeVar("Value")
-
-InitData = SupportsKeysAndGetitem[Key, Value] | Iterable[tuple[Key, Value]]
+from .DataCopyable import DataCopyable
 
 
-class DataDict(
+class DataDict[Key, Value](
     BaseDataDict[Key, Value],
     DataMapping[Key, Value],
+    DataCopyable[Key | str],
 ):
-    """Act as base class for dict-like implementation which only has to override __fget__ and __fset__ to work immediately."""
+    """Act as base class for dict-like implementation which only has to override __data__ and __init__ to work immediately."""
 
     __slots__ = ()
 
+    class Data[DataKey, DataValue](
+        BaseDataDict.Data[DataKey, DataValue], 
+        DataMapping.Data[DataKey, DataValue],
+        DataCopyable.Data[DataKey],
+        Protocol[DataKey, DataValue],
+    ):
+        @setdoc.basic
+        def __ior__(
+            self: Self,
+            other: BaseDataDict.Init[DataKey, DataValue],
+            /,
+        ) -> object: ...
+
+    @abstractmethod
     @setdoc.basic
-    def __ior__(self: Self, other: InitData[Key, Value], /) -> Self:
-        self |= type(self)(self.__fget__() | frozendict(other))
+    def __data__(self: Self) -> Data[Key, Value]: ...
 
     @setdoc.basic
-    def copy(self: Self) -> Self:
-        return type(self)(self.__fget__())
+    def __ior__(
+        self: Self, 
+        other: BaseDataDict.Init[Key, Value], 
+        /,
+    ) -> Self:
+        self.__data__().__ior__(other)
+        return self

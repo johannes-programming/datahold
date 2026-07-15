@@ -1,22 +1,24 @@
 __all__: list[str] = ["SlotSet"]
-from typing import Self, TypeVar
+from typing import Self
+from collections.abc import Iterable
 
 import setdoc
 
 from .DataSet import DataSet
 
-Item = TypeVar("Item", covariant=True)
 
 
-class SlotSet(DataSet[Item]):
-    """Work as a list-like class."""
+class SlotSet[Item](DataSet[Item]):
+    """Provide set-like class."""
 
     __slots__ = ("_data",)
 
-    @setdoc.basic
-    def __fget__(self: Self) -> DataSet.Data[Item]:
-        return self._data
+    Data = set
 
     @setdoc.basic
-    def __fset__(self: Self, data: DataSet.Data[Item], /) -> None:
-        self._data: DataSet.Data[Item] = data
+    def __data__(self:Self)->set[Item]:
+        return self._data
+    
+    @setdoc.basic
+    def __init__(self:Self, data:Iterable[Item] = (), /)->None:
+        self._data:set[Item] = set(data)

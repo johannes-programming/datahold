@@ -1,22 +1,24 @@
+from __future__ import annotations
 __all__: list[str] = ["SlotList"]
-from typing import Self, TypeVar
+from typing import Self
+from collections.abc import Iterable
 
 import setdoc
 
 from .DataList import DataList
 
-Item = TypeVar("Item", covariant=True)
-
-
-class SlotList(DataList[Item]):
-    """Work as a list-like class."""
+class SlotList[Item](DataList[Item]):
+    """Provide list-like class."""
 
     __slots__ = ("_data",)
 
-    @setdoc.basic
-    def __fget__(self: Self) -> DataList.Data[Item]:
-        return self._data
+    type Data[DataItem] = list[DataItem]
 
     @setdoc.basic
-    def __fset__(self: Self, data: DataList.Data[Item], /) -> None:
-        self._data: DataList.Data[Item] = data
+    def __data__(self:Self) -> list[Item]:
+        return self._data
+    
+    @setdoc.basic
+    def __init__(self: Self, data:Iterable[Item] =(), /) -> None:
+        self._data:list[Item] = list(data)
+

@@ -3,62 +3,76 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataDict"]
 
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections.abc import Container, Iterable, Sized, Hashable
 from types import NotImplementedType
-from typing import Optional, Self, TypeVar
+from typing import Never, Optional, Protocol, Self, Any
 
 import setdoc
-from frozendict import frozendict
-
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .BaseDataMapping import BaseDataMapping
 
-Key = TypeVar("Key", covariant=True)
-Value = TypeVar("Value", covariant=True)
-InitData = (
-    SupportsKeysAndGetitem[Key | str, Optional[Value]]
-    | Iterable[tuple[Key, Value]]
-)
 
+class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
 
-class BaseDataDict(BaseDataMapping[Key | str, Optional[Value]]):
-    """Act as base class for dict-like implementation which only has to override __fget__ and __fset__ to work immediately."""
+    @setdoc.basic
+    def __getitem__(self: Self, key: Any, /) -> Value: ...
+
+    @setdoc.basic
+    def keys(self: Self) -> Iterable[Key]: ...
+        
+
+class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
+    """Act as base class for dict-like implementation which only has to override __data__ and __fset__ to work immediately."""
 
     __slots__ = ()
 
-    Data = frozendict
+    @setdoc.basic
+    class Data[DataKey, DataValue](
+        Sized,
+        Iterable[DataKey],
+        Container[Never],
+        Protocol[DataKey, DataValue],
+    ):
+        @setdoc.basic
+        def __getitem__(self: Self, key: Hashable, /) -> DataValue: ...
+        @setdoc.basic
+        def __or__(self: Self, other: Self, /) -> BaseDataDict.Init[DataKey, DataValue]: ...
+        @setdoc.basic
+        def keys(self: Self, /) -> Iterable[DataKey | str]: ...
+
+    type Init[Key, Value] = (
+        SupportsKeysAndGetitem[Key|str, Optional[Value]]
+        | Iterable[tuple[Key|str, Optional[Value]]]
+    )
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> Data[Key | str, Optional[Value]]: ...
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(self, BaseDataDict):
-            return self.__fget__() == other.__fget__()
+        if isinstance(other, BaseDataDict):
+            return self.__data__() == other.__data__()
         else:
             return NotImplemented
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(
-        self: Self, data: frozenset[Key | str, Optional[Value]], /
-    ) -> None: ...
-
-    @setdoc.basic
     def __init__(
         self: Self,
-        data: InitData[Key, Value] = (),
+        data: Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
-    ) -> None:
-        self.__fset__(frozendict(data, **kwargs))
+    ) -> None: ...
 
     @setdoc.basic
     def __or__(
         self: Self, other: BaseDataDict[Key | str, Optional[Value]], /
     ) -> Self:
-        return type(self)(self.__fget__() | frozendict(other))
+        # Overload(
+        #     def [_KT, _VT] (dict[_KT, _VT], dict[_KT, _VT]) -> dict[_KT, _VT],
+        #     def [_KT, _VT, _T1, _T2] (dict[_KT, _VT], dict[_T1, _T2]) -> dict[_KT | _T1, _VT | _T2],
+        # )
+        return type(self)(self.__data__() | other.__data__())
 
     # __ror__ is not needed
     # because of how __or__ is defined
@@ -67,4 +81,4 @@ class BaseDataDict(BaseDataMapping[Key | str, Optional[Value]]):
     def fromkeys(
         self: Self, keys: Iterable[Key | str], value: Optional[Value] = None, /
     ) -> Self:
-        return type(self)(frozendict.fromkeys(keys, value))
+        return type(self)(dict.fromkeys(keys, value))
