@@ -57,7 +57,7 @@ reset:
 
 test: dist
 	mkdir dist/out/ ;
-	conda run -n base python make/env.py test_datahold --python=3.11 --recreate >/dev/null;
+	conda run -n base python make/env.py test_datahold --python=3.12 --recreate >/dev/null;
 	conda run -n test_datahold pip install dist/*.tar.gz >/dev/null;
 	conda run -n test_datahold python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
 	conda run -n test_datahold pip install mypy >/dev/null;
