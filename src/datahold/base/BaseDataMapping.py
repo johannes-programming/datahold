@@ -15,7 +15,7 @@ class BaseDataMapping[Key, Value](  # type: ignore[type-var]
     BaseDataCollection[Key],
     Mapping[Key, Value],
 ):
-    """Act as base class for mapping implementation which only has to override __data__ to work immediately."""
+    """Act as base class for mapping implementation which only needs overriding of __data__ to work immediately."""
 
     __slots__ = ()
 

@@ -16,7 +16,7 @@ Item = TypeVar("Item", covariant=True)
 
 
 class BaseDataList(BaseDataSequence[Item]):
-    """Act as base class for list-like implementation which only has to override __data__ and __init__ to work immediately."""
+    """Act as base class for list-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 
@@ -55,7 +55,7 @@ class BaseDataList(BaseDataSequence[Item]):
             self: Self, other: SupportsIndex, /
         ) -> Iterable[DataItem]: ...
     
-    Init = Iterable
+    type Init[InitItem] = Iterable[InitItem]
 
     @setdoc.basic
     def __add__(self: Self, other: BaseDataList[Item], /) -> Self:

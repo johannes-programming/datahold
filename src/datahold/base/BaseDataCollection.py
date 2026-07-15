@@ -7,7 +7,7 @@ from typing import Never, Protocol, Self
 
 import setdoc
 class BaseDataCollection[Item](Collection[Item]):
-    """Act as base class for collection implementation which only has to override __data__ to work immediately."""
+    """Act as base class for collection implementation which only needs overriding of __data__ to work immediately."""
 
     __slots__ = ()
 

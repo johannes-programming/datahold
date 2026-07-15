@@ -12,6 +12,7 @@ from .BaseDataMapping import BaseDataMapping
 
 
 class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
+    """Act as protocol supporting __getitem__ and keys."""
 
     @setdoc.basic
     def __getitem__(self: Self, key: Any, /) -> Value: ...
@@ -21,7 +22,7 @@ class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
         
 
 class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
-    """Act as base class for dict-like implementation which only has to override __data__ and __fset__ to work immediately."""
+    """Act as base class for dict-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 

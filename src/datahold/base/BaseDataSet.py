@@ -13,7 +13,7 @@ from .BaseDataAbstractSet import BaseDataAbstractSet
 
 
 class BaseDataSet[Item](BaseDataAbstractSet[Item]):
-    """Act as base class for set-like implementation which only has to override __data__ and __init__ to work immediately."""
+    """Act as base class for set-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 
@@ -43,7 +43,7 @@ class BaseDataSet[Item](BaseDataAbstractSet[Item]):
             self: Self, *others: Iterable[Item]
         ) -> Iterable[DataItem]: ...
     
-    Init = Iterable
+    type Init[InitItem] = Iterable[InitItem]
 
     @abstractmethod
     @setdoc.basic

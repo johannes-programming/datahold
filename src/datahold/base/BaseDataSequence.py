@@ -17,10 +17,11 @@ class BaseDataSequence(
     BaseDataCollection[Item],
     Sequence[Item],
 ):
-    """Act as base class for sequence implementation which only has to override __data__ and __init__ to work immediately."""
+    """Act as base class for sequence implementation which only needs overriding of __data__ and __init__ to work immediately."""
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
 
         @overload
@@ -35,7 +36,7 @@ class BaseDataSequence(
             self: Self, index: int | slice, /
         ) -> Item | Sequence[Item]: ...
     
-    Init = Sequence
+    type Init[InitItem] = Sequence[InitItem]
 
     @abstractmethod
     @setdoc.basic
