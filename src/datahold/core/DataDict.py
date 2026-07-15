@@ -18,6 +18,7 @@ class DataDict[Key, Value](
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data[DataKey, DataValue](
         BaseDataDict.Data[DataKey, DataValue], 
         DataMapping.Data[DataKey, DataValue],

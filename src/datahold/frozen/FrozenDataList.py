@@ -12,8 +12,11 @@ Item = TypeVar("Item", covariant=True)
 
 
 class FrozenDataList(BaseDataList[Item], FrozenDataSequence[Item]):
+    """Act as base class for frozen list-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
+
     __slots__ = ()
 
+    @setdoc.basic
     class Data(
         BaseDataList.Data[Item],
         FrozenDataSequence.Data[Item],

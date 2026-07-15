@@ -21,6 +21,7 @@ class DataSet[Item](  # type: ignore[type-var]
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data[DataItem](BaseDataSet[DataItem], DataAbstractSet[DataItem]):
         @setdoc.basic
         def difference_update(

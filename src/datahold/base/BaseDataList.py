@@ -24,27 +24,27 @@ class BaseDataList(BaseDataSequence[Item]):
     class Data(BaseDataSequence.Data[DataItem], Protocol[DataItem]):
         @setdoc.basic
         def __add__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> Iterable[DataItem]: ...
         @setdoc.basic
         def __eq__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> NotImplementedType | bool: ...
         @setdoc.basic
         def __ge__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> NotImplementedType | bool: ...
         @setdoc.basic
         def __gt__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> NotImplementedType | bool: ...
         @setdoc.basic
         def __le__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> NotImplementedType | bool: ...
         @setdoc.basic
         def __lt__(
-            self: Self, other: BaseDataList.Data[Item], /
+            self: Self, other: BaseDataList.Data[DataItem], /
         ) -> NotImplementedType | bool: ...
         @setdoc.basic
         def __mul__(

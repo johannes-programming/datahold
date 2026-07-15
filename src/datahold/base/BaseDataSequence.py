@@ -3,17 +3,15 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataSequence"]
 from abc import abstractmethod
 from collections.abc import Sequence
-from typing import Protocol, Self, TypeVar, overload
+from typing import Protocol, Self, overload
 
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
 
-DataItem = TypeVar("DataItem", covariant=True)
-Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataSequence(
+class BaseDataSequence[Item](
     BaseDataCollection[Item],
     Sequence[Item],
 ):
@@ -22,19 +20,19 @@ class BaseDataSequence(
     __slots__ = ()
 
     @setdoc.basic
-    class Data(BaseDataCollection.Data[DataItem], Protocol[DataItem]):
+    class Data[DataItem](BaseDataCollection.Data[DataItem], Protocol[DataItem]):
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, index: int, /) -> Item: ...
+        def __getitem__(self: Self, index: int, /) -> DataItem: ...
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, index: slice, /) -> Sequence[Item]: ...
+        def __getitem__(self: Self, index: slice, /) -> Sequence[DataItem]: ...
 
         def __getitem__(
             self: Self, index: int | slice, /
-        ) -> Item | Sequence[Item]: ...
+        ) -> DataItem | Sequence[DataItem]: ...
     
     type Init[InitItem] = Sequence[InitItem]
 

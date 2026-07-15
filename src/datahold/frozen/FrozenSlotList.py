@@ -8,6 +8,8 @@ from ..base.BaseDataList import BaseDataList
 
 
 class FrozenSlotList[Item](BaseDataList[Item]):
+    """Act as frozen list-like class."""
+
     __slots__ = ("_data",)
 
     type Data[DataItem] = tuple[DataItem, ...]

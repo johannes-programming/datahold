@@ -10,8 +10,11 @@ from .FrozenDataAbstractSet import FrozenDataAbstractSet
 
 
 class FrozenDataSet[Item](BaseDataSet[Item], FrozenDataAbstractSet[Item]):
+    """Act as base class for frozen set-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
+
     __slots__ = ()
 
+    @setdoc.basic
     class Data(
         BaseDataSet.Data[Item],
         FrozenDataAbstractSet.Data[Item],

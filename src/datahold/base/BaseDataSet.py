@@ -36,11 +36,11 @@ class BaseDataSet[Item](BaseDataAbstractSet[Item]):
         def issuperset(self: Self, other: Iterable[Hashable], /) -> bool: ...
         @setdoc.basic
         def symmetric_difference(
-            self: Self, other: Iterable[Item], /
+            self: Self, other: Iterable[DataItem], /
         ) -> Iterable[DataItem]: ...
         @setdoc.basic
         def union(
-            self: Self, *others: Iterable[Item]
+            self: Self, *others: Iterable[DataItem]
         ) -> Iterable[DataItem]: ...
     
     type Init[InitItem] = Iterable[InitItem]

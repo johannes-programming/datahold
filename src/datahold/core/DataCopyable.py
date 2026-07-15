@@ -10,6 +10,8 @@ class DataCopyable[Item](BaseDataCollection[Item]):
     """Act as base class for copyable implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
+    
+    @setdoc.basic
     class Data[DataItem](BaseDataCollection.Data[DataItem], Protocol[DataItem]):
         @setdoc.basic
         def copy(self:Self) -> DataCopyable.Data[DataItem]:

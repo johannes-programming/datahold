@@ -17,6 +17,7 @@ class DataList[Item](
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data[DataItem](
         BaseDataList.Data[DataItem],
         DataSequence.Data[DataItem],

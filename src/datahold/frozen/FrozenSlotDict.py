@@ -9,6 +9,8 @@ from ..base.BaseDataDict import BaseDataDict
 
 
 class FrozenSlotDict[Key, Value](BaseDataDict[Key, Value]):
+    """Act as frozen dict-like class."""
+
     __slots__ = ("_data",)
 
     type Data[DataKey, DataValue] = frozendict[DataKey|str, Optional[DataValue]]

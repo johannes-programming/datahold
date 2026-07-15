@@ -8,6 +8,8 @@ from ..base.BaseDataSet import BaseDataSet
 
 
 class FrozenSlotSet[Item](BaseDataSet[Item]):
+    """Act as frozen set-like class."""
+
     __slots__ = ("_data",)
 
     type Data[DataItem] = frozenset[DataItem]

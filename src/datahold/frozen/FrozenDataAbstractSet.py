@@ -13,8 +13,11 @@ class FrozenDataAbstractSet[Item](
     BaseDataAbstractSet[Item], 
     FrozenDataCollection[Item],
 ):
-    __slots__ = ()
+    """Act as base class for (abstract) frozen set implementation which only needs overriding of __data__ to work immediately."""
 
+    __slots__ = ()
+    
+    @setdoc.basic
     class Data(
         BaseDataAbstractSet.Data[Item],
         FrozenDataCollection.Data[Item],

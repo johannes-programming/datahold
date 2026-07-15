@@ -13,7 +13,7 @@ class SlotSet[Item](DataSet[Item]):
 
     __slots__ = ("_data",)
 
-    Data = set
+    type Data[DataItem] = set[DataItem]
 
     @setdoc.basic
     def __data__(self:Self)->set[Item]:
