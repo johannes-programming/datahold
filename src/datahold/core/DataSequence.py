@@ -41,16 +41,16 @@ class DataSequence[Item](
         @overload
         @setdoc.basic
         def __setitem__(
-            self: Self, key: SupportsIndex, value: Item, /
+            self: Self, key: SupportsIndex, value: DataItem, /
         ) -> None: 
             ...
         @overload
         @setdoc.basic
-        def __setitem__(self: Self, key: Slice, value: Iterable[Item], /) -> None:
+        def __setitem__(self: Self, key: Slice, value: Iterable[DataItem], /) -> None:
             ...
         @setdoc.basic
         def __setitem__(
-            self: Self, key: SupportsIndex | Slice, value: Item | Iterable[Item], /
+            self: Self, key: SupportsIndex | Slice, value: DataItem | Iterable[DataItem], /
         ) -> None:
             ...
 

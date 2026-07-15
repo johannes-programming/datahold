@@ -18,10 +18,10 @@ class FrozenDataSequence[Item](
     __slots__ = ()
 
     @setdoc.basic
-    class Data(
-        BaseDataSequence.Data[Item],
-        FrozenDataCollection.Data[Item],
-        Protocol[Item],
+    class Data[DataItem](
+        BaseDataSequence.Data[DataItem],
+        FrozenDataCollection.Data[DataItem],
+        Protocol[DataItem],
     ): ...
 
     @abstractmethod

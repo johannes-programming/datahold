@@ -17,10 +17,10 @@ class FrozenDataList(BaseDataList[Item], FrozenDataSequence[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    class Data(
-        BaseDataList.Data[Item],
-        FrozenDataSequence.Data[Item],
-        Protocol[Item],
+    class Data[DataItem](
+        BaseDataList.Data[DataItem],
+        FrozenDataSequence.Data[DataItem],
+        Protocol[DataItem],
     ): ...
 
     @abstractmethod

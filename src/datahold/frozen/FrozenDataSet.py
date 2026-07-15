@@ -15,10 +15,10 @@ class FrozenDataSet[Item](BaseDataSet[Item], FrozenDataAbstractSet[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    class Data(
-        BaseDataSet.Data[Item],
-        FrozenDataAbstractSet.Data[Item],
-        Protocol[Item],
+    class Data[DataItem](
+        BaseDataSet.Data[DataItem],
+        FrozenDataAbstractSet.Data[DataItem],
+        Protocol[DataItem],
     ): ...
 
     @abstractmethod
