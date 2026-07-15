@@ -11,7 +11,6 @@ import setdoc
 from .BaseDataAbstractSet import BaseDataAbstractSet
 
 
-
 class BaseDataSet[Item](BaseDataAbstractSet[Item]):
     """Act as base class for set-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
@@ -19,7 +18,7 @@ class BaseDataSet[Item](BaseDataAbstractSet[Item]):
 
     @setdoc.basic
     class Data[DataItem](
-        BaseDataAbstractSet.Data[DataItem], 
+        BaseDataAbstractSet.Data[DataItem],
         Protocol[DataItem],
     ):
         @setdoc.basic
@@ -42,7 +41,7 @@ class BaseDataSet[Item](BaseDataAbstractSet[Item]):
         def union(
             self: Self, *others: Iterable[DataItem]
         ) -> Iterable[DataItem]: ...
-    
+
     type Init[InitItem] = Iterable[InitItem]
 
     @abstractmethod

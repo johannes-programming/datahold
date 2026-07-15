@@ -7,7 +7,7 @@ from __future__ import annotations
 __all__: list[str] = ["DataSequence"]
 
 from abc import abstractmethod
-from collections.abc import MutableSequence, Iterable
+from collections.abc import Iterable, MutableSequence
 from typing import Optional, Self, SupportsIndex, overload
 
 import setdoc
@@ -29,54 +29,50 @@ class DataSequence[Item](
     class Data[DataItem](BaseDataSequence.Data[DataItem]):
         @overload
         @setdoc.basic
-        def __delitem__(self: Self, key: SupportsIndex, /) -> None: 
-            ...
+        def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
         @overload
         @setdoc.basic
-        def __delitem__(self: Self, key: Slice, /) -> None: 
-            ...
+        def __delitem__(self: Self, key: Slice, /) -> None: ...
         @setdoc.basic
-        def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None:
-            ...
+        def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None: ...
         @overload
         @setdoc.basic
         def __setitem__(
             self: Self, key: SupportsIndex, value: DataItem, /
-        ) -> None: 
-            ...
+        ) -> None: ...
         @overload
         @setdoc.basic
-        def __setitem__(self: Self, key: Slice, value: Iterable[DataItem], /) -> None:
-            ...
+        def __setitem__(
+            self: Self, key: Slice, value: Iterable[DataItem], /
+        ) -> None: ...
         @setdoc.basic
         def __setitem__(
-            self: Self, key: SupportsIndex | Slice, value: DataItem | Iterable[DataItem], /
-        ) -> None:
-            ...
+            self: Self,
+            key: SupportsIndex | Slice,
+            value: DataItem | Iterable[DataItem],
+            /,
+        ) -> None: ...
 
     @abstractmethod
     @setdoc.basic
-    def __data__(self:Self) -> Data[Item]:
-        ...
+    def __data__(self: Self) -> Data[Item]: ...
 
     @overload
     @setdoc.basic
-    def __delitem__(self: Self, key: SupportsIndex, /) -> None: 
-        ...
+    def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
     @overload
     @setdoc.basic
-    def __delitem__(self: Self, key: Slice, /) -> None: 
+    def __delitem__(self: Self, key: Slice, /) -> None:
         # def __delitem__(self, slice[int | None, int | None, int | None], /) -> None
         ...
+
     @setdoc.basic
     def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None:
         del self.__data__()[key]
 
     @overload
     @setdoc.basic
-    def __setitem__(
-        self: Self, key: SupportsIndex, value: Item, /
-    ) -> None: 
+    def __setitem__(self: Self, key: SupportsIndex, value: Item, /) -> None:
         # def [_T] (list[_T], typing.SupportsIndex, _T)
         ...
 

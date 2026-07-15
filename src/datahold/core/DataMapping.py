@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 __all__: list[str] = ["DataMapping"]
+from abc import abstractmethod
 from collections.abc import Hashable, MutableMapping
-from typing import Optional, Self, Protocol
+from typing import Optional, Protocol, Self
 
 import setdoc
-from abc import abstractmethod
 
 from ..base.BaseDataMapping import BaseDataMapping
 
@@ -20,21 +20,19 @@ class DataMapping[Key, Value](
 
     @setdoc.basic
     class Data[DataKey, DataValue](
-        BaseDataMapping.Data[DataKey | str, Optional[DataValue]], 
+        BaseDataMapping.Data[DataKey | str, Optional[DataValue]],
         Protocol[DataKey, DataValue],
     ):
         @setdoc.basic
-        def __delitem__(self:Self, key: Hashable) -> None:
-            ...
+        def __delitem__(self: Self, key: Hashable) -> None: ...
         @setdoc.basic
-        def __setitem__(self:Self, key: DataKey, value: DataValue) -> None:
-            ...
-    
+        def __setitem__(
+            self: Self, key: DataKey, value: DataValue
+        ) -> None: ...
+
     @abstractmethod
     @setdoc.basic
-    def __data__(self:Self) -> Data[Key, Value]:
-        ...
-
+    def __data__(self: Self) -> Data[Key, Value]: ...
 
     @setdoc.basic
     def __delitem__(self: Self, key: Hashable, /) -> None:

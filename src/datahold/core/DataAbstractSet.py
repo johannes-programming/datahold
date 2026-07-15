@@ -11,7 +11,6 @@ import setdoc
 from ..base.BaseDataAbstractSet import BaseDataAbstractSet
 
 
-
 class DataAbstractSet[Item](  # type: ignore[type-var]
     BaseDataAbstractSet[Item],
     MutableSet[Item],
@@ -20,9 +19,10 @@ class DataAbstractSet[Item](  # type: ignore[type-var]
 
     __slots__ = ()
 
-
     @setdoc.basic
-    class Data[DataItem](BaseDataAbstractSet.Data[DataItem], Protocol[DataItem]):
+    class Data[DataItem](
+        BaseDataAbstractSet.Data[DataItem], Protocol[DataItem]
+    ):
         @setdoc.basic
         def add(self: Self, item: DataItem, /) -> None: ...
         @setdoc.basic

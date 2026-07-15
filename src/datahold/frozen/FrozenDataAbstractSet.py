@@ -10,7 +10,7 @@ from .FrozenDataCollection import FrozenDataCollection
 
 
 class FrozenDataAbstractSet[Item](
-    BaseDataAbstractSet[Item], 
+    BaseDataAbstractSet[Item],
     FrozenDataCollection[Item],
 ):
     """Act as base class for (abstract) frozen set implementation which only needs overriding of __data__ to work immediately."""

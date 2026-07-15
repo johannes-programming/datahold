@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 __all__: list[str] = ["SlotDict"]
 from typing import Optional, Self
 
@@ -7,9 +8,7 @@ import setdoc
 from .DataDict import DataDict
 
 
-
 class SlotDict[Key, Value](DataDict[Key, Value]):
-
     """Act as dict-like class."""
 
     __slots__ = ("_data",)
@@ -22,9 +21,9 @@ class SlotDict[Key, Value](DataDict[Key, Value]):
 
     @setdoc.basic
     def __init__(
-        self:Self, 
-        data:DataDict.Init[Key, Value] = (), 
-        /, 
-        **kwargs:Optional[Value],
+        self: Self,
+        data: DataDict.Init[Key, Value] = (),
+        /,
+        **kwargs: Optional[Value],
     ) -> None:
-        self._data :SlotDict.Data[Key, Value] = dict(data, **kwargs)
+        self._data: SlotDict.Data[Key, Value] = dict(data, **kwargs)

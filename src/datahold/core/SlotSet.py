@@ -1,11 +1,10 @@
 __all__: list[str] = ["SlotSet"]
-from typing import Self
 from collections.abc import Iterable
+from typing import Self
 
 import setdoc
 
 from .DataSet import DataSet
-
 
 
 class SlotSet[Item](DataSet[Item]):
@@ -16,9 +15,9 @@ class SlotSet[Item](DataSet[Item]):
     type Data[DataItem] = set[DataItem]
 
     @setdoc.basic
-    def __data__(self:Self)->set[Item]:
+    def __data__(self: Self) -> set[Item]:
         return self._data
-    
+
     @setdoc.basic
-    def __init__(self:Self, data:Iterable[Item] = (), /)->None:
-        self._data:set[Item] = set(data)
+    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+        self._data: set[Item] = set(data)

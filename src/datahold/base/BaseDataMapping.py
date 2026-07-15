@@ -10,7 +10,6 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 
 
-
 class BaseDataMapping[Key, Value](  # type: ignore[type-var]
     BaseDataCollection[Key],
     Mapping[Key, Value],

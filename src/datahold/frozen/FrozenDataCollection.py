@@ -1,12 +1,11 @@
 __all__: list[str] = ["FrozenDataCollection"]
 from abc import abstractmethod
 from collections.abc import Hashable
-from typing import Self, Protocol
+from typing import Protocol, Self
 
 import setdoc
 
 from ..base.BaseDataCollection import BaseDataCollection
-
 
 
 class FrozenDataCollection[Key, Value](BaseDataCollection[Key, Value]):
@@ -16,8 +15,8 @@ class FrozenDataCollection[Key, Value](BaseDataCollection[Key, Value]):
 
     @setdoc.basic
     class Data[DataKey, DataValue](
-        BaseDataCollection.Data[DataKey, DataValue], 
-        Hashable, 
+        BaseDataCollection.Data[DataKey, DataValue],
+        Hashable,
         Protocol[DataKey, DataValue],
     ): ...
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__: list[str] = ["DataSet"]
+from abc import abstractmethod
 from collections.abc import Hashable, Iterable
 from typing import Self
 
@@ -9,7 +10,6 @@ import setdoc
 from ..base.BaseDataSet import BaseDataSet
 from .DataAbstractSet import DataAbstractSet
 from .DataCopyable import DataCopyable
-from abc import abstractmethod
 
 
 class DataSet[Item](  # type: ignore[type-var]
@@ -37,11 +37,10 @@ class DataSet[Item](  # type: ignore[type-var]
         ) -> None: ...
         @setdoc.basic
         def update(self: Self, *others: Iterable[DataItem]) -> None: ...
-    
+
     @abstractmethod
     @setdoc.basic
-    def __data__(self:Self) -> Data[Item]:
-        ...
+    def __data__(self: Self) -> Data[Item]: ...
 
     @setdoc.basic
     def difference_update(self: Self, *others: Iterable[Hashable]) -> None:

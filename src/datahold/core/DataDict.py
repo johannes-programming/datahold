@@ -5,8 +5,8 @@ from typing import Protocol, Self
 import setdoc
 
 from ..base.BaseDataDict import BaseDataDict
-from .DataMapping import DataMapping
 from .DataCopyable import DataCopyable
+from .DataMapping import DataMapping
 
 
 class DataDict[Key, Value](
@@ -20,7 +20,7 @@ class DataDict[Key, Value](
 
     @setdoc.basic
     class Data[DataKey, DataValue](
-        BaseDataDict.Data[DataKey, DataValue], 
+        BaseDataDict.Data[DataKey, DataValue],
         DataMapping.Data[DataKey, DataValue],
         DataCopyable.Data[DataKey],
         Protocol[DataKey, DataValue],
@@ -38,8 +38,8 @@ class DataDict[Key, Value](
 
     @setdoc.basic
     def __ior__(
-        self: Self, 
-        other: BaseDataDict.Init[Key, Value], 
+        self: Self,
+        other: BaseDataDict.Init[Key, Value],
         /,
     ) -> Self:
         self.__data__().__ior__(other)

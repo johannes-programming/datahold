@@ -3,13 +3,14 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataSequence"]
 from abc import abstractmethod
 from collections.abc import Sequence
-from typing import Protocol, Self, overload, Optional
+from typing import Optional, Protocol, Self, overload
 
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
 
 Slice = slice[Optional[int], Optional[int], Optional[int]]
+
 
 class BaseDataSequence[Item](
     BaseDataCollection[Item],
@@ -20,7 +21,9 @@ class BaseDataSequence[Item](
     __slots__ = ()
 
     @setdoc.basic
-    class Data[DataItem](BaseDataCollection.Data[DataItem], Protocol[DataItem]):
+    class Data[DataItem](
+        BaseDataCollection.Data[DataItem], Protocol[DataItem]
+    ):
 
         @overload
         @setdoc.basic
@@ -33,7 +36,7 @@ class BaseDataSequence[Item](
         def __getitem__(
             self: Self, index: int | Slice, /
         ) -> DataItem | Sequence[DataItem]: ...
-    
+
     type Init[InitItem] = Sequence[InitItem]
 
     @abstractmethod

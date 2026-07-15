@@ -6,6 +6,8 @@ from collections.abc import Collection, Container, Iterable, Iterator, Sized
 from typing import Never, Protocol, Self
 
 import setdoc
+
+
 class BaseDataCollection[Item](Collection[Item]):
     """Act as base class for collection implementation which only needs overriding of __data__ to work immediately."""
 
@@ -17,8 +19,7 @@ class BaseDataCollection[Item](Collection[Item]):
         Iterable[DataItem],
         Container[Never],  # every TypeError is worked around
         Protocol[DataItem],
-    ):
-        ...
+    ): ...
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:

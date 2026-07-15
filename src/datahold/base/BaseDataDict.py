@@ -3,11 +3,12 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataDict"]
 
 from abc import abstractmethod
-from collections.abc import Container, Iterable, Sized, Hashable
+from collections.abc import Container, Hashable, Iterable, Sized
 from types import NotImplementedType
-from typing import Never, Optional, Protocol, Self, Any
+from typing import Any, Never, Optional, Protocol, Self
 
 import setdoc
+
 from .BaseDataMapping import BaseDataMapping
 
 
@@ -19,7 +20,7 @@ class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
 
     @setdoc.basic
     def keys(self: Self) -> Iterable[Key]: ...
-        
+
 
 class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
     """Act as base class for dict-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
@@ -36,13 +37,15 @@ class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
         @setdoc.basic
         def __getitem__(self: Self, key: Hashable, /) -> DataValue: ...
         @setdoc.basic
-        def __or__(self: Self, other: Self, /) -> BaseDataDict.Init[DataKey, DataValue]: ...
+        def __or__(
+            self: Self, other: Self, /
+        ) -> BaseDataDict.Init[DataKey, DataValue]: ...
         @setdoc.basic
         def keys(self: Self, /) -> Iterable[DataKey | str]: ...
 
     type Init[Key, Value] = (
-        SupportsKeysAndGetitem[Key|str, Optional[Value]]
-        | Iterable[tuple[Key|str, Optional[Value]]]
+        SupportsKeysAndGetitem[Key | str, Optional[Value]]
+        | Iterable[tuple[Key | str, Optional[Value]]]
     )
 
     @abstractmethod

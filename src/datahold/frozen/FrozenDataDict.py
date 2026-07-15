@@ -8,7 +8,6 @@ from ..base.BaseDataDict import BaseDataDict
 from .FrozenDataMapping import FrozenDataMapping
 
 
-
 class FrozenDataDict[Key, Value](
     BaseDataDict[Key, Value],
     FrozenDataMapping[Key, Value],

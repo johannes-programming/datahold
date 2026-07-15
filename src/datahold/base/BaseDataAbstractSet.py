@@ -6,9 +6,8 @@ from collections.abc import Set
 from .BaseDataCollection import BaseDataCollection
 
 
-
 class BaseDataAbstractSet[Item](
-    BaseDataCollection[Item], 
+    BaseDataCollection[Item],
     Set[Item],
 ):
     """Act as base class for (abstract) set implementation which only needs overriding of __data__ to work immediately."""

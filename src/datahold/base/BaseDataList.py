@@ -54,7 +54,7 @@ class BaseDataList(BaseDataSequence[Item]):
         def __rmul__(
             self: Self, other: SupportsIndex, /
         ) -> Iterable[DataItem]: ...
-    
+
     type Init[InitItem] = Iterable[InitItem]
 
     @setdoc.basic

@@ -10,7 +10,7 @@ from .FrozenDataCollection import FrozenDataCollection
 
 
 class FrozenDataSequence[Item](
-    BaseDataSequence[Item], 
+    BaseDataSequence[Item],
     FrozenDataCollection[Item],
 ):
     """Act as base class for frozen sequence implementation which only needs overriding of __data__ and of __init__ to work immediately."""
