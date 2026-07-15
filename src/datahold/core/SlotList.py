@@ -8,7 +8,7 @@ import setdoc
 from .DataList import DataList
 
 class SlotList[Item](DataList[Item]):
-    """Provide list-like class."""
+    """Act as list-like class."""
 
     __slots__ = ("_data",)
 

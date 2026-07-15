@@ -14,7 +14,7 @@ class DataMapping[Key, Value](
     BaseDataMapping[Key | str, Optional[Value]],
     MutableMapping[Key | str, Optional[Value]],
 ):
-    """Act as base class for mutable mapping implementation which only has to override __data__ to work immediately."""
+    """Act as base class for mutable mapping implementation which only needs overriding of __data__ to work immediately."""
 
     __slots__ = ()
 

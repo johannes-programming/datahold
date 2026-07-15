@@ -9,7 +9,8 @@ from .DataDict import DataDict
 
 
 class SlotDict[Key, Value](DataDict[Key, Value]):
-    """Provide dict-like class."""
+
+    """Act as dict-like class."""
 
     __slots__ = ("_data",)
 

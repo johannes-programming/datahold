@@ -17,7 +17,7 @@ class DataSet[Item](  # type: ignore[type-var]
     DataAbstractSet[Item],
     DataCopyable[Item],
 ):
-    """Act as base class for (abstract) mutable set implementation which only has to override __data__ and __fset__ to work immediately."""
+    """Act as base class for set-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 

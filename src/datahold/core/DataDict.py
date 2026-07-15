@@ -1,7 +1,6 @@
 __all__: list[str] = ["DataDict"]
 from abc import abstractmethod
-from collections.abc import Iterable
-from typing import Optional, Protocol, Self
+from typing import Protocol, Self
 
 import setdoc
 
@@ -15,7 +14,7 @@ class DataDict[Key, Value](
     DataMapping[Key, Value],
     DataCopyable[Key | str],
 ):
-    """Act as base class for dict-like implementation which only has to override __data__ and __init__ to work immediately."""
+    """Act as base class for dict-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 

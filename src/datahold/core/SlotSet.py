@@ -9,7 +9,7 @@ from .DataSet import DataSet
 
 
 class SlotSet[Item](DataSet[Item]):
-    """Provide set-like class."""
+    """Act as set-like class."""
 
     __slots__ = ("_data",)
 
