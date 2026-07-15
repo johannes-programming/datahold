@@ -3,17 +3,28 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataList"]
 
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from types import NotImplementedType
-from typing import Protocol, Self, SupportsIndex
+from typing import Protocol, Self, SupportsIndex, overload
 
 
 
 import setdoc
 
-from .BaseDataSequence import BaseDataSequence
+from .BaseDataSequence import BaseDataSequence, Slice
 
-
+def optionalIndex(index:Optional[SupportsIndex]) -> Optional[int]:
+    if index is None:
+        return None
+    else:
+        return operator.index(index)
+def sequenceSlice(index:Slice[SupportsIndex]) -> Slice[int]:
+    return slice(
+        optionalIndex(index.start),
+        optionalIndex(index.stop),
+        optionalIndex(index.step),
+    )
+    
 
 
 class BaseDataList[Item](BaseDataSequence[Item]):
@@ -79,7 +90,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
             return self.__data__().__ge__(other.__data__())
         else:
             return NotImplemented
-
+        
     @setdoc.basic
     def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):

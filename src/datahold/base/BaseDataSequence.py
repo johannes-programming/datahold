@@ -5,25 +5,13 @@ from abc import abstractmethod
 from collections.abc import Sequence
 from typing import Optional, Protocol, Self, overload, SupportsIndex
 
-import operator
 import setdoc
 
 from .BaseDataCollection import BaseDataCollection
 
 type Slice[SliceItem] = slice[Optional[SliceItem], Optional[SliceItem], Optional[SliceItem]]
 
-def optionalIndex(index:Optional[SupportsIndex]) -> Optional[int]:
-    if index is None:
-        return None
-    else:
-        return operator.index(index)
-def sequenceSlice(index:Slice[SupportsIndex]) -> Slice[int]:
-    return slice(
-        optionalIndex(index.start),
-        optionalIndex(index.stop),
-        optionalIndex(index.step),
-    )
-    
+
 
 class BaseDataSequence[Item](
     BaseDataCollection[Item],
@@ -40,14 +28,14 @@ class BaseDataSequence[Item](
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> DataItem: ...
+        def __getitem__(self: Self, key: SupportsIndex, /) -> DataItem: ...
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, key: Slice[int], /) -> Sequence[DataItem]: ...
+        def __getitem__(self: Self, key: Slice[SupportsIndex], /) -> Sequence[DataItem]: ...
 
         def __getitem__(
-            self: Self, key: int | Slice[int], /
+            self: Self, key: SupportsIndex | Slice[SupportsIndex], /
         ) -> DataItem | Sequence[DataItem]: ...
 
     type Init[InitItem] = Sequence[InitItem]
@@ -70,8 +58,9 @@ class BaseDataSequence[Item](
         # we are forced to assume a constructor signature
         # the subtype of BaseDataSequence might be immutable
         if isinstance(key, SupportsIndex):
-            return self.__data__()[optionalIndex(key)]
-        return type(self)(self.__data__()[sequenceSlice(key)])
+            return self.__data__()[key]
+        else:
+            return type(self)(self.__data__()[key])
         
 
     @abstractmethod

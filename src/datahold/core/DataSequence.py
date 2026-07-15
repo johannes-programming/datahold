@@ -8,22 +8,13 @@ __all__: list[str] = ["DataSequence"]
 
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
-from typing import Self, SupportsIndex, overload, Optional
+from typing import Self, SupportsIndex, overload
 
 import setdoc
 import operator
 
-from ..base.BaseDataSequence import BaseDataSequence, Slice, sequenceSlice
+from ..base.BaseDataSequence import BaseDataSequence, Slice
 
-@overload
-def sequenceKey(key: SupportsIndex )  -> int:...
-@overload
-def sequenceKey(key: Slice[SupportsIndex]) -> Slice[int]: ...
-def sequenceKey(key: SupportsIndex| Slice[SupportsIndex]) -> Optional[int] | Slice[int]:
-    if isinstance(key, SupportsIndex):
-        return operator.index(key)
-    
-    return sequenceSlice(key)
 class DataSequence[Item](
     BaseDataSequence[Item],
     MutableSequence[Item],
@@ -36,26 +27,26 @@ class DataSequence[Item](
     class Data[DataItem](BaseDataSequence.Data[DataItem]):
         @overload
         @setdoc.basic
-        def __delitem__(self: Self, key: int, /) -> None: ...
+        def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
         @overload
         @setdoc.basic
-        def __delitem__(self: Self, key: Slice[int], /) -> None: ...
+        def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None: ...
         @setdoc.basic
-        def __delitem__(self: Self, key: int | Slice[int], /) -> None: ...
+        def __delitem__(self: Self, key: SupportsIndex | Slice[SupportsIndex], /) -> None: ...
         @overload
         @setdoc.basic
         def __setitem__(
-            self: Self, key: int, value: DataItem, /
+            self: Self, key: SupportsIndex, value: DataItem, /
         ) -> None: ...
         @overload
         @setdoc.basic
         def __setitem__(
-            self: Self, key: Slice[int], value: Iterable[DataItem], /
+            self: Self, key: Slice[SupportsIndex], value: Iterable[DataItem], /
         ) -> None: ...
         @setdoc.basic
         def __setitem__(
             self: Self,
-            key: int | Slice[int],
+            key: SupportsIndex | Slice[SupportsIndex],
             value: DataItem | Iterable[DataItem],
             /,
         ) -> None: ...
@@ -69,16 +60,13 @@ class DataSequence[Item](
     def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
     @overload
     @setdoc.basic
-    def __delitem__(self: Self, key: Slice, /) -> None:
+    def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None:
         # def __delitem__(self, slice[int | None, int | None, int | None], /) -> None
         ...
 
     @setdoc.basic
-    def __delitem__(self: Self, key: SupportsIndex | Slice, /) -> None:
-        if isinstance(key, SupportsIndex):
-            del self.__data__()[ operator.index(key)]
-        else:
-            del self.__data__()[sequenceSlice(key)]
+    def __delitem__(self: Self, key: SupportsIndex | Slice[SupportsIndex], /) -> None:
+        del self.__data__()[key]
 
     @overload
     @setdoc.basic
@@ -88,18 +76,15 @@ class DataSequence[Item](
 
     @overload
     @setdoc.basic
-    def __setitem__(self: Self, key: Slice, value: Iterable[Item], /) -> None:
+    def __setitem__(self: Self, key: Slice[SupportsIndex], value: Iterable[Item], /) -> None:
         # def [_T] (list[_T], slice[typing.SupportsIndex | None, typing.SupportsIndex | None, typing.SupportsIndex | None], typing.Iterable[_T])
         ...
 
     @setdoc.basic
     def __setitem__(
-        self: Self, key: SupportsIndex | Slice, value: Item | Iterable[Item], /
+        self: Self, key: SupportsIndex | Slice[SupportsIndex], value: Item | Iterable[Item], /
     ) -> None:
-        if isinstance(key, SupportsIndex):
-            self.__data__()[ operator.index(key)] = value
-        else:
-            self.__data__()[sequenceSlice(key)]= value
+        self.__data__()[key] = value
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
