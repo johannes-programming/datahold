@@ -5,23 +5,24 @@ __all__: list[str] = ["BaseDataList"]
 from abc import abstractmethod
 from collections.abc import Iterable
 from types import NotImplementedType
-from typing import Protocol, Self, SupportsIndex, TypeVar
+from typing import Protocol, Self, SupportsIndex
+
+
 
 import setdoc
 
 from .BaseDataSequence import BaseDataSequence
 
-DataItem = TypeVar("DataItem", covariant=True)
-Item = TypeVar("Item", covariant=True)
 
 
-class BaseDataList(BaseDataSequence[Item]):
+
+class BaseDataList[Item](BaseDataSequence[Item]):
     """Act as base class for list-like implementation which only needs overriding of __data__ and of __init__ to work immediately."""
 
     __slots__ = ()
 
     @setdoc.basic
-    class Data(BaseDataSequence.Data[DataItem], Protocol[DataItem]):
+    class Data[DataItem](BaseDataSequence.Data[DataItem], Protocol[DataItem]):
         @setdoc.basic
         def __add__(
             self: Self, other: BaseDataList.Data[DataItem], /

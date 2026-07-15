@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__: list[str] = ["BaseDataCollection"]
+
 from abc import abstractmethod
 from collections.abc import Collection, Container, Iterable, Iterator, Sized
 from typing import Never, Protocol, Self
