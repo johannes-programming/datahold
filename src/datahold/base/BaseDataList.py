@@ -5,13 +5,13 @@ __all__: list[str] = ["BaseDataList"]
 from abc import abstractmethod
 from collections.abc import Iterable, Sequence
 from types import NotImplementedType
-from typing import Protocol, Self, SupportsIndex, overload
+from typing import Protocol, Self, SupportsIndex, overload, Optional
 
 
 
 import setdoc
 
-from .BaseDataSequence import BaseDataSequence, Slice
+from .BaseDataSequence import BaseDataSequence, Slice, Key
 
 def optionalIndex(index:Optional[SupportsIndex]) -> Optional[int]:
     if index is None:

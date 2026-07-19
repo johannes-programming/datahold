@@ -10,7 +10,7 @@ import setdoc
 from .BaseDataCollection import BaseDataCollection
 
 type Slice[SliceItem] = slice[Optional[SliceItem], Optional[SliceItem], Optional[SliceItem]]
-
+type Key[KeyItem] = KeyItem | Slice[KeyItem]
 
 
 class BaseDataSequence[Item](
@@ -28,14 +28,14 @@ class BaseDataSequence[Item](
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, key: SupportsIndex, /) -> DataItem: ...
+        def __getitem__(self: Self, key: int, /) -> DataItem: ...
 
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, key: Slice[SupportsIndex], /) -> Sequence[DataItem]: ...
+        def __getitem__(self: Self, key: Slice[int], /) -> Sequence[DataItem]: ...
 
         def __getitem__(
-            self: Self, key: SupportsIndex | Slice[SupportsIndex], /
+            self: Self, key: Key[int], /
         ) -> DataItem | Sequence[DataItem]: ...
 
     type Init[InitItem] = Sequence[InitItem]
@@ -46,21 +46,15 @@ class BaseDataSequence[Item](
 
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, key: SupportsIndex) -> Item: ...
+    def __getitem__(self: Self, key: int) -> Item: ...
 
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, key: Slice[SupportsIndex]) -> Self: ...
+    def __getitem__(self: Self, key: Slice[int]) -> Sequence[Item]: ...
 
     @setdoc.basic
-    def __getitem__(self: Self, key: SupportsIndex | Slice[SupportsIndex]) -> Item | Self:
-        # Sequence.__getitem__ reveals "Overload(def [_T_co] (typing.Sequence[_T_co], int) -> _T_co, def [_T_co] (typing.Sequence[_T_co], slice[int | None, int | None, int | None]) -> typing.Sequence[_T_co])"
-        # we are forced to assume a constructor signature
-        # the subtype of BaseDataSequence might be immutable
-        if isinstance(key, SupportsIndex):
-            return self.__data__()[key]
-        else:
-            return type(self)(self.__data__()[key])
+    def __getitem__(self: Self, key: Key[int]) -> Item | Sequence[Item]:
+        return self.__data__()[key]
         
 
     @abstractmethod
