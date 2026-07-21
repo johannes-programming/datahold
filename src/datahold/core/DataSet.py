@@ -14,7 +14,7 @@ from ..base.BaseDataSet import BaseDataSet
 from .DataCollection import DataCollection
 
 
-class DataSet[Item](
+class DataSet[Item: Hashable](
     BaseDataSet[Item],
     DataCollection[Item],
     MutableSet[Item],

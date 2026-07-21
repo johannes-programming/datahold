@@ -11,7 +11,7 @@ import setdoc
 from ..base.BaseDataSet import BaseDataSet
 
 
-class FrozenDataSet[Item](BaseDataSet[Item], Hashable):
+class FrozenDataSet[Item: Hashable](BaseDataSet[Item], Hashable):
 
     __slots__ = ()
 

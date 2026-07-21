@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__ = ["BaseDataDict"]
 
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections.abc import Hashable, Iterable
 from typing import Never, Optional, Protocol, Self
 
 import setdoc
@@ -23,7 +23,9 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
     def keys(self: Self) -> Iterable[Key]: ...
 
 
-class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
+class BaseDataDict[Key: Hashable, Value](
+    BaseDataMapping[Key | str, Optional[Value]],
+):
 
     # dict has rich cmp that always returns NotImplemented
     # should we add these here as well?

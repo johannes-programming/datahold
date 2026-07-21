@@ -10,7 +10,7 @@ import setdoc
 from ..base.BaseDataDict import BaseDataDict
 
 
-class FrozenDataDict[Key, Value](
+class FrozenDataDict[Key: Hashable, Value](
     BaseDataDict[Key, Value],
     Hashable,
 ):

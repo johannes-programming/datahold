@@ -13,7 +13,7 @@ import setdoc
 from .BaseDataAbstractSet import BaseDataAbstractSet
 
 
-class BaseDataSet[Item](BaseDataAbstractSet[Item]):
+class BaseDataSet[Item: Hashable](BaseDataAbstractSet[Item]):
     __slots__ = ()
 
     type Data[DataItem] = frozenset[DataItem]

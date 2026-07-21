@@ -15,7 +15,7 @@ from .DataSet import DataSet
 Item = TypeVar("Item", bound=Hashable)
 
 
-class HoldSet[Item](
+class HoldSet[Item: Hashable](
     DataSet[Item],
     BaseHoldCollection[Item],
 ):
