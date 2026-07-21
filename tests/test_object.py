@@ -1,4 +1,4 @@
-__all__: list[str] = ["TestObject"]
+__all__: list[str] = ["TestCollection"]
 import enum
 import io
 import tomllib
@@ -70,7 +70,7 @@ class Lazy(enum.Enum):
         return cast(dict[str, Any], self.data["varia"])
 
 
-class TestObject(unittest.TestCase):
+class TestCollection(unittest.TestCase):
     def _test_cls(self: Self, cls: type) -> None:
         method: Any
         for method in Lazy.lazy.METHODS:
