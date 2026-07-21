@@ -1,7 +1,9 @@
 """Provide DataDict."""
 
-__all__: list[str] = ["DataDict"]
+from __future__ import annotations
 
+__all__: list[str] = ["DataDict"]
+from abc import abstractmethod
 from collections.abc import MutableMapping
 from typing import Optional, Self
 
@@ -57,3 +59,13 @@ class DataDict[Key, Value](
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
+
+    @property
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self) -> DataDict.Data[Key, Value]: ...
+
+    @data.setter
+    @abstractmethod
+    @setdoc.basic
+    def data(self: Self, value: DataDict.Init[Key, Value]) -> None: ...

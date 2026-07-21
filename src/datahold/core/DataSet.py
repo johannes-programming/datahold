@@ -1,5 +1,7 @@
 """Provide DataSet."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["DataSet"]
 
 from abc import abstractmethod
@@ -34,14 +36,14 @@ class DataSet[Item](
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> frozenset[Item]: ...
+    def data(self: Self) -> DataSet.Data[Item]: ...
 
     @data.setter
     @abstractmethod
     @setdoc.basic
     def data(
         self: Self,
-        value: Iterable[Item],
+        value: DataSet.Init[Item],
     ) -> None: ...
 
     @setdoc.basic

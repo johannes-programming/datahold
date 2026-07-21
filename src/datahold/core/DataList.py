@@ -84,7 +84,7 @@ class DataList[Item](
     @setdoc.basic
     def data(
         self: Self,
-        value: Iterable[Item],
+        value: DataList.Init[Item],
     ) -> None: ...
 
     @setdoc.basic
