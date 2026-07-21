@@ -15,6 +15,7 @@ class FrozenDataDict[Key: Hashable, Value](
     Hashable,
 ):
     """Provide easy abc for custom frozen dict-like."""
+
     __slots__ = ()
 
     @setdoc.basic

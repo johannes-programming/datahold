@@ -12,8 +12,8 @@ from ..base.BaseDataSet import BaseDataSet
 
 
 class FrozenDataSet[Item: Hashable](BaseDataSet[Item], Hashable):
-
     """Provide easy abc for custom frozen set-like."""
+
     __slots__ = ()
 
     @setdoc.basic

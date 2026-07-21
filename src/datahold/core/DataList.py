@@ -21,6 +21,7 @@ class DataList[Item](
     MutableSequence[Item],
 ):
     """Provide easy abc for custom mutable list-like."""
+
     __slots__ = ()
 
     @setdoc.basic
