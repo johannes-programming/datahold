@@ -66,8 +66,10 @@ and for all other classes whose origin or nature should be apparent to a program
 
 The classes in ``datahold.base`` can also be accessed directly from ``datahold``.
 
-``class datahold.base.BaseDataCollection.BaseDataCollection``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.base.BaseDataCollection.BaseDataCollection[Item]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``Sized``, ``Iterable[Item]``, and ``Container[Never]``.
 
 ``class datahold.base.BaseDataCollection.BaseDataCollection.Data``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -215,7 +217,7 @@ This abstract ``property`` is inherited from ``BaseDataCollection[Key]`` and rea
 ``class datahold.base.BaseDataDict.BaseDataDict[Key, Value](data: Init = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataCollection[Key | str]`` and ``Mapping[Key | str, Optional[Value]]``.
+This abstract base class inherits from ``BaseDataMapping[Key | str, Optional[Value]]``.
 The type variables are forced by the fact that every ``dict`` can be made to take any ``str`` as a key or ``None`` as a value without having to pass them.
 It implements the non-mutating mapping operations of ``dict`` that are not already present in ``object``.
 
@@ -293,7 +295,7 @@ This abstract ``property`` is inherited from ``BaseDataCollection`` and reannota
 ``class datahold.base.BaseDataList.BaseDataList[Item](data: Init[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataCollection[Item]`` and ``Sequence[Item]``.
+This abstract base class inherits from ``BaseDataSequence[Item]``.
 It has no classmethod to implement.
 
 ``__slots__ = ()``
@@ -576,7 +578,7 @@ The classes in ``datahold.frozen`` can also be accessed directly from ``datahold
 ``class datahold.frozen.FrozenDataSet.FrozenDataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``BaseDataSet[Item]``.
+This class inherits from ``BaseDataSet[Item]`` and ``Hashable``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -584,7 +586,7 @@ This class inherits from ``BaseDataSet[Item]``.
 ``class datahold.frozen.FrozenDataList.FrozenDataList[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``BaseDataList[Item]``.
+This class inherits from ``BaseDataList[Item]`` and ``Hashable``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -592,7 +594,7 @@ This class inherits from ``BaseDataList[Item]``.
 ``class datahold.frozen.FrozenDataDict.FrozenDataDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This class inherits from ``BaseDataDict[Key, Value]``.
+This class inherits from ``BaseDataDict[Key, Value]`` and ``Hashable``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
