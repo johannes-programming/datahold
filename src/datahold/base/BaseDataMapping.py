@@ -30,7 +30,7 @@ class BaseDataMapping[Key, Value](
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Optional[Value]:
         try:
-            return self.data[key]
+            return self.data[key] # type: ignore[index]
         except TypeError:
             raise KeyError(key) from None
 
