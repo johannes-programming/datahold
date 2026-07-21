@@ -94,7 +94,6 @@ args = [
 a = 1
 
 [types.FrozenHoldDict.parents]
-FrozenHoldCollection = true
 Mapping = true
 MutableMapping = false
 
@@ -110,7 +109,6 @@ repr = "FrozenHoldList([1, 2])"
 [types.FrozenHoldList.parents]
 BaseHoldList = true
 FrozenDataList = true
-FrozenHoldCollection = true
 MutableSequence = false
 Sequence = true
 
@@ -124,7 +122,6 @@ args = [
 valid = true
 
 [types.FrozenHoldSet.parents]
-FrozenHoldCollection = true
 MutableSet = false
 Set = true
 
