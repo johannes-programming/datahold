@@ -2,10 +2,13 @@
 
 __all__: list[str] = ["FrozenDataList"]
 
-from ..base.BaseDataList import BaseDataList
 from collections.abc import Hashable
-import setdoc
 from typing import Self
+
+import setdoc
+
+from ..base.BaseDataList import BaseDataList
+
 
 class FrozenDataList[Item](
     BaseDataList[Item],
@@ -13,6 +16,7 @@ class FrozenDataList[Item](
 ):
 
     __slots__ = ()
+
     @setdoc.basic
     def __hash__(self: Self) -> int:
         return hash(self.data)

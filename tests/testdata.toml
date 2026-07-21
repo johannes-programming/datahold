@@ -67,13 +67,11 @@ DataCollection = true
 MutableSet = true
 Set = true
 
-
 [types.FrozenDataDict]
 Data = "frozendict"
 isabstract = true
 
 [types.FrozenDataDict.parents]
-
 
 [types.FrozenDataList]
 Data = "tuple"
@@ -81,13 +79,11 @@ isabstract = true
 
 [types.FrozenDataList.parents]
 
-
 [types.FrozenDataSet]
 Data = "frozenset"
 isabstract = true
 
 [types.FrozenDataSet.parents]
-
 
 [types.FrozenHoldDict.constructor.concrete]
 args = [
@@ -173,7 +169,6 @@ args = [
 
 [types.HoldList.parents]
 BaseHoldList = true
-HoldCollection = true
 MutableSequence = true
 Sequence = true
 
@@ -207,4 +202,3 @@ MutableSet = true
 Set = true
 
 [varia]
-

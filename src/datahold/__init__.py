@@ -10,7 +10,6 @@ __all__ = [
     "DataDict",
     "DataList",
     "DataSet",
-    "FrozenDataCollection",
     "FrozenDataDict",
     "FrozenDataList",
     "FrozenDataSet",
@@ -34,7 +33,6 @@ from datahold.core.DataSet import DataSet
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
 from datahold.core.HoldSet import HoldSet
-from datahold.frozen.FrozenDataCollection import FrozenDataCollection
 from datahold.frozen.FrozenDataDict import FrozenDataDict
 from datahold.frozen.FrozenDataList import FrozenDataList
 from datahold.frozen.FrozenDataSet import FrozenDataSet
