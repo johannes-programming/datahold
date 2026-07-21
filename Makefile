@@ -59,8 +59,8 @@ test: dist
 	mkdir dist/out/ ;
 	conda run -n base python make/env.py test_datahold --python=3.12 --recreate >/dev/null;
 	conda run -n test_datahold pip install dist/*.tar.gz >/dev/null;
-	conda run -n test_datahold python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
 	conda run -n test_datahold python make/run_introspection.py > dist/out/introspection_out.txt 2> dist/out/introspection_err.txt || true;
+	conda run -n test_datahold python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
 	conda run -n test_datahold pip install mypy >/dev/null;
 	conda run -n test_datahold python -m mypy --python-version 3.12 --exclude build --exclude dist --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
 	conda run -n test_datahold python -m mypy --python-version 3.12 --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
