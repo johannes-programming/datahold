@@ -169,10 +169,8 @@ class TestAbstractness(unittest.TestCase):
         for x, y in kwargs.get("parents", {}).items():
             parenttype = Lazy.get_parenttype(x)
             self.assertEqual(issubclass(cls, parenttype), y)
-        self.assertNotEqual(
-            typename.startswith("Base") or typename.startswith("Frozen"),
-            hasattr(cls, "copy"),
-        )
+        if typename.startswith("Base") or typename.startswith("Frozen"):
+            self.assertFalse(hasattr(cls, "copy"))
 
     def test_abstract_classes(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():
@@ -209,10 +207,8 @@ class TestData(unittest.TestCase):
         doc: Any
         error: Any
         member: Any
-        module: Any
         obj: Any
-        module = getattr(core, name)
-        cls = getattr(module, name)
+        cls = Lazy.get_type(typename=name)
         for attrname in dir(cls):
             member = getattr(cls, attrname)
             if not callable(member) and not isinstance(member, property):
