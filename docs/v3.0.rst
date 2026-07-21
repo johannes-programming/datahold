@@ -55,6 +55,11 @@ Features
 
 Inherited features are not mentioned again, unless something changed.
 
+Classes that can be imported from ``datahold``, from ``collections.abc``, or from ``typing`` are usually mentions without import.
+
+The same is true for nested classes (i.e. ``Data``) 
+and protocols with self-explanatory name (i.e. ``SupportsKeysAndGetitem``).
+
 ``datahold.base``
 '''''''''''''''''
 
