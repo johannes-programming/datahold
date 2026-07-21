@@ -45,10 +45,6 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     def __ge__(self: Self, other: BaseDataList[Any], /) -> bool:
         return self.data >= other.data
 
-    @setdoc.basic
-    def __gt__(self: Self, other: BaseDataList[Any], /) -> bool:
-        return self.data > other.data
-
     @overload
     @setdoc.basic
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
@@ -65,6 +61,10 @@ class BaseDataList[Item](BaseDataSequence[Item]):
             return self.data[index]
         else:
             return type(self)(self.data[index])
+
+    @setdoc.basic
+    def __gt__(self: Self, other: BaseDataList[Any], /) -> bool:
+        return self.data > other.data
 
     @abstractmethod
     @setdoc.basic
