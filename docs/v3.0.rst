@@ -69,7 +69,7 @@ The classes in ``datahold.base`` can also be accessed directly from ``datahold``
 ``class datahold.base.BaseDataCollection.BaseDataCollection[Item]``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``Sized``, ``Iterable[Item]``, and ``Container[Never]``.
+This abstract base class inherits from ``Sized``, ``Iterable[Item]``, and ``Container[object]``.
 
 ``class datahold.base.BaseDataCollection.BaseDataCollection.Data``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
