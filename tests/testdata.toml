@@ -20,18 +20,6 @@ Set = true
 [types.BaseHoldCollection.parents]
 BaseDataCollection = true
 
-[types.BaseHoldDict.parents]
-BaseHoldCollection = true
-Mapping = true
-
-[types.BaseHoldList.parents]
-BaseHoldCollection = true
-Sequence = true
-
-[types.BaseHoldSet.parents]
-BaseHoldCollection = true
-Set = true
-
 [types.DataCollection]
 Data = "Hashable"
 isabstract = true
@@ -107,12 +95,6 @@ isabstract = true
 [types.FrozenDataSet.parents]
 FrozenDataCollection = true
 
-[types.FrozenHoldCollection]
-Data = "Hashable"
-isabstract = true
-
-[types.FrozenHoldCollection.parents]
-
 [types.FrozenHoldDict.constructor.concrete]
 args = [
     { a = 1 },
@@ -156,12 +138,6 @@ FrozenHoldCollection = true
 MutableSet = false
 Set = true
 
-[types.HoldCollection]
-Data = "Hashable"
-isabstract = true
-
-[types.HoldCollection.parents]
-
 [types.HoldDict]
 Data = "frozendict"
 n_type_params = 2
@@ -174,7 +150,6 @@ args = []
 
 [types.HoldDict.parents]
 BaseHoldDict = true
-HoldCollection = true
 Mapping = true
 MutableMapping = true
 
@@ -234,7 +209,6 @@ args = [
 
 [types.HoldSet.parents]
 BaseHoldSet = true
-HoldCollection = true
 MutableSet = true
 Set = true
 
