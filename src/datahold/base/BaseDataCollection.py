@@ -3,7 +3,7 @@
 __all__ = ["BaseDataCollection"]
 
 
-from collections.abc import Collection, Hashable, Iterator, Container, Sized, Iterable
+from collections.abc import Hashable, Iterator, Container, Sized, Iterable
 from typing import Protocol, Self, Any, Never
 
 import setdoc
@@ -12,7 +12,9 @@ from abc import ABCMeta, abstractmethod
 
 
 class BaseDataCollection[Item](
-    Collection[Item], 
+    Sized,
+    Iterable[Item],
+    Container[Never],
     metaclass=ABCMeta,
 ):
     __slots__ = ()

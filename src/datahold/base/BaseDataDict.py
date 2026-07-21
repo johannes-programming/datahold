@@ -5,48 +5,43 @@ from __future__ import annotations
 __all__ = ["BaseDataDict"]
 
 from abc import abstractmethod
-from collections.abc import (
-    Hashable,
-    ItemsView,
-    Iterable,
-    KeysView,
-    Mapping,
-    ValuesView,
-)
-from typing import Optional, Self, TypeVar
+from collections.abc import Iterable
+from typing import Optional, Self, Protocol, Never
 
 import setdoc
 from frozendict import frozendict
 
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
-from .BaseDataCollection import BaseDataCollection
-
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
-Data_ = frozendict[Key | str, Optional[Value]]
-Value_ = TypeVar("Value_")
+from .BaseDataMapping import BaseDataMapping
 
 
-class BaseDataDict(
-    BaseDataCollection[Key | str], Mapping[Key | str, Optional[Value]]
+
+
+class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: Never, /) -> Value: ...
+
+    @setdoc.basic
+    def keys(self: Self) -> Iterable[Key]: ...
+
+
+class BaseDataDict[Key, Value](
+    BaseDataMapping[Key | str, Optional[Value]]
 ):
 
     __slots__ = ()
 
-    Data = Data_  # type: ignore[assignment]
-
-    @setdoc.basic
-    def __getitem__(self: Self, key: Hashable, /) -> Optional[Value]:
-        return self.data[key]  # type: ignore[index]
+    type Data[DataKey, DataValue] = frozendict[DataKey, DataValue]
+    type Init[DataKey, DataValue] = (
+        SupportsKeysAndGetitem[DataKey | str, Optional[DataValue]]
+        | Iterable[tuple[DataKey | str, Optional[DataValue]]]
+    )
 
     @abstractmethod
     @setdoc.basic
     def __init__(
         self: Self,
-        data: (
-            SupportsKeysAndGetitem[Key | str, Optional[Value]]
-            | Iterable[tuple[Key | str, Optional[Value]]]
-        ) = (),
+        data: Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ) -> None: ...
@@ -63,14 +58,12 @@ class BaseDataDict(
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({dict(self)!r})"
 
-    # Mapping already defines: __reversed__ = None
-
     # __ror__ is unnecessary because of how __or__ is defined
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data_[Key, Value]: ...
+    def data(self: Self) -> Data[Key, Value]: ...
 
     @classmethod
     @setdoc.basic
@@ -81,14 +74,3 @@ class BaseDataDict(
         /,
     ) -> Self:
         return cls(dict.fromkeys(iterable, value))
-
-    @setdoc.basic
-    def get(
-        self: Self,
-        key: Hashable,
-        default: Optional[Value_] = None,
-        /,
-    ) -> Optional[Value | Value_]:
-        return self.data.get(key, default)  # type: ignore[arg-type]
-
-    # Mapping already defines keys, items, and values

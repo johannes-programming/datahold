@@ -4,31 +4,31 @@ from __future__ import annotations
 
 __all__: list[str] = ["BaseDataList"]
 
-import sys
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable, Iterator, Sequence
-from typing import Any, Self, SupportsIndex, TypeVar, cast, overload
+from collections.abc import Iterable
+from typing import Self, SupportsIndex, overload
 
 import setdoc
 
-from .BaseDataCollection import BaseDataCollection
-
-Item = TypeVar("Item", covariant=True)
-Data_ = tuple[Item, ...]
+from .BaseDataSequence import BaseDataSequence, Slice
 
 
-class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
+class BaseDataList[Item](BaseDataSequence[Item]):
     __slots__ = ()
 
-    Data = Data_
+    type Data[DataItem] = tuple[DataItem, ...]
 
     @setdoc.basic
-    def __add__(self: Self, other: Iterable[Item], /) -> Self:
-        return type(self)(self.data + tuple(other))
-
-    @setdoc.basic
-    def __contains__(self: Self, other: object, /) -> bool:
-        return other in self.data
+    def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
+        # list.__add__ reveals Overload(
+        #     def [_T] (list[_T], list[_T]) -> list[_T], 
+        #     def [_T, _S] (list[_T], list[_S]) -> list[_S | _T],
+        # ) 
+        # tuple.__add__ reveals Overload(
+        #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...], 
+        #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
+        # )
+        return type(self)(self.data + other.data)
 
     @overload
     @setdoc.basic
@@ -36,11 +36,11 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
 
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, index: slice, /) -> Self: ...
+    def __getitem__(self: Self, index: Slice[SupportsIndex], /) -> Self: ...
 
     @setdoc.basic
     def __getitem__(
-        self: Self, index: SupportsIndex | slice, /
+        self: Self, index: SupportsIndex | Slice[SupportsIndex], /
     ) -> Item | Self:
         if isinstance(index, SupportsIndex):
             return self.data[index]
@@ -58,30 +58,10 @@ class BaseDataList(BaseDataCollection[Item], Sequence[Item]):
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.data)!r})"
-
-    @setdoc.basic
-    def __reversed__(self: Self, /) -> Iterator[Item]:
-        return reversed(self.data)
-
-    @setdoc.basic
-    def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
-        return type(self)(other * self.data)
-
-    @setdoc.basic
-    def count(self: Self, item: Hashable, /) -> int:
-        return self.data.count(cast(Any, item))
+    
+    __rmul__ = __mul__
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data_[Item]: ...
-
-    @setdoc.basic
-    def index(
-        self: Self,
-        item: Hashable,
-        start: SupportsIndex = 0,
-        end: SupportsIndex = sys.maxsize,
-        /,
-    ) -> int:
-        return self.data.index(cast(Any, item), start, end)
+    def data(self: Self) -> Data[Item]: ...

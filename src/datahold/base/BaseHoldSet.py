@@ -2,14 +2,10 @@
 
 __all__: list[str] = ["BaseHoldSet"]
 
-from collections.abc import Hashable
-from typing import TypeVar
-
 from .BaseDataSet import BaseDataSet
-from .BaseHoldObject import BaseHoldObject
-
-Item = TypeVar("Item", bound=Hashable)
+from .BaseHoldCollection import BaseHoldCollection
 
 
-class BaseHoldSet(BaseDataSet[Item], BaseHoldObject):
+
+class BaseHoldSet[Item](BaseDataSet[Item], BaseHoldCollection[Item]):
     __slots__ = ()

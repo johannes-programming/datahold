@@ -2,15 +2,12 @@
 
 __all__: list[str] = ["BaseHoldDict"]
 
-from collections.abc import Hashable
-from typing import TypeVar
-
 from .BaseDataDict import BaseDataDict
-from .BaseHoldObject import BaseHoldObject
-
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
+from .BaseHoldCollection import BaseHoldCollection
 
 
-class BaseHoldDict(BaseDataDict[Key, Value], BaseHoldObject):
+class BaseHoldDict[Key, Value](
+    BaseDataDict[Key, Value], 
+    BaseHoldCollection[Key],
+):
     __slots__ = ()
