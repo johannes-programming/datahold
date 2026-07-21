@@ -4,6 +4,9 @@ METHODS = [
     "__str__",
 ]
 
+[types.BaseDataAbstractSet.parents]
+BaseDataCollection = true
+
 [types.BaseDataCollection.parents]
 Collection = true
 Hashable = false
@@ -13,6 +16,12 @@ Mapping = true
 
 [types.BaseDataList.parents]
 Sequence = true
+
+[types.BaseDataMapping.parents]
+BaseDataCollection = true
+
+[types.BaseDataSequence.parents]
+BaseDataCollection = true
 
 [types.BaseDataSet.parents]
 Set = true
