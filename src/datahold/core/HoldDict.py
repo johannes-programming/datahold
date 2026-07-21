@@ -1,5 +1,6 @@
 """Provide HoldDict."""
 from __future__ import annotations
+
 __all__: list[str] = ["HoldDict"]
 
 from typing import Self
@@ -10,7 +11,6 @@ from frozendict import frozendict
 from ..base.BaseHoldDict import BaseHoldDict
 from .DataDict import DataDict
 from .HoldCollection import HoldCollection
-
 
 
 class HoldDict[Key, Value](

@@ -1,10 +1,11 @@
 """Provide DataCollection."""
 
 from __future__ import annotations
+
 __all__: list[str] = ["DataCollection"]
 
 from abc import abstractmethod
-from typing import Self, Never
+from typing import Never, Self
 
 import setdoc
 

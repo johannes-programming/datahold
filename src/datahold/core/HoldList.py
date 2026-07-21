@@ -1,5 +1,6 @@
 """Provide HoldList."""
 from __future__ import annotations
+
 __all__: list[str] = ["HoldList"]
 
 from collections.abc import Iterable

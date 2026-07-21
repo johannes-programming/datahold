@@ -6,7 +6,7 @@ __all__: list[str] = ["BaseDataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Self, SupportsIndex, overload, Any
+from typing import Any, Self, SupportsIndex, overload
 
 import setdoc
 

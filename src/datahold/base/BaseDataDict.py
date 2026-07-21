@@ -6,14 +6,12 @@ __all__ = ["BaseDataDict"]
 
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Optional, Self, Protocol, Never
+from typing import Never, Optional, Protocol, Self
 
 import setdoc
 from frozendict import frozendict
 
 from .BaseDataMapping import BaseDataMapping
-
-
 
 
 class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):

@@ -1,6 +1,7 @@
 """Provide DataList."""
 
 from __future__ import annotations
+
 __all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
@@ -11,7 +12,6 @@ import setdoc
 
 from ..base.BaseDataList import BaseDataList, Slice
 from .DataCollection import DataCollection
-
 
 
 class DataList[Item](

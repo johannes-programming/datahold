@@ -7,7 +7,6 @@ from .BaseDataList import BaseDataList
 from .BaseHoldCollection import BaseHoldCollection
 
 
-
 class BaseHoldList[Item](
     BaseDataList[Item], 
     BaseHoldCollection[Item],

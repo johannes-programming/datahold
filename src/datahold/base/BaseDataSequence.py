@@ -3,12 +3,11 @@
 __all__ = ["BaseDataSequence"]
 
 
+from abc import abstractmethod
 from collections.abc import Sequence
-from typing import Protocol, Self, Optional, overload
+from typing import Optional, Protocol, Self, overload
 
 import setdoc
-
-from abc import abstractmethod
 
 from .BaseDataCollection import BaseDataCollection
 

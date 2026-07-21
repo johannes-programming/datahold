@@ -3,12 +3,11 @@
 __all__ = ["BaseDataCollection"]
 
 
-from collections.abc import Hashable, Iterator, Container, Sized, Iterable
-from typing import Protocol, Self, Any, Never
+from abc import ABCMeta, abstractmethod
+from collections.abc import Container, Hashable, Iterable, Iterator, Sized
+from typing import Any, Never, Protocol, Self
 
 import setdoc
-
-from abc import ABCMeta, abstractmethod
 
 
 class BaseDataCollection[Item](

@@ -12,7 +12,6 @@ from ..base.BaseDataDict import BaseDataDict
 from .DataCollection import DataCollection
 
 
-
 class DataDict[Key, Value](
     BaseDataDict[Key, Value],
     DataCollection[Key | str],

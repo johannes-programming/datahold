@@ -5,10 +5,8 @@ from __future__ import annotations
 __all__ = ["BaseDataMapping"]
 
 from abc import abstractmethod
-from collections.abc import (
-    Mapping,
-)
-from typing import Optional, Self, Protocol, Never
+from collections.abc import Mapping
+from typing import Never, Optional, Protocol, Self
 
 import setdoc
 

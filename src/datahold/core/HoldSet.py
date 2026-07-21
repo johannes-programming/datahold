@@ -1,5 +1,6 @@
 """Provide HoldSet."""
 from __future__ import annotations
+
 __all__: list[str] = ["HoldSet"]
 
 from collections.abc import Hashable, Iterable

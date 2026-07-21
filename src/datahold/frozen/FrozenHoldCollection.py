@@ -1,5 +1,6 @@
 """Provide FrozenHoldCollection."""
 from __future__ import annotations
+
 __all__: list[str] = ["FrozenHoldCollection"]
 
 from typing import Self
