@@ -16,6 +16,8 @@ class DataCollection[Item](BaseDataCollection[Item]):
 
     __slots__ = ()
 
+    __hash__ = None
+
     @property
     @abstractmethod
     @setdoc.basic
