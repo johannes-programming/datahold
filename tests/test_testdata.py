@@ -10,9 +10,8 @@ from functools import cached_property
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Optional, Self, cast, get_args, get_origin
-
-from datahold import core
+from typing import (Any, Optional, Self, TypeAliasType, cast, get_args,
+                    get_origin)
 
 
 class Lazy(enum.Enum):
@@ -218,6 +217,8 @@ class TestData(unittest.TestCase):
         for attrname in dir(cls):
             member = getattr(cls, attrname)
             if not callable(member) and not isinstance(member, property):
+                continue
+            if isinstance(member, TypeAliasType):
                 continue
             if getattr(member, "__isabstractmethod__", False):
                 continue
