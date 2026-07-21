@@ -10,8 +10,15 @@ from functools import cached_property
 from importlib import import_module
 from pathlib import Path
 from types import ModuleType
-from typing import (Any, Optional, Self, TypeAliasType, cast, get_args,
-                    get_origin)
+from typing import (
+    Any,
+    Optional,
+    Self,
+    TypeAliasType,
+    cast,
+    get_args,
+    get_origin,
+)
 
 
 class Lazy(enum.Enum):
