@@ -10,7 +10,8 @@ from typing import Any, Self, SupportsIndex, overload
 
 import setdoc
 
-from .BaseDataSequence import BaseDataSequence, Slice
+from .._utils.Slice import Slice
+from .BaseDataSequence import BaseDataSequence
 
 
 class BaseDataList[Item](BaseDataSequence[Item]):

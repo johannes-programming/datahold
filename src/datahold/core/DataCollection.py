@@ -16,7 +16,7 @@ class DataCollection[Item](BaseDataCollection[Item]):
 
     __slots__ = ()
 
-    __hash__ = None
+    __hash__ = None  # type: ignore
 
     @property
     @abstractmethod

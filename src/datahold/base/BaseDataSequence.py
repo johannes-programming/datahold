@@ -5,13 +5,12 @@ __all__ = ["BaseDataSequence"]
 
 from abc import abstractmethod
 from collections.abc import Sequence
-from typing import Optional, Protocol, Self, overload
+from typing import Protocol, Self, overload
 
 import setdoc
 
+from .._utils.Slice import Slice
 from .BaseDataCollection import BaseDataCollection
-
-type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
 class BaseDataSequence[Item](
