@@ -11,13 +11,11 @@ import setdoc
 
 from ..base.BaseHoldList import BaseHoldList
 from .DataList import DataList
-from .HoldCollection import HoldCollection
 
 
 class HoldList[Item](
     DataList[Item],
     BaseHoldList[Item],
-    HoldCollection[Item],
 ):
 
     __slots__ = ()

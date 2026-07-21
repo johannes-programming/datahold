@@ -11,11 +11,10 @@ from frozendict import frozendict
 
 from ..base.BaseHoldDict import BaseHoldDict
 from .DataDict import DataDict
-from .HoldCollection import HoldCollection
-
 
 class HoldDict[Key, Value](
-    DataDict[Key, Value], BaseHoldDict[Key, Value], HoldCollection[Key | str]
+    DataDict[Key, Value], 
+    BaseHoldDict[Key, Value], 
 ):
 
     __slots__ = ()

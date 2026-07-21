@@ -11,7 +11,6 @@ import setdoc
 
 from ..base.BaseHoldSet import BaseHoldSet
 from .DataSet import DataSet
-from .HoldCollection import HoldCollection
 
 Item = TypeVar("Item", bound=Hashable)
 
@@ -19,7 +18,6 @@ Item = TypeVar("Item", bound=Hashable)
 class HoldSet[Item](
     DataSet[Item],
     BaseHoldSet[Item],
-    HoldCollection[Item],
 ):
 
     __slots__ = ()
