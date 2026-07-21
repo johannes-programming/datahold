@@ -8,8 +8,8 @@ from typing import Self
 
 import setdoc
 
-from .FrozenDataList import FrozenDataList
 from ..base.BaseHoldCollection import BaseHoldCollection
+from .FrozenDataList import FrozenDataList
 
 
 class FrozenHoldList[Item](

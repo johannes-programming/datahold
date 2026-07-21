@@ -9,14 +9,12 @@ from typing import Self
 import setdoc
 from frozendict import frozendict
 
-from ..base.BaseDataDict import BaseDataDict
 from ..base.BaseHoldCollection import BaseHoldCollection
 from .DataDict import DataDict
 
 
 class HoldDict[Key, Value](
     DataDict[Key, Value],
-    BaseDataDict[Key, Value],
     BaseHoldCollection[Key | str],
 ):
 

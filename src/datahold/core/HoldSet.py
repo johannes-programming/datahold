@@ -9,7 +9,7 @@ from typing import Self, TypeVar
 
 import setdoc
 
-from ..base.BaseHoldSet import BaseHoldSet
+from ..base.BaseHoldCollection import BaseHoldCollection
 from .DataSet import DataSet
 
 Item = TypeVar("Item", bound=Hashable)
@@ -17,7 +17,7 @@ Item = TypeVar("Item", bound=Hashable)
 
 class HoldSet[Item](
     DataSet[Item],
-    BaseHoldSet[Item],
+    BaseHoldCollection[Item],
 ):
 
     __slots__ = ()

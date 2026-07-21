@@ -9,13 +9,13 @@ from typing import Self
 
 import setdoc
 
-from ..base.BaseHoldList import BaseHoldList
+from ..base.BaseHoldCollection import BaseHoldCollection
 from .DataList import DataList
 
 
 class HoldList[Item](
     DataList[Item],
-    BaseHoldList[Item],
+    BaseHoldCollection[Item],
 ):
 
     __slots__ = ()

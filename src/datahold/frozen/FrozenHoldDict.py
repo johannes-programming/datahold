@@ -9,8 +9,8 @@ from typing import Optional, Self
 import setdoc
 from frozendict import frozendict
 
-from .FrozenDataDict import FrozenDataDict
 from ..base.BaseHoldCollection import BaseHoldCollection
+from .FrozenDataDict import FrozenDataDict
 
 
 class FrozenHoldDict[Key, Value](
