@@ -135,8 +135,8 @@ a = 1
 args = []
 
 [types.HoldDict.parents]
-DataDict = true
 BaseDataDict = true
+DataDict = true
 Mapping = true
 MutableMapping = true
 
