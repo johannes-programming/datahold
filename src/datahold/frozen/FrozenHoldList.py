@@ -3,29 +3,26 @@
 __all__: list[str] = ["FrozenHoldList"]
 
 from collections.abc import Iterable
-from typing import Self, TypeVar
+from typing import Self
 
 import setdoc
 
 from ..base.BaseHoldList import BaseHoldList
 from .FrozenDataList import FrozenDataList
-from .FrozenHoldObject import FrozenHoldObject
-
-Item = TypeVar("Item", covariant=True)
+from .FrozenHoldCollection import FrozenHoldCollection
 
 
-class FrozenHoldList(
+class FrozenHoldList[Item](
     FrozenDataList[Item],
     BaseHoldList[Item],
-    FrozenHoldObject,
+    FrozenHoldCollection[Item],
 ):
 
     __slots__ = ()
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        self._data: tuple[Item, ...]
-        self._data = tuple(data)
+        self._data: tuple[Item, ...] = tuple(data)
 
     @property
     @setdoc.basic

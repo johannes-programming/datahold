@@ -2,15 +2,12 @@
 
 __all__: list[str] = ["FrozenDataDict"]
 
-from collections.abc import Hashable
-from typing import TypeVar
-
 from ..base.BaseDataDict import BaseDataDict
-from .FrozenDataObject import FrozenDataObject
-
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
+from .FrozenDataCollection import FrozenDataCollection
 
 
-class FrozenDataDict(BaseDataDict[Key, Value], FrozenDataObject):
+class FrozenDataDict[Key, Value](
+    BaseDataDict[Key, Value], 
+    FrozenDataCollection[Key | str],
+):
     __slots__ = ()

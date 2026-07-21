@@ -2,41 +2,35 @@
 
 __all__: list[str] = ["DataDict"]
 
-from abc import abstractmethod
-from collections.abc import Hashable, Iterable, MutableMapping
-from typing import Optional, Self, TypeVar, overload
+from collections.abc import MutableMapping
+from typing import Optional, Self
 
 import setdoc
 from frozendict import frozendict
 
-from .._utils.Missing import Missing
 from ..base.BaseDataDict import BaseDataDict
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
-from .DataObject import DataObject
-
-Key = TypeVar("Key", bound=Hashable)
-Value = TypeVar("Value")
-Value_ = TypeVar("Value_")
+from .DataCollection import DataCollection
 
 
-class DataDict(
+
+class DataDict[Key, Value](
     BaseDataDict[Key, Value],
-    DataObject,
+    DataCollection[Key | str],
     MutableMapping[Key | str, Optional[Value]],
 ):
     __slots__ = ()
 
     @setdoc.basic
-    def __delitem__(self: Self, key: Hashable, /) -> None:
-        self.data = self.data.delete(key)  # type: ignore[arg-type]
+    def __delitem__(self: Self, key: object, /) -> None:
+        try:
+            self.data = self.data.delete(key)
+        except TypeError:
+            raise KeyError(key) from None
 
     @setdoc.basic
     def __init__(
         self: Self,
-        data: (
-            SupportsKeysAndGetitem[Key | str, Optional[Value]]
-            | Iterable[tuple[Key | str, Optional[Value]]]
-        ) = (),
+        data: BaseDataDict.Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ) -> None:
@@ -58,92 +52,5 @@ class DataDict(
         value: Optional[Value],
         /,
     ) -> None:
+        # what to do if Key includes unhashable types?
         self.data = self.data.set(key, value)
-
-    @setdoc.basic
-    def clear(self: Self, /) -> None:
-        self.data = frozendict()
-
-    @property
-    @abstractmethod
-    @setdoc.basic
-    def data(self: Self) -> frozendict[Key | str, Optional[Value]]: ...
-
-    @data.setter
-    @abstractmethod
-    @setdoc.basic
-    def data(
-        self: Self,
-        value: (
-            SupportsKeysAndGetitem[Key | str, Optional[Value]]
-            | Iterable[tuple[Key | str, Optional[Value]]]
-        ),
-    ) -> None: ...
-
-    @overload
-    @setdoc.basic
-    def pop(self: Self, key: Hashable, /) -> Optional[Value]: ...
-
-    @overload
-    @setdoc.basic
-    def pop(
-        self: Self,
-        key: Hashable,
-        default: Value_,
-        /,
-    ) -> Optional[Value | Value_]: ...
-
-    @setdoc.basic
-    def pop(
-        self: Self,
-        key: Hashable,
-        default: Missing | Value_ = Missing.missing,
-        /,
-    ) -> Optional[Value | Value_]:
-        ans: Optional[Value | Value_]
-        data: dict[Key | str, Optional[Value]]
-        data = dict(self.data)
-        if isinstance(default, Missing):
-            ans = data.pop(key)  # type: ignore[arg-type]
-        else:
-            ans = data.pop(key, default)  # type: ignore[arg-type]
-        self.data = frozendict(data)
-        return ans
-
-    @setdoc.basic
-    def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
-        ans: tuple[Key | str, Optional[Value]]
-        data: dict[Key | str, Optional[Value]]
-        data = dict(self.data)
-        ans = data.popitem()
-        self.data = frozendict(data)
-        return ans
-
-    @setdoc.basic
-    def setdefault(
-        self: Self,
-        key: Key | str,
-        default: Optional[Value] = None,
-        /,
-    ) -> Optional[Value]:
-        ans: Optional[Value]
-        data: dict[Key | str, Optional[Value]]
-        data = dict(self.data)
-        ans = data.setdefault(key, default)
-        self.data = frozendict(data)
-        return ans
-
-    @setdoc.basic
-    def update(
-        self: Self,
-        other: (
-            SupportsKeysAndGetitem[Key | str, Optional[Value]]
-            | Iterable[tuple[Key | str, Optional[Value]]]
-        ) = (),
-        /,
-        **kwargs: Optional[Value],
-    ) -> None:
-        data: dict[Key | str, Optional[Value]]
-        data = dict(self.data)
-        data.update(other, **kwargs)
-        self.data = frozendict(data)

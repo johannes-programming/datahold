@@ -2,30 +2,27 @@
 
 __all__: list[str] = ["FrozenHoldSet"]
 
-from collections.abc import Hashable, Iterable
-from typing import Self, TypeVar
+from collections.abc import  Iterable
+from typing import Self
 
 import setdoc
 
 from ..base.BaseHoldSet import BaseHoldSet
 from .FrozenDataSet import FrozenDataSet
-from .FrozenHoldObject import FrozenHoldObject
-
-Item = TypeVar("Item", bound=Hashable)
+from .FrozenHoldCollection import FrozenHoldCollection
 
 
-class FrozenHoldSet(
+class FrozenHoldSet[Item](
     FrozenDataSet[Item],
     BaseHoldSet[Item],
-    FrozenHoldObject,
+    FrozenHoldCollection[Item],
 ):
 
     __slots__ = ()
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        self._data: frozenset[Item]
-        self._data = frozenset(data)
+        self._data: frozenset[Item] = frozenset(data)
 
     @property
     @setdoc.basic

@@ -2,14 +2,12 @@
 
 __all__: list[str] = ["FrozenDataList"]
 
-from typing import TypeVar
-
 from ..base.BaseDataList import BaseDataList
-from .FrozenDataObject import FrozenDataObject
+from .FrozenDataCollection import FrozenDataCollection
 
-Item = TypeVar("Item", covariant=True)
-
-
-class FrozenDataList(BaseDataList[Item], FrozenDataObject):
+class FrozenDataList[Item](
+    BaseDataList[Item], 
+    FrozenDataCollection[Item],
+):
 
     __slots__ = ()

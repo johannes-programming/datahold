@@ -1,10 +1,10 @@
 """Provide DataCollection."""
 
+from __future__ import annotations
 __all__: list[str] = ["DataCollection"]
 
 from abc import abstractmethod
-from collections.abc import Hashable
-from typing import Protocol, Self, Never
+from typing import Self, Never
 
 import setdoc
 
@@ -15,18 +15,10 @@ class DataCollection[Item](BaseDataCollection[Item]):
 
     __slots__ = ()
 
-    class Data[DataItem](
-        BaseDataCollection.Data[DataItem],
-        Hashable,
-        Protocol[DataItem],
-    ):
-        ...
-        
-
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def data(self: Self) -> DataCollection.Data[Item]: ...
 
     @data.setter
     @abstractmethod

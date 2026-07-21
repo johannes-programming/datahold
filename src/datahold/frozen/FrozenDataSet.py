@@ -2,15 +2,10 @@
 
 __all__: list[str] = ["FrozenDataSet"]
 
-from collections.abc import Hashable
-from typing import TypeVar
 
 from ..base.BaseDataSet import BaseDataSet
-from .FrozenDataObject import FrozenDataObject
+from .FrozenDataCollection import FrozenDataCollection
 
-Item = TypeVar("Item", bound=Hashable, covariant=True)
-
-
-class FrozenDataSet(BaseDataSet[Item], FrozenDataObject):
+class FrozenDataSet[Item](BaseDataSet[Item], FrozenDataCollection[Item]):
 
     __slots__ = ()
