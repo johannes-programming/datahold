@@ -14,6 +14,7 @@ class FrozenDataList[Item](
     BaseDataList[Item],
     Hashable,
 ):
+    """Provide easy abc for custom frozen list-like."""
 
     __slots__ = ()
 

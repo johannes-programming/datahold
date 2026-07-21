@@ -17,6 +17,7 @@ class FrozenHoldSet[Item: Hashable](
     FrozenDataSet[Item],
     BaseHoldCollection[Item],
 ):
+    """Provide usable frozen set-like with slots."""
 
     __slots__ = ()
 

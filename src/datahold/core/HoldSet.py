@@ -19,6 +19,7 @@ class HoldSet[Item: Hashable](
     DataSet[Item],
     BaseHoldCollection[Item],
 ):
+    """Provide usable mutable set-like with slots."""
 
     __slots__ = ()
 

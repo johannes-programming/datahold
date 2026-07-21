@@ -17,6 +17,7 @@ class HoldList[Item](
     DataList[Item],
     BaseHoldCollection[Item],
 ):
+    """Provide usable mutable list-like with slots."""
 
     __slots__ = ()
 

@@ -19,6 +19,7 @@ class DataSet[Item: Hashable](
     DataCollection[Item],
     MutableSet[Item],
 ):
+    """Provide easy abc for custom mutable set-like."""
     __slots__ = ()
 
     @setdoc.basic

@@ -19,6 +19,7 @@ class DataDict[Key: Hashable, Value](
     DataCollection[Key | str],
     MutableMapping[Key | str, Optional[Value]],
 ):
+    """Provide easy abc for custom mutable dict-like."""
     __slots__ = ()
 
     @setdoc.basic

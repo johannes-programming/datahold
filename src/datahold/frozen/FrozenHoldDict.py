@@ -18,6 +18,7 @@ class FrozenHoldDict[Key: Hashable, Value](
     FrozenDataDict[Key, Value],
     BaseHoldCollection[Key | str],
 ):
+    """Provide usable frozen dict-like with slots."""
 
     __slots__ = ()
 

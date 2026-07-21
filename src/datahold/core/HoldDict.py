@@ -18,6 +18,7 @@ class HoldDict[Key: Hashable, Value](
     DataDict[Key, Value],
     BaseHoldCollection[Key | str],
 ):
+    """Provide usable mutable dict-like with slots."""
 
     __slots__ = ()
 

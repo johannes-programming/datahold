@@ -16,6 +16,7 @@ class FrozenHoldList[Item](
     FrozenDataList[Item],
     BaseHoldCollection[Item],
 ):
+    """Provide usable frozen list-like with slots."""
 
     __slots__ = ()
 
