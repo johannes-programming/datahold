@@ -67,33 +67,27 @@ DataCollection = true
 MutableSet = true
 Set = true
 
-[types.FrozenDataCollection]
-Data = "Hashable"
-isabstract = true
-
-[types.FrozenDataCollection.parents]
-Hashable = true
 
 [types.FrozenDataDict]
 Data = "frozendict"
 isabstract = true
 
 [types.FrozenDataDict.parents]
-FrozenDataCollection = true
+
 
 [types.FrozenDataList]
 Data = "tuple"
 isabstract = true
 
 [types.FrozenDataList.parents]
-FrozenDataCollection = true
+
 
 [types.FrozenDataSet]
 Data = "frozenset"
 isabstract = true
 
 [types.FrozenDataSet.parents]
-FrozenDataCollection = true
+
 
 [types.FrozenHoldDict.constructor.concrete]
 args = [
