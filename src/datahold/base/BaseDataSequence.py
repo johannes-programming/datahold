@@ -21,6 +21,7 @@ class BaseDataSequence[Item](
     __slots__ = ()
 
     class Data[DataItem](
+        BaseDataCollection.Data[DataItem],
         Protocol,
     ):
         """Provide sequence data protocol."""
