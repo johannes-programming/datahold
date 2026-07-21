@@ -19,12 +19,12 @@ class BaseDataMapping[Key, Value](
 
     __slots__ = ()
 
-    class Data[DataKey,DataValue](
+    class Data[DataKey, DataValue](
         BaseDataCollection.Data[DataKey],
         Protocol[DataKey, DataValue],
     ):
         @setdoc.basic
-        def __getitem__(self:Self, key:Never, /) -> DataValue :
+        def __getitem__(self: Self, key: Never, /) -> DataValue:
             pass
 
     @setdoc.basic

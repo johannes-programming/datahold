@@ -7,7 +7,7 @@ from .FrozenDataCollection import FrozenDataCollection
 
 
 class FrozenDataList[Item](
-    BaseDataList[Item], 
+    BaseDataList[Item],
     FrozenDataCollection[Item],
 ):
 

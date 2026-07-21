@@ -1,4 +1,5 @@
 """Provide HoldSet."""
+
 from __future__ import annotations
 
 __all__: list[str] = ["HoldSet"]
@@ -16,8 +17,8 @@ Item = TypeVar("Item", bound=Hashable)
 
 
 class HoldSet[Item](
-    DataSet[Item], 
-    BaseHoldSet[Item], 
+    DataSet[Item],
+    BaseHoldSet[Item],
     HoldCollection[Item],
 ):
 
@@ -31,4 +32,4 @@ class HoldSet[Item](
     @data.setter
     @setdoc.basic
     def data(self: Self, value: Iterable[Item]) -> None:
-        self._data : HoldSet.Data[Item] = frozenset(value)
+        self._data: HoldSet.Data[Item] = frozenset(value)

@@ -29,7 +29,7 @@ class FrozenHoldDict[Key, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._data:FrozenHoldDict.Data[Key, Value] = frozendict(
+        self._data: FrozenHoldDict.Data[Key, Value] = frozendict(
             data,  # type: ignore[arg-type]
             **kwargs,
         )

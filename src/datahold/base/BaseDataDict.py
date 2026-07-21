@@ -23,16 +23,16 @@ class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
     def keys(self: Self) -> Iterable[Key]: ...
 
 
-class BaseDataDict[Key, Value](
-    BaseDataMapping[Key | str, Optional[Value]]
-):
-    
+class BaseDataDict[Key, Value](BaseDataMapping[Key | str, Optional[Value]]):
+
     # dict has rich cmp that always returns NotImplemented
     # should we add these here as well?
 
     __slots__ = ()
 
-    type Data[DataKey, DataValue] = frozendict[DataKey | str, Optional[DataValue]]
+    type Data[DataKey, DataValue] = frozendict[
+        DataKey | str, Optional[DataValue]
+    ]
     type Init[DataKey, DataValue] = (
         SupportsKeysAndGetitem[DataKey | str, Optional[DataValue]]
         | Iterable[tuple[DataKey | str, Optional[DataValue]]]

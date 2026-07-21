@@ -9,7 +9,7 @@ from .BaseDataCollection import BaseDataCollection
 
 
 class BaseDataAbstractSet[Item](
-    BaseDataCollection[Item], 
+    BaseDataCollection[Item],
     Set[Item],
 ):
     __slots__ = ()

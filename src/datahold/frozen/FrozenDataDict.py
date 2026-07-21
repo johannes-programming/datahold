@@ -7,7 +7,7 @@ from .FrozenDataCollection import FrozenDataCollection
 
 
 class FrozenDataDict[Key, Value](
-    BaseDataDict[Key, Value], 
+    BaseDataDict[Key, Value],
     FrozenDataCollection[Key | str],
 ):
     __slots__ = ()

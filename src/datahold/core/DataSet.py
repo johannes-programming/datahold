@@ -13,8 +13,8 @@ from .DataCollection import DataCollection
 
 
 class DataSet[Item](
-    BaseDataSet[Item], 
-    DataCollection[Item], 
+    BaseDataSet[Item],
+    DataCollection[Item],
     MutableSet[Item],
 ):
     __slots__ = ()
@@ -30,7 +30,7 @@ class DataSet[Item](
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-    
+
     @property
     @abstractmethod
     @setdoc.basic

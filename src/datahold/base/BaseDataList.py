@@ -22,30 +22,29 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     @setdoc.basic
     def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
         # list.__add__ reveals Overload(
-        #     def [_T] (list[_T], list[_T]) -> list[_T], 
+        #     def [_T] (list[_T], list[_T]) -> list[_T],
         #     def [_T, _S] (list[_T], list[_S]) -> list[_S | _T],
-        # ) 
+        # )
         # tuple.__add__ reveals Overload(
-        #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...], 
+        #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...],
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
         return type(self)(self.data + other.data)
-    
+
     @setdoc.basic
-    def __eq__(self:Self, other: object, /)-> bool:
+    def __eq__(self: Self, other: object, /) -> bool:
         if isinstance(other, BaseDataList):
             return self.data == other.data
         else:
             return False
-    
+
     @setdoc.basic
-    def __ge__(self:Self, other: BaseDataList[Any], /) -> bool:
+    def __ge__(self: Self, other: BaseDataList[Any], /) -> bool:
         return self.data >= other.data
-    
+
     @setdoc.basic
-    def __gt__(self:Self, other: BaseDataList[Any], /) -> bool:
+    def __gt__(self: Self, other: BaseDataList[Any], /) -> bool:
         return self.data > other.data
-    
 
     @overload
     @setdoc.basic
@@ -69,13 +68,13 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
-    def __le__(self:Self, other: BaseDataList[Any], /) -> bool:
+    def __le__(self: Self, other: BaseDataList[Any], /) -> bool:
         return self.data <= other.data
-    
+
     @setdoc.basic
-    def __lt__(self:Self, other: BaseDataList[Any], /) -> bool:
+    def __lt__(self: Self, other: BaseDataList[Any], /) -> bool:
         return self.data < other.data
-    
+
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
         return type(self)(self.data * other)
@@ -83,7 +82,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.data)!r})"
-    
+
     __rmul__ = __mul__
 
     @property

@@ -3,27 +3,27 @@
 __all__ = [
     "BaseDataDict",
     "BaseDataList",
-    "BaseDataObject",
+    "BaseDataCollection",
     "BaseDataSet",
     "BaseHoldDict",
     "BaseHoldList",
-    "BaseHoldObject",
+    "BaseHoldCollection",
     "BaseHoldSet",
     "DataDict",
     "DataList",
-    "DataObject",
+    "DataCollection",
     "DataSet",
     "FrozenDataDict",
     "FrozenDataList",
-    "FrozenDataObject",
+    "FrozenDataCollection",
     "FrozenDataSet",
     "FrozenHoldDict",
     "FrozenHoldList",
-    "FrozenHoldObject",
+    "FrozenHoldCollection",
     "FrozenHoldSet",
     "HoldDict",
     "HoldList",
-    "HoldObject",
+    "HoldCollection",
     "HoldSet",
 ]
 
@@ -39,15 +39,15 @@ from datahold.core.DataCollection import DataCollection
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
 from datahold.core.DataSet import DataSet
+from datahold.core.HoldCollection import HoldCollection
 from datahold.core.HoldDict import HoldDict
 from datahold.core.HoldList import HoldList
-from datahold.core.HoldObject import HoldObject
 from datahold.core.HoldSet import HoldSet
+from datahold.frozen.FrozenDataCollection import FrozenDataCollection
 from datahold.frozen.FrozenDataDict import FrozenDataDict
 from datahold.frozen.FrozenDataList import FrozenDataList
-from datahold.frozen.FrozenDataObject import FrozenDataObject
 from datahold.frozen.FrozenDataSet import FrozenDataSet
+from datahold.frozen.FrozenHoldCollection import FrozenHoldCollection
 from datahold.frozen.FrozenHoldDict import FrozenHoldDict
 from datahold.frozen.FrozenHoldList import FrozenHoldList
-from datahold.frozen.FrozenHoldObject import FrozenHoldObject
 from datahold.frozen.FrozenHoldSet import FrozenHoldSet

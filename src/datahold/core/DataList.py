@@ -22,7 +22,9 @@ class DataList[Item](
     __slots__ = ()
 
     @setdoc.basic
-    def __delitem__(self: Self, other: SupportsIndex | Slice[SupportsIndex], /) -> None:
+    def __delitem__(
+        self: Self, other: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None:
         data: list[Item]
         data = list(self.data)
         del data[other]
@@ -71,7 +73,7 @@ class DataList[Item](
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-    
+
     @property
     @abstractmethod
     @setdoc.basic

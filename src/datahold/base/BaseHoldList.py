@@ -8,7 +8,7 @@ from .BaseHoldCollection import BaseHoldCollection
 
 
 class BaseHoldList[Item](
-    BaseDataList[Item], 
+    BaseDataList[Item],
     BaseHoldCollection[Item],
 ):
     __slots__ = ()

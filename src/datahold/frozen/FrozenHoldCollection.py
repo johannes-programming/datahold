@@ -1,4 +1,5 @@
 """Provide FrozenHoldCollection."""
+
 from __future__ import annotations
 
 __all__: list[str] = ["FrozenHoldCollection"]
@@ -12,7 +13,7 @@ from .FrozenDataCollection import FrozenDataCollection
 
 
 class FrozenHoldCollection[Item](
-    FrozenDataCollection[Item], 
+    FrozenDataCollection[Item],
     BaseHoldCollection[Item],
 ):
 

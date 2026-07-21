@@ -53,7 +53,7 @@ class DataDict[Key, Value](
     ) -> None:
         # what to do if Key includes unhashable types?
         self.data = self.data.set(key, value)
-    
+
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)

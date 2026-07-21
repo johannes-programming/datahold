@@ -27,7 +27,6 @@ class BaseDataCollection[Item](
     ):
         """Provide collection data protocol."""
 
-
     @setdoc.basic
     def __eq__(self: Self, other: Any, /) -> Any:
         if isinstance(other, BaseDataCollection):
@@ -35,8 +34,8 @@ class BaseDataCollection[Item](
         else:
             return NotImplemented
 
-    #@setdoc.basic
-    #def __ge__(self: Self, other: Any, /) -> Any:
+    # @setdoc.basic
+    # def __ge__(self: Self, other: Any, /) -> Any:
     #    if not isinstance(other, BaseDataCollection):
     #        return NotImplemented
     #    try:
@@ -44,8 +43,8 @@ class BaseDataCollection[Item](
     #    except Exception:
     #        return NotImplemented
 
-    #@setdoc.basic
-    #def __gt__(self: Self, other: Any, /) -> Any:
+    # @setdoc.basic
+    # def __gt__(self: Self, other: Any, /) -> Any:
     #    if not isinstance(other, BaseDataCollection):
     #        return NotImplemented
     #    try:
@@ -53,12 +52,12 @@ class BaseDataCollection[Item](
     #    except Exception:
     #        return NotImplemented
 
-    #@abstractmethod
-    #@setdoc.basic
-    #def __init__(self: Self, data: Self, /) -> None: ...
+    # @abstractmethod
+    # @setdoc.basic
+    # def __init__(self: Self, data: Self, /) -> None: ...
 
-    #@setdoc.basic
-    #def __le__(self: Self, other: Any, /) -> Any:
+    # @setdoc.basic
+    # def __le__(self: Self, other: Any, /) -> Any:
     #    if not isinstance(other, BaseDataCollection):
     #        return NotImplemented
     #    try:
@@ -66,8 +65,8 @@ class BaseDataCollection[Item](
     #    except Exception:
     #        return NotImplemented
 
-    #@setdoc.basic
-    #def __lt__(self: Self, other: Any, /) -> Any:
+    # @setdoc.basic
+    # def __lt__(self: Self, other: Any, /) -> Any:
     #    if not isinstance(other, BaseDataCollection):
     #        return NotImplemented
     #    try:
@@ -75,14 +74,12 @@ class BaseDataCollection[Item](
     #    except Exception:
     #        return NotImplemented
 
-    #@setdoc.basic
-    #def __ne__(self: Self, other: Any, /) -> Any:
+    # @setdoc.basic
+    # def __ne__(self: Self, other: Any, /) -> Any:
     #    if isinstance(other, BaseDataCollection):
     #        return self.data.__ne__(other.data)
     #    else:
     #        return NotImplemented
-
-
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:

@@ -1,4 +1,5 @@
 """Provide HoldDict."""
+
 from __future__ import annotations
 
 __all__: list[str] = ["HoldDict"]
@@ -14,9 +15,8 @@ from .HoldCollection import HoldCollection
 
 
 class HoldDict[Key, Value](
-    DataDict[Key, Value], 
-    BaseHoldDict[Key, Value], 
-    HoldCollection[Key | str]):
+    DataDict[Key, Value], BaseHoldDict[Key, Value], HoldCollection[Key | str]
+):
 
     __slots__ = ()
 
@@ -31,4 +31,4 @@ class HoldDict[Key, Value](
         self: Self,
         value: HoldDict.Init[Key, Value],
     ) -> None:
-        self._data:HoldDict.Data[Key, Value] = frozendict(value)  # type: ignore[arg-type]
+        self._data: HoldDict.Data[Key, Value] = frozendict(value)  # type: ignore[arg-type]

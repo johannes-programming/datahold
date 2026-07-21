@@ -1,4 +1,5 @@
 """Provide HoldList."""
+
 from __future__ import annotations
 
 __all__: list[str] = ["HoldList"]
@@ -14,8 +15,8 @@ from .HoldCollection import HoldCollection
 
 
 class HoldList[Item](
-    DataList[Item], 
-    BaseHoldList[Item], 
+    DataList[Item],
+    BaseHoldList[Item],
     HoldCollection[Item],
 ):
 
@@ -29,4 +30,4 @@ class HoldList[Item](
     @data.setter
     @setdoc.basic
     def data(self: Self, value: Iterable[Item]) -> None:
-        self._data:HoldList.Data[Item] = tuple(value)
+        self._data: HoldList.Data[Item] = tuple(value)
