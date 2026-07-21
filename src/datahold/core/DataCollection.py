@@ -13,7 +13,6 @@ from ..base.BaseDataCollection import BaseDataCollection
 
 
 class DataCollection[Item](BaseDataCollection[Item]):
-
     """Provide an easy abc for a custom mutable collection."""
 
     __slots__ = ()
