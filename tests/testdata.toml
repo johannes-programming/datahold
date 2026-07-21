@@ -9,7 +9,7 @@ BaseDataCollection = true
 
 [types.BaseDataCollection.parents]
 Collection = true
-Hashable = false
+Hashable = true
 
 [types.BaseDataDict.parents]
 Mapping = true
