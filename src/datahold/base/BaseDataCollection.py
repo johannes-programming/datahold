@@ -5,7 +5,7 @@ __all__ = ["BaseDataCollection"]
 
 from abc import ABCMeta, abstractmethod
 from collections.abc import Container, Hashable, Iterable, Iterator, Sized
-from typing import Any, Never, Protocol, Self
+from typing import Never, Protocol, Self
 
 import setdoc
 
