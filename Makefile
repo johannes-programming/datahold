@@ -61,8 +61,8 @@ test: dist
 	conda run -n test_datahold pip install dist/*.tar.gz >/dev/null;
 	conda run -n test_datahold python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
 	conda run -n test_datahold pip install mypy >/dev/null;
-	conda run -n test_datahold python -m mypy --exclude build --exclude dist --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
-	conda run -n test_datahold python -m mypy --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
+	conda run -n test_datahold python -m mypy --python-version 3.12 --exclude build --exclude dist --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
+	conda run -n test_datahold python -m mypy --python-version 3.12 --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
 	zip -r dist/out.zip dist/out;
 
 toml_sorted: py312
