@@ -23,7 +23,7 @@ class BaseDataCollection[Item](
         Iterable[DataItem],
         Container[Never],
         Hashable,
-        Protocol[DataItem],
+        Protocol,
     ):
         """Provide collection data protocol."""
 

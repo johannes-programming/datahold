@@ -21,7 +21,7 @@ class BaseDataMapping[Key, Value](
 
     class Data[DataKey, DataValue](
         BaseDataCollection.Data[DataKey],
-        Protocol[DataKey, DataValue],
+        Protocol,
     ):
         @setdoc.basic
         def __getitem__(self: Self, key: Never, /) -> DataValue:

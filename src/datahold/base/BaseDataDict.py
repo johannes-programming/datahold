@@ -14,7 +14,7 @@ from frozendict import frozendict
 from .BaseDataMapping import BaseDataMapping
 
 
-class SupportsKeysAndGetitem[Key, Value](Protocol[Key, Value]):
+class SupportsKeysAndGetitem[Key, Value](Protocol):
 
     @setdoc.basic
     def __getitem__(self: Self, key: Never, /) -> Value: ...
