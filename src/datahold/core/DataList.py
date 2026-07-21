@@ -67,6 +67,10 @@ class DataList[Item](
         data[key] = value
         self.data = tuple(data)
 
+    @setdoc.basic
+    def copy(self: Self) -> Self:
+        return type(self)(self)
+    
     @property
     @abstractmethod
     @setdoc.basic

@@ -27,6 +27,10 @@ class DataSet[Item](
     def add(self: Self, item: Item, /) -> None:
         self.data |= {item}
 
+    @setdoc.basic
+    def copy(self: Self) -> Self:
+        return type(self)(self)
+    
     @property
     @abstractmethod
     @setdoc.basic
