@@ -26,6 +26,7 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
 class BaseDataDict[Key: Hashable, Value](
     BaseDataMapping[Key | str, Optional[Value]],
 ):
+    """Provide an easy abc for custom dict-like."""
 
     # dict has rich cmp that always returns NotImplemented
     # should we add these here as well?

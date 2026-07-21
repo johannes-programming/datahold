@@ -14,6 +14,7 @@ from .BaseDataAbstractSet import BaseDataAbstractSet
 
 
 class BaseDataSet[Item: Hashable](BaseDataAbstractSet[Item]):
+    """Provide an easy abc for custom set-like."""
     __slots__ = ()
 
     type Data[DataItem] = frozenset[DataItem]
