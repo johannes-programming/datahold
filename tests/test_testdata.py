@@ -1,4 +1,4 @@
-__all__: list[str] = ["TestAbstractness"]
+__all__: list[str] = ["TestAbstractness", "TestCollection"]
 import collections.abc
 import enum
 import inspect as ins
