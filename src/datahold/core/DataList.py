@@ -10,8 +10,8 @@ from typing import Any, Self, SupportsIndex, overload
 
 import setdoc
 
-from ..base.BaseDataList import BaseDataList
 from .._utils.Slice import Slice
+from ..base.BaseDataList import BaseDataList
 from .DataCollection import DataCollection
 
 

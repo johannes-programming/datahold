@@ -1,8 +1,9 @@
 """Provide FrozenHoldSet."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["FrozenHoldSet"]
 
-from collections.abc import Iterable
 from typing import Self
 
 import setdoc
@@ -21,10 +22,10 @@ class FrozenHoldSet[Item](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, data: FrozenHoldSet.Init[Item] = (), /) -> None:
         self._data: frozenset[Item] = frozenset(data)
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozenset[Item]:
+    def data(self: Self) -> FrozenHoldSet.Data[Item]:
         return self._data
