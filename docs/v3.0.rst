@@ -390,12 +390,6 @@ This abstract ``class`` inherits from ``BaseDataCollection[Item]``.
 
 The classes in ``datahold.core`` can also be accessed directly from ``datahold``.
 
-``class datahold.core.DataCollection.DataCollection[Item]``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
-
 ``class datahold.core.DataSet.DataSet[Item](data: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
