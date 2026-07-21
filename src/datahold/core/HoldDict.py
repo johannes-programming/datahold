@@ -12,9 +12,10 @@ from frozendict import frozendict
 from ..base.BaseHoldDict import BaseHoldDict
 from .DataDict import DataDict
 
+
 class HoldDict[Key, Value](
-    DataDict[Key, Value], 
-    BaseHoldDict[Key, Value], 
+    DataDict[Key, Value],
+    BaseHoldDict[Key, Value],
 ):
 
     __slots__ = ()
