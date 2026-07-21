@@ -4,20 +4,17 @@ from __future__ import annotations
 
 __all__: list[str] = ["FrozenHoldList"]
 
-from collections.abc import Iterable
 from typing import Self
 
 import setdoc
 
-from ..base.BaseHoldList import BaseHoldList
 from .FrozenDataList import FrozenDataList
-from .FrozenHoldCollection import FrozenHoldCollection
+from ..base.BaseHoldCollection import BaseHoldCollection
 
 
 class FrozenHoldList[Item](
     FrozenDataList[Item],
-    BaseHoldList[Item],
-    FrozenHoldCollection[Item],
+    BaseHoldCollection[Item],
 ):
 
     __slots__ = ()

@@ -9,15 +9,13 @@ from typing import Optional, Self
 import setdoc
 from frozendict import frozendict
 
-from ..base.BaseHoldDict import BaseHoldDict
 from .FrozenDataDict import FrozenDataDict
-from .FrozenHoldCollection import FrozenHoldCollection
+from ..base.BaseHoldCollection import BaseHoldCollection
 
 
 class FrozenHoldDict[Key, Value](
     FrozenDataDict[Key, Value],
-    BaseHoldDict[Key, Value],
-    FrozenHoldCollection[Key | str],
+    BaseHoldCollection[Key | str],
 ):
 
     __slots__ = ()

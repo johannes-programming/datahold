@@ -8,15 +8,13 @@ from typing import Self
 
 import setdoc
 
-from ..base.BaseHoldSet import BaseHoldSet
 from .FrozenDataSet import FrozenDataSet
-from .FrozenHoldCollection import FrozenHoldCollection
+from ..base.BaseHoldCollection import BaseHoldCollection
 
 
 class FrozenHoldSet[Item](
     FrozenDataSet[Item],
-    BaseHoldSet[Item],
-    FrozenHoldCollection[Item],
+    BaseHoldCollection[Item],
 ):
 
     __slots__ = ()
