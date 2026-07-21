@@ -24,7 +24,7 @@ class DataDict[Key, Value](
     @setdoc.basic
     def __delitem__(self: Self, key: object, /) -> None:
         try:
-            self.data = self.data.delete(key)
+            self.data = self.data.delete(key) # type: ignore[arg-type]
         except TypeError:
             raise KeyError(key) from None
 
