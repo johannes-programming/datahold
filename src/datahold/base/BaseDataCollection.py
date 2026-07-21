@@ -13,7 +13,7 @@ import setdoc
 class BaseDataCollection[Item](
     Sized,
     Iterable[Item],
-    Container[Never],
+    Container[object],
     metaclass=ABCMeta,
 ):
     """Provide an easy abc for a custom collection."""
