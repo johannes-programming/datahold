@@ -21,6 +21,7 @@ class BaseDataSequence[Item](
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data[DataItem](
         BaseDataCollection.Data[DataItem],
         Protocol,

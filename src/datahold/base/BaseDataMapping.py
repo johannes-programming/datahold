@@ -20,6 +20,7 @@ class BaseDataMapping[Key, Value](
 
     __slots__ = ()
 
+    @setdoc.basic
     class Data[DataKey, DataValue](
         BaseDataCollection.Data[DataKey],
         Protocol,

@@ -16,6 +16,7 @@ from .BaseDataSequence import BaseDataSequence
 
 class BaseDataList[Item](BaseDataSequence[Item]):
     """Provide an easy abc for custom list-like."""
+
     __slots__ = ()
 
     type Data[DataItem] = tuple[DataItem, ...]
