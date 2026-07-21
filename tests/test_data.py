@@ -13,7 +13,7 @@ class TestData(unittest.TestCase):
         s: str
         t: str
         for s in ("Data", "Hold"):
-            for t in ("Object", "Dict", "List", "Set"):
+            for t in ("Collection", "Dict", "List", "Set"):
                 name = s + t
                 with self.subTest(name=name):
                     self.go(name=name)

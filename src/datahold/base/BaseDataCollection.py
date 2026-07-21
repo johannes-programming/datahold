@@ -86,7 +86,7 @@ class BaseDataCollection[Item](
         try:
             return other in self.data
         except TypeError:
-            return other in (x for x in self.data)
+            return other in (x for x in self.data) # type: ignore[operator]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> Iterator[Item]:
