@@ -6,7 +6,7 @@ __all__: list[str] = ["BaseDataSet"]
 
 from abc import abstractmethod
 from collections.abc import Hashable, Iterable
-from typing import Self, cast
+from typing import Self
 
 import setdoc
 
@@ -16,11 +16,12 @@ from .BaseDataAbstractSet import BaseDataAbstractSet
 class BaseDataSet[Item](BaseDataAbstractSet[Item]):
     __slots__ = ()
 
-    Data = frozenset
+    type Data[DataItem] = frozenset[DataItem]
+    type Init[InitItem] = Iterable[InitItem]
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:

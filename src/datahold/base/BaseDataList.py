@@ -17,6 +17,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     __slots__ = ()
 
     type Data[DataItem] = tuple[DataItem, ...]
+    type Init[InitItem] = Iterable[InitItem]
 
     @setdoc.basic
     def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
@@ -29,6 +30,13 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
         return type(self)(self.data + other.data)
+    
+    @setdoc.basic
+    def __eq__(self:Self, other: object, /)-> bool:
+        if isinstance(other, BaseDataList):
+            return self.data == other.data
+        else:
+            return False
     
     @setdoc.basic
     def __ge__(self:Self, other: BaseDataList[Any], /) -> bool:
@@ -58,7 +66,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None: ...
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __le__(self:Self, other: BaseDataList[Any], /) -> bool:

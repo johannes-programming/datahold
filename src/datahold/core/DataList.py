@@ -1,5 +1,6 @@
 """Provide DataList."""
 
+from __future__ import annotations
 __all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
@@ -74,7 +75,7 @@ class DataList[Item](
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> tuple[Item, ...]: ...
+    def data(self: Self) -> DataList.Data[Item]: ...
 
     @data.setter
     @abstractmethod
