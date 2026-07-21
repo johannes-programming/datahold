@@ -1,4 +1,12 @@
-__all__: list[str] = ["TestAbstractness", "TestCollection", "TestData"]
+__all__: list[str] = [
+    "TestAbstractness",
+    "TestCollection",
+    "TestConstructor",
+    "TestData",
+    "TestGeneric",
+    "TestHasCopy",
+    "TestParents",
+]
 
 import collections.abc
 import enum
@@ -87,49 +95,39 @@ class Lazy(enum.Enum):
 
 
 class TestAbstractness(unittest.TestCase):
-    def go_assert_is_generic(
-        self: Self,
-        cls: Any,
-        n_type_params: Any,
-    ) -> None:
-        """
-        Helper: assert that `cls[...]` works and that typing.get_origin/get_args
-        see it as a proper generic alias of `cls`.
-        """
-        alias: Any
-        args: Any
-        exc: BaseException
-        origin: Any
-        params: tuple[type, ...]
-        sample_types: tuple[type, ...]
 
-        if n_type_params is None:
-            return
-        if not isinstance(n_type_params, int):
+    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+        cls: Optional[type[Any]]
+        cls = Lazy.get_type(typename)
+        if cls is None:
             raise Exception
+        if kwargs.get("isabstract") is not None:
+            self.assertEqual(ins.isabstract(cls), kwargs.get("isabstract"))
 
-        # Pick some arbitrary distinct types for the parameters
-        sample_types = (int, str, float, bytes)
-        params = sample_types[:n_type_params]
-        try:
-            alias = cls[params if n_type_params > 1 else params[0]]
-        except TypeError as exc:  # not subscriptable ⇒ not generic
-            self.fail(f"{cls.__name__} is not generic: {exc!r}")
+    def test_abstract_classes(self: Self) -> None:
+        for typename, kwargs in Lazy.lazy.types.items():
+            with self.subTest(typename=typename):
+                self.go_types(typename, **kwargs)
 
-        origin = get_origin(alias)
-        args = get_args(alias)
 
-        self.assertIs(
-            origin,
-            cls,
-            f"get_origin({cls.__name__}[...]) is {origin!r}, expected {cls!r}",
-        )
-        self.assertEqual(
-            args,
-            params,
-            f"get_args({cls.__name__}[...]) is {args!r}, expected {params!r}",
-        )
+class TestCollection(unittest.TestCase):
+    def _test_cls(self: Self, cls: type) -> None:
+        method: Any
+        for method in Lazy.lazy.METHODS:
+            with self.subTest(cls=cls):
+                self.assertIs(getattr(cls, method), getattr(object, method))
 
+    def test_object(self: Self) -> None:
+        cls: Optional[type[Any]]
+        typename: str
+        for typename in Lazy.lazy.types.keys():
+            cls = Lazy.get_type(typename=typename)
+            if cls is None:
+                raise Exception
+            self._test_cls(cls)
+
+
+class TestConstructor(unittest.TestCase):
     def go_constructor(self: Self, cls: type[Any], /, **info: Any) -> None:
         obj: Any
         parenttype: Any
@@ -160,45 +158,19 @@ class TestAbstractness(unittest.TestCase):
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
         cls: Optional[type[Any]]
-        parenttype: type[Any]
         x: Any
         y: Any
         cls = Lazy.get_type(typename)
         if cls is None:
             raise Exception
-        if kwargs.get("isabstract") is not None:
-            self.assertEqual(ins.isabstract(cls), kwargs.get("isabstract"))
-        self.go_assert_is_generic(cls, kwargs.get("n_type_params"))
         for x, y in kwargs.get("constructor", {}).items():
             with self.subTest(constructor=x):
                 self.go_constructor(cls, **y)
-        for x, y in kwargs.get("parents", {}).items():
-            parenttype = Lazy.get_parenttype(x)
-            self.assertEqual(issubclass(cls, parenttype), y)
-        if typename.startswith("Base") or typename.startswith("Frozen"):
-            self.assertFalse(hasattr(cls, "copy"))
 
     def test_abstract_classes(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():
             with self.subTest(typename=typename):
                 self.go_types(typename, **kwargs)
-
-
-class TestCollection(unittest.TestCase):
-    def _test_cls(self: Self, cls: type) -> None:
-        method: Any
-        for method in Lazy.lazy.METHODS:
-            with self.subTest(cls=cls):
-                self.assertIs(getattr(cls, method), getattr(object, method))
-
-    def test_object(self: Self) -> None:
-        cls: Optional[type[Any]]
-        typename: str
-        for typename in Lazy.lazy.types.keys():
-            cls = Lazy.get_type(typename=typename)
-            if cls is None:
-                raise Exception
-            self._test_cls(cls)
 
 
 class TestData(unittest.TestCase):
@@ -242,6 +214,97 @@ class TestData(unittest.TestCase):
             return
         with self.assertRaises(AttributeError):
             obj.foo = 42
+
+
+class TestGeneric(unittest.TestCase):
+    def go_assert_is_generic(
+        self: Self,
+        cls: Any,
+        n_type_params: Any,
+    ) -> None:
+        """
+        Helper: assert that `cls[...]` works and that typing.get_origin/get_args
+        see it as a proper generic alias of `cls`.
+        """
+        alias: Any
+        args: Any
+        exc: BaseException
+        origin: Any
+        params: tuple[type, ...]
+        sample_types: tuple[type, ...]
+
+        if n_type_params is None:
+            return
+        if not isinstance(n_type_params, int):
+            raise Exception
+
+        # Pick some arbitrary distinct types for the parameters
+        sample_types = (int, str, float, bytes)
+        params = sample_types[:n_type_params]
+        try:
+            alias = cls[params if n_type_params > 1 else params[0]]
+        except TypeError as exc:  # not subscriptable ⇒ not generic
+            self.fail(f"{cls.__name__} is not generic: {exc!r}")
+
+        origin = get_origin(alias)
+        args = get_args(alias)
+
+        self.assertIs(
+            origin,
+            cls,
+            f"get_origin({cls.__name__}[...]) is {origin!r}, expected {cls!r}",
+        )
+        self.assertEqual(
+            args,
+            params,
+            f"get_args({cls.__name__}[...]) is {args!r}, expected {params!r}",
+        )
+
+    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+        cls: Optional[type[Any]]
+        cls = Lazy.get_type(typename)
+        if cls is None:
+            raise Exception
+        self.go_assert_is_generic(cls, kwargs.get("n_type_params"))
+
+    def test_generic(self: Self) -> None:
+        for typename, kwargs in Lazy.lazy.types.items():
+            with self.subTest(typename=typename):
+                self.go_types(typename, **kwargs)
+
+
+class TestHasCopy(unittest.TestCase):
+    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+        cls: Optional[type[Any]]
+        cls = Lazy.get_type(typename)
+        if cls is None:
+            raise Exception
+        if typename.startswith("Base") or typename.startswith("Frozen"):
+            self.assertFalse(hasattr(cls, "copy"))
+
+    def test_has_copy(self: Self) -> None:
+        for typename, kwargs in Lazy.lazy.types.items():
+            with self.subTest(typename=typename):
+                self.go_types(typename, **kwargs)
+
+
+class TestParents(unittest.TestCase):
+    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+        cls: Optional[type[Any]]
+        parenttype: type[Any]
+        x: Any
+        y: Any
+        cls = Lazy.get_type(typename)
+        if cls is None:
+            raise Exception
+        for x, y in kwargs.get("parents", {}).items():
+            parenttype = Lazy.get_parenttype(x)
+            self.assertEqual(issubclass(cls, parenttype), y, x)
+
+    def test_parents(self: Self) -> None:
+        for typename, kwargs in Lazy.lazy.types.items():
+            with self.subTest(typename=typename):
+                self.go_types(typename, **kwargs)
 
 
 if __name__ == "__main__":
