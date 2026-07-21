@@ -34,7 +34,7 @@ class Lazy(enum.Enum):
             return cast(type[Any], getattr(collections.abc, typename))
         ans = cls.get_type(typename)
         if ans is None:
-            raise Exception
+            raise Exception("get_parenttype(%r)" % typename)
         else:
             return ans
 
