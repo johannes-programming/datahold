@@ -16,6 +16,7 @@ from .BaseDataCollection import BaseDataCollection
 class BaseDataMapping[Key, Value](
     BaseDataCollection[Key | str], Mapping[Key | str, Optional[Value]]
 ):
+    """Provide an easy abc for a custom mapping."""
 
     __slots__ = ()
 

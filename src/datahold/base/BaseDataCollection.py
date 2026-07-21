@@ -16,6 +16,7 @@ class BaseDataCollection[Item](
     Container[Never],
     metaclass=ABCMeta,
 ):
+    """Provide an easy abc for a custom collection."""
     __slots__ = ()
 
     class Data[DataItem](

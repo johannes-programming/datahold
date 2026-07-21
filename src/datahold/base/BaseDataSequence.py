@@ -17,6 +17,8 @@ class BaseDataSequence[Item](
     BaseDataCollection[Item],
     Sequence[Item],
 ):
+    """Provide an easy abc for a custom sequence."""
+
     __slots__ = ()
 
     class Data[DataItem](

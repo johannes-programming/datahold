@@ -207,8 +207,14 @@ class TestData(unittest.TestCase):
         doc: Any
         error: Any
         member: Any
+        module: Any
         obj: Any
+        module = Lazy.get_typemodule(typename=name)
+        doc = getattr(module, "__doc__", None)
+        self.assertIsNotNone(doc, "module %r has no docstring" % name)
         cls = Lazy.get_type(typename=name)
+        doc = getattr(cls, "__doc__", None)
+        self.assertIsNotNone(doc, "class %r has no docstring" % name)
         for attrname in dir(cls):
             member = getattr(cls, attrname)
             if not callable(member) and not isinstance(member, property):

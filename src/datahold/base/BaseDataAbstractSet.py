@@ -12,4 +12,6 @@ class BaseDataAbstractSet[Item](
     BaseDataCollection[Item],
     Set[Item],
 ):
+    """Provide an easy abc for a custom (abstract) set."""
+
     __slots__ = ()
