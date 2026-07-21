@@ -6,28 +6,35 @@ METHODS = [
 
 [types.BaseDataAbstractSet.parents]
 BaseDataCollection = true
+Hashable = false
 
 [types.BaseDataCollection.parents]
 Collection = true
 Hashable = true
 
 [types.BaseDataDict.parents]
+Hashable = false
 Mapping = true
 
 [types.BaseDataList.parents]
+Hashable = false
 Sequence = true
 
 [types.BaseDataMapping.parents]
 BaseDataCollection = true
+Hashable = false
 
 [types.BaseDataSequence.parents]
 BaseDataCollection = true
+Hashable = true
 
 [types.BaseDataSet.parents]
+Hashable = false
 Set = true
 
 [types.BaseHoldCollection.parents]
 BaseDataCollection = true
+Hashable = true
 
 [types.DataCollection]
 Data = "Hashable"
