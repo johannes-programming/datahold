@@ -107,7 +107,6 @@ args = [
 repr = "FrozenHoldList([1, 2])"
 
 [types.FrozenHoldList.parents]
-BaseHoldList = true
 FrozenDataList = true
 MutableSequence = false
 Sequence = true
@@ -136,7 +135,8 @@ a = 1
 args = []
 
 [types.HoldDict.parents]
-BaseHoldDict = true
+DataDict = true
+BaseDataDict = true
 Mapping = true
 MutableMapping = true
 
@@ -165,7 +165,7 @@ args = [
 ]
 
 [types.HoldList.parents]
-BaseHoldList = true
+DataList = true
 MutableSequence = true
 Sequence = true
 
@@ -194,7 +194,8 @@ args = [
 ]
 
 [types.HoldSet.parents]
-BaseHoldSet = true
+BaseDataSet = true
+DataSet = true
 MutableSet = true
 Set = true
 

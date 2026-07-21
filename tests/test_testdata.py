@@ -1,4 +1,5 @@
-__all__: list[str] = ["TestAbstractness", "TestCollection"]
+__all__: list[str] = ["TestAbstractness", "TestCollection", "TestData"]
+
 import collections.abc
 import enum
 import inspect as ins
@@ -10,6 +11,8 @@ from importlib import import_module
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Optional, Self, cast, get_args, get_origin
+
+from datahold import core
 
 
 class Lazy(enum.Enum):
@@ -192,6 +195,43 @@ class TestCollection(unittest.TestCase):
             if cls is None:
                 raise Exception
             self._test_cls(cls)
+
+
+class TestData(unittest.TestCase):
+
+    def test_doc(self: Self) -> None:
+        for name in Lazy.lazy.types.keys():
+            self.go(name=name)
+
+    def go(self: Self, name: str) -> None:
+        attrname: Any
+        cls: Any
+        doc: Any
+        error: Any
+        member: Any
+        module: Any
+        obj: Any
+        module = getattr(core, name)
+        cls = getattr(module, name)
+        for attrname in dir(cls):
+            member = getattr(cls, attrname)
+            if not callable(member) and not isinstance(member, property):
+                continue
+            if getattr(member, "__isabstractmethod__", False):
+                continue
+            if attrname in ("__init_subclass__", "__subclasshook__"):
+                continue
+            if getattr(member, "__module__", None) == "collections.abc":
+                continue
+            doc = getattr(member, "__doc__", None)
+            error = "%r inside %r has no docstring" % (attrname, name)
+            self.assertIsNotNone(doc, error)
+        try:
+            obj = cls()
+        except TypeError:
+            return
+        with self.assertRaises(AttributeError):
+            obj.foo = 42
 
 
 if __name__ == "__main__":
