@@ -192,7 +192,7 @@ It implements the non-mutating mapping operations of ``dict`` that are not alrea
 ``class Data[DataKey, DataValue]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This protocol inherits from ``BaseDataCollection.Data[DataKey, DataValue]`` and from ``Protocol``.
+This protocol inherits from ``BaseDataCollection.Data[DataKey]`` and from ``Protocol``.
 
 ``__getitem__(self: Self, key: Never, /) -> DataValue``
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
