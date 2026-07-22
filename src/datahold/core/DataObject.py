@@ -7,18 +7,14 @@ from collections.abc import Hashable
 from typing import Any, Self
 
 import setdoc
-from copyable import Copyable
 
 from ..base.BaseDataObject import BaseDataObject
 
 
-class DataObject(BaseDataObject, Copyable):
+class DataObject(BaseDataObject):
+    """Provide easy abc for custom mutable object."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def copy(self: Self) -> Self:
-        return type(self)(self)
 
     @property
     @abstractmethod

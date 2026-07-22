@@ -12,6 +12,7 @@ from .FrozenDataObject import FrozenDataObject
 
 
 class FrozenHoldObject(FrozenDataObject, BaseHoldObject):
+    """Provide easy abc for custom slotted frozen object."""
 
     _data: Hashable
     __slots__ = ()

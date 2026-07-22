@@ -2,14 +2,16 @@
 
 __all__: list[str] = ["FrozenDataList"]
 
-from typing import TypeVar
-
 from ..base.BaseDataList import BaseDataList
 from .FrozenDataObject import FrozenDataObject
 
-Item = TypeVar("Item", covariant=True)
 
-
-class FrozenDataList(BaseDataList[Item], FrozenDataObject):
+class FrozenDataList[Item](
+    BaseDataList[Item],
+    FrozenDataObject,
+):
+    """Provide easy abc for custom frozen list-like."""
 
     __slots__ = ()
+
+    __hash__ = FrozenDataObject.__hash__

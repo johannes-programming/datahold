@@ -1,47 +1,42 @@
 """Provide FrozenHoldDict."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["FrozenHoldDict"]
 
-from collections.abc import Hashable, Iterable
-from typing import Optional, Self, TypeVar
+from collections.abc import Hashable
+from typing import Optional, Self
 
 import setdoc
 from frozendict import frozendict
 
 from ..base.BaseHoldDict import BaseHoldDict
-from ..typing.SupportsKeysAndGetitem import SupportsKeysAndGetitem
 from .FrozenDataDict import FrozenDataDict
 from .FrozenHoldObject import FrozenHoldObject
 
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
 
-
-class FrozenHoldDict(
+class FrozenHoldDict[Key: Hashable, Value](
     FrozenDataDict[Key, Value],
     BaseHoldDict[Key, Value],
     FrozenHoldObject,
 ):
+    """Provide usable frozen dict-like with slots."""
 
     __slots__ = ()
 
     @setdoc.basic
     def __init__(
         self: Self,
-        data: (
-            SupportsKeysAndGetitem[Key | str, Optional[Value]]
-            | Iterable[tuple[Key | str, Optional[Value]]]
-        ) = (),
+        data: FrozenHoldDict.Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._data: frozendict[Key | str, Optional[Value]]
-        self._data = frozendict(
+        self._data: FrozenHoldDict.Data[Key, Value] = frozendict(
             data,  # type: ignore[arg-type]
             **kwargs,
         )
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozendict[Key | str, Optional[Value]]:
+    def data(self: Self) -> FrozenHoldDict.Data[Key, Value]:
         return self._data

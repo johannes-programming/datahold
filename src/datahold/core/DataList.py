@@ -1,37 +1,37 @@
 """Provide DataList."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable, MutableSequence
-from typing import Any, Self, SupportsIndex, TypeVar, overload
+from typing import Any, Self, SupportsIndex, overload
 
 import setdoc
 
+from .._utils.Slice import Slice
 from ..base.BaseDataList import BaseDataList
 from .DataObject import DataObject
 
-Item = TypeVar("Item")
 
-
-class DataList(
+class DataList[Item](
     BaseDataList[Item],
     DataObject,
     MutableSequence[Item],
 ):
+    """Provide easy abc for custom mutable list-like."""
+
     __slots__ = ()
 
     @setdoc.basic
-    def __delitem__(self: Self, other: SupportsIndex | slice, /) -> None:
+    def __delitem__(
+        self: Self, other: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None:
         data: list[Item]
         data = list(self.data)
         del data[other]
         self.data = tuple(data)
-
-    @setdoc.basic
-    def __iadd__(self: Self, other: Iterable[Item], /) -> Self:
-        self.data += tuple(other)
-        return self
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
@@ -56,7 +56,7 @@ class DataList(
     @setdoc.basic
     def __setitem__(
         self: Self,
-        key: slice,
+        key: Slice[SupportsIndex],
         value: Iterable[Item],
         /,
     ) -> None: ...
@@ -64,7 +64,7 @@ class DataList(
     @setdoc.basic
     def __setitem__(
         self: Self,
-        key: SupportsIndex | slice,
+        key: SupportsIndex | Slice[SupportsIndex],
         value: Item | Iterable[Item],
         /,
     ) -> None:
@@ -74,29 +74,21 @@ class DataList(
         self.data = tuple(data)
 
     @setdoc.basic
-    def append(self: Self, item: Item, /) -> None:
-        self.data += (item,)
-
-    @setdoc.basic
-    def clear(self: Self, /) -> None:
-        self.data = ()
+    def copy(self: Self) -> Self:
+        return type(self)(self)
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> tuple[Item, ...]: ...
+    def data(self: Self) -> DataList.Data[Item]: ...
 
     @data.setter
     @abstractmethod
     @setdoc.basic
     def data(
         self: Self,
-        value: Iterable[Item],
+        value: DataList.Init[Item],
     ) -> None: ...
-
-    @setdoc.basic
-    def extend(self: Self, iterable: Iterable[Item], /) -> None:
-        self.data += tuple(iterable)
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
@@ -104,26 +96,6 @@ class DataList(
         data = list(self.data)
         data.insert(index, item)
         self.data = tuple(data)
-
-    @setdoc.basic
-    def pop(self: Self, index: SupportsIndex = -1, /) -> Item:
-        ans: Item
-        data: list[Item]
-        data = list(self.data)
-        ans = data.pop(index)
-        self.data = tuple(data)
-        return ans
-
-    @setdoc.basic
-    def remove(self: Self, item: object, /) -> None:
-        data: list[Item]
-        data = list(self.data)
-        data.remove(item)  # type: ignore[arg-type]
-        self.data = tuple(data)
-
-    @setdoc.basic
-    def reverse(self: Self) -> None:
-        self.data = tuple(self.data[::-1])
 
     @setdoc.basic
     def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:

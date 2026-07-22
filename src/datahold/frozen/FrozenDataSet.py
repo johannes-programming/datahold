@@ -3,14 +3,17 @@
 __all__: list[str] = ["FrozenDataSet"]
 
 from collections.abc import Hashable
-from typing import TypeVar
 
 from ..base.BaseDataSet import BaseDataSet
 from .FrozenDataObject import FrozenDataObject
 
-Item = TypeVar("Item", bound=Hashable, covariant=True)
 
-
-class FrozenDataSet(BaseDataSet[Item], FrozenDataObject):
+class FrozenDataSet[Item: Hashable](
+    BaseDataSet[Item],
+    FrozenDataObject,
+):
+    """Provide easy abc for custom frozen set-like."""
 
     __slots__ = ()
+
+    __hash__ = FrozenDataObject.__hash__

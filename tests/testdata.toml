@@ -24,6 +24,8 @@ Sequence = true
 BaseDataCollection = true
 Hashable = false
 
+[types.BaseDataObject.parents]
+
 [types.BaseDataSequence.parents]
 BaseDataCollection = true
 Hashable = true
@@ -32,9 +34,15 @@ Hashable = true
 Hashable = false
 Set = true
 
-[types.BaseHoldCollection.parents]
-BaseDataCollection = true
+[types.BaseHoldDict.parents]
+
+[types.BaseHoldList.parents]
+
+[types.BaseHoldObject.parents]
+BaseDataObject = true
 Hashable = true
+
+[types.BaseHoldSet.parents]
 
 [types.DataDict]
 Data = "frozendict"
@@ -61,6 +69,8 @@ BaseDataList = true
 MutableSequence = true
 Sequence = true
 
+[types.DataObject.parents]
+
 [types.DataSet]
 Data = "frozenset"
 isabstract = true
@@ -85,6 +95,8 @@ Data = "tuple"
 isabstract = true
 
 [types.FrozenDataList.parents]
+
+[types.FrozenDataObject.parents]
 
 [types.FrozenDataSet]
 Data = "frozenset"
@@ -117,6 +129,8 @@ repr = "FrozenHoldList([1, 2])"
 FrozenDataList = true
 MutableSequence = false
 Sequence = true
+
+[types.FrozenHoldObject.parents]
 
 [types.FrozenHoldSet.constructor.concrete]
 args = [
@@ -175,6 +189,8 @@ args = [
 DataList = true
 MutableSequence = true
 Sequence = true
+
+[types.HoldObject.parents]
 
 [types.HoldSet]
 Date = "frozenset"

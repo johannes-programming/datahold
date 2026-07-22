@@ -2,13 +2,11 @@
 
 __all__: list[str] = ["BaseHoldList"]
 
-from typing import TypeVar
-
 from .BaseDataList import BaseDataList
 from .BaseHoldObject import BaseHoldObject
 
-Item = TypeVar("Item", covariant=True)
 
+class BaseHoldList[Item](BaseDataList[Item], BaseHoldObject):
+    """Provide an template for FrozenHoldList and for HoldList."""
 
-class BaseHoldList(BaseDataList[Item], BaseHoldObject):
     __slots__ = ()

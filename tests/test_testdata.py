@@ -6,6 +6,7 @@ __all__: list[str] = [
     "TestGeneric",
     "TestHasCopy",
     "TestParents",
+    "TestTypes",
 ]
 
 import collections.abc
@@ -27,6 +28,8 @@ from typing import (
     get_args,
     get_origin,
 )
+
+import datahold
 
 
 class Lazy(enum.Enum):
@@ -305,6 +308,18 @@ class TestParents(unittest.TestCase):
         for typename, kwargs in Lazy.lazy.types.items():
             with self.subTest(typename=typename):
                 self.go_types(typename, **kwargs)
+
+
+class TestTypes(unittest.TestCase):
+    def test_parents(self: Self) -> None:
+        self.assertListEqual(
+            datahold.__all__,
+            list(sorted(datahold.__all__)),
+        )
+        self.assertListEqual(
+            datahold.__all__,
+            list(Lazy.lazy.types.keys()),
+        )
 
 
 if __name__ == "__main__":

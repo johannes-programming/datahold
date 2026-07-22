@@ -11,6 +11,7 @@ from ..base.BaseDataObject import BaseDataObject
 
 
 class FrozenDataObject(BaseDataObject, Hashable):
+    """Provide easy abc for custom frozen object."""
 
     __slots__ = ()
 

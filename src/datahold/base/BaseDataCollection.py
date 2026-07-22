@@ -1,32 +1,43 @@
 """Provide BaseDataCollection."""
 
-__all__ = ["BaseDataCollection"]
+__all__: list[str] = ["BaseDataCollection"]
 
-from abc import abstractmethod
-from collections.abc import Collection, Hashable, Iterator
-from typing import Protocol, Self, TypeVar
+from abc import ABCMeta, abstractmethod
+from collections.abc import Container, Hashable, Iterable, Iterator, Sized
+from typing import Never, Protocol, Self
 
 import setdoc
 
-from .BaseDataObject import BaseDataObject
-
-DataItem = TypeVar("DataItem", covariant=True)
-Item = TypeVar("Item", covariant=True)
+from .BaseDataObject import BaseDataObject  # remove in v4.0
 
 
-class BaseDataCollection(BaseDataObject, Collection[Item]):
+class BaseDataCollection[Item](
+    BaseDataObject,  # remove in v4.0
+    Sized,
+    Iterable[Item],
+    Container[object],
+    metaclass=ABCMeta,
+):
+    """Provide an easy abc for a custom collection."""
+
     __slots__ = ()
 
-    class Data(
-        Collection[DataItem],
-        BaseDataObject.Data,
-        Protocol[DataItem],
+    @setdoc.basic
+    class Data[DataItem](
+        Sized,
+        Iterable[DataItem],
+        Container[Never],
+        Hashable,
+        Protocol,
     ):
         """Provide collection data protocol."""
 
     @setdoc.basic
-    def __contains__(self: Self, other: Hashable, /) -> bool:
-        return other in self.data
+    def __contains__(self: Self, other: object, /) -> bool:
+        try:
+            return other in self.data
+        except TypeError:
+            return other in (x for x in self.data)  # type: ignore[operator]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> Iterator[Item]:

@@ -3,14 +3,14 @@
 __all__: list[str] = ["BaseHoldDict"]
 
 from collections.abc import Hashable
-from typing import TypeVar
 
 from .BaseDataDict import BaseDataDict
 from .BaseHoldObject import BaseHoldObject
 
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
 
+class BaseHoldDict[Key: Hashable, Value](
+    BaseDataDict[Key, Value], BaseHoldObject
+):
+    """Provide an template for FrozenHoldDict and for HoldDict."""
 
-class BaseHoldDict(BaseDataDict[Key, Value], BaseHoldObject):
     __slots__ = ()

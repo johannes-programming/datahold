@@ -1,0 +1,16 @@
+"""Provide BaseDataAbstractSet."""
+
+__all__: list[str] = ["BaseDataAbstractSet"]
+
+from collections.abc import Set
+
+from .BaseDataCollection import BaseDataCollection
+
+
+class BaseDataAbstractSet[Item](
+    BaseDataCollection[Item],
+    Set[Item],
+):
+    """Provide an easy abc for a custom (abstract) set."""
+
+    __slots__ = ()

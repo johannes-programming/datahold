@@ -3,14 +3,17 @@
 __all__: list[str] = ["FrozenDataDict"]
 
 from collections.abc import Hashable
-from typing import TypeVar
 
 from ..base.BaseDataDict import BaseDataDict
 from .FrozenDataObject import FrozenDataObject
 
-Key = TypeVar("Key", bound=Hashable, covariant=True)
-Value = TypeVar("Value", covariant=True)
 
+class FrozenDataDict[Key: Hashable, Value](
+    BaseDataDict[Key, Value],
+    FrozenDataObject,
+):
+    """Provide easy abc for custom frozen dict-like."""
 
-class FrozenDataDict(BaseDataDict[Key, Value], FrozenDataObject):
     __slots__ = ()
+
+    __hash__ = FrozenDataObject.__hash__

@@ -7,4 +7,6 @@ from .DataObject import DataObject
 
 
 class HoldObject(DataObject, BaseHoldObject):
+    """Provide easy abc for custom mutable object."""
+
     __slots__ = ()
