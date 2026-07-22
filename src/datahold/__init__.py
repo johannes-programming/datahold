@@ -1,9 +1,12 @@
 """Provide __init__."""
 
 __all__ = [
+    "BaseDataAbstractSet",
     "BaseDataCollection",
     "BaseDataDict",
     "BaseDataList",
+    "BaseDataMapping",
+    "BaseDataSequence",
     "BaseDataSet",
     "BaseHoldCollection",
     "DataCollection",
@@ -21,9 +24,12 @@ __all__ = [
     "HoldSet",
 ]
 
+from datahold.base.BaseDataAbstractSet import BaseDataAbstractSet
 from datahold.base.BaseDataCollection import BaseDataCollection
 from datahold.base.BaseDataDict import BaseDataDict
 from datahold.base.BaseDataList import BaseDataList
+from datahold.base.BaseDataMapping import BaseDataMapping
+from datahold.base.BaseDataSequence import BaseDataSequence
 from datahold.base.BaseDataSet import BaseDataSet
 from datahold.base.BaseHoldCollection import BaseHoldCollection
 from datahold.core.DataCollection import DataCollection
