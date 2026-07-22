@@ -6,7 +6,7 @@ __all__ = ["BaseDataMapping"]
 
 from abc import abstractmethod
 from collections.abc import Mapping
-from typing import Never, Optional, Protocol, Self
+from typing import Never, Protocol, Self
 
 import setdoc
 
