@@ -312,17 +312,17 @@ It has no classmethod to implement.
 
 This magic method implements ``self + other``.
 
-``__eq__(other: object, /) -> Self``
+``__eq__(other: object, /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self == other``.
 
-``__ge__(other: BaseDataList[Item], /) -> Self``
+``__ge__(other: BaseDataList[Item], /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self >= other``.
 
-``__gt__(other: BaseDataList[Item], /) -> Self``
+``__gt__(other: BaseDataList[Item], /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self > other``.
@@ -351,12 +351,12 @@ This magic method implements ``self[index]``.
         else:
             return type(self)(self.data[index])
 
-``__le__(other: BaseDataList[Item], /) -> Self``
+``__le__(other: BaseDataList[Item], /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self <= other``.
 
-``__lt__(other: BaseDataList[Item], /) -> Self``
+``__lt__(other: BaseDataList[Item], /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self < other``.
