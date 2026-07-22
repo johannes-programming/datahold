@@ -12,12 +12,10 @@ import setdoc
 from frozendict import frozendict
 
 from ..base.BaseDataDict import BaseDataDict
-from .DataCollection import DataCollection
 
 
 class DataDict[Key: Hashable, Value](
     BaseDataDict[Key, Value],
-    DataCollection[Key | str],
     MutableMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom mutable dict-like."""

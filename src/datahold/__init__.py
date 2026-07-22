@@ -9,7 +9,6 @@ __all__ = [
     "BaseDataSequence",
     "BaseDataSet",
     "BaseHoldCollection",
-    "DataCollection",
     "DataDict",
     "DataList",
     "DataSet",
@@ -32,7 +31,6 @@ from datahold.base.BaseDataMapping import BaseDataMapping
 from datahold.base.BaseDataSequence import BaseDataSequence
 from datahold.base.BaseDataSet import BaseDataSet
 from datahold.base.BaseHoldCollection import BaseHoldCollection
-from datahold.core.DataCollection import DataCollection
 from datahold.core.DataDict import DataDict
 from datahold.core.DataList import DataList
 from datahold.core.DataSet import DataSet

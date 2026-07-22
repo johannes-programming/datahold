@@ -36,13 +36,6 @@ Set = true
 BaseDataCollection = true
 Hashable = true
 
-[types.DataCollection]
-Data = "Hashable"
-isabstract = true
-
-[types.DataCollection.parents]
-Hashable = true
-
 [types.DataDict]
 Data = "frozendict"
 isabstract = true
@@ -53,7 +46,6 @@ valid = false
 
 [types.DataDict.parents]
 BaseDataDict = true
-DataCollection = true
 MutableMapping = true
 
 [types.DataList]
@@ -66,7 +58,6 @@ valid = false
 
 [types.DataList.parents]
 BaseDataList = true
-DataCollection = true
 MutableSequence = true
 Sequence = true
 
@@ -80,7 +71,6 @@ valid = false
 
 [types.DataSet.parents]
 BaseDataSet = true
-DataCollection = true
 MutableSet = true
 Set = true
 

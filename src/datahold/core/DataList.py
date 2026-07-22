@@ -12,12 +12,10 @@ import setdoc
 
 from .._utils.Slice import Slice
 from ..base.BaseDataList import BaseDataList
-from .DataCollection import DataCollection
 
 
 class DataList[Item](
     BaseDataList[Item],
-    DataCollection[Item],
     MutableSequence[Item],
 ):
     """Provide easy abc for custom mutable list-like."""

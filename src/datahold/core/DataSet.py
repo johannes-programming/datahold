@@ -11,12 +11,10 @@ from typing import Self
 import setdoc
 
 from ..base.BaseDataSet import BaseDataSet
-from .DataCollection import DataCollection
 
 
 class DataSet[Item: Hashable](
     BaseDataSet[Item],
-    DataCollection[Item],
     MutableSet[Item],
 ):
     """Provide easy abc for custom mutable set-like."""
