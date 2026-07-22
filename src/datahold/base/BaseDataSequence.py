@@ -1,7 +1,6 @@
 """Provide BaseDataSequence."""
 
-__all__ = ["BaseDataSequence"]
-
+__all__: list[str] = ["BaseDataSequence"]
 
 from abc import abstractmethod
 from collections.abc import Sequence

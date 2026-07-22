@@ -1,7 +1,6 @@
 """Provide BaseDataCollection."""
 
-__all__ = ["BaseDataCollection"]
-
+__all__: list[str] = ["BaseDataCollection"]
 
 from abc import ABCMeta, abstractmethod
 from collections.abc import Container, Hashable, Iterable, Iterator, Sized

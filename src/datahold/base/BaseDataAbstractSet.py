@@ -1,7 +1,6 @@
 """Provide BaseDataAbstractSet."""
 
-__all__ = ["BaseDataAbstractSet"]
-
+__all__: list[str] = ["BaseDataAbstractSet"]
 
 from collections.abc import Set
 

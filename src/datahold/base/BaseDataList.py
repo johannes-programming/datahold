@@ -6,7 +6,8 @@ __all__: list[str] = ["BaseDataList"]
 
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Any, Self, SupportsIndex, overload
+from types import NotImplementedType
+from typing import Self, SupportsIndex, overload
 
 import setdoc
 
@@ -32,18 +33,24 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...],
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
-        return type(self)(self.data + other.data)
+        if isinstance(other, BaseDataList):
+            return type(self)(self.data + other.data)
+        else:
+            return NotImplemented
 
     @setdoc.basic
-    def __eq__(self: Self, other: object, /) -> bool:
+    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
             return self.data == other.data
         else:
-            return False
+            return NotImplemented
 
     @setdoc.basic
-    def __ge__(self: Self, other: BaseDataList[Any], /) -> bool:
-        return self.data >= other.data
+    def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.data >= other.data
+        else:
+            return NotImplemented
 
     @overload
     @setdoc.basic
@@ -63,20 +70,29 @@ class BaseDataList[Item](BaseDataSequence[Item]):
             return type(self)(self.data[index])
 
     @setdoc.basic
-    def __gt__(self: Self, other: BaseDataList[Any], /) -> bool:
-        return self.data > other.data
+    def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.data > other.data
+        else:
+            return NotImplemented
 
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
-    def __le__(self: Self, other: BaseDataList[Any], /) -> bool:
-        return self.data <= other.data
+    def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.data <= other.data
+        else:
+            return NotImplemented
 
     @setdoc.basic
-    def __lt__(self: Self, other: BaseDataList[Any], /) -> bool:
-        return self.data < other.data
+    def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.data < other.data
+        else:
+            return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:

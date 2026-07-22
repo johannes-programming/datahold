@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-__all__ = ["BaseDataMapping"]
+__all__: list[str] = ["BaseDataMapping"]
 
 from abc import abstractmethod
 from collections.abc import Mapping
