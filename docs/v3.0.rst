@@ -142,14 +142,14 @@ This abstract base class inherits from ``BaseDataAbstractSet[Item]``.
 It works analogously to ``BaseDataDict``.
 It has no classmethod to implement.
 
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
 ``type Data[DataItem] = frozenset[DataItem]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``type Init[DataItem] = Iterable[DataItem]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
 
 ``__repr__() -> str``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -182,9 +182,12 @@ This abstract ``property`` is inherited from ``BaseDataCollection[Item]`` and re
 ``class datahold.base.BaseDataMapping.BaseDataMapping[Key, Value]``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This abstract base class inherits from ``BaseDataCollection[Key | str]`` and ``Mapping[Key | str, Optional[Value]]``.
+This abstract base class inherits from ``BaseDataCollection[Key]`` and ``Mapping[Key, Value]``.
 The type variables are forced by the fact that every ``dict`` can be made to take any ``str`` as a key or ``None`` as a value without having to pass them.
 It implements the non-mutating mapping operations of ``dict`` that are not already present in ``object``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
 
 ``class Data[DataKey, DataValue]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -193,9 +196,6 @@ This protocol inherits from ``BaseDataCollection.Data[DataKey, DataValue]`` and 
 
 ``__getitem__(self: Self, key: Never, /) -> DataValue``
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
 
 ``__getitem__(key: Hashable, /) -> Optional[Value]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
