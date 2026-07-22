@@ -221,14 +221,14 @@ This abstract base class inherits from ``BaseDataMapping[Key | str, Optional[Val
 The type variables are forced by the fact that every ``dict`` can be made to take any ``str`` as a key or ``None`` as a value without having to pass them.
 It implements the non-mutating mapping operations of ``dict`` that are not already present in ``object``.
 
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
 ``type Data[DataKey, DataValue] = frozendict[Key | str, Optional[Value]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``type Init[InitKey, InitValue] = SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``__slots__ = ()``
-^^^^^^^^^^^^^^^^^^
 
 ``__or__(other: BaseDataDict[Key, Value], /) -> Self``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
