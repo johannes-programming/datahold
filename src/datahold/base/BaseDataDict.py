@@ -28,9 +28,6 @@ class BaseDataDict[Key: Hashable, Value](
 ):
     """Provide an easy abc for custom dict-like."""
 
-    # dict has rich cmp that always returns NotImplemented
-    # should we add these here as well?
-
     __slots__ = ()
 
     type Data[DataKey, DataValue] = frozendict[

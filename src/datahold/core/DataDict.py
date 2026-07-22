@@ -25,11 +25,8 @@ class DataDict[Key: Hashable, Value](
     __slots__ = ()
 
     @setdoc.basic
-    def __delitem__(self: Self, key: object, /) -> None:
-        try:
-            self.data = self.data.delete(key)  # type: ignore[arg-type]
-        except TypeError:
-            raise KeyError(key) from None
+    def __delitem__(self: Self, key: Key | str, /) -> None:
+        self.data = self.data.delete(key)
 
     @setdoc.basic
     def __init__(
