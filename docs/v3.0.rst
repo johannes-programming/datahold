@@ -317,15 +317,19 @@ This magic method implements ``self + other``.
 
 This magic method implements ``self == other``.
 
-``__ge__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self >= other``.
+``__ge__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
 
-``__gt__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self > other``.
+``__gt__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
 
 ``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[Optional[SupportsIndex], Optional[SupportsIndex], Optional[SupportsIndex]], /) -> Self``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -355,11 +359,15 @@ This magic method implements ``self[index]``.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self <= other``.
+``__le__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
 
 ``__lt__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self < other``.
+``__lt__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
 
 ``__mul__(other: SupportsIndex, /) -> Self``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -452,8 +460,8 @@ This abstract base class inherits from ``BaseDataDict[Key, Value]``, from ``Data
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``__delitem__(key: Hashable, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__delitem__(key: Key | str, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``del self[key]``.
 
