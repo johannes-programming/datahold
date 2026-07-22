@@ -197,8 +197,8 @@ This protocol inherits from ``BaseDataCollection.Data[DataKey, DataValue]`` and 
 ``__getitem__(self: Self, key: Never, /) -> DataValue``
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-``__getitem__(key: Hashable, /) -> Optional[Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: object, /) -> Optional[Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
