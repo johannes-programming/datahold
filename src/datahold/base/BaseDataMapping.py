@@ -14,7 +14,7 @@ from .BaseDataCollection import BaseDataCollection
 
 
 class BaseDataMapping[Key, Value](
-    BaseDataCollection[Key | str], Mapping[Key | str, Optional[Value]]
+    BaseDataCollection[Key], Mapping[Key, Value]
 ):
     """Provide an easy abc for a custom mapping."""
 
@@ -30,7 +30,7 @@ class BaseDataMapping[Key, Value](
             pass
 
     @setdoc.basic
-    def __getitem__(self: Self, key: object, /) -> Optional[Value]:
+    def __getitem__(self: Self, key: object, /) -> Value:
         try:
             return self.data[key]  # type: ignore[index]
         except TypeError:
