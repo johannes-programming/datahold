@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 __all__: list[str] = ["DataDict"]
+
 from abc import abstractmethod
 from collections.abc import Hashable, MutableMapping
 from typing import Optional, Self

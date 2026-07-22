@@ -2,7 +2,6 @@
 
 __all__: list[str] = ["FrozenDataSet"]
 
-
 from collections.abc import Hashable
 from typing import Self
 
