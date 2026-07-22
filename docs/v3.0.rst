@@ -270,8 +270,8 @@ This protocol inherits from ``BaseDataCollection.Data[DataItem]`` and from ``Pro
 ``__getitem__(key: int, /) -> DataItem`` ``__getitem__(key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[DataItem]``
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-``__getitem__(key: int, /) -> Item`` ``__getitem__(key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[DataItem]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: int, /) -> Item`` ``__getitem__(key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[Data]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
