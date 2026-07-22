@@ -197,13 +197,13 @@ This protocol inherits from ``BaseDataCollection.Data[DataKey]`` and from ``Prot
 ``__getitem__(self: Self, key: Never, /) -> DataValue``
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-``__getitem__(key: object, /) -> Optional[Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: object, /) -> Value``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
     @setdoc.basic
-    def __getitem__(self: Self, key: object, /) -> Optional[Value]:
+    def __getitem__(self: Self, key: object, /) -> Value:
         try:
             return self.data[key]  # type: ignore[index]
         except TypeError:
@@ -312,18 +312,18 @@ It has no classmethod to implement.
 
 This magic method implements ``self + other``.
 
-``__eq__(other: object, /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__eq__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self == other``.
 
-``__ge__(other: BaseDataList[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self >= other``.
 
-``__gt__(other: BaseDataList[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self > other``.
 
@@ -351,13 +351,13 @@ This magic method implements ``self[index]``.
         else:
             return type(self)(self.data[index])
 
-``__le__(other: BaseDataList[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__le__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self <= other``.
 
-``__lt__(other: BaseDataList[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__lt__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self < other``.
 
@@ -374,8 +374,8 @@ This magic method implements ``repr(self)``.
 ``__rmul__ = __mul__``
 ^^^^^^^^^^^^^^^^^^^^^^
 
-``data: tuple[Item, ...]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
 
 This abstract ``property`` is inherited from ``BaseDataCollection[Item]`` and reannotated.
 
@@ -392,8 +392,8 @@ This abstract ``class`` inherits from ``BaseDataCollection[Item]``.
 
 The classes in ``datahold.core`` can also be accessed directly from ``datahold``.
 
-``class datahold.core.DataSet.DataSet[Item](data: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.core.DataSet.DataSet[Item: Hashable](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``BaseDataSet[Item]``, from ``DataCollection[Item]``, and from ``MutableSet[Item]``.
 
@@ -552,7 +552,7 @@ This class inherits from ``DataDict[Key, Value]`` and from ``BaseHoldCollection[
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-The slot layout of the class is dictated by ``BaseHoldCollection[Item]``.
+The slot layout of the class is dictated by ``BaseHoldCollection[Key | str]``.
 
 ``data: Data[Key, Value]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
