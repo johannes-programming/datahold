@@ -311,7 +311,21 @@ class TestParents(unittest.TestCase):
 
 
 class TestTypes(unittest.TestCase):
-    def test_parents(self: Self) -> None:
+    def test_modules(self: Self) -> None:
+        module: Any
+        name: str
+        for name in Lazy.lazy.types.keys():
+            module = Lazy.get_typemodule(typename=name)
+            self.assertEqual(module.__all__, [name])
+            self.assertIn(
+                module.__annotations__["__all__"],
+                [
+                    list[str],
+                    "list[str]",
+                ],
+            )
+
+    def test_types(self: Self) -> None:
         self.assertListEqual(
             datahold.__all__,
             list(sorted(datahold.__all__)),
