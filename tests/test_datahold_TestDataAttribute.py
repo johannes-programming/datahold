@@ -1,15 +1,18 @@
 __all__: list[str] = ["TestDataAttribute"]
+
 import unittest
 from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold.core.HoldDict import HoldDict
-from datahold.core.HoldList import HoldList
-from datahold.core.HoldSet import HoldSet
-from datahold.frozen.FrozenHoldDict import FrozenHoldDict
-from datahold.frozen.FrozenHoldList import FrozenHoldList
-from datahold.frozen.FrozenHoldSet import FrozenHoldSet
+from datahold import (
+    FrozenHoldDict,
+    FrozenHoldList,
+    FrozenHoldSet,
+    HoldDict,
+    HoldList,
+    HoldSet,
+)
 
 
 class TestDataAttribute(unittest.TestCase):

@@ -1,6 +1,8 @@
-"""Provide __init__."""
+"""Provide easy abc for custom collections."""
 
-__all__ = [
+from __future__ import annotations
+
+__all__: list[str] = [
     "BaseDataAbstractSet",
     "BaseDataCollection",
     "BaseDataDict",
@@ -23,23 +25,751 @@ __all__ = [
     "HoldSet",
 ]
 
-from datahold.base.BaseDataAbstractSet import BaseDataAbstractSet
-from datahold.base.BaseDataCollection import BaseDataCollection
-from datahold.base.BaseDataDict import BaseDataDict
-from datahold.base.BaseDataList import BaseDataList
-from datahold.base.BaseDataMapping import BaseDataMapping
-from datahold.base.BaseDataSequence import BaseDataSequence
-from datahold.base.BaseDataSet import BaseDataSet
-from datahold.base.BaseHoldCollection import BaseHoldCollection
-from datahold.core.DataDict import DataDict
-from datahold.core.DataList import DataList
-from datahold.core.DataSet import DataSet
-from datahold.core.HoldDict import HoldDict
-from datahold.core.HoldList import HoldList
-from datahold.core.HoldSet import HoldSet
-from datahold.frozen.FrozenDataDict import FrozenDataDict
-from datahold.frozen.FrozenDataList import FrozenDataList
-from datahold.frozen.FrozenDataSet import FrozenDataSet
-from datahold.frozen.FrozenHoldDict import FrozenHoldDict
-from datahold.frozen.FrozenHoldList import FrozenHoldList
-from datahold.frozen.FrozenHoldSet import FrozenHoldSet
+import enum
+from abc import ABCMeta, abstractmethod
+from collections import abc
+from types import NotImplementedType
+from typing import (
+    Any,
+    Never,
+    Optional,
+    Protocol,
+    Self,
+    SupportsIndex,
+    overload,
+)
+
+import setdoc
+from frozendict import frozendict
+
+### UTILS ###
+
+
+class Missing(enum.Enum):
+    missing = None
+
+
+type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
+
+
+### COLLECTION ###
+
+
+class BaseDataCollection[Item](
+    abc.Sized,
+    abc.Iterable[Item],
+    abc.Container[object],
+    metaclass=ABCMeta,
+):
+    """Provide an easy abc for a custom collection."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class Data[DataItem](
+        abc.Sized,
+        abc.Iterable[DataItem],
+        abc.Container[Never],
+        abc.Hashable,
+        Protocol,
+    ):
+        """Provide collection data protocol."""
+
+    @setdoc.basic
+    def __contains__(self: Self, other: object, /) -> bool:
+        try:
+            return other in self.__fget__()
+        except TypeError:
+            return other in (x for x in self.__fget__())  # type: ignore[operator]
+
+    @setdoc.basic
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
+        return iter(self.__fget__())
+
+    @setdoc.basic
+    def __len__(self: Self, /) -> int:
+        return len(self.__fget__())
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
+
+class BaseHoldCollection[Item](BaseDataCollection[Item]):
+    """Provide abc for usable classes with slots."""
+
+    __slots__ = ("_data",)
+
+
+### ABSTRACT SET ###
+
+
+class BaseDataAbstractSet[Item](
+    BaseDataCollection[Item],
+    abc.Set[Item],
+):
+    """Provide an easy abc for a custom (abstract) set."""
+
+    __slots__ = ()
+
+
+class BaseDataSet[Item: abc.Hashable](BaseDataAbstractSet[Item]):
+    """Provide an easy abc for custom set-like."""
+
+    __slots__ = ()
+
+    type Data[DataItem] = frozenset[DataItem]
+    type Init[InitItem] = abc.Iterable[InitItem]
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
+
+    @setdoc.basic
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({set(self.__fget__())!r})"
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> frozenset[Item]: ...
+
+    @setdoc.basic
+    def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
+        return type(self)(self.__fget__().difference(*others))
+
+    @setdoc.basic
+    def intersection(
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
+    ) -> Self:
+        return type(self)(self.__fget__().intersection(*others))
+
+    @setdoc.basic
+    def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
+        return self.__fget__().issubset(other)
+
+    @setdoc.basic
+    def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
+        return self.__fget__().issuperset(other)
+
+    @setdoc.basic
+    def symmetric_difference(
+        self: Self,
+        other: abc.Iterable[Item],
+        /,
+    ) -> Self:
+        return type(self)(self.__fget__().symmetric_difference(other))
+
+    @setdoc.basic
+    def union(self: Self, /, *others: abc.Iterable[Item]) -> Self:
+        return type(self)(self.__fget__().union(*others))
+
+
+class FrozenDataSet[Item: abc.Hashable](BaseDataSet[Item], abc.Hashable):
+    """Provide easy abc for custom frozen set-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(self.__fget__())
+
+
+class FrozenHoldSet[Item: abc.Hashable](
+    FrozenDataSet[Item],
+    BaseHoldCollection[Item],
+):
+    """Provide usable frozen set-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fget__(self: Self) -> FrozenHoldSet.Data[Item]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, data: FrozenHoldSet.Data[Item], /) -> None:
+        self._data: FrozenHoldSet.Data[Item] = data
+
+    @setdoc.basic
+    def __init__(self: Self, data: FrozenHoldSet.Init[Item] = (), /) -> None:
+        self.__fset__(frozenset(data))
+
+
+class DataSet[Item: abc.Hashable](
+    BaseDataSet[Item],
+    abc.MutableSet[Item],
+):
+    """Provide easy abc for custom mutable set-like."""
+
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> DataSet.Data[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(
+        self: Self,
+        value: DataSet.Init[Item],
+        /,
+    ) -> None: ...
+
+    @setdoc.basic
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self.__fset__(frozenset(data))
+
+    @setdoc.basic
+    def add(self: Self, item: Item, /) -> None:
+        self.__fset__(self.__fget__() | {item})
+
+    @setdoc.basic
+    def copy(self: Self) -> Self:
+        return type(self)(self)
+
+    @setdoc.basic
+    def difference_update(
+        self: Self,
+        /,
+        *others: abc.Iterable[abc.Hashable],
+    ) -> None:
+        data: set[Item]
+        data = set(self.__fget__())
+        data.difference_update(*others)
+        self.__fset__(frozenset(data))
+
+    @setdoc.basic
+    def discard(self: Self, item: abc.Hashable, /) -> None:
+        data: set[Item]
+        data = set(self.__fget__())
+        data.discard(item)
+        self.__fset__(frozenset(data))
+
+    @setdoc.basic
+    def intersection_update(
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
+    ) -> None:
+        data: set[Item]
+        data = set(self.__fget__())
+        data.intersection_update(*others)
+        self.__fset__(frozenset(data))
+
+    @setdoc.basic
+    def symmetric_difference_update(
+        self: Self, other: abc.Iterable[Item], /
+    ) -> None:
+        data: set[Item]
+        data = set(self.__fget__())
+        data.symmetric_difference_update(other)
+        self.__fset__(frozenset(data))
+
+    @setdoc.basic
+    def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
+        self.__fset__(self.__fget__().union(*others))
+
+
+class HoldSet[Item: abc.Hashable](
+    DataSet[Item],
+    BaseHoldCollection[Item],
+):
+    """Provide usable mutable set-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fget__(self: Self) -> HoldSet.Data[Item]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, value: abc.Iterable[Item], /) -> None:
+        self._data: HoldSet.Data[Item] = frozenset(value)
+
+
+### MAPPING ###
+class BaseDataMapping[Key, Value](
+    BaseDataCollection[Key], abc.Mapping[Key, Value]
+):
+    """Provide an easy abc for a custom mapping."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class Data[DataKey, DataValue](
+        BaseDataCollection.Data[DataKey],
+        Protocol,
+    ):
+        @setdoc.basic
+        def __getitem__(self: Self, key: Never, /) -> DataValue:
+            pass
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: object, /) -> Value:
+        try:
+            return self.__fget__()[key]  # type: ignore[index]
+        except TypeError:
+            raise KeyError(key) from None
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Key, Value]: ...
+
+
+class SupportsKeysAndGetitem[Key, Value](Protocol):
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: Never, /) -> Value: ...
+
+    @setdoc.basic
+    def keys(self: Self) -> abc.Iterable[Key]: ...
+
+
+class BaseDataDict[Key: abc.Hashable, Value](
+    BaseDataMapping[Key | str, Optional[Value]],
+):
+    """Provide an easy abc for custom dict-like."""
+
+    __slots__ = ()
+
+    type Data[DataKey, DataValue] = frozendict[
+        DataKey | str, Optional[DataValue]
+    ]
+    type Init[DataKey, DataValue] = (
+        SupportsKeysAndGetitem[DataKey | str, Optional[DataValue]]
+        | abc.Iterable[tuple[DataKey | str, Optional[DataValue]]]
+    )
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: Init[Key, Value] = (),
+        /,
+        **kwargs: Optional[Value],
+    ) -> None: ...
+
+    @setdoc.basic
+    def __or__(
+        self: Self,
+        other: BaseDataDict[Key, Value],
+        /,
+    ) -> Self:
+        return type(self)(self.__fget__() | other.__fget__())
+
+    @setdoc.basic
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({dict(self)!r})"
+
+    # __ror__ is unnecessary because of how __or__ is defined
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Key, Value]: ...
+
+    @classmethod
+    @setdoc.basic
+    def fromkeys(
+        cls: type[Self],
+        iterable: abc.Iterable[Key | str],
+        value: Optional[Value] = None,
+        /,
+    ) -> Self:
+        return cls(dict.fromkeys(iterable, value))
+
+
+class FrozenDataDict[Key: abc.Hashable, Value](
+    BaseDataDict[Key, Value],
+    abc.Hashable,
+):
+    """Provide easy abc for custom frozen dict-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(self.__fget__())
+
+
+class FrozenHoldDict[Key: abc.Hashable, Value](
+    FrozenDataDict[Key, Value],
+    BaseHoldCollection[Key | str],
+):
+    """Provide usable frozen dict-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: FrozenHoldDict.Init[Key, Value] = (),
+        /,
+        **kwargs: Optional[Value],
+    ) -> None:
+        self.__fset__(
+            frozendict(
+                data,  # type: ignore[arg-type]
+                **kwargs,
+            )
+        )
+
+    @setdoc.basic
+    def __fget__(self: Self) -> FrozenHoldDict.Data[Key, Value]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, data: FrozenHoldDict.Data[Key, Value], /) -> None:
+        self._data: FrozenHoldDict.Data[Key, Value] = data
+
+
+class DataDict[Key: abc.Hashable, Value](
+    BaseDataDict[Key, Value],
+    abc.MutableMapping[Key | str, Optional[Value]],
+):
+    """Provide easy abc for custom mutable dict-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __delitem__(self: Self, key: Key | str, /) -> None:
+        self.__fset__(self.__fget__().delete(key))
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> DataDict.Data[Key, Value]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: DataDict.Data[Key, Value], /) -> None: ...
+
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: BaseDataDict.Init[Key, Value] = (),
+        /,
+        **kwargs: Optional[Value],
+    ) -> None:
+        self.__fset__(frozendict(data, **kwargs))  # type: ignore[arg-type]
+
+    @setdoc.basic
+    def __ior__(
+        self: Self,
+        other: BaseDataDict[Key, Value],
+        /,
+    ) -> Self:
+        self.__fset__(self.__fget__() | other.__fget__())
+        return self
+
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: Key | str,
+        value: Optional[Value],
+        /,
+    ) -> None:
+        # what to do if Key includes unhashable types?
+        self.__fset__(self.__fget__().set(key, value))
+
+    @setdoc.basic
+    def copy(self: Self) -> Self:
+        return type(self)(self)
+
+
+class HoldDict[Key: abc.Hashable, Value](
+    DataDict[Key, Value],
+    BaseHoldCollection[Key | str],
+):
+    """Provide usable mutable dict-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fget__(self: Self) -> HoldDict.Data[Key, Value]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(
+        self: Self,
+        value: HoldDict.Init[Key, Value],
+        /,
+    ) -> None:
+        self._data: HoldDict.Data[Key, Value] = frozendict(value)  # type: ignore[arg-type]
+
+
+### SEQUENCE ###
+
+
+class BaseDataSequence[Item](
+    BaseDataCollection[Item],
+    abc.Sequence[Item],
+):
+    """Provide an easy abc for a custom sequence."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class Data[DataItem](
+        BaseDataCollection.Data[DataItem],
+        Protocol,
+    ):
+        """Provide sequence data protocol."""
+
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, key: int, /) -> DataItem: ...
+        @overload
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: Slice[int], /
+        ) -> abc.Sequence[DataItem]: ...
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: int | Slice[int], /
+        ) -> DataItem | abc.Sequence[DataItem]: ...
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: int | Slice[int], /
+    ) -> Item | abc.Sequence[Item]:
+        return self.__fget__()[key]
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
+
+class BaseDataList[Item](BaseDataSequence[Item]):
+    """Provide an easy abc for custom list-like."""
+
+    __slots__ = ()
+
+    type Data[DataItem] = tuple[DataItem, ...]
+    type Init[InitItem] = abc.Iterable[InitItem]
+
+    @setdoc.basic
+    def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
+        # list.__add__ reveals Overload(
+        #     def [_T] (list[_T], list[_T]) -> list[_T],
+        #     def [_T, _S] (list[_T], list[_S]) -> list[_S | _T],
+        # )
+        # tuple.__add__ reveals Overload(
+        #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...],
+        #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
+        # )
+        if isinstance(other, BaseDataList):
+            return type(self)(self.__fget__() + other.__fget__())
+        else:
+            return NotImplemented
+
+    @setdoc.basic
+    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.__fget__() == other.__fget__()
+        else:
+            return NotImplemented
+
+    @setdoc.basic
+    def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.__fget__() >= other.__fget__()
+        else:
+            return NotImplemented
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: Slice[SupportsIndex], /) -> Self: ...
+
+    @setdoc.basic
+    def __getitem__(
+        self: Self, index: SupportsIndex | Slice[SupportsIndex], /
+    ) -> Item | Self:
+        if isinstance(index, SupportsIndex):
+            return self.__fget__()[index]
+        else:
+            return type(self)(self.__fget__()[index])
+
+    @setdoc.basic
+    def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.__fget__() > other.__fget__()
+        else:
+            return NotImplemented
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
+
+    @setdoc.basic
+    def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.__fget__() <= other.__fget__()
+        else:
+            return NotImplemented
+
+    @setdoc.basic
+    def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if isinstance(other, BaseDataList):
+            return self.__fget__() < other.__fget__()
+        else:
+            return NotImplemented
+
+    @setdoc.basic
+    def __mul__(self: Self, other: SupportsIndex, /) -> Self:
+        return type(self)(self.__fget__() * other)
+
+    @setdoc.basic
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({list(self.__fget__())!r})"
+
+    __rmul__ = __mul__
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
+
+class FrozenDataList[Item](
+    BaseDataList[Item],
+    abc.Hashable,
+):
+    """Provide easy abc for custom frozen list-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(self.__fget__())
+
+
+class FrozenHoldList[Item](
+    FrozenDataList[Item],
+    BaseHoldCollection[Item],
+):
+    """Provide usable frozen list-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fget__(self: Self) -> FrozenHoldList.Data[Item]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, data: FrozenHoldList.Data[Item], /) -> None:
+        self._data: FrozenHoldList.Data[Item] = data
+
+    @setdoc.basic
+    def __init__(self: Self, data: FrozenHoldList.Init[Item] = (), /) -> None:
+        self.__fset__(tuple(data))
+
+
+class DataList[Item](
+    BaseDataList[Item],
+    abc.MutableSequence[Item],
+):
+    """Provide easy abc for custom mutable list-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __delitem__(
+        self: Self, other: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        del data[other]
+        self.__fset__(tuple(data))
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> DataList.Data[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(
+        self: Self,
+        value: DataList.Init[Item],
+        /,
+    ) -> None: ...
+
+    @setdoc.basic
+    def __imul__(self: Self, other: SupportsIndex, /) -> Self:
+        self.__fset__(self.__fget__() * other)
+        return self
+
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: abc.Iterable[Item] = (),
+        /,
+    ) -> None:
+        self.__fset__(tuple(data))
+
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: SupportsIndex, value: Item, /
+    ) -> None: ...
+
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: Slice[SupportsIndex],
+        value: abc.Iterable[Item],
+        /,
+    ) -> None: ...
+
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: SupportsIndex | Slice[SupportsIndex],
+        value: Item | abc.Iterable[Item],
+        /,
+    ) -> None:
+        data: Any
+        data = list(self.__fget__())
+        data[key] = value
+        self.__fset__(tuple(data))
+
+    @setdoc.basic
+    def copy(self: Self) -> Self:
+        return type(self)(self)
+
+    @setdoc.basic
+    def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        data.insert(index, item)
+        self.__fset__(tuple(data))
+
+    @setdoc.basic
+    def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        data.sort(key=key, reverse=reverse)
+        self.__fset__(tuple(data))
+
+
+class HoldList[Item](
+    DataList[Item],
+    BaseHoldCollection[Item],
+):
+    """Provide usable mutable list-like with slots."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fget__(self: Self) -> HoldList.Data[Item]:
+        return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, value: abc.Iterable[Item], /) -> None:
+        self._data: HoldList.Data[Item] = tuple(value)

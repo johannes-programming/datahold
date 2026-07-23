@@ -3,9 +3,7 @@ __all__: list[str] = ["TestFrozenMutability"]
 import unittest
 from typing import Any, Self
 
-from datahold.frozen.FrozenHoldDict import FrozenHoldDict
-from datahold.frozen.FrozenHoldList import FrozenHoldList
-from datahold.frozen.FrozenHoldSet import FrozenHoldSet
+from datahold import FrozenHoldDict, FrozenHoldList, FrozenHoldSet
 
 
 class TestFrozenMutability(unittest.TestCase):

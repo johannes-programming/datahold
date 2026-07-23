@@ -2,7 +2,7 @@ __all__: list[str] = ["TestFrozenHoldLists"]
 import unittest
 from typing import Self
 
-from datahold.frozen.FrozenHoldList import FrozenHoldList
+from datahold import FrozenHoldList
 
 
 class TestFrozenHoldList(unittest.TestCase):

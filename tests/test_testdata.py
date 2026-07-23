@@ -15,18 +15,10 @@ import io
 import tomllib
 import unittest
 from functools import cached_property
-from importlib import import_module
 from pathlib import Path
-from types import ModuleType
-from typing import (
-    Any,
-    Optional,
-    Self,
-    TypeAliasType,
-    cast,
-    get_args,
-    get_origin,
-)
+from typing import Any, Self, TypeAliasType, cast, get_args, get_origin
+
+import datahold
 
 
 class Lazy(enum.Enum):
@@ -45,45 +37,13 @@ class Lazy(enum.Enum):
             return tomllib.load(stream)
 
     @classmethod
-    def get_parenttype(cls: type[Self], typename: str) -> type[Any]:
-        ans: Optional[type[Any]]
+    def get_type(cls: type[Self], typename: str) -> type[Any]:
+        ans: Any
         if typename in collections.abc.__all__:
-            return cast(type[Any], getattr(collections.abc, typename))
-        ans = cls.get_type(typename)
-        if ans is None:
-            raise Exception("get_parenttype(%r)" % typename)
+            ans = getattr(collections.abc, typename)
         else:
-            return ans
-
-    @classmethod
-    def get_type(cls: type[Self], typename: str) -> Optional[type[Any]]:
-        module: Optional[ModuleType]
-        module = cls.get_typemodule(typename)
-        if module is None:
-            return None
-        return cast(type[Any], getattr(module, typename))
-
-    @classmethod
-    def get_typemodule(cls: type[Self], typename: str) -> Optional[ModuleType]:
-        try:
-            return import_module(name=cls.get_typemodulename(typename))
-        except ImportError:
-            return None
-
-    @classmethod
-    def get_typemodulename(cls: type[Self], typename: str) -> str:
-        ans: str
-        ans = "datahold"
-        ans += "."
-        for prefix in ("Base", "Frozen"):
-            if typename.startswith(prefix):
-                ans += prefix.lower()
-                break
-        else:
-            ans += "core"
-        ans += "."
-        ans += typename
-        return ans
+            ans = getattr(datahold, typename)
+        return cast(type[Any], ans)
 
     @cached_property
     def test_object(self: Self) -> dict[str, Any]:
@@ -97,10 +57,8 @@ class Lazy(enum.Enum):
 class TestAbstractness(unittest.TestCase):
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         cls = Lazy.get_type(typename)
-        if cls is None:
-            raise Exception
         if kwargs.get("isabstract") is not None:
             self.assertEqual(ins.isabstract(cls), kwargs.get("isabstract"))
 
@@ -118,7 +76,7 @@ class TestCollection(unittest.TestCase):
                 self.assertIs(getattr(cls, method), getattr(object, method))
 
     def test_object(self: Self) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         typename: str
         for typename in Lazy.lazy.types.keys():
             cls = Lazy.get_type(typename=typename)
@@ -153,16 +111,14 @@ class TestConstructor(unittest.TestCase):
         self.assertIn(info.get("repr"), [None, repr(obj)])
         self.assertIn(info.get("str"), [None, str(obj)])
         for x, y in info.get("parents", {}).items():
-            parenttype = Lazy.get_parenttype(x)
+            parenttype = Lazy.get_type(x)
             self.assertEqual(isinstance(obj, parenttype), y)
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         x: Any
         y: Any
         cls = Lazy.get_type(typename)
-        if cls is None:
-            raise Exception
         for x, y in kwargs.get("constructor", {}).items():
             with self.subTest(constructor=x):
                 self.go_constructor(cls, **y)
@@ -176,6 +132,7 @@ class TestConstructor(unittest.TestCase):
 class TestData(unittest.TestCase):
 
     def test_doc(self: Self) -> None:
+        self.assertIsNot(datahold.__doc__, None)
         for name in Lazy.lazy.types.keys():
             self.go(name=name)
 
@@ -185,11 +142,7 @@ class TestData(unittest.TestCase):
         doc: Any
         error: Any
         member: Any
-        module: Any
         obj: Any
-        module = Lazy.get_typemodule(typename=name)
-        doc = getattr(module, "__doc__", None)
-        self.assertIsNotNone(doc, "module %r has no docstring" % name)
         cls = Lazy.get_type(typename=name)
         doc = getattr(cls, "__doc__", None)
         self.assertIsNotNone(doc, "class %r has no docstring" % name)
@@ -261,10 +214,8 @@ class TestGeneric(unittest.TestCase):
         )
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         cls = Lazy.get_type(typename)
-        if cls is None:
-            raise Exception
         self.go_assert_is_generic(cls, kwargs.get("n_type_params"))
 
     def test_generic(self: Self) -> None:
@@ -275,7 +226,7 @@ class TestGeneric(unittest.TestCase):
 
 class TestHasCopy(unittest.TestCase):
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         cls = Lazy.get_type(typename)
         if cls is None:
             raise Exception
@@ -290,7 +241,7 @@ class TestHasCopy(unittest.TestCase):
 
 class TestParents(unittest.TestCase):
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: Optional[type[Any]]
+        cls: type[Any]
         parenttype: type[Any]
         x: Any
         y: Any
@@ -298,7 +249,7 @@ class TestParents(unittest.TestCase):
         if cls is None:
             raise Exception
         for x, y in kwargs.get("parents", {}).items():
-            parenttype = Lazy.get_parenttype(x)
+            parenttype = Lazy.get_type(x)
             self.assertEqual(issubclass(cls, parenttype), y, x)
 
     def test_parents(self: Self) -> None:

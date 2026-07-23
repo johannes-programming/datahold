@@ -5,7 +5,7 @@ from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold.frozen.FrozenHoldDict import FrozenHoldDict
+from datahold import FrozenHoldDict
 
 
 class TestFrozenHoldDict(unittest.TestCase):
