@@ -1,33 +1,31 @@
 """Provide FrozenHoldSet."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["FrozenHoldSet"]
 
-from collections.abc import Hashable, Iterable
-from typing import Self, TypeVar
+from collections.abc import Hashable
+from typing import Self
 
 import setdoc
 
-from ..base.BaseHoldSet import BaseHoldSet
+from ..base.BaseHoldCollection import BaseHoldCollection
 from .FrozenDataSet import FrozenDataSet
-from .FrozenHoldObject import FrozenHoldObject
-
-Item = TypeVar("Item", bound=Hashable)
 
 
-class FrozenHoldSet(
+class FrozenHoldSet[Item: Hashable](
     FrozenDataSet[Item],
-    BaseHoldSet[Item],
-    FrozenHoldObject,
+    BaseHoldCollection[Item],
 ):
+    """Provide usable frozen set-like with slots."""
 
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        self._data: frozenset[Item]
-        self._data = frozenset(data)
+    def __init__(self: Self, data: FrozenHoldSet.Init[Item] = (), /) -> None:
+        self._data: frozenset[Item] = frozenset(data)
 
     @property
     @setdoc.basic
-    def data(self: Self) -> frozenset[Item]:
+    def data(self: Self) -> FrozenHoldSet.Data[Item]:
         return self._data

@@ -1,65 +1,49 @@
 """Provide DataSet."""
 
+from __future__ import annotations
+
 __all__: list[str] = ["DataSet"]
 
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable, MutableSet, Set
-from typing import Self, TypeVar
+from collections.abc import Hashable, Iterable, MutableSet
+from typing import Self
 
 import setdoc
 
 from ..base.BaseDataSet import BaseDataSet
-from .DataObject import DataObject
-
-Item = TypeVar("Item", bound=Hashable)
 
 
-class DataSet(BaseDataSet[Item], DataObject, MutableSet[Item]):
+class DataSet[Item: Hashable](
+    BaseDataSet[Item],
+    MutableSet[Item],
+):
+    """Provide easy abc for custom mutable set-like."""
+
     __slots__ = ()
-
-    @setdoc.basic
-    def __iand__(self: Self, other: Set[Hashable], /) -> Self:
-        self.data &= frozenset(other)
-        return self
 
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
         self.data = frozenset(data)
 
     @setdoc.basic
-    def __ior__(self: Self, other: Set[Item], /) -> Self:  # type: ignore[override]
-        self.data |= frozenset(other)
-        return self
-
-    @setdoc.basic
-    def __isub__(self: Self, other: Set[Hashable], /) -> Self:
-        self.data -= frozenset(other)
-        return self
-
-    @setdoc.basic
-    def __ixor__(self: Self, other: Set[Item], /) -> Self:  # type: ignore[override]
-        self.data ^= frozenset(other)
-        return self
-
-    @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
         self.data |= {item}
 
     @setdoc.basic
-    def clear(self: Self) -> None:
-        self.data = frozenset()
+    def copy(self: Self) -> Self:
+        return type(self)(self)
 
     @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> frozenset[Item]: ...
+    def data(self: Self) -> DataSet.Data[Item]: ...
 
     @data.setter
     @abstractmethod
     @setdoc.basic
     def data(
         self: Self,
-        value: Iterable[Item],
+        value: DataSet.Init[Item],
     ) -> None: ...
 
     @setdoc.basic
@@ -87,22 +71,6 @@ class DataSet(BaseDataSet[Item], DataObject, MutableSet[Item]):
         data: set[Item]
         data = set(self.data)
         data.intersection_update(*others)
-        self.data = frozenset(data)
-
-    @setdoc.basic
-    def pop(self: Self, /) -> Item:
-        ans: Item
-        data: set[Item]
-        data = set(self.data)
-        ans = data.pop()
-        self.data = frozenset(data)
-        return ans
-
-    @setdoc.basic
-    def remove(self: Self, item: Hashable, /) -> None:
-        data: set[Item]
-        data = set(self.data)
-        data.remove(item)  # type: ignore[arg-type]
         self.data = frozenset(data)
 
     @setdoc.basic
