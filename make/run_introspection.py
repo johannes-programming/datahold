@@ -2,7 +2,7 @@ __all__: list[str] = []
 
 from typing import Any
 
-from datahold import BaseDataList, FrozenHoldList
+from datahold import BaseDataList
 
 
 def search_mro(cls_: type[Any], /, name: str) -> None:
@@ -13,10 +13,7 @@ def search_mro(cls_: type[Any], /, name: str) -> None:
     print()
 
 
-print("FrozenHoldList.__mro__", FrozenHoldList.__mro__)
-print("FrozenHoldList.__hash__", FrozenHoldList.__hash__)
+# print("FrozenHoldList.__mro__", FrozenHoldList.__mro__)
+# print("FrozenHoldList.__hash__", FrozenHoldList.__hash__)
 
-search_mro(FrozenHoldList, "__hash__")
 search_mro(BaseDataList, "__hash__")
-
-print(FrozenHoldList.Data)
