@@ -106,6 +106,10 @@ class BaseDataCollection[Item](
         except TypeError:
             return other in (x for x in self.__fget__())  # type: ignore[operator]
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
     @setdoc.basic
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__fget__())
@@ -113,10 +117,6 @@ class BaseDataCollection[Item](
     @setdoc.basic
     def __len__(self: Self, /) -> int:
         return len(self.__fget__())
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
 
 
 ### ABSTRACT SET ###
@@ -270,8 +270,7 @@ class BaseDataMapping[Key, Value](
         Protocol,
     ):
         @setdoc.basic
-        def __getitem__(self: Self, key: Never, /) -> DataValue:
-            pass
+        def __getitem__(self: Self, key: Never, /) -> DataValue: ...
 
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Value:
