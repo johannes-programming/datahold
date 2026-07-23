@@ -18,3 +18,5 @@ print("FrozenHoldList.__hash__", FrozenHoldList.__hash__)
 
 search_mro(FrozenHoldList, "__hash__")
 search_mro(BaseDataList, "__hash__")
+
+print(FrozenHoldList.Data)

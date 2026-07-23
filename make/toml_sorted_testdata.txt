@@ -4,10 +4,10 @@
 --sort
 --key=types
 --all-keys
---key=parents
 --sort
 --key=types
 --all-keys
+--key=parents
 --sort
 --key=varia
 --all-keys
