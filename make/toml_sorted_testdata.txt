@@ -9,6 +9,10 @@
 --all-keys
 --key=parents
 --sort
+--key=types
+--all-keys
+--key=dirData
+--sort
 --key=varia
 --all-keys
 --
