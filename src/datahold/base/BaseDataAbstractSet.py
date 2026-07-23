@@ -2,14 +2,14 @@
 
 __all__: list[str] = ["BaseDataAbstractSet"]
 
-from collections.abc import Set
+from collections import abc
 
 from .BaseDataCollection import BaseDataCollection
 
 
 class BaseDataAbstractSet[Item](
     BaseDataCollection[Item],
-    Set[Item],
+    abc.Set[Item],
 ):
     """Provide an easy abc for a custom (abstract) set."""
 

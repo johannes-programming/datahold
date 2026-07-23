@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataDict"]
 
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable
+from collections import abc
 from typing import Never, Optional, Protocol, Self
 
 import setdoc
@@ -20,10 +20,10 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
     def __getitem__(self: Self, key: Never, /) -> Value: ...
 
     @setdoc.basic
-    def keys(self: Self) -> Iterable[Key]: ...
+    def keys(self: Self) -> abc.Iterable[Key]: ...
 
 
-class BaseDataDict[Key: Hashable, Value](
+class BaseDataDict[Key: abc.Hashable, Value](
     BaseDataMapping[Key | str, Optional[Value]],
 ):
     """Provide an easy abc for custom dict-like."""
@@ -35,7 +35,7 @@ class BaseDataDict[Key: Hashable, Value](
     ]
     type Init[DataKey, DataValue] = (
         SupportsKeysAndGetitem[DataKey | str, Optional[DataValue]]
-        | Iterable[tuple[DataKey | str, Optional[DataValue]]]
+        | abc.Iterable[tuple[DataKey | str, Optional[DataValue]]]
     )
 
     @abstractmethod
@@ -69,7 +69,7 @@ class BaseDataDict[Key: Hashable, Value](
     @setdoc.basic
     def fromkeys(
         cls: type[Self],
-        iterable: Iterable[Key | str],
+        iterable: abc.Iterable[Key | str],
         value: Optional[Value] = None,
         /,
     ) -> Self:

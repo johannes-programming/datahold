@@ -3,7 +3,7 @@
 __all__: list[str] = ["BaseDataSequence"]
 
 from abc import abstractmethod
-from collections.abc import Sequence
+from collections import abc
 from typing import Protocol, Self, overload
 
 import setdoc
@@ -14,7 +14,7 @@ from .BaseDataCollection import BaseDataCollection
 
 class BaseDataSequence[Item](
     BaseDataCollection[Item],
-    Sequence[Item],
+    abc.Sequence[Item],
 ):
     """Provide an easy abc for a custom sequence."""
 
@@ -34,22 +34,22 @@ class BaseDataSequence[Item](
         @setdoc.basic
         def __getitem__(
             self: Self, key: Slice[int], /
-        ) -> Sequence[DataItem]: ...
+        ) -> abc.Sequence[DataItem]: ...
         @setdoc.basic
         def __getitem__(
             self: Self, key: int | Slice[int], /
-        ) -> DataItem | Sequence[DataItem]: ...
+        ) -> DataItem | abc.Sequence[DataItem]: ...
 
     @overload
     @setdoc.basic
     def __getitem__(self: Self, key: int, /) -> Item: ...
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, key: Slice[int], /) -> Sequence[Item]: ...
+    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item]: ...
     @setdoc.basic
     def __getitem__(
         self: Self, key: int | Slice[int], /
-    ) -> Item | Sequence[Item]:
+    ) -> Item | abc.Sequence[Item]:
         return self.__fget__()[key]
 
     @abstractmethod

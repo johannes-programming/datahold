@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["DataList"]
 
 from abc import abstractmethod
-from collections.abc import Iterable, MutableSequence
+from collections import abc
 from typing import Any, Self, SupportsIndex, overload
 
 import setdoc
@@ -16,7 +16,7 @@ from ..base.BaseDataList import BaseDataList
 
 class DataList[Item](
     BaseDataList[Item],
-    MutableSequence[Item],
+    abc.MutableSequence[Item],
 ):
     """Provide easy abc for custom mutable list-like."""
 
@@ -51,7 +51,7 @@ class DataList[Item](
     @setdoc.basic
     def __init__(
         self: Self,
-        data: Iterable[Item] = (),
+        data: abc.Iterable[Item] = (),
         /,
     ) -> None:
         self.__fset__(tuple(data))
@@ -67,7 +67,7 @@ class DataList[Item](
     def __setitem__(
         self: Self,
         key: Slice[SupportsIndex],
-        value: Iterable[Item],
+        value: abc.Iterable[Item],
         /,
     ) -> None: ...
 
@@ -75,7 +75,7 @@ class DataList[Item](
     def __setitem__(
         self: Self,
         key: SupportsIndex | Slice[SupportsIndex],
-        value: Item | Iterable[Item],
+        value: Item | abc.Iterable[Item],
         /,
     ) -> None:
         data: Any

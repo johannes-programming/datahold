@@ -2,7 +2,7 @@
 
 __all__: list[str] = ["FrozenDataSet"]
 
-from collections.abc import Hashable
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -10,7 +10,7 @@ import setdoc
 from ..base.BaseDataSet import BaseDataSet
 
 
-class FrozenDataSet[Item: Hashable](BaseDataSet[Item], Hashable):
+class FrozenDataSet[Item: abc.Hashable](BaseDataSet[Item], abc.Hashable):
     """Provide easy abc for custom frozen set-like."""
 
     __slots__ = ()

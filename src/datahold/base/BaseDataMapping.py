@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataMapping"]
 
 from abc import abstractmethod
-from collections.abc import Mapping
+from collections import abc
 from typing import Never, Protocol, Self
 
 import setdoc
@@ -14,7 +14,7 @@ from .BaseDataCollection import BaseDataCollection
 
 
 class BaseDataMapping[Key, Value](
-    BaseDataCollection[Key], Mapping[Key, Value]
+    BaseDataCollection[Key], abc.Mapping[Key, Value]
 ):
     """Provide an easy abc for a custom mapping."""
 

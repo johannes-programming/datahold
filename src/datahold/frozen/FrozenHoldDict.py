@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__: list[str] = ["FrozenHoldDict"]
 
-from collections.abc import Hashable
+from collections import abc
 from typing import Optional, Self
 
 import setdoc
@@ -14,7 +14,7 @@ from ..base.BaseHoldCollection import BaseHoldCollection
 from .FrozenDataDict import FrozenDataDict
 
 
-class FrozenHoldDict[Key: Hashable, Value](
+class FrozenHoldDict[Key: abc.Hashable, Value](
     FrozenDataDict[Key, Value],
     BaseHoldCollection[Key | str],
 ):

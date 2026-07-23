@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__: list[str] = ["HoldList"]
 
-from collections.abc import Iterable
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -26,5 +26,5 @@ class HoldList[Item](
         return self._data
 
     @setdoc.basic
-    def __fset__(self: Self, value: Iterable[Item], /) -> None:
+    def __fset__(self: Self, value: abc.Iterable[Item], /) -> None:
         self._data: HoldList.Data[Item] = tuple(value)

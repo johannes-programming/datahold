@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["DataDict"]
 
 from abc import abstractmethod
-from collections.abc import Hashable, MutableMapping
+from collections import abc
 from typing import Optional, Self
 
 import setdoc
@@ -14,9 +14,9 @@ from frozendict import frozendict
 from ..base.BaseDataDict import BaseDataDict
 
 
-class DataDict[Key: Hashable, Value](
+class DataDict[Key: abc.Hashable, Value](
     BaseDataDict[Key, Value],
-    MutableMapping[Key | str, Optional[Value]],
+    abc.MutableMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom mutable dict-like."""
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["BaseDataList"]
 
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections import abc
 from types import NotImplementedType
 from typing import Self, SupportsIndex, overload
 
@@ -21,7 +21,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     __slots__ = ()
 
     type Data[DataItem] = tuple[DataItem, ...]
-    type Init[InitItem] = Iterable[InitItem]
+    type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
     def __add__(self: Self, other: BaseDataList[Item], /) -> Self:

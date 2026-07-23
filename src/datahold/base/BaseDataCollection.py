@@ -3,16 +3,16 @@
 __all__: list[str] = ["BaseDataCollection"]
 
 from abc import ABCMeta, abstractmethod
-from collections.abc import Container, Hashable, Iterable, Iterator, Sized
+from collections import abc
 from typing import Never, Protocol, Self
 
 import setdoc
 
 
 class BaseDataCollection[Item](
-    Sized,
-    Iterable[Item],
-    Container[object],
+    abc.Sized,
+    abc.Iterable[Item],
+    abc.Container[object],
     metaclass=ABCMeta,
 ):
     """Provide an easy abc for a custom collection."""
@@ -21,10 +21,10 @@ class BaseDataCollection[Item](
 
     @setdoc.basic
     class Data[DataItem](
-        Sized,
-        Iterable[DataItem],
-        Container[Never],
-        Hashable,
+        abc.Sized,
+        abc.Iterable[DataItem],
+        abc.Container[Never],
+        abc.Hashable,
         Protocol,
     ):
         """Provide collection data protocol."""
@@ -37,7 +37,7 @@ class BaseDataCollection[Item](
             return other in (x for x in self.__fget__())  # type: ignore[operator]
 
     @setdoc.basic
-    def __iter__(self: Self, /) -> Iterator[Item]:
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__fget__())
 
     @setdoc.basic

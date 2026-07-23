@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__: list[str] = ["FrozenHoldSet"]
 
-from collections.abc import Hashable
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -13,7 +13,7 @@ from ..base.BaseHoldCollection import BaseHoldCollection
 from .FrozenDataSet import FrozenDataSet
 
 
-class FrozenHoldSet[Item: Hashable](
+class FrozenHoldSet[Item: abc.Hashable](
     FrozenDataSet[Item],
     BaseHoldCollection[Item],
 ):

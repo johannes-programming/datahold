@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__: list[str] = ["HoldDict"]
 
-from collections.abc import Hashable
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -14,7 +14,7 @@ from ..base.BaseHoldCollection import BaseHoldCollection
 from .DataDict import DataDict
 
 
-class HoldDict[Key: Hashable, Value](
+class HoldDict[Key: abc.Hashable, Value](
     DataDict[Key, Value],
     BaseHoldCollection[Key | str],
 ):

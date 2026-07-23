@@ -5,7 +5,7 @@ from __future__ import annotations
 __all__: list[str] = ["DataSet"]
 
 from abc import abstractmethod
-from collections.abc import Hashable, Iterable, MutableSet
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -13,9 +13,9 @@ import setdoc
 from ..base.BaseDataSet import BaseDataSet
 
 
-class DataSet[Item: Hashable](
+class DataSet[Item: abc.Hashable](
     BaseDataSet[Item],
-    MutableSet[Item],
+    abc.MutableSet[Item],
 ):
     """Provide easy abc for custom mutable set-like."""
 
@@ -34,7 +34,7 @@ class DataSet[Item: Hashable](
     ) -> None: ...
 
     @setdoc.basic
-    def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         self.__fset__(frozenset(data))
 
     @setdoc.basic
@@ -49,7 +49,7 @@ class DataSet[Item: Hashable](
     def difference_update(
         self: Self,
         /,
-        *others: Iterable[Hashable],
+        *others: abc.Iterable[abc.Hashable],
     ) -> None:
         data: set[Item]
         data = set(self.__fget__())
@@ -57,7 +57,7 @@ class DataSet[Item: Hashable](
         self.__fset__(frozenset(data))
 
     @setdoc.basic
-    def discard(self: Self, item: Hashable, /) -> None:
+    def discard(self: Self, item: abc.Hashable, /) -> None:
         data: set[Item]
         data = set(self.__fget__())
         data.discard(item)
@@ -65,7 +65,7 @@ class DataSet[Item: Hashable](
 
     @setdoc.basic
     def intersection_update(
-        self: Self, /, *others: Iterable[Hashable]
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> None:
         data: set[Item]
         data = set(self.__fget__())
@@ -74,7 +74,7 @@ class DataSet[Item: Hashable](
 
     @setdoc.basic
     def symmetric_difference_update(
-        self: Self, other: Iterable[Item], /
+        self: Self, other: abc.Iterable[Item], /
     ) -> None:
         data: set[Item]
         data = set(self.__fget__())
@@ -82,5 +82,5 @@ class DataSet[Item: Hashable](
         self.__fset__(frozenset(data))
 
     @setdoc.basic
-    def update(self: Self, /, *others: Iterable[Item]) -> None:
+    def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
         self.__fset__(self.__fget__().union(*others))

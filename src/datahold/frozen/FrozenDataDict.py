@@ -2,7 +2,7 @@
 
 __all__: list[str] = ["FrozenDataDict"]
 
-from collections.abc import Hashable
+from collections import abc
 from typing import Self
 
 import setdoc
@@ -10,9 +10,9 @@ import setdoc
 from ..base.BaseDataDict import BaseDataDict
 
 
-class FrozenDataDict[Key: Hashable, Value](
+class FrozenDataDict[Key: abc.Hashable, Value](
     BaseDataDict[Key, Value],
-    Hashable,
+    abc.Hashable,
 ):
     """Provide easy abc for custom frozen dict-like."""
 
