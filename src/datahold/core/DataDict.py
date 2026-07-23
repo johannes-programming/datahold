@@ -24,7 +24,15 @@ class DataDict[Key: Hashable, Value](
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key | str, /) -> None:
-        self.data = self.data.delete(key)
+        self.__fset__(self.__fget__().delete(key))
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> DataDict.Data[Key, Value]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: DataDict.Data[Key, Value], /) -> None: ...
 
     @setdoc.basic
     def __init__(
@@ -33,7 +41,7 @@ class DataDict[Key: Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self.data = frozendict(data, **kwargs)  # type: ignore[arg-type]
+        self.__fset__(frozendict(data, **kwargs))  # type: ignore[arg-type]
 
     @setdoc.basic
     def __ior__(
@@ -41,7 +49,7 @@ class DataDict[Key: Hashable, Value](
         other: BaseDataDict[Key, Value],
         /,
     ) -> Self:
-        self.data |= other.data
+        self.__fset__(self.__fget__() | other.__fget__())
         return self
 
     @setdoc.basic
@@ -52,18 +60,8 @@ class DataDict[Key: Hashable, Value](
         /,
     ) -> None:
         # what to do if Key includes unhashable types?
-        self.data = self.data.set(key, value)
+        self.__fset__(self.__fget__().set(key, value))
 
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-
-    @property
-    @abstractmethod
-    @setdoc.basic
-    def data(self: Self) -> DataDict.Data[Key, Value]: ...
-
-    @data.setter
-    @abstractmethod
-    @setdoc.basic
-    def data(self: Self, value: DataDict.Init[Key, Value]) -> None: ...

@@ -21,10 +21,13 @@ class FrozenHoldList[Item](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: FrozenHoldList.Init[Item] = (), /) -> None:
-        self._data: FrozenHoldList.Data[Item] = tuple(data)
-
-    @property
-    @setdoc.basic
-    def data(self: Self) -> FrozenHoldList.Data[Item]:
+    def __fget__(self: Self) -> FrozenHoldList.Data[Item]:
         return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, data: FrozenHoldList.Data[Item], /) -> None:
+        self._data: FrozenHoldList.Data[Item] = data
+
+    @setdoc.basic
+    def __init__(self: Self, data: FrozenHoldList.Init[Item] = (), /) -> None:
+        self.__fset__(tuple(data))

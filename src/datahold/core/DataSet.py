@@ -21,30 +21,29 @@ class DataSet[Item: Hashable](
 
     __slots__ = ()
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> DataSet.Data[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(
+        self: Self,
+        value: DataSet.Init[Item],
+        /,
+    ) -> None: ...
+
     @setdoc.basic
     def __init__(self: Self, data: Iterable[Item] = (), /) -> None:
-        self.data = frozenset(data)
+        self.__fset__(frozenset(data))
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
-        self.data |= {item}
+        self.__fset__(self.__fget__() | {item})
 
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-
-    @property
-    @abstractmethod
-    @setdoc.basic
-    def data(self: Self) -> DataSet.Data[Item]: ...
-
-    @data.setter
-    @abstractmethod
-    @setdoc.basic
-    def data(
-        self: Self,
-        value: DataSet.Init[Item],
-    ) -> None: ...
 
     @setdoc.basic
     def difference_update(
@@ -53,35 +52,35 @@ class DataSet[Item: Hashable](
         *others: Iterable[Hashable],
     ) -> None:
         data: set[Item]
-        data = set(self.data)
+        data = set(self.__fget__())
         data.difference_update(*others)
-        self.data = frozenset(data)
+        self.__fset__(frozenset(data))
 
     @setdoc.basic
     def discard(self: Self, item: Hashable, /) -> None:
         data: set[Item]
-        data = set(self.data)
+        data = set(self.__fget__())
         data.discard(item)
-        self.data = frozenset(data)
+        self.__fset__(frozenset(data))
 
     @setdoc.basic
     def intersection_update(
         self: Self, /, *others: Iterable[Hashable]
     ) -> None:
         data: set[Item]
-        data = set(self.data)
+        data = set(self.__fget__())
         data.intersection_update(*others)
-        self.data = frozenset(data)
+        self.__fset__(frozenset(data))
 
     @setdoc.basic
     def symmetric_difference_update(
         self: Self, other: Iterable[Item], /
     ) -> None:
         data: set[Item]
-        data = set(self.data)
+        data = set(self.__fget__())
         data.symmetric_difference_update(other)
-        self.data = frozenset(data)
+        self.__fset__(frozenset(data))
 
     @setdoc.basic
     def update(self: Self, /, *others: Iterable[Item]) -> None:
-        self.data = self.data.union(*others)
+        self.__fset__(self.__fget__().union(*others))

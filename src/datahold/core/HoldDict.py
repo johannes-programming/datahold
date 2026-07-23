@@ -22,15 +22,14 @@ class HoldDict[Key: Hashable, Value](
 
     __slots__ = ()
 
-    @property
     @setdoc.basic
-    def data(self: Self) -> HoldDict.Data[Key, Value]:
+    def __fget__(self: Self) -> HoldDict.Data[Key, Value]:
         return self._data
 
-    @data.setter
     @setdoc.basic
-    def data(
+    def __fset__(
         self: Self,
         value: HoldDict.Init[Key, Value],
+        /,
     ) -> None:
         self._data: HoldDict.Data[Key, Value] = frozendict(value)  # type: ignore[arg-type]

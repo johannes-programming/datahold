@@ -21,11 +21,11 @@ class TestDataAttribute(unittest.TestCase):
         m = HoldDict({"a": 1})
 
         for obj in (f, m):
-            self.assertIsInstance(obj.data, frozendict)
+            self.assertIsInstance(obj.__fget__(), frozendict)
 
             # try to mutate underlying data
             with self.assertRaises((TypeError, AttributeError)):
-                obj.data["b"] = 2
+                obj.__fget__()["b"] = 2
 
     def test_list_data_is_tuple(self: Self) -> None:
         f: FrozenHoldList[Any]
@@ -35,9 +35,9 @@ class TestDataAttribute(unittest.TestCase):
         m = HoldList([1, 2, 3])
 
         for o in (f, m):
-            self.assertIsInstance(o.data, tuple)
+            self.assertIsInstance(o.__fget__(), tuple)
             with self.assertRaises(Exception):
-                o.data.append(4)
+                o.__fget__().append(4)
 
     def test_set_data_is_frozenset(self: Self) -> None:
         f: FrozenHoldSet[Any]
@@ -47,9 +47,9 @@ class TestDataAttribute(unittest.TestCase):
         m = HoldSet({1, 2, 3})
 
         for obj in (f, m):
-            self.assertIsInstance(obj.data, frozenset)
+            self.assertIsInstance(obj.__fget__(), frozenset)
             with self.assertRaises(AttributeError):
-                obj.data.add(4)
+                obj.__fget__().add(4)
 
 
 if __name__ == "__main__":

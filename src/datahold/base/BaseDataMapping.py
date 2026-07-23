@@ -32,11 +32,10 @@ class BaseDataMapping[Key, Value](
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Value:
         try:
-            return self.data[key]  # type: ignore[index]
+            return self.__fget__()[key]  # type: ignore[index]
         except TypeError:
             raise KeyError(key) from None
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Key, Value]: ...
+    def __fget__(self: Self) -> Data[Key, Value]: ...

@@ -15,12 +15,12 @@ class TestHoldDict(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj: Any = HoldDict({"x": 42})
-        self.assertEqual(obj.data, {"x": 42})
+        self.assertEqual(obj.__fget__(), {"x": 42})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.data, dict)
-        self.assertEqual(self.obj.data, {"a": 1, "b": 2})
+        self.assertIsInstance(self.obj.__fget__(), dict)
+        self.assertEqual(self.obj.__fget__(), {"a": 1, "b": 2})
 
     # __contains__
     def test_contains(self: Self) -> None:

@@ -23,12 +23,10 @@ class HoldSet[Item: Hashable](
 
     __slots__ = ()
 
-    @property
     @setdoc.basic
-    def data(self: Self) -> HoldSet.Data[Item]:
+    def __fget__(self: Self) -> HoldSet.Data[Item]:
         return self._data
 
-    @data.setter
     @setdoc.basic
-    def data(self: Self, value: Iterable[Item]) -> None:
+    def __fset__(self: Self, value: Iterable[Item], /) -> None:
         self._data: HoldSet.Data[Item] = frozenset(value)

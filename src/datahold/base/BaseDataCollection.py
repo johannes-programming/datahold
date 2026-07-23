@@ -32,19 +32,18 @@ class BaseDataCollection[Item](
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
         try:
-            return other in self.data
+            return other in self.__fget__()
         except TypeError:
-            return other in (x for x in self.data)  # type: ignore[operator]
+            return other in (x for x in self.__fget__())  # type: ignore[operator]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> Iterator[Item]:
-        return iter(self.data)
+        return iter(self.__fget__())
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
-        return len(self.data)
+        return len(self.__fget__())
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def __fget__(self: Self) -> Data[Item]: ...
