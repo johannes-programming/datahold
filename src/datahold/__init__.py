@@ -134,15 +134,19 @@ class BaseDataSet[Item: abc.Hashable](BaseDataAbstractSet[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
+    def __fget__(self: Self) -> set[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: Data[Item], /) -> None: ...
+
+    @setdoc.basic
+    def __init__(self: Self, data: Init[Item] = (), /) -> None:
+        self.__fset__(set(data))
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({set(self.__fget__())!r})"
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> set[Item]: ...
 
     @setdoc.basic
     def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
@@ -201,10 +205,6 @@ class FrozenHoldSet[Item: abc.Hashable](
     def __fset__(self: Self, data: FrozenHoldSet.Data[Item], /) -> None:
         self._data: FrozenHoldSet.Data[Item] = data
 
-    @setdoc.basic
-    def __init__(self: Self, data: FrozenHoldSet.Init[Item] = (), /) -> None:
-        self.__fset__(set(data))
-
 
 class DataSet[Item: abc.Hashable](
     BaseDataSet[Item],
@@ -225,10 +225,6 @@ class DataSet[Item: abc.Hashable](
         value: DataSet.Data[Item],
         /,
     ) -> None: ...
-
-    @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.__fset__(set(data))
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
@@ -343,12 +339,21 @@ class BaseDataDict[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
+    def __fset__(self: Self, data: Data[Key, Value], /) -> None: ...
+
+    @setdoc.basic
     def __init__(
         self: Self,
         data: Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
-    ) -> None: ...
+    ) -> None:
+        data_: BaseDataDict.Data[Key, Value]
+        data_ = dict(  # type: ignore[assignment]
+            data,  # type: ignore[arg-type]
+            **kwargs,
+        )
+        self.__fset__(data_)
 
     @setdoc.basic
     def __or__(
@@ -401,20 +406,6 @@ class FrozenHoldDict[Key: abc.Hashable, Value](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(
-        self: Self,
-        data: FrozenHoldDict.Init[Key, Value] = (),
-        /,
-        **kwargs: Optional[Value],
-    ) -> None:
-        self.__fset__(
-            dict(
-                data,  # type: ignore[arg-type]
-                **kwargs,
-            )
-        )
-
-    @setdoc.basic
     def __fget__(self: Self) -> FrozenHoldDict.Data[Key, Value]:
         return dict(self._data)
 
@@ -445,20 +436,6 @@ class DataDict[Key: abc.Hashable, Value](
     @abstractmethod
     @setdoc.basic
     def __fset__(self: Self, data: DataDict.Data[Key, Value], /) -> None: ...
-
-    @setdoc.basic
-    def __init__(
-        self: Self,
-        data: BaseDataDict.Init[Key, Value] = (),
-        /,
-        **kwargs: Optional[Value],
-    ) -> None:
-        self.__fset__(
-            dict(
-                data,  # type: ignore[arg-type]
-                **kwargs,
-            )
-        )
 
     @setdoc.basic
     def __ior__(
@@ -589,6 +566,10 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         else:
             return NotImplemented
 
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, value: list[Item], /) -> None: ...
+
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
@@ -620,9 +601,9 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         else:
             return NotImplemented
 
-    @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
+    def __init__(self: Self, data: Init[Item] = (), /) -> None:
+        self.__fset__(list(data))
 
     @setdoc.basic
     def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
@@ -682,10 +663,6 @@ class FrozenHoldList[Item](
     def __fset__(self: Self, data: FrozenHoldList.Data[Item], /) -> None:
         self._data: FrozenHoldList.Data[Item] = data
 
-    @setdoc.basic
-    def __init__(self: Self, data: FrozenHoldList.Init[Item] = (), /) -> None:
-        self.__fset__(list(data))
-
 
 class DataList[Item](
     BaseDataList[Item],
@@ -720,14 +697,6 @@ class DataList[Item](
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
         self.__fset__(self.__fget__() * other)
         return self
-
-    @setdoc.basic
-    def __init__(
-        self: Self,
-        data: abc.Iterable[Item] = (),
-        /,
-    ) -> None:
-        self.__fset__(list(data))
 
     @overload
     @setdoc.basic
