@@ -50,9 +50,8 @@ class BaseDataSequence[Item](
     def __getitem__(
         self: Self, key: int | Slice[int], /
     ) -> Item | Sequence[Item]:
-        return self.data[key]
+        return self.__fget__()[key]
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def __fget__(self: Self) -> Data[Item]: ...

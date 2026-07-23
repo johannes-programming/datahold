@@ -34,21 +34,21 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
         if isinstance(other, BaseDataList):
-            return type(self)(self.data + other.data)
+            return type(self)(self.__fget__() + other.__fget__())
         else:
             return NotImplemented
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
-            return self.data == other.data
+            return self.__fget__() == other.__fget__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
-            return self.data >= other.data
+            return self.__fget__() >= other.__fget__()
         else:
             return NotImplemented
 
@@ -65,14 +65,14 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         self: Self, index: SupportsIndex | Slice[SupportsIndex], /
     ) -> Item | Self:
         if isinstance(index, SupportsIndex):
-            return self.data[index]
+            return self.__fget__()[index]
         else:
-            return type(self)(self.data[index])
+            return type(self)(self.__fget__()[index])
 
     @setdoc.basic
     def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
-            return self.data > other.data
+            return self.__fget__() > other.__fget__()
         else:
             return NotImplemented
 
@@ -83,28 +83,27 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     @setdoc.basic
     def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
-            return self.data <= other.data
+            return self.__fget__() <= other.__fget__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, BaseDataList):
-            return self.data < other.data
+            return self.__fget__() < other.__fget__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
-        return type(self)(self.data * other)
+        return type(self)(self.__fget__() * other)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({list(self.data)!r})"
+        return f"{type(self).__name__}({list(self.__fget__())!r})"
 
     __rmul__ = __mul__
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Item]: ...
+    def __fget__(self: Self) -> Data[Item]: ...

@@ -14,12 +14,12 @@ class TestHoldSet(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj: Any = HoldSet([1, 2, 3])
-        self.assertEqual(obj.data, frozenset({1, 2, 3}))
+        self.assertEqual(obj.__fget__(), frozenset({1, 2, 3}))
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.data, frozenset)
-        self.assertEqual(self.obj.data, frozenset({1, 2, 3}))
+        self.assertIsInstance(self.obj.__fget__(), frozenset)
+        self.assertEqual(self.obj.__fget__(), frozenset({1, 2, 3}))
 
     # __contains__
     def test_contains(self: Self) -> None:

@@ -20,4 +20,4 @@ class FrozenDataList[Item](
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        return hash(self.data)
+        return hash(self.__fget__())

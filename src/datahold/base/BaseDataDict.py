@@ -53,7 +53,7 @@ class BaseDataDict[Key: Hashable, Value](
         other: BaseDataDict[Key, Value],
         /,
     ) -> Self:
-        return type(self)(self.data | other.data)
+        return type(self)(self.__fget__() | other.__fget__())
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
@@ -61,10 +61,9 @@ class BaseDataDict[Key: Hashable, Value](
 
     # __ror__ is unnecessary because of how __or__ is defined
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> Data[Key, Value]: ...
+    def __fget__(self: Self) -> Data[Key, Value]: ...
 
     @classmethod
     @setdoc.basic

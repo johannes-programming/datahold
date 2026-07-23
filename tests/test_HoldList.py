@@ -15,12 +15,12 @@ class TestHoldList(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj = HoldList([42])
-        self.assertEqual(obj.data, (42,))
+        self.assertEqual(obj.__fget__(), (42,))
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.data, tuple)
-        self.assertEqual(self.obj.data, (1, 2, 3))
+        self.assertIsInstance(self.obj.__fget__(), tuple)
+        self.assertEqual(self.obj.__fget__(), (1, 2, 3))
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -40,7 +40,7 @@ class TestHoldList(unittest.TestCase):
     # __delitem__
     def test_delitem(self: Self) -> None:
         del self.obj[1]
-        self.assertEqual(self.obj.data, (1, 3))
+        self.assertEqual(self.obj.__fget__(), (1, 3))
 
     # __iter__
     def test_iter(self: Self) -> None:
@@ -62,22 +62,22 @@ class TestHoldList(unittest.TestCase):
 
     # __lt__
     def test_lt(self: Self) -> None:
-        expected = self.obj.data < self.other.data
+        expected = self.obj.__fget__() < self.other.__fget__()
         self.assertEqual(self.obj < self.other, expected)
 
     # __le__
     def test_le(self: Self) -> None:
-        expected = self.obj.data <= self.same.data
+        expected = self.obj.__fget__() <= self.same.__fget__()
         self.assertEqual(self.obj <= self.same, expected)
 
     # __gt__
     def test_gt(self: Self) -> None:
-        expected = self.other.data > self.obj.data
+        expected = self.other.__fget__() > self.obj.__fget__()
         self.assertEqual(self.other > self.obj, expected)
 
     # __ge__
     def test_ge(self: Self) -> None:
-        expected = self.same.data >= self.obj.data
+        expected = self.same.__fget__() >= self.obj.__fget__()
         self.assertEqual(self.same >= self.obj, expected)
 
     # __repr__

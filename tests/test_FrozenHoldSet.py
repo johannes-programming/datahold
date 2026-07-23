@@ -15,12 +15,12 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj = FrozenHoldSet([1, 2, 3])
-        self.assertEqual(obj.data, frozenset({1, 2, 3}))
+        self.assertEqual(obj.__fget__(), frozenset({1, 2, 3}))
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.data, frozenset)
-        self.assertEqual(self.obj.data, frozenset({1, 2, 3}))
+        self.assertIsInstance(self.obj.__fget__(), frozenset)
+        self.assertEqual(self.obj.__fget__(), frozenset({1, 2, 3}))
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -66,7 +66,7 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __hash__
     def test_hash(self: Self) -> None:
         self.assertEqual(hash(self.obj), hash(self.same))
-        self.assertEqual(hash(self.obj), hash(self.obj.data))
+        self.assertEqual(hash(self.obj), hash(self.obj.__fget__()))
 
     # __or__
     def test_or(self: Self) -> None:

@@ -29,12 +29,17 @@ class FrozenHoldDict[Key: Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._data: FrozenHoldDict.Data[Key, Value] = frozendict(
-            data,  # type: ignore[arg-type]
-            **kwargs,
+        self.__fset__(
+            frozendict(
+                data,  # type: ignore[arg-type]
+                **kwargs,
+            )
         )
 
-    @property
     @setdoc.basic
-    def data(self: Self) -> FrozenHoldDict.Data[Key, Value]:
+    def __fget__(self: Self) -> FrozenHoldDict.Data[Key, Value]:
         return self._data
+
+    @setdoc.basic
+    def __fset__(self: Self, data: FrozenHoldDict.Data[Key, Value], /) -> None:
+        self._data: FrozenHoldDict.Data[Key, Value] = data

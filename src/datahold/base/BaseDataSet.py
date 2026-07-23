@@ -27,28 +27,27 @@ class BaseDataSet[Item: Hashable](BaseDataAbstractSet[Item]):
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({set(self.data)!r})"
+        return f"{type(self).__name__}({set(self.__fget__())!r})"
 
-    @property
     @abstractmethod
     @setdoc.basic
-    def data(self: Self) -> frozenset[Item]: ...
+    def __fget__(self: Self) -> frozenset[Item]: ...
 
     @setdoc.basic
     def difference(self: Self, /, *others: Iterable[Hashable]) -> Self:
-        return type(self)(self.data.difference(*others))
+        return type(self)(self.__fget__().difference(*others))
 
     @setdoc.basic
     def intersection(self: Self, /, *others: Iterable[Hashable]) -> Self:
-        return type(self)(self.data.intersection(*others))
+        return type(self)(self.__fget__().intersection(*others))
 
     @setdoc.basic
     def issubset(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.data.issubset(other)
+        return self.__fget__().issubset(other)
 
     @setdoc.basic
     def issuperset(self: Self, other: Iterable[Hashable], /) -> bool:
-        return self.data.issuperset(other)
+        return self.__fget__().issuperset(other)
 
     @setdoc.basic
     def symmetric_difference(
@@ -56,8 +55,8 @@ class BaseDataSet[Item: Hashable](BaseDataAbstractSet[Item]):
         other: Iterable[Item],
         /,
     ) -> Self:
-        return type(self)(self.data.symmetric_difference(other))
+        return type(self)(self.__fget__().symmetric_difference(other))
 
     @setdoc.basic
     def union(self: Self, /, *others: Iterable[Item]) -> Self:
-        return type(self)(self.data.union(*others))
+        return type(self)(self.__fget__().union(*others))

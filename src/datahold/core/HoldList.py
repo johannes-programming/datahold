@@ -21,12 +21,10 @@ class HoldList[Item](
 
     __slots__ = ()
 
-    @property
     @setdoc.basic
-    def data(self: Self) -> HoldList.Data[Item]:
+    def __fget__(self: Self) -> HoldList.Data[Item]:
         return self._data
 
-    @data.setter
     @setdoc.basic
-    def data(self: Self, value: Iterable[Item]) -> None:
+    def __fset__(self: Self, value: Iterable[Item], /) -> None:
         self._data: HoldList.Data[Item] = tuple(value)

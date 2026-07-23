@@ -19,12 +19,12 @@ class TestFrozenHoldDict(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: Any
         obj = FrozenHoldDict({"x": 42})
-        self.assertEqual(obj.data, frozendict({"x": 42}))
+        self.assertEqual(obj.__fget__(), frozendict({"x": 42}))
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.data, frozendict)
-        self.assertEqual(self.obj.data, frozendict({"a": 1, "b": 2}))
+        self.assertIsInstance(self.obj.__fget__(), frozendict)
+        self.assertEqual(self.obj.__fget__(), frozendict({"a": 1, "b": 2}))
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -55,7 +55,7 @@ class TestFrozenHoldDict(unittest.TestCase):
 
     # __hash__
     def test_hash(self: Self) -> None:
-        self.assertEqual(hash(self.obj), hash(self.obj.data))
+        self.assertEqual(hash(self.obj), hash(self.obj.__fget__()))
         self.assertEqual(hash(self.obj), hash(self.same))
 
     # __or__
