@@ -48,7 +48,12 @@ BaseDataCollection = true
 Hashable = false
 
 [types.BaseDataSequence]
-dirData = []
+dirData = [
+    "__contains__",
+    "__getitem__",
+    "__iter__",
+    "__len__",
+]
 
 [types.BaseDataSequence.parents]
 BaseDataCollection = true
@@ -58,15 +63,9 @@ Hashable = true
 dirData = []
 
 [types.BaseDataSet.parents]
+BaseDataAbstractSet = true
 Hashable = false
 Set = true
-
-[types.BaseHoldCollection]
-dirData = []
-
-[types.BaseHoldCollection.parents]
-BaseDataCollection = true
-Hashable = true
 
 [types.DataDict]
 Data = "frozendict"
@@ -79,6 +78,7 @@ valid = false
 
 [types.DataDict.parents]
 BaseDataDict = true
+BaseDataMapping = true
 MutableMapping = true
 
 [types.DataList]
@@ -130,130 +130,7 @@ isabstract = true
 
 [types.FrozenDataSet.parents]
 
-[types.FrozenHoldDict]
-dirData = []
-
-[types.FrozenHoldDict.constructor.concrete]
-args = [
-    { a = 1 },
-]
-
-[types.FrozenHoldDict.constructor.concrete-1.kwargs]
-a = 1
-
-[types.FrozenHoldDict.parents]
-Mapping = true
-MutableMapping = false
-
-[types.FrozenHoldList]
-dirData = []
-
-[types.FrozenHoldList.constructor.concrete]
-args = [
-    [
-        1,
-        2,
-    ],
-]
-repr = "FrozenHoldList([1, 2])"
-
-[types.FrozenHoldList.parents]
-FrozenDataList = true
-MutableSequence = false
-Sequence = true
-
-[types.FrozenHoldSet]
-dirData = []
-
-[types.FrozenHoldSet.constructor.concrete]
-args = [
-    [
-        1,
-        2,
-    ],
-]
-valid = true
-
-[types.FrozenHoldSet.parents]
-MutableSet = false
-Set = true
-
-[types.HoldDict]
-Data = "frozendict"
-dirData = []
-n_type_params = 2
-
-[types.HoldDict.constructor.concrete.kwargs]
-a = 1
-
-[types.HoldDict.constructor.empty]
-args = []
-
-[types.HoldDict.parents]
-BaseDataDict = true
-DataDict = true
-Mapping = true
-MutableMapping = true
-
-[types.HoldList]
-Data = "tuple"
-dirData = []
-n_type_params = 1
-
-[types.HoldList.constructor.empty]
-args = []
-
-[types.HoldList.constructor.concrete]
-args = [
-    [
-        1,
-        2,
-    ],
-]
-
-[types.HoldList.constructor.protocols]
-args = [
-    [
-        1,
-        2,
-        3,
-    ],
-]
-
-[types.HoldList.parents]
-DataList = true
-MutableSequence = true
-Sequence = true
-
-[types.HoldSet]
-Date = "frozenset"
-dirData = []
-n_type_params = 1
-
-[types.HoldSet.constructor.empty]
-args = []
-
-[types.HoldSet.constructor.concrete]
-args = [
-    [
-        1,
-        2,
-    ],
-]
-
-[types.HoldSet.constructor.protocols]
-args = [
-    [
-        1,
-        2,
-        3,
-    ],
-]
-
-[types.HoldSet.parents]
-BaseDataSet = true
-DataSet = true
-MutableSet = true
-Set = true
-
 [varia]
+HOLD_TYPES = [
+    "BaseHoldObject",
+]

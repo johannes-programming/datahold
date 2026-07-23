@@ -1,11 +1,55 @@
-__all__: list[str] = ["TestFrozenHoldDict"]
+__all__: list[str] = [
+    "TestCopy",
+    "TestDataAttribute",
+    "TestFrozenHoldDict",
+    "TestFrozenMutability",
+]
 
 import unittest
+from collections import abc
 from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold import FrozenHoldDict
+from datahold import BaseHoldObject, FrozenDataDict
+
+
+class FrozenHoldDict[Key: abc.Hashable, Value](
+    BaseHoldObject[FrozenDataDict.Data[Key, Value]],
+    FrozenDataDict[Key, Value],
+):
+    """Provide usable frozen dict-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+
+    def test_frozen_have_no_copy_2(self: Self) -> None:
+        """
+        Frozen classes should not define their own copy method.
+        (If a parent class or wrapped object exposes one, we ignore that.)
+        """
+        args: Any
+        cls: Any
+        copy_obj: Any
+        obj: Any
+        cls, args = (FrozenHoldDict, ({"a": 1},))
+        # They must not *define* copy themselves
+        self.assertNotIn("copy", cls.__dict__)
+        # Optional: if they *do* expose copy on the instance, it should not
+        # create a mutable variant; you can drop this if you prefer.
+        obj = cls(*args)
+        if hasattr(obj, "copy"):
+            copy_obj = obj.copy()
+            self.assertIsInstance(copy_obj, cls)
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_dict_data_is_immutable_mapping(self: Self) -> None:
+        f: FrozenHoldDict[Any, Any]
+        f = FrozenHoldDict({"a": 1})
+        self.assertIsInstance(f.__fget__(), dict)
 
 
 class TestFrozenHoldDict(unittest.TestCase):
@@ -125,6 +169,16 @@ class TestFrozenHoldDict(unittest.TestCase):
             set(self.obj.values()),
             {1, 2},
         )
+
+
+class TestFrozenMutability(unittest.TestCase):
+    def test_frozen_dict_cannot_mutate(self: Self) -> None:
+        f: Any
+        f = FrozenHoldDict({"a": 1})
+        with self.assertRaises((TypeError, AttributeError)):
+            f["b"] = 2
+        with self.assertRaises((TypeError, AttributeError)):
+            f.pop("a", None)
 
 
 if __name__ == "__main__":

@@ -10,19 +10,13 @@ __all__: list[str] = [
     "BaseDataMapping",
     "BaseDataSequence",
     "BaseDataSet",
-    "BaseHoldCollection",
+    "BaseHoldObject",
     "DataDict",
     "DataList",
     "DataSet",
     "FrozenDataDict",
     "FrozenDataList",
     "FrozenDataSet",
-    "FrozenHoldDict",
-    "FrozenHoldList",
-    "FrozenHoldSet",
-    "HoldDict",
-    "HoldList",
-    "HoldSet",
 ]
 
 import enum
@@ -45,6 +39,11 @@ from frozendict import frozendict
 ### UTILS ###
 
 
+class Copyable(Protocol):
+    @setdoc.basic
+    def copy(self: Self) -> Self: ...
+
+
 class Missing(enum.Enum):
     missing = None
 
@@ -59,6 +58,23 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
 
     @setdoc.basic
     def keys(self: Self) -> abc.Iterable[Key]: ...
+
+
+### OBJECT ###
+
+
+class BaseHoldObject[HoldData: Copyable]:
+    """Provide abc for usable classes with slots."""
+
+    __slots__ = ("_data",)
+
+    @setdoc.basic
+    def __fget__(self: Self) -> HoldData:
+        return self._data.copy()
+
+    @setdoc.basic
+    def __fset__(self: Self, data: HoldData, /) -> None:
+        self._data: HoldData = data
 
 
 ### COLLECTION ###
@@ -101,12 +117,6 @@ class BaseDataCollection[Item](
     @abstractmethod
     @setdoc.basic
     def __fget__(self: Self) -> Data[Item]: ...
-
-
-class BaseHoldCollection[Item](BaseDataCollection[Item]):
-    """Provide abc for usable classes with slots."""
-
-    __slots__ = ("_data",)
 
 
 ### ABSTRACT SET ###
@@ -189,23 +199,6 @@ class FrozenDataSet[Item: abc.Hashable](BaseDataSet[Item], abc.Hashable):
         return hash(frozenset(self.__fget__()))
 
 
-class FrozenHoldSet[Item: abc.Hashable](
-    FrozenDataSet[Item],
-    BaseHoldCollection[Item],
-):
-    """Provide usable frozen set-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> FrozenHoldSet.Data[Item]:
-        return set(self._data)
-
-    @setdoc.basic
-    def __fset__(self: Self, data: FrozenHoldSet.Data[Item], /) -> None:
-        self._data: FrozenHoldSet.Data[Item] = data
-
-
 class DataSet[Item: abc.Hashable](
     BaseDataSet[Item],
     abc.MutableSet[Item],
@@ -229,55 +222,38 @@ class DataSet[Item: abc.Hashable](
         *others: abc.Iterable[abc.Hashable],
     ) -> None:
         data: set[Item]
-        data = set(self.__fget__())
+        data = self.__fget__()
         data.difference_update(*others)
-        self.__fset__(set(data))
+        self.__fset__(data)
 
     @setdoc.basic
     def discard(self: Self, item: abc.Hashable, /) -> None:
         data: set[Item]
-        data = set(self.__fget__())
+        data = self.__fget__()
         data.discard(item)
-        self.__fset__(set(data))
+        self.__fset__(data)
 
     @setdoc.basic
     def intersection_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> None:
         data: set[Item]
-        data = set(self.__fget__())
+        data = self.__fget__()
         data.intersection_update(*others)
-        self.__fset__(set(data))
+        self.__fset__(data)
 
     @setdoc.basic
     def symmetric_difference_update(
         self: Self, other: abc.Iterable[Item], /
     ) -> None:
         data: set[Item]
-        data = set(self.__fget__())
+        data = self.__fget__()
         data.symmetric_difference_update(other)
-        self.__fset__(set(data))
+        self.__fset__(data)
 
     @setdoc.basic
     def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
         self.__fset__(self.__fget__().union(*others))
-
-
-class HoldSet[Item: abc.Hashable](
-    DataSet[Item],
-    BaseHoldCollection[Item],
-):
-    """Provide usable mutable set-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> HoldSet.Data[Item]:
-        return set(self._data)
-
-    @setdoc.basic
-    def __fset__(self: Self, value: HoldSet.Data[Item], /) -> None:
-        self._data: HoldSet.Data[Item] = value
 
 
 ### MAPPING ###
@@ -385,23 +361,6 @@ class FrozenDataDict[Key: abc.Hashable, Value](
         return hash(frozendict(self.__fget__()))
 
 
-class FrozenHoldDict[Key: abc.Hashable, Value](
-    FrozenDataDict[Key, Value],
-    BaseHoldCollection[Key | str],
-):
-    """Provide usable frozen dict-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> FrozenHoldDict.Data[Key, Value]:
-        return dict(self._data)
-
-    @setdoc.basic
-    def __fset__(self: Self, data: FrozenHoldDict.Data[Key, Value], /) -> None:
-        self._data: FrozenHoldDict.Data[Key, Value] = data
-
-
 class DataDict[Key: abc.Hashable, Value](
     BaseDataDict[Key, Value],
     abc.MutableMapping[Key | str, Optional[Value]],
@@ -442,27 +401,6 @@ class DataDict[Key: abc.Hashable, Value](
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-
-
-class HoldDict[Key: abc.Hashable, Value](
-    DataDict[Key, Value],
-    BaseHoldCollection[Key | str],
-):
-    """Provide usable mutable dict-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> HoldDict.Data[Key, Value]:
-        return dict(self._data)
-
-    @setdoc.basic
-    def __fset__(
-        self: Self,
-        value: HoldDict.Data[Key, Value],
-        /,
-    ) -> None:
-        self._data: HoldDict.Data[Key, Value] = value
 
 
 ### SEQUENCE ###
@@ -627,23 +565,6 @@ class FrozenDataList[Item](
         return hash(tuple(self.__fget__()))
 
 
-class FrozenHoldList[Item](
-    FrozenDataList[Item],
-    BaseHoldCollection[Item],
-):
-    """Provide usable frozen list-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> FrozenHoldList.Data[Item]:
-        return list(self._data)
-
-    @setdoc.basic
-    def __fset__(self: Self, data: FrozenHoldList.Data[Item], /) -> None:
-        self._data: FrozenHoldList.Data[Item] = data
-
-
 class DataList[Item](
     BaseDataList[Item],
     abc.MutableSequence[Item],
@@ -710,20 +631,3 @@ class DataList[Item](
         data = self.__fget__()
         data.sort(key=key, reverse=reverse)
         self.__fset__(data)
-
-
-class HoldList[Item](
-    DataList[Item],
-    BaseHoldCollection[Item],
-):
-    """Provide usable mutable list-like with slots."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __fget__(self: Self) -> HoldList.Data[Item]:
-        return list(self._data)
-
-    @setdoc.basic
-    def __fset__(self: Self, value: HoldList.Data[Item], /) -> None:
-        self._data: HoldList.Data[Item] = value

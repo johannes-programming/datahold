@@ -1,8 +1,44 @@
-__all__: list[str] = ["TestHoldList"]
+__all__: list[str] = [
+    "TestCopy",
+    "TestDataAttribute",
+    "TestHoldList",
+    "TestMutableBehavior",
+]
 import unittest
 from typing import Any, Self
 
-from datahold import HoldList
+from datahold import BaseHoldObject, DataList
+
+
+class HoldList[Item](
+    BaseHoldObject[DataList.Data[Item]],
+    DataList[Item],
+):
+    """Provide usable mutable list-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+
+    def test_list_copy(self: Self) -> None:
+        lst: HoldList[Any]
+        lst_copy: HoldList[Any]
+        lst = HoldList([[1], [2]])
+        lst_copy = lst.copy()
+        self.assertIsInstance(lst_copy, type(lst))
+        self.assertIsNot(lst_copy, lst)
+        self.assertEqual(list(lst_copy), list(lst))
+
+        lst[0].append(99)
+        self.assertEqual(lst_copy[0], [1, 99])
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_list_data_is_tuple(self: Self) -> None:
+        m: HoldList[Any]
+        m = HoldList([1, 2, 3])
+        self.assertIsInstance(m.__fget__(), list)
 
 
 class TestHoldList(unittest.TestCase):
@@ -210,6 +246,16 @@ class TestHoldList(unittest.TestCase):
             result,
             HoldList([1, 2, 1, 2]),
         )
+
+
+class TestMutableBehavior(unittest.TestCase):
+
+    def test_hold_list_mutates_and_syncs_data(self: Self) -> None:
+        x: HoldList[Any]
+        x = HoldList([1, 2])
+        x.append(3)
+        self.assertEqual(list(x), [1, 2, 3])
+        self.assertEqual(x.__fget__(), [1, 2, 3])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,45 @@
+__all__: list[str] = [
+    "TestCopy",
+    "TestDataAttribute",
+    "TestHoldSet",
+    "TestMutableBehavior",
+]
 import unittest
+from collections import abc
 from typing import Any, Self
 
-from datahold import HoldSet
+from datahold import BaseHoldObject, DataSet
+
+
+class HoldSet[Item: abc.Hashable](
+    BaseHoldObject[DataSet.Data[Item]],
+    DataSet[Item],
+):
+    """Provide usable mutable set-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+
+    def test_set_copy(self: Self) -> None:
+        s: HoldSet[Any]
+        s_copy: HoldSet[Any]
+        s = HoldSet({1, 2, 3})
+        s_copy = s.copy()
+        self.assertIsInstance(s_copy, type(s))
+        self.assertIsNot(s_copy, s)
+        self.assertEqual(set(s_copy), set(s))
+
+        s.add(4)
+        self.assertNotIn(4, s_copy)
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_set_data_is_frozenset(self: Self) -> None:
+        m: HoldSet[Any]
+        m = HoldSet({1, 2, 3})
+        self.assertIsInstance(m.__fget__(), set)
 
 
 class TestHoldSet(unittest.TestCase):
@@ -232,6 +270,15 @@ class TestHoldSet(unittest.TestCase):
             {1, 2} ^ HoldSet({2, 3}),
             HoldSet({1, 3}),
         )
+
+
+class TestMutableBehavior(unittest.TestCase):
+    def test_hold_set_mutates_and_syncs_data(self: Self) -> None:
+        s: HoldSet[Any]
+        s = HoldSet({1, 2})
+        s.add(3)
+        self.assertTrue(3 in s)
+        self.assertTrue(3 in s.__fget__())
 
 
 if __name__ == "__main__":

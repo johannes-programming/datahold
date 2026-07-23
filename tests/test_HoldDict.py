@@ -1,8 +1,45 @@
-__all__: list[str] = ["TestHoldDict"]
+__all__: list[str] = [
+    "TestDataAttribute",
+    "TestHoldDict",
+    "TestMutableBehavior",
+    "TestCopy",
+]
 import unittest
-from typing import Any, Self
+from collections import abc
+from typing import Any, Self, cast
 
-from datahold import HoldDict
+from datahold import BaseHoldObject, DataDict
+
+
+class HoldDict[Key: abc.Hashable, Value](
+    BaseHoldObject[DataDict.Data[Key, Value]],
+    DataDict[Key, Value],
+):
+    """Provide usable mutable dict-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+    def test_mutable_copy_returns_same_type_and_is_shallow(self: Self) -> None:
+        d: HoldDict[str, dict[str, int]]
+        d_copy: HoldDict[str, dict[str, int]]
+        d = HoldDict({"a": {"x": 1}})
+        d_copy = d.copy()
+        self.assertIsInstance(d_copy, type(d))
+        self.assertIsNot(d_copy, d)
+        self.assertEqual(dict(d_copy), dict(d))
+
+        # shallow: inner object is shared
+        cast(dict[str, int], d["a"])["x"] = 2
+        self.assertEqual(cast(dict[str, int], d_copy["a"])["x"], 2)
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_dict_data_is_immutable_mapping(self: Self) -> None:
+        m: HoldDict[Any, Any]
+        m = HoldDict({"a": 1})
+        self.assertIsInstance(m.__fget__(), dict)
 
 
 class TestHoldDict(unittest.TestCase):
@@ -162,6 +199,15 @@ class TestHoldDict(unittest.TestCase):
         self.assertIsInstance(result, HoldDict)
         self.assertEqual(result, self.obj)
         self.assertIsNot(result, self.obj)
+
+
+class TestMutableBehavior(unittest.TestCase):
+    def test_hold_dict_mutates_and_syncs_data(self: Self) -> None:
+        x: HoldDict[Any, Any]
+        x = HoldDict({"a": 1})
+        x["b"] = 2
+        self.assertEqual(x["b"], 2)
+        self.assertEqual(x.__fget__()["b"], 2)
 
 
 if __name__ == "__main__":

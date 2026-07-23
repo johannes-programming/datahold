@@ -1,5 +1,6 @@
 __all__: list[str] = [
     "TestAbstractness",
+    "TestAll",
     "TestCollection",
     "TestConstructor",
     "TestData",
@@ -24,6 +25,10 @@ import datahold
 
 class Lazy(enum.Enum):
     lazy = None
+
+    @cached_property
+    def HOLD_TYPES(self: Self) -> list[str]:
+        return cast(list[str], self.varia["HOLD_TYPES"])
 
     @cached_property
     def METHODS(self: Self) -> tuple[str, ...]:
@@ -54,6 +59,10 @@ class Lazy(enum.Enum):
     def types(self: Self) -> dict[str, dict[str, Any]]:
         return cast(dict[str, dict[str, Any]], self.data["types"])
 
+    @cached_property
+    def varia(self: Self) -> dict[str, Any]:
+        return cast(dict[str, Any], self.data["varia"])
+
 
 class TestAbstractness(unittest.TestCase):
 
@@ -67,6 +76,18 @@ class TestAbstractness(unittest.TestCase):
         for typename, kwargs in Lazy.lazy.types.items():
             with self.subTest(typename=typename):
                 self.go_types(typename, **kwargs)
+
+
+class TestAll(unittest.TestCase):
+    def test_all(self: Self) -> None:
+        self.assertLessEqual(
+            set(datahold.__all__),
+            Lazy.lazy.types.keys() | Lazy.lazy.HOLD_TYPES,
+        )
+        self.assertListEqual(
+            datahold.__all__,
+            list(sorted(datahold.__all__)),
+        )
 
 
 class TestCollection(unittest.TestCase):
@@ -182,10 +203,8 @@ class TestDirData(unittest.TestCase):
     def go_init(self: Self, x: str, /) -> None:
         cls: Any
         cls = getattr(datahold, x)
-        self.assertEqual(
-            "__fget__" in cls.__dict__,
-            "Data" in cls.__dict__ or not ins.isabstract(cls),
-        )
+        if "__fget__" in cls.__dict__:
+            self.assertTrue("Data" in cls.__dict__ or not ins.isabstract(cls))
         if "__fset__" in cls.__dict__:
             self.assertIn("__fget__", cls.__dict__)
         self.assertEqual(

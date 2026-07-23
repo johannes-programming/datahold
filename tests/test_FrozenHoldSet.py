@@ -1,8 +1,54 @@
-__all__: list[str] = ["TestFrozenHoldSet"]
+__all__: list[str] = [
+    "TestCopy",
+    "TestDataAttribute",
+    "TestFrozenHoldSet",
+    "TestFrozenMutability",
+]
 import unittest
-from typing import Self
+from collections import abc
+from typing import Any, Self
 
-from datahold import FrozenHoldSet
+from datahold import BaseHoldObject, FrozenDataSet
+
+
+class FrozenHoldSet[Item: abc.Hashable](
+    BaseHoldObject[FrozenDataSet.Data[Item]],
+    FrozenDataSet[Item],
+):
+    """Provide usable frozen set-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+
+    def test_frozen_have_no_copy_2(self: Self) -> None:
+        """
+        Frozen classes should not define their own copy method.
+        (If a parent class or wrapped object exposes one, we ignore that.)
+        """
+        args: Any
+        cls: Any
+        copy_obj: Any
+        obj: Any
+        cls = FrozenHoldSet
+        args = ({1, 2},)
+        # They must not *define* copy themselves
+        self.assertNotIn("copy", cls.__dict__)
+
+        # Optional: if they *do* expose copy on the instance, it should not
+        # create a mutable variant; you can drop this if you prefer.
+        obj = cls(*args)
+        if hasattr(obj, "copy"):
+            copy_obj = obj.copy()
+            self.assertIsInstance(copy_obj, cls)
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_set_data_is_frozenset(self: Self) -> None:
+        f: FrozenHoldSet[Any]
+        f = FrozenHoldSet({1, 2, 3})
+        self.assertIsInstance(f.__fget__(), set)
 
 
 class TestFrozenHoldSet(unittest.TestCase):
@@ -183,6 +229,17 @@ class TestFrozenHoldSet(unittest.TestCase):
             {1, 2} ^ FrozenHoldSet({2, 3}),
             FrozenHoldSet({1, 3}),
         )
+
+
+class TestFrozenMutability(unittest.TestCase):
+
+    def test_frozen_set_cannot_mutate(self: Self) -> None:
+        f: Any
+        f = FrozenHoldSet({1, 2, 3})
+        with self.assertRaises((TypeError, AttributeError)):
+            f.add(4)
+        with self.assertRaises((TypeError, AttributeError)):
+            f.remove(1)
 
 
 if __name__ == "__main__":

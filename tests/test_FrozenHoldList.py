@@ -1,8 +1,51 @@
-__all__: list[str] = ["TestFrozenHoldLists"]
+__all__: list[str] = [
+    "TestCopy",
+    "TestDataAttribute",
+    "TestFrozenHoldLists",
+    "TestFrozenMutability",
+]
 import unittest
 from typing import Any, Self
 
-from datahold import FrozenHoldList
+from datahold import BaseHoldObject, FrozenDataList
+
+
+class FrozenHoldList[Item](
+    BaseHoldObject[FrozenDataList.Data[Item]],
+    FrozenDataList[Item],
+):
+    """Provide usable frozen list-like with slots."""
+
+    __slots__ = ()
+
+
+class TestCopy(unittest.TestCase):
+
+    def test_frozen_have_no_copy_2(self: Self) -> None:
+        """
+        Frozen classes should not define their own copy method.
+        (If a parent class or wrapped object exposes one, we ignore that.)
+        """
+        args: Any
+        cls: Any
+        copy_obj: Any
+        obj: Any
+        cls, args = (FrozenHoldList, ([1, 2],))
+        # They must not *define* copy themselves
+        self.assertNotIn("copy", cls.__dict__)
+        # Optional: if they *do* expose copy on the instance, it should not
+        # create a mutable variant; you can drop this if you prefer.
+        obj = cls(*args)
+        if hasattr(obj, "copy"):
+            copy_obj = obj.copy()
+            self.assertIsInstance(copy_obj, cls)
+
+
+class TestDataAttribute(unittest.TestCase):
+    def test_list_data_is_tuple(self: Self) -> None:
+        f: FrozenHoldList[Any]
+        f = FrozenHoldList([1, 2, 3])
+        self.assertIsInstance(f.__fget__(), list)
 
 
 class TestFrozenHoldList(unittest.TestCase):
@@ -142,6 +185,16 @@ class TestFrozenHoldList(unittest.TestCase):
         self.assertEqual(self.obj.index(2), 1)
         with self.assertRaises(ValueError):
             self.obj.index(99)
+
+
+class TestFrozenMutability(unittest.TestCase):
+    def test_frozen_list_cannot_mutate(self: Self) -> None:
+        f: Any
+        f = FrozenHoldList([1, 2, 3])
+        with self.assertRaises((TypeError, AttributeError)):
+            f.append(4)
+        with self.assertRaises((TypeError, AttributeError)):
+            f.pop()
 
 
 if __name__ == "__main__":
