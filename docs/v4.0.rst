@@ -1,0 +1,667 @@
+Overview
+--------
+
+This project wraps common mutable data structures for inheritance with modification.
+
+Of course, similar base classes are provided by ``collections``.
+They were also the main inspiration for this project.
+But they suffer from one principal problem:
+They necessitate overriding multiple methods
+to effectively customize the data holder.
+This project allows creating a customized data holder
+by only overwriting the ``data`` property.
+All proper methods and magic methods in the classes of this project
+use the getter (and in the mutable ``core`` classes also the setter) of the ``data`` property.
+Therefore, overwriting the ``data`` property alone immediately gives an effectively modified class.
+Further overwriting of methods is still possible
+and might - depending on the situation - substantially improve performance,
+but it is not strictly necessary.
+For example, it is possible to create - with only a few lines of code - a ``MutableSet``
+that forces all its items to become strings.
+
+.. code-block:: python
+
+    from datahold import HoldSet
+
+    class StrSet(HoldSet):
+
+        __slots__ = () # all classes with Hold have a predefined slot layout with only _data
+
+        @property
+        def data(self):
+            return self._data
+
+        @data.setter
+        def data(self, value):
+            self._data = frozenset(map(str, value))
+
+Installation
+------------
+
+To install ``datahold``, you can use ``pip``.
+Open your terminal and run:
+
+.. code-block:: shell
+
+    pip install datahold
+
+Typing
+------
+
+The typing conforms strictly to ``mypy``.
+
+Features
+--------
+
+Inherited features are not mentioned again, unless something changed.
+
+Classes that can be imported from ``datahold``, from ``collections.abc``, or from ``typing`` are usually mentions without import.
+
+The same is true for protocols with self-explanatory name (i.e. ``SupportsKeysAndGetitem``),
+for nested classes (i.e. ``Data``),
+and for all other classes whose origin or nature should be apparent to a programmer.
+
+``datahold.base``
+'''''''''''''''''
+
+The classes in ``datahold.base`` can also be accessed directly from ``datahold``.
+
+``class datahold.base.BaseDataCollection.BaseDataCollection[Item]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``Sized``, ``Iterable[Item]``, and ``Container[object]``.
+
+``class datahold.base.BaseDataCollection.BaseDataCollection.Data``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This protocol inherits from
+``Sized``,
+``Iterable[DataItem]``,
+``Container[Never]``,
+``Hashable``,
+and ``Protocol``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__contains__(other: object) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``other in self``.
+
+.. code-block:: python
+
+    @setdoc.basic
+    def __contains__(self: Self, other: object, /) -> bool:
+        try:
+            return other in self.data
+        except TypeError:
+            return other in (x for x in self.data)  # type: ignore[operator]
+
+``__iter__() -> Iterator[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``iter(self)``.
+
+.. code-block:: python
+
+    @setdoc.basic
+    def __iter__(self: Self, /) -> Iterator[Item]:
+        return iter(self.data)
+
+``__len__() -> int``
+^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``len(self)``.
+
+.. code-block:: python
+
+    @setdoc.basic
+    def __len__(self: Self, /) -> int:
+        return len(self.data)
+
+``data: BaseDataCollection.Data[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract property is at the center of this class and of its descendants.
+
+``class datahold.base.BaseDataAbstractSet.BaseDataAbstractSet[Item]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataCollection[Item]`` and from ``Set[Item]``.
+It works analogously to ``BaseDataDict``.
+It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.base.BaseDataSet.BaseDataSet[Item: Hashable](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataAbstractSet[Item]``.
+It works analogously to ``BaseDataDict``.
+It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``type Data[DataItem] = frozenset[DataItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``type Init[DataItem] = Iterable[DataItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__repr__() -> str``
+^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``repr(self)``.
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``property`` is inherited from ``BaseDataCollection[Item]`` and reannotated.
+
+``difference(*others: Iterable[Hashable]) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``intersection(*others: Iterable[Hashable]) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``issubset(other: Iterable[Hashable], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``issuperset(other: Iterable[Hashable], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``symmetric_difference(other: Iterable[Item], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``union(*others: Iterable[Item]) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.base.BaseDataMapping.BaseDataMapping[Key, Value]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataCollection[Key]`` and ``Mapping[Key, Value]``.
+The type variables are forced by the fact that every ``dict`` can be made to take any ``str`` as a key or ``None`` as a value without having to pass them.
+It implements the non-mutating mapping operations of ``dict`` that are not already present in ``object``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class Data[DataKey, DataValue]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This protocol inherits from ``BaseDataCollection.Data[DataKey]`` and from ``Protocol``.
+
+``__getitem__(self: Self, key: Never, /) -> DataValue``
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``__getitem__(key: object, /) -> Value``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: object, /) -> Value:
+        try:
+            return self.data[key]  # type: ignore[index]
+        except TypeError:
+            raise KeyError(key) from None
+
+``data: Data[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``property`` is inherited from ``BaseDataCollection[Key]`` and reannotated.
+
+``class datahold.base.BaseDataDict.BaseDataDict[Key, Value](data: Init = (), /, **kwargs: Optional[Value])``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataMapping[Key | str, Optional[Value]]``.
+The type variables are forced by the fact that every ``dict`` can be made to take any ``str`` as a key or ``None`` as a value without having to pass them.
+It implements the non-mutating mapping operations of ``dict`` that are not already present in ``object``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``type Data[DataKey, DataValue] = frozendict[Key | str, Optional[Value]]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``type Init[InitKey, InitValue] = SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__or__(other: BaseDataDict[Key, Value], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__repr__() -> str``
+^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``repr(self)``.
+
+.. code-block:: python
+
+    def __repr__(self: Self, /) -> str:
+        return "%s(%r)" % (type(self).__name__, dict(self))
+
+``data: Data[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``property`` is inherited from ``BaseDataCollection[Key]`` and reannotated.
+
+``fromkeys(iterable: Iterable[Key | str], value: Optional[Value] = None, /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``fromkeys`` is the only ``classmethod`` of ``dict`` and therefore also of ``BaseDataDict``.
+
+``class datahold.base.BaseDataSequence.BaseDataSequence[Item]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataCollection[Item]`` and ``Sequence[Item]``.
+It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class Data[DataItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+This protocol inherits from ``BaseDataCollection.Data[DataItem]`` and from ``Protocol``.
+
+``__getitem__(key: int, /) -> DataItem`` ``__getitem__(key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[DataItem]``
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+``__getitem__(key: int, /) -> Item`` ``__getitem__(key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[Data]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: slice[Optional[int], Optional[int], Optional[int]], /) -> Sequence[Item]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: int | slice[Optional[int], Optional[int], Optional[int]], /
+    ) -> Item | Sequence[Item]:
+        return self.data[key]
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``property`` is inherited from ``BaseDataCollection`` and reannotated.
+
+``class datahold.base.BaseDataList.BaseDataList[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataSequence[Item]``.
+It has no classmethod to implement.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``type Data[DataItem] = tuple[DataItem, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``type Init[DataItem] = Iterable[DataItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__add__(other: BaseDataList[Item], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self + other``.
+
+``__eq__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self == other``.
+
+``__ge__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self >= other``.
+``__ge__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
+
+``__gt__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self > other``.
+``__gt__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
+
+``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[Optional[SupportsIndex], Optional[SupportsIndex], Optional[SupportsIndex]], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self[index]``.
+
+.. code-block:: python
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, index: slice[Optional[SupportsIndex], Optional[SupportsIndex], Optional[SupportsIndex]], /) -> Self: ...
+
+    @setdoc.basic
+    def __getitem__(
+        self: Self, index: SupportsIndex | slice[Optional[SupportsIndex], Optional[SupportsIndex], Optional[SupportsIndex]], /
+    ) -> Item | Self:
+        if isinstance(index, SupportsIndex):
+            return self.data[index]
+        else:
+            return type(self)(self.data[index])
+
+``__le__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self <= other``.
+``__le__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
+
+``__lt__(other: BaseDataList[Item], /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self < other``.
+``__lt__`` and all other rich comparison magic methods return ``NotImplemented``
+iff ``not isinstance(other, BaseDataList)``.
+
+``__mul__(other: SupportsIndex, /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self * other``.
+
+``__repr__() -> str``
+^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``repr(self)``.
+
+``__rmul__ = __mul__``
+^^^^^^^^^^^^^^^^^^^^^^
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``property`` is inherited from ``BaseDataCollection[Item]`` and reannotated.
+
+``class datahold.base.BaseHoldCollection.BaseHoldCollection[Item]``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract ``class`` inherits from ``BaseDataCollection[Item]``.
+
+``__slots__ = ("_data",)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``datahold.core``
+'''''''''''''''''
+
+The classes in ``datahold.core`` can also be accessed directly from ``datahold``.
+
+``class datahold.core.DataSet.DataSet[Item: Hashable](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``BaseDataSet[Item]``, from ``DataCollection[Item]``, and from ``MutableSet[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__iand__(other: BaseDataSet[Hashable], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__ior__(other: BaseDataSet[Item], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__isub__(other: BaseDataSet[Hashable], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__ixor__(other: BaseDataSet[Item], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``add(item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``clear() -> None``
+^^^^^^^^^^^^^^^^^^^
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+The setter accepts ``Init[Item]``.
+
+``difference_update(*others: Iterable[Hashable]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``discard(item: Hashable, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``intersection_update(*others: Iterable[Hashable]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``pop() -> Item``
+^^^^^^^^^^^^^^^^^
+
+``remove(item: Hashable, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``symmetric_difference_update(other: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``update(*others: Iterable[Item]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.core.DataDict.DataDict[Key, Value](data: Init[Key, Value] = (), /, **kwargs: Optional[Value])``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``BaseDataDict[Key, Value]``, from ``DataCollection[Key | str]``, and from ``collections.abc.MutableMapping[Key | str, Optional[Value]]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__delitem__(key: Key | str, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``del self[key]``.
+
+``__ior__(other: BaseDataDict[Key, Value], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self |= other``.
+
+``__setitem__(key: Key | str, value: Optional[Value], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self[key] = value``.
+
+``clear() -> None``
+^^^^^^^^^^^^^^^^^^^
+
+``data: Data[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The setter accepts ``Init[Key, Value]``.
+
+``pop(key: Hashable, /) -> Optional[Value]`` ``pop(key: Hashable, default: Value_, /) -> Optional[Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``popitem() -> tuple[Key | str, Optional[Value]]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``setdefault(key: Key | str, default: Optional[Value] = None, /) -> Optional[Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``update(other: Init[Key, Value] = (), /, **kwargs: Optional[Value]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.core.DataList.DataList[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``BaseDataList[Item]``, ``DataCollection[Item]``, and ``collections.abc.MutableSequence[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__delitem__(other: SupportsIndex | slice, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__iadd__(other: Iterable[Item], /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__imul__(other: SupportsIndex, /) -> Self``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__setitem__(key: SupportsIndex, value: Item, /) -> None`` ``__setitem__(key: slice, value: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``append(item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``clear() -> None``
+^^^^^^^^^^^^^^^^^^^
+
+``extend(iterable: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``insert(index: SupportsIndex, item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``pop(index: SupportsIndex = -1, /) -> Item``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``remove(item: object, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``reverse() -> None``
+^^^^^^^^^^^^^^^^^^^^^
+
+``sort(*, key: Any = None, reverse: bool = False) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.core.HoldSet.HoldSet[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``DataSet[Item]`` and from ``BaseHoldCollection[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Item]``.
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.core.HoldDict.HoldDict[Key, Value](data: Init[Key, Value] = (), /, **kwargs: Optional[Value])``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``DataDict[Key, Value]`` and from ``BaseHoldCollection[Key | str]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Key | str]``.
+
+``data: Data[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.core.HoldList.HoldList[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``DataList[Item]`` and from ``BaseHoldCollection[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Item]``.
+
+``data: Data[Item]``
+^^^^^^^^^^^^^^^^^^^^
+
+``datahold.frozen``
+'''''''''''''''''''
+
+The classes in ``datahold.frozen`` can also be accessed directly from ``datahold``.
+
+``class datahold.frozen.FrozenDataSet.FrozenDataSet[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``BaseDataSet[Item]`` and ``Hashable``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenDataList.FrozenDataList[Item](data: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``BaseDataList[Item]`` and ``Hashable``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenDataDict.FrozenDataDict[Key, Value](data: SupportsKeysAndGetitem[Key | str, Optional[Value]] | Iterable[tuple[Key | str, Optional[Value]]] = (), /, **kwargs: Optional[Value])``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``BaseDataDict[Key, Value]`` and ``Hashable``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``class datahold.frozen.FrozenHoldSet.FrozenHoldSet[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``FrozenDataSet[Item]`` and from ``BaseHoldCollection[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Item]``.
+
+``class datahold.frozen.FrozenHoldList.FrozenHoldList[Item](data: Init[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``FrozenDataList[Item]`` and from ``BaseHoldCollection[Item]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Item]``.
+
+``class datahold.frozen.FrozenHoldDict.FrozenHoldDict[Key, Value](data: Init[Key, Value] = (), /, **kwargs: Optional[Value])``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This class inherits from ``FrozenDataDict[Key, Value]`` and from ``BaseHoldCollection[Key | str]``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+The slot layout of the class is dictated by ``BaseHoldCollection[Key | str]``.
+
+Testing
+-------
+
+This project can be tested through its ``run_tests.py`` script
+which runs the tests in its ``tests/`` dir.
+
+License
+-------
+
+This project is licensed under the MIT License.
+
+Links
+-----
+
+- Download: https://pypi.org/project/datahold/#files
+- Index: https://pypi.org/project/datahold/
+- Source: https://github.com/johannes-programming/datahold/
+- Website: https://datahold.johannes-programming.online/
+
+Impressum
+---------
+
+**Johannes Programming**
+
+- Name: Johannes
+- Email: johannes.programming@gmail.com
+- Homepage: https://www.johannes-programming.online/
+- Gravatar: https://www.johannes-programming.fyi/
