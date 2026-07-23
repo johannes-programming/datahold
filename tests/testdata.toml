@@ -4,33 +4,65 @@ METHODS = [
     "__str__",
 ]
 
+[types.BaseDataAbstractSet]
+dirData = [
+    "__contains__",
+    "__iter__",
+    "__len__",
+]
+
 [types.BaseDataAbstractSet.parents]
 BaseDataCollection = true
 Hashable = false
+
+[types.BaseDataCollection]
+dirData = [
+    "__contains__",
+    "__iter__",
+    "__len__",
+]
 
 [types.BaseDataCollection.parents]
 Collection = true
 Hashable = true
 
+[types.BaseDataDict]
+dirData = []
+
 [types.BaseDataDict.parents]
 Hashable = false
 Mapping = true
+
+[types.BaseDataList]
+dirData = []
 
 [types.BaseDataList.parents]
 Hashable = false
 Sequence = true
 
+[types.BaseDataMapping]
+dirData = []
+
 [types.BaseDataMapping.parents]
 BaseDataCollection = true
 Hashable = false
+
+[types.BaseDataSequence]
+dirData = []
 
 [types.BaseDataSequence.parents]
 BaseDataCollection = true
 Hashable = true
 
+[types.BaseDataSet]
+dirData = []
+
 [types.BaseDataSet.parents]
 Hashable = false
 Set = true
+
+[types.BaseHoldCollection]
+dirData = []
 
 [types.BaseHoldCollection.parents]
 BaseDataCollection = true
@@ -38,6 +70,7 @@ Hashable = true
 
 [types.DataDict]
 Data = "frozendict"
+dirData = []
 isabstract = true
 n_type_params = 2
 
@@ -50,6 +83,7 @@ MutableMapping = true
 
 [types.DataList]
 Data = "tuple"
+dirData = []
 isabstract = true
 n_type_params = 1
 
@@ -63,6 +97,7 @@ Sequence = true
 
 [types.DataSet]
 Data = "frozenset"
+dirData = []
 isabstract = true
 n_type_params = 1
 
@@ -76,21 +111,27 @@ Set = true
 
 [types.FrozenDataDict]
 Data = "frozendict"
+dirData = []
 isabstract = true
 
 [types.FrozenDataDict.parents]
 
 [types.FrozenDataList]
 Data = "tuple"
+dirData = []
 isabstract = true
 
 [types.FrozenDataList.parents]
 
 [types.FrozenDataSet]
 Data = "frozenset"
+dirData = []
 isabstract = true
 
 [types.FrozenDataSet.parents]
+
+[types.FrozenHoldDict]
+dirData = []
 
 [types.FrozenHoldDict.constructor.concrete]
 args = [
@@ -103,6 +144,9 @@ a = 1
 [types.FrozenHoldDict.parents]
 Mapping = true
 MutableMapping = false
+
+[types.FrozenHoldList]
+dirData = []
 
 [types.FrozenHoldList.constructor.concrete]
 args = [
@@ -117,6 +161,9 @@ repr = "FrozenHoldList([1, 2])"
 FrozenDataList = true
 MutableSequence = false
 Sequence = true
+
+[types.FrozenHoldSet]
+dirData = []
 
 [types.FrozenHoldSet.constructor.concrete]
 args = [
@@ -133,6 +180,7 @@ Set = true
 
 [types.HoldDict]
 Data = "frozendict"
+dirData = []
 n_type_params = 2
 
 [types.HoldDict.constructor.concrete.kwargs]
@@ -149,6 +197,7 @@ MutableMapping = true
 
 [types.HoldList]
 Data = "tuple"
+dirData = []
 n_type_params = 1
 
 [types.HoldList.constructor.empty]
@@ -178,6 +227,7 @@ Sequence = true
 
 [types.HoldSet]
 Date = "frozenset"
+dirData = []
 n_type_params = 1
 
 [types.HoldSet.constructor.empty]

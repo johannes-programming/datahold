@@ -3,6 +3,7 @@ __all__: list[str] = [
     "TestCollection",
     "TestConstructor",
     "TestData",
+    "TestDirData",
     "TestGeneric",
     "TestHasCopy",
     "TestParents",
@@ -167,6 +168,40 @@ class TestData(unittest.TestCase):
             return
         with self.assertRaises(AttributeError):
             obj.foo = 42
+
+
+class TestDirData(unittest.TestCase):
+    def go_dirData(self: Self, x: Any, /, **y: Any) -> None:
+        cls = getattr(datahold, x)
+        dirData = y.get("dirData")
+        if dirData is None:
+            return
+        for z in dirData:
+            self.assertTrue(hasattr(cls.Data, z))
+
+    def go_init(self: Self, x: str, /) -> None:
+        cls: Any
+        cls = getattr(datahold, x)
+        self.assertEqual(
+            "__fget__" in cls.__dict__,
+            "Data" in cls.__dict__ or not ins.isabstract(cls),
+        )
+        if "__fset__" in cls.__dict__:
+            self.assertIn("__fget__", cls.__dict__)
+        self.assertEqual(
+            "Init" in cls.__dict__,
+            "__init__" in cls.__dict__,
+        )
+        self.assertNotEqual(
+            hasattr(cls, "Init"),
+            cls.__init__ is object.__init__,
+        )
+
+    def test_types(self: Self) -> None:
+        for x, y in Lazy.lazy.types.items():
+            with self.subTest(type=x):
+                self.go_dirData(x, **y)
+                self.go_init(x)
 
 
 class TestGeneric(unittest.TestCase):

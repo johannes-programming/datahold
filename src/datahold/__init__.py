@@ -134,7 +134,7 @@ class BaseDataSet[Item: abc.Hashable](BaseDataAbstractSet[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> set[Item]: ...
+    def __fget__(self: Self) -> Data[Item]: ...
 
     @abstractmethod
     @setdoc.basic
@@ -213,18 +213,6 @@ class DataSet[Item: abc.Hashable](
     """Provide easy abc for custom mutable set-like."""
 
     __slots__ = ()
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> DataSet.Data[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(
-        self: Self,
-        value: DataSet.Data[Item],
-        /,
-    ) -> None: ...
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
@@ -339,6 +327,10 @@ class BaseDataDict[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
+    def __fget__(self: Self) -> Data[Key, Value]: ...
+
+    @abstractmethod
+    @setdoc.basic
     def __fset__(self: Self, data: Data[Key, Value], /) -> None: ...
 
     @setdoc.basic
@@ -368,10 +360,6 @@ class BaseDataDict[Key: abc.Hashable, Value](
         return f"{type(self).__name__}({dict(self)!r})"
 
     # __ror__ is unnecessary because of how __or__ is defined
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Key, Value]: ...
 
     @classmethod
     @setdoc.basic
@@ -428,14 +416,6 @@ class DataDict[Key: abc.Hashable, Value](
         data = self.__fget__()
         del data[key]
         self.__fset__(data)
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> DataDict.Data[Key, Value]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: DataDict.Data[Key, Value], /) -> None: ...
 
     @setdoc.basic
     def __ior__(
@@ -568,7 +548,11 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __fset__(self: Self, value: list[Item], /) -> None: ...
+    def __fget__(self: Self) -> Data[Item]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: Data[Item], /) -> None: ...
 
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
@@ -629,10 +613,6 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     __rmul__ = __mul__
 
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
-
 
 class FrozenDataList[Item](
     BaseDataList[Item],
@@ -680,18 +660,6 @@ class DataList[Item](
         data = self.__fget__()
         del data[other]
         self.__fset__(data)
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> DataList.Data[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(
-        self: Self,
-        value: DataList.Data[Item],
-        /,
-    ) -> None: ...
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
