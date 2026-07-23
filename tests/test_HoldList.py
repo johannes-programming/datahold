@@ -1,6 +1,6 @@
 __all__: list[str] = ["TestHoldList"]
 import unittest
-from typing import Self
+from typing import Any, Self
 
 from datahold import HoldList
 
@@ -8,19 +8,23 @@ from datahold import HoldList
 class TestHoldList(unittest.TestCase):
 
     def setUp(self: Self) -> None:
+        self.obj: HoldList[int]
+        self.other: HoldList[int]
+        self.same: HoldList[int]
         self.obj = HoldList([1, 2, 3])
         self.same = HoldList([1, 2, 3])
         self.other = HoldList([1, 2, 4])
 
     # __init__
     def test_init(self: Self) -> None:
+        obj: HoldList[int]
         obj = HoldList([42])
-        self.assertEqual(obj.__fget__(), (42,))
+        self.assertEqual(obj.__fget__(), [42])
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), tuple)
-        self.assertEqual(self.obj.__fget__(), (1, 2, 3))
+        self.assertIsInstance(self.obj.__fget__(), list)
+        self.assertEqual(self.obj.__fget__(), [1, 2, 3])
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -40,7 +44,7 @@ class TestHoldList(unittest.TestCase):
     # __delitem__
     def test_delitem(self: Self) -> None:
         del self.obj[1]
-        self.assertEqual(self.obj.__fget__(), (1, 3))
+        self.assertEqual(self.obj.__fget__(), [1, 3])
 
     # __iter__
     def test_iter(self: Self) -> None:
@@ -62,21 +66,25 @@ class TestHoldList(unittest.TestCase):
 
     # __lt__
     def test_lt(self: Self) -> None:
+        expected: bool
         expected = self.obj.__fget__() < self.other.__fget__()
         self.assertEqual(self.obj < self.other, expected)
 
     # __le__
     def test_le(self: Self) -> None:
+        expected: bool
         expected = self.obj.__fget__() <= self.same.__fget__()
         self.assertEqual(self.obj <= self.same, expected)
 
     # __gt__
     def test_gt(self: Self) -> None:
+        expected: bool
         expected = self.other.__fget__() > self.obj.__fget__()
         self.assertEqual(self.other > self.obj, expected)
 
     # __ge__
     def test_ge(self: Self) -> None:
+        expected: bool
         expected = self.same.__fget__() >= self.obj.__fget__()
         self.assertEqual(self.same >= self.obj, expected)
 
@@ -90,7 +98,6 @@ class TestHoldList(unittest.TestCase):
     # append
     def test_append(self: Self) -> None:
         self.obj.append(4)
-
         self.assertEqual(
             self.obj,
             HoldList([1, 2, 3, 4]),
@@ -99,7 +106,6 @@ class TestHoldList(unittest.TestCase):
     # extend
     def test_extend(self: Self) -> None:
         self.obj.extend([4, 5])
-
         self.assertEqual(
             self.obj,
             HoldList([1, 2, 3, 4, 5]),
@@ -108,7 +114,6 @@ class TestHoldList(unittest.TestCase):
     # insert
     def test_insert(self: Self) -> None:
         self.obj.insert(1, 99)
-
         self.assertEqual(
             self.obj,
             HoldList([1, 99, 2, 3]),
@@ -117,7 +122,6 @@ class TestHoldList(unittest.TestCase):
     # remove
     def test_remove(self: Self) -> None:
         self.obj.remove(2)
-
         self.assertEqual(
             self.obj,
             HoldList([1, 3]),
@@ -125,8 +129,8 @@ class TestHoldList(unittest.TestCase):
 
     # pop
     def test_pop(self: Self) -> None:
+        value: Any
         value = self.obj.pop()
-
         self.assertEqual(value, 3)
         self.assertEqual(
             self.obj,
@@ -136,7 +140,6 @@ class TestHoldList(unittest.TestCase):
     # clear
     def test_clear(self: Self) -> None:
         self.obj.clear()
-
         self.assertEqual(len(self.obj), 0)
 
     # index
@@ -148,8 +151,8 @@ class TestHoldList(unittest.TestCase):
 
     # count
     def test_count(self: Self) -> None:
+        obj: HoldList[int]
         obj = HoldList([1, 2, 2, 3])
-
         self.assertEqual(
             obj.count(2),
             2,
@@ -158,7 +161,6 @@ class TestHoldList(unittest.TestCase):
     # reverse
     def test_reverse(self: Self) -> None:
         self.obj.reverse()
-
         self.assertEqual(
             self.obj,
             HoldList([3, 2, 1]),
@@ -166,10 +168,9 @@ class TestHoldList(unittest.TestCase):
 
     # sort
     def test_sort(self: Self) -> None:
+        obj: HoldList[int]
         obj = HoldList([3, 1, 2])
-
         obj.sort()
-
         self.assertEqual(
             obj,
             HoldList([1, 2, 3]),
@@ -177,14 +178,15 @@ class TestHoldList(unittest.TestCase):
 
     # copy
     def test_copy(self: Self) -> None:
+        result: HoldList[Any]
         result = self.obj.copy()
-
         self.assertIsInstance(result, HoldList)
         self.assertEqual(result, self.obj)
         self.assertIsNot(result, self.obj)
 
     # __add__
     def test_add(self: Self) -> None:
+        result: HoldList[int]
         result = HoldList([1, 2]) + HoldList([3, 4])
         self.assertEqual(
             result,
@@ -193,6 +195,7 @@ class TestHoldList(unittest.TestCase):
 
     # __mul__
     def test_mul(self: Self) -> None:
+        result: HoldList[int]
         result = HoldList([1, 2]) * 2
         self.assertEqual(
             result,
@@ -201,6 +204,7 @@ class TestHoldList(unittest.TestCase):
 
     # __rmul__
     def test_rmul(self: Self) -> None:
+        result: HoldList[int]
         result = 2 * HoldList([1, 2])
         self.assertEqual(
             result,

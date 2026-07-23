@@ -19,7 +19,7 @@ class TestMutableBehavior(unittest.TestCase):
         x = HoldList([1, 2])
         x.append(3)
         self.assertEqual(list(x), [1, 2, 3])
-        self.assertEqual(x.__fget__(), (1, 2, 3))
+        self.assertEqual(x.__fget__(), [1, 2, 3])
 
     def test_hold_set_mutates_and_syncs_data(self: Self) -> None:
         s: HoldSet[Any]

@@ -1,6 +1,6 @@
 __all__: list[str] = ["TestFrozenHoldLists"]
 import unittest
-from typing import Self
+from typing import Any, Self
 
 from datahold import FrozenHoldList
 
@@ -14,13 +14,14 @@ class TestFrozenHoldList(unittest.TestCase):
 
     # __init__
     def test_init(self: Self) -> None:
+        obj: FrozenHoldList[int]
         obj = FrozenHoldList([42])
-        self.assertEqual(obj.__fget__(), (42,))
+        self.assertEqual(obj.__fget__(), [42])
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), tuple)
-        self.assertEqual(self.obj.__fget__(), (1, 2, 3))
+        self.assertIsInstance(self.obj.__fget__(), list)
+        self.assertEqual(self.obj.__fget__(), [1, 2, 3])
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -33,6 +34,7 @@ class TestFrozenHoldList(unittest.TestCase):
         self.assertEqual(self.obj[-1], 3)
 
     def test_getitem_slice(self: Self) -> None:
+        result: Any
         result = self.obj[1:]
         self.assertEqual(result, FrozenHoldList([2, 3]))
         self.assertEqual(list(result), [2, 3])
@@ -57,33 +59,37 @@ class TestFrozenHoldList(unittest.TestCase):
 
     # __lt__
     def test_lt(self: Self) -> None:
+        expected: bool
         expected = self.obj.__fget__() < self.other.__fget__()
         self.assertEqual(self.obj < self.other, expected)
 
     # __le__
     def test_le(self: Self) -> None:
+        expected: bool
         expected = self.obj.__fget__() <= self.same.__fget__()
         self.assertEqual(self.obj <= self.same, expected)
 
     # __gt__
     def test_gt(self: Self) -> None:
+        expected: bool
         expected = self.other.__fget__() > self.obj.__fget__()
         self.assertEqual(self.other > self.obj, expected)
 
     # __ge__
     def test_ge(self: Self) -> None:
+        expected: bool
         expected = self.obj.__fget__() >= self.same.__fget__()
         self.assertEqual(self.obj >= self.same, expected)
 
     # __hash__
     def test_hash(self: Self) -> None:
-        self.assertEqual(hash(self.obj), hash(self.obj.__fget__()))
+        self.assertEqual(hash(self.obj), hash(tuple(self.obj.__fget__())))
         self.assertEqual(hash(self.obj), hash(self.same))
 
     # __add__
     def test_add(self: Self) -> None:
+        result: Any
         result = self.obj + FrozenHoldList([4, 5])
-
         self.assertIsInstance(result, FrozenHoldList)
         self.assertEqual(
             result,
@@ -92,8 +98,8 @@ class TestFrozenHoldList(unittest.TestCase):
 
     # __mul__
     def test_mul(self: Self) -> None:
+        result: Any
         result = self.obj * 2
-
         self.assertIsInstance(result, FrozenHoldList)
         self.assertEqual(
             result,
@@ -102,8 +108,8 @@ class TestFrozenHoldList(unittest.TestCase):
 
     # __rmul__
     def test_rmul(self: Self) -> None:
+        result: Any
         result = 2 * self.obj
-
         self.assertIsInstance(result, FrozenHoldList)
         self.assertEqual(
             result,
@@ -126,15 +132,14 @@ class TestFrozenHoldList(unittest.TestCase):
 
     # count
     def test_count(self: Self) -> None:
+        obj: FrozenHoldList[int]
         obj = FrozenHoldList([1, 2, 1, 3, 1])
-
         self.assertEqual(obj.count(1), 3)
         self.assertEqual(obj.count(99), 0)
 
     # index
     def test_index(self: Self) -> None:
         self.assertEqual(self.obj.index(2), 1)
-
         with self.assertRaises(ValueError):
             self.obj.index(99)
 

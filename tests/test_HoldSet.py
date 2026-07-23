@@ -7,19 +7,23 @@ from datahold import HoldSet
 class TestHoldSet(unittest.TestCase):
 
     def setUp(self: Self) -> None:
-        self.obj: Any = HoldSet({1, 2, 3})
-        self.same: Any = HoldSet({1, 2, 3})
-        self.other: Any = HoldSet({3, 4, 5})
+        self.obj: Any
+        self.other: Any
+        self.same: Any
+        self.obj = HoldSet({1, 2, 3})
+        self.other = HoldSet({3, 4, 5})
+        self.same = HoldSet({1, 2, 3})
 
     # __init__
     def test_init(self: Self) -> None:
-        obj: Any = HoldSet([1, 2, 3])
-        self.assertEqual(obj.__fget__(), frozenset({1, 2, 3}))
+        obj: Any
+        obj = HoldSet([1, 2, 3])
+        self.assertEqual(obj.__fget__(), {1, 2, 3})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), frozenset)
-        self.assertEqual(self.obj.__fget__(), frozenset({1, 2, 3}))
+        self.assertIsInstance(self.obj.__fget__(), set)
+        self.assertEqual(self.obj.__fget__(), {1, 2, 3})
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -64,8 +68,8 @@ class TestHoldSet(unittest.TestCase):
 
     # __or__
     def test_or(self: Self) -> None:
-        result: Any = HoldSet({1, 2}) | HoldSet({2, 3})
-
+        result: Any
+        result = HoldSet({1, 2}) | HoldSet({2, 3})
         self.assertIsInstance(result, HoldSet)
         self.assertEqual(
             result,
@@ -74,8 +78,8 @@ class TestHoldSet(unittest.TestCase):
 
     # __and__
     def test_and(self: Self) -> None:
-        result: Any = HoldSet({1, 2, 3}) & HoldSet({2, 3, 4})
-
+        result: Any
+        result = HoldSet({1, 2, 3}) & HoldSet({2, 3, 4})
         self.assertEqual(
             result,
             HoldSet({2, 3}),
@@ -83,8 +87,8 @@ class TestHoldSet(unittest.TestCase):
 
     # __sub__
     def test_sub(self: Self) -> None:
-        result: Any = HoldSet({1, 2, 3}) - HoldSet({2})
-
+        result: Any
+        result = HoldSet({1, 2, 3}) - HoldSet({2})
         self.assertEqual(
             result,
             HoldSet({1, 3}),
@@ -92,8 +96,8 @@ class TestHoldSet(unittest.TestCase):
 
     # __xor__
     def test_xor(self: Self) -> None:
-        result: Any = HoldSet({1, 2, 3}) ^ HoldSet({3, 4})
-
+        result: Any
+        result = HoldSet({1, 2, 3}) ^ HoldSet({3, 4})
         self.assertEqual(
             result,
             HoldSet({1, 2, 4}),
@@ -109,7 +113,6 @@ class TestHoldSet(unittest.TestCase):
     # add
     def test_add(self: Self) -> None:
         self.obj.add(4)
-
         self.assertEqual(
             self.obj,
             HoldSet({1, 2, 3, 4}),
@@ -118,7 +121,6 @@ class TestHoldSet(unittest.TestCase):
     # remove
     def test_remove(self: Self) -> None:
         self.obj.remove(2)
-
         self.assertEqual(
             self.obj,
             HoldSet({1, 3}),
@@ -128,7 +130,6 @@ class TestHoldSet(unittest.TestCase):
     def test_discard(self: Self) -> None:
         self.obj.discard(2)
         self.obj.discard(999)
-
         self.assertEqual(
             self.obj,
             HoldSet({1, 3}),
@@ -136,21 +137,19 @@ class TestHoldSet(unittest.TestCase):
 
     # pop
     def test_pop(self: Self) -> None:
-        value: Any = self.obj.pop()
-
+        value: Any
+        value = self.obj.pop()
         self.assertNotIn(value, self.obj)
         self.assertEqual(len(self.obj), 2)
 
     # clear
     def test_clear(self: Self) -> None:
         self.obj.clear()
-
         self.assertEqual(len(self.obj), 0)
 
     # update
     def test_update(self: Self) -> None:
         self.obj.update({4, 5})
-
         self.assertEqual(
             self.obj,
             HoldSet({1, 2, 3, 4, 5}),
@@ -158,8 +157,8 @@ class TestHoldSet(unittest.TestCase):
 
     # union
     def test_union(self: Self) -> None:
-        result: Any = self.obj.union({4, 5})
-
+        result: Any
+        result = self.obj.union({4, 5})
         self.assertIsInstance(result, HoldSet)
         self.assertEqual(
             result,
@@ -168,8 +167,8 @@ class TestHoldSet(unittest.TestCase):
 
     # intersection
     def test_intersection(self: Self) -> None:
-        result: Any = self.obj.intersection({2, 3, 4})
-
+        result: Any
+        result = self.obj.intersection({2, 3, 4})
         self.assertEqual(
             result,
             HoldSet({2, 3}),
@@ -177,8 +176,8 @@ class TestHoldSet(unittest.TestCase):
 
     # difference
     def test_difference(self: Self) -> None:
-        result: Any = self.obj.difference({2})
-
+        result: Any
+        result = self.obj.difference({2})
         self.assertEqual(
             result,
             HoldSet({1, 3}),
@@ -186,8 +185,8 @@ class TestHoldSet(unittest.TestCase):
 
     # symmetric_difference
     def test_symmetric_difference(self: Self) -> None:
-        result: Any = self.obj.symmetric_difference({3, 4})
-
+        result: Any
+        result = self.obj.symmetric_difference({3, 4})
         self.assertEqual(
             result,
             HoldSet({1, 2, 4}),
@@ -209,8 +208,8 @@ class TestHoldSet(unittest.TestCase):
 
     # copy
     def test_copy(self: Self) -> None:
-        result: Any = self.obj.copy()
-
+        result: Any
+        result = self.obj.copy()
         self.assertIsInstance(result, HoldSet)
         self.assertEqual(result, self.obj)
         self.assertIsNot(result, self.obj)
@@ -221,17 +220,14 @@ class TestHoldSet(unittest.TestCase):
             {1, 2} | HoldSet({2, 3}),
             HoldSet({1, 2, 3}),
         )
-
         self.assertEqual(
             {1, 2} & HoldSet({2, 3}),
             HoldSet({2}),
         )
-
         self.assertEqual(
             {1, 2} - HoldSet({2}),
             HoldSet({1}),
         )
-
         self.assertEqual(
             {1, 2} ^ HoldSet({2, 3}),
             HoldSet({1, 3}),

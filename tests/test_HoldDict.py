@@ -8,13 +8,17 @@ from datahold import HoldDict
 class TestHoldDict(unittest.TestCase):
 
     def setUp(self: Self) -> None:
-        self.obj: Any = HoldDict({"a": 1, "b": 2})
-        self.same: Any = HoldDict({"a": 1, "b": 2})
-        self.other: Any = HoldDict({"a": 1, "b": 3})
+        self.obj: Any
+        self.other: Any
+        self.same: Any
+        self.obj = HoldDict({"a": 1, "b": 2})
+        self.same = HoldDict({"a": 1, "b": 2})
+        self.other = HoldDict({"a": 1, "b": 3})
 
     # __init__
     def test_init(self: Self) -> None:
-        obj: Any = HoldDict({"x": 42})
+        obj: Any
+        obj = HoldDict({"x": 42})
         self.assertEqual(obj.__fget__(), {"x": 42})
 
     # data property
@@ -61,8 +65,8 @@ class TestHoldDict(unittest.TestCase):
 
     # __or__
     def test_or(self: Self) -> None:
-        result: Any = HoldDict({"a": 1}) | HoldDict({"b": 2})
-
+        result: Any
+        result = HoldDict({"a": 1}) | HoldDict({"b": 2})
         self.assertIsInstance(result, HoldDict)
         self.assertEqual(
             result,
@@ -78,8 +82,8 @@ class TestHoldDict(unittest.TestCase):
 
     # fromkeys
     def test_fromkeys(self: Self) -> None:
-        result: Any = HoldDict.fromkeys(["x", "y"], 123)
-
+        result: Any
+        result = HoldDict.fromkeys(["x", "y"], 123)
         self.assertIsInstance(result, HoldDict)
         self.assertEqual(
             result,
@@ -126,7 +130,8 @@ class TestHoldDict(unittest.TestCase):
 
     # setdefault
     def test_setdefault(self: Self) -> None:
-        value: Any = self.obj.setdefault("c", 3)
+        value: Any
+        value = self.obj.setdefault("c", 3)
         self.assertEqual(value, 3)
         self.assertEqual(self.obj["c"], 3)
 

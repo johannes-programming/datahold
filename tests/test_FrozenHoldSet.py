@@ -15,12 +15,12 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj = FrozenHoldSet([1, 2, 3])
-        self.assertEqual(obj.__fget__(), frozenset({1, 2, 3}))
+        self.assertEqual(obj.__fget__(), {1, 2, 3})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), frozenset)
-        self.assertEqual(self.obj.__fget__(), frozenset({1, 2, 3}))
+        self.assertIsInstance(self.obj.__fget__(), set)
+        self.assertEqual(self.obj.__fget__(), {1, 2, 3})
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -66,12 +66,11 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __hash__
     def test_hash(self: Self) -> None:
         self.assertEqual(hash(self.obj), hash(self.same))
-        self.assertEqual(hash(self.obj), hash(self.obj.__fget__()))
+        self.assertEqual(hash(self.obj), hash(frozenset(self.obj.__fget__())))
 
     # __or__
     def test_or(self: Self) -> None:
         result = FrozenHoldSet({1, 2}) | FrozenHoldSet({2, 3})
-
         self.assertIsInstance(result, FrozenHoldSet)
         self.assertEqual(
             result,
@@ -88,7 +87,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # union
     def test_union(self: Self) -> None:
         result = self.obj.union({4, 5})
-
         self.assertIsInstance(result, FrozenHoldSet)
         self.assertEqual(
             result,
@@ -98,7 +96,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # intersection
     def test_intersection(self: Self) -> None:
         result = self.obj.intersection({2, 3, 4})
-
         self.assertEqual(
             result,
             FrozenHoldSet({2, 3}),
@@ -107,7 +104,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # difference
     def test_difference(self: Self) -> None:
         result = self.obj.difference({2})
-
         self.assertEqual(
             result,
             FrozenHoldSet({1, 3}),
@@ -116,7 +112,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # symmetric_difference
     def test_symmetric_difference(self: Self) -> None:
         result = self.obj.symmetric_difference({3, 4})
-
         self.assertEqual(
             result,
             FrozenHoldSet({1, 2, 4}),
@@ -146,7 +141,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __and__
     def test_and(self: Self) -> None:
         result = FrozenHoldSet({1, 2, 3}) & FrozenHoldSet({2, 3, 4})
-
         self.assertEqual(
             result,
             FrozenHoldSet({2, 3}),
@@ -155,7 +149,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __sub__
     def test_sub(self: Self) -> None:
         result = FrozenHoldSet({1, 2, 3}) - FrozenHoldSet({2})
-
         self.assertEqual(
             result,
             FrozenHoldSet({1, 3}),
@@ -164,7 +157,6 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __xor__
     def test_xor(self: Self) -> None:
         result = FrozenHoldSet({1, 2, 3}) ^ FrozenHoldSet({3, 4})
-
         self.assertEqual(
             result,
             FrozenHoldSet({1, 2, 4}),
