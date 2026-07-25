@@ -17,6 +17,7 @@ import io
 import tomllib
 import unittest
 from functools import cached_property
+from importlib import import_module
 from pathlib import Path
 from typing import Any, Self, TypeAliasType, cast, get_args, get_origin
 
@@ -43,13 +44,16 @@ class Lazy(enum.Enum):
             return tomllib.load(stream)
 
     @classmethod
+    def get_import(cls: type[Self], qualname: str) -> type[Any]:
+        module: Any
+        parts: list[str]
+        parts = qualname.split(".")
+        module = import_module(".".join(parts[:-1]))
+        return cast(type[Any], getattr(module, parts[-1]))
+
+    @classmethod
     def get_type(cls: type[Self], typename: str) -> type[Any]:
-        ans: Any
-        if typename in collections.abc.__all__:
-            ans = getattr(collections.abc, typename)
-        else:
-            ans = getattr(datahold, typename)
-        return cast(type[Any], ans)
+        return cast(type[Any], getattr(datahold, typename))
 
     @cached_property
     def test_object(self: Self) -> dict[str, Any]:
@@ -102,8 +106,6 @@ class TestCollection(unittest.TestCase):
         typename: str
         for typename in Lazy.lazy.types.keys():
             cls = Lazy.get_type(typename=typename)
-            if cls is None:
-                raise Exception
             self._test_cls(cls)
 
 
@@ -133,7 +135,7 @@ class TestConstructor(unittest.TestCase):
         self.assertIn(info.get("repr"), [None, repr(obj)])
         self.assertIn(info.get("str"), [None, str(obj)])
         for x, y in info.get("parents", {}).items():
-            parenttype = Lazy.get_type(x)
+            parenttype = Lazy.get_import(x)
             self.assertEqual(isinstance(obj, parenttype), y)
 
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
@@ -147,7 +149,7 @@ class TestConstructor(unittest.TestCase):
 
     def test_abstract_classes(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():
-            with self.subTest(typename=typename):
+            with self.subTest(type=typename):
                 self.go_types(typename, **kwargs)
 
 
@@ -303,7 +305,7 @@ class TestParents(unittest.TestCase):
         if cls is None:
             raise Exception
         for x, y in kwargs.get("parents", {}).items():
-            parenttype = Lazy.get_type(x)
+            parenttype = Lazy.get_import(x)
             self.assertEqual(issubclass(cls, parenttype), y, x)
 
     def test_parents(self: Self) -> None:

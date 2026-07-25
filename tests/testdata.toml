@@ -12,8 +12,8 @@ dirData = [
 ]
 
 [types.BaseDataAbstractSet.parents]
-BaseDataCollection = true
-Hashable = false
+"collections.abc.Hashable" = false
+"datahold.BaseDataCollection" = true
 
 [types.BaseDataCollection]
 dirData = [
@@ -23,29 +23,29 @@ dirData = [
 ]
 
 [types.BaseDataCollection.parents]
-Collection = true
-Hashable = true
+"collections.abc.Collection" = true
+"collections.abc.Hashable" = true
 
 [types.BaseDataDict]
 dirData = []
 
 [types.BaseDataDict.parents]
-Hashable = false
-Mapping = true
+"collections.abc.Hashable" = false
+"collections.abc.Mapping" = true
 
 [types.BaseDataList]
 dirData = []
 
 [types.BaseDataList.parents]
-Hashable = false
-Sequence = true
+"collections.abc.Hashable" = false
+"collections.abc.Sequence" = true
 
 [types.BaseDataMapping]
 dirData = []
 
 [types.BaseDataMapping.parents]
-BaseDataCollection = true
-Hashable = false
+"collections.abc.Hashable" = false
+"datahold.BaseDataCollection" = true
 
 [types.BaseDataSequence]
 dirData = [
@@ -56,16 +56,16 @@ dirData = [
 ]
 
 [types.BaseDataSequence.parents]
-BaseDataCollection = true
-Hashable = true
+"collections.abc.Hashable" = true
+"datahold.BaseDataCollection" = true
 
 [types.BaseDataSet]
 dirData = []
 
 [types.BaseDataSet.parents]
-BaseDataAbstractSet = true
-Hashable = false
-Set = true
+"collections.abc.Hashable" = false
+"collections.abc.Set" = true
+"datahold.BaseDataAbstractSet" = true
 
 [types.DataDict]
 Data = "frozendict"
@@ -77,9 +77,9 @@ n_type_params = 2
 valid = false
 
 [types.DataDict.parents]
-BaseDataDict = true
-BaseDataMapping = true
-MutableMapping = true
+"collections.abc.MutableMapping" = true
+"datahold.BaseDataDict" = true
+"datahold.BaseDataMapping" = true
 
 [types.DataList]
 Data = "tuple"
@@ -91,9 +91,9 @@ n_type_params = 1
 valid = false
 
 [types.DataList.parents]
-BaseDataList = true
-MutableSequence = true
-Sequence = true
+"collections.abc.MutableSequence" = true
+"collections.abc.Sequence" = true
+"datahold.BaseDataList" = true
 
 [types.DataSet]
 Data = "frozenset"
@@ -105,9 +105,9 @@ n_type_params = 1
 valid = false
 
 [types.DataSet.parents]
-BaseDataSet = true
-MutableSet = true
-Set = true
+"collections.abc.MutableSet" = true
+"collections.abc.Set" = true
+"datahold.BaseDataSet" = true
 
 [types.FrozenDataDict]
 Data = "frozendict"
@@ -115,8 +115,8 @@ dirData = []
 isabstract = true
 
 [types.FrozenDataDict.parents]
-BaseDataDict = true
-FrozenDataMapping = true
+"datahold.BaseDataDict" = true
+"datahold.FrozenDataMapping" = true
 
 [types.FrozenDataList]
 Data = "tuple"
@@ -129,8 +129,8 @@ isabstract = true
 dirData = []
 
 [types.FrozenDataMapping.parents]
-BaseDataMapping = true
-Hashable = true
+"collections.abc.Hashable" = true
+"datahold.BaseDataMapping" = true
 
 [types.FrozenDataSet]
 Data = "frozenset"
