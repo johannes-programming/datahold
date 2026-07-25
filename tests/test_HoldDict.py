@@ -8,12 +8,12 @@ import unittest
 from collections import abc
 from typing import Any, Self, cast
 
-from datahold import BaseHoldObject, DataDict
+from datahold import BaseHoldObject, MutableDictLike
 
 
 class HoldDict[Key: abc.Hashable, Value](
-    BaseHoldObject[DataDict.Data[Key, Value]],
-    DataDict[Key, Value],
+    BaseHoldObject[MutableDictLike.Data[Key, Value]],
+    MutableDictLike[Key, Value],
 ):
     """Provide usable mutable dict-like with slots."""
 

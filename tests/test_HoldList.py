@@ -7,12 +7,12 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import BaseHoldObject, DataList
+from datahold import BaseHoldObject, MutableListLike
 
 
 class HoldList[Item](
-    BaseHoldObject[DataList.Data[Item]],
-    DataList[Item],
+    BaseHoldObject[MutableListLike.Data[Item]],
+    MutableListLike[Item],
 ):
     """Provide usable mutable list-like with slots."""
 

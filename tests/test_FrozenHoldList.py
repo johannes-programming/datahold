@@ -7,12 +7,12 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import BaseHoldObject, FrozenDataList
+from datahold import BaseHoldObject, FrozenListLike
 
 
 class FrozenHoldList[Item](
-    BaseHoldObject[FrozenDataList.Data[Item]],
-    FrozenDataList[Item],
+    BaseHoldObject[FrozenListLike.Data[Item]],
+    FrozenListLike[Item],
 ):
     """Provide usable frozen list-like with slots."""
 

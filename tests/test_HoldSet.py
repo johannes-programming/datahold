@@ -8,12 +8,12 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import BaseHoldObject, DataSet
+from datahold import BaseHoldObject, MutableSetLike
 
 
 class HoldSet[Item: abc.Hashable](
-    BaseHoldObject[DataSet.Data[Item]],
-    DataSet[Item],
+    BaseHoldObject[MutableSetLike.Data[Item]],
+    MutableSetLike[Item],
 ):
     """Provide usable mutable set-like with slots."""
 

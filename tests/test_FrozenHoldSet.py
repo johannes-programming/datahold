@@ -8,12 +8,12 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import BaseHoldObject, FrozenDataSet
+from datahold import BaseHoldObject, FrozenSetLike
 
 
 class FrozenHoldSet[Item: abc.Hashable](
-    BaseHoldObject[FrozenDataSet.Data[Item]],
-    FrozenDataSet[Item],
+    BaseHoldObject[FrozenSetLike.Data[Item]],
+    FrozenSetLike[Item],
 ):
     """Provide usable frozen set-like with slots."""
 

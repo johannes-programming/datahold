@@ -4,50 +4,111 @@ METHODS = [
     "__str__",
 ]
 
-[types.BaseDataAbstractSet]
+[types.Collection]
 dirData = [
     "__contains__",
     "__iter__",
     "__len__",
 ]
 
-[types.BaseDataAbstractSet.parents]
-"collections.abc.Hashable" = false
-"datahold.BaseDataCollection" = true
-
-[types.BaseDataCollection]
-dirData = [
-    "__contains__",
-    "__iter__",
-    "__len__",
-]
-
-[types.BaseDataCollection.parents]
+[types.Collection.parents]
 "collections.abc.Collection" = true
 "collections.abc.Hashable" = true
 
-[types.BaseDataDict]
+[types.DictLike]
 dirData = []
 
-[types.BaseDataDict.parents]
+[types.DictLike.parents]
 "collections.abc.Hashable" = false
 "collections.abc.Mapping" = true
 
-[types.BaseDataList]
+[types.FrozenDictLike]
+Data = "frozendict"
+dirData = []
+isabstract = true
+
+[types.FrozenDictLike.parents]
+"datahold.DictLike" = true
+"datahold.FrozenMapping" = true
+
+[types.FrozenListLike]
+Data = "tuple"
+dirData = []
+isabstract = true
+
+[types.FrozenListLike.parents]
+
+[types.FrozenMapping]
 dirData = []
 
-[types.BaseDataList.parents]
+[types.FrozenMapping.parents]
+"collections.abc.Hashable" = true
+"datahold.Mapping" = true
+
+[types.FrozenSetLike]
+Data = "frozenset"
+dirData = []
+isabstract = true
+
+[types.FrozenSetLike.parents]
+
+[types.ListLike]
+dirData = []
+
+[types.ListLike.parents]
 "collections.abc.Hashable" = false
 "collections.abc.Sequence" = true
 
-[types.BaseDataMapping]
+[types.Mapping]
 dirData = []
 
-[types.BaseDataMapping.parents]
+[types.Mapping.parents]
 "collections.abc.Hashable" = false
-"datahold.BaseDataCollection" = true
+"datahold.Collection" = true
 
-[types.BaseDataSequence]
+[types.MutableDictLike]
+Data = "frozendict"
+dirData = []
+isabstract = true
+n_type_params = 2
+
+[types.MutableDictLike.constructor.empty]
+valid = false
+
+[types.MutableDictLike.parents]
+"collections.abc.MutableMapping" = true
+"datahold.DictLike" = true
+"datahold.Mapping" = true
+
+[types.MutableListLike]
+Data = "tuple"
+dirData = []
+isabstract = true
+n_type_params = 1
+
+[types.MutableListLike.constructor.empty]
+valid = false
+
+[types.MutableListLike.parents]
+"collections.abc.MutableSequence" = true
+"collections.abc.Sequence" = true
+"datahold.ListLike" = true
+
+[types.MutableSetLike]
+Data = "frozenset"
+dirData = []
+isabstract = true
+n_type_params = 1
+
+[types.MutableSetLike.constructor.empty]
+valid = false
+
+[types.MutableSetLike.parents]
+"collections.abc.MutableSet" = true
+"collections.abc.Set" = true
+"datahold.SetLike" = true
+
+[types.Sequence]
 dirData = [
     "__contains__",
     "__getitem__",
@@ -55,89 +116,28 @@ dirData = [
     "__len__",
 ]
 
-[types.BaseDataSequence.parents]
+[types.Sequence.parents]
 "collections.abc.Hashable" = true
-"datahold.BaseDataCollection" = true
+"datahold.Collection" = true
 
-[types.BaseDataSet]
+[types.Set]
+dirData = [
+    "__contains__",
+    "__iter__",
+    "__len__",
+]
+
+[types.Set.parents]
+"collections.abc.Hashable" = false
+"datahold.Collection" = true
+
+[types.SetLike]
 dirData = []
 
-[types.BaseDataSet.parents]
+[types.SetLike.parents]
 "collections.abc.Hashable" = false
 "collections.abc.Set" = true
-"datahold.BaseDataAbstractSet" = true
-
-[types.DataDict]
-Data = "frozendict"
-dirData = []
-isabstract = true
-n_type_params = 2
-
-[types.DataDict.constructor.empty]
-valid = false
-
-[types.DataDict.parents]
-"collections.abc.MutableMapping" = true
-"datahold.BaseDataDict" = true
-"datahold.BaseDataMapping" = true
-
-[types.DataList]
-Data = "tuple"
-dirData = []
-isabstract = true
-n_type_params = 1
-
-[types.DataList.constructor.empty]
-valid = false
-
-[types.DataList.parents]
-"collections.abc.MutableSequence" = true
-"collections.abc.Sequence" = true
-"datahold.BaseDataList" = true
-
-[types.DataSet]
-Data = "frozenset"
-dirData = []
-isabstract = true
-n_type_params = 1
-
-[types.DataSet.constructor.empty]
-valid = false
-
-[types.DataSet.parents]
-"collections.abc.MutableSet" = true
-"collections.abc.Set" = true
-"datahold.BaseDataSet" = true
-
-[types.FrozenDataDict]
-Data = "frozendict"
-dirData = []
-isabstract = true
-
-[types.FrozenDataDict.parents]
-"datahold.BaseDataDict" = true
-"datahold.FrozenDataMapping" = true
-
-[types.FrozenDataList]
-Data = "tuple"
-dirData = []
-isabstract = true
-
-[types.FrozenDataList.parents]
-
-[types.FrozenDataMapping]
-dirData = []
-
-[types.FrozenDataMapping.parents]
-"collections.abc.Hashable" = true
-"datahold.BaseDataMapping" = true
-
-[types.FrozenDataSet]
-Data = "frozenset"
-dirData = []
-isabstract = true
-
-[types.FrozenDataSet.parents]
+"datahold.Set" = true
 
 [varia]
 HOLD_TYPES = [

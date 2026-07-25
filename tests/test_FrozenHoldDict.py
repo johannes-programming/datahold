@@ -11,12 +11,12 @@ from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold import BaseHoldObject, FrozenDataDict
+from datahold import BaseHoldObject, FrozenDictLike
 
 
 class FrozenHoldDict[Key: abc.Hashable, Value](
-    BaseHoldObject[FrozenDataDict.Data[Key, Value]],
-    FrozenDataDict[Key, Value],
+    BaseHoldObject[FrozenDictLike.Data[Key, Value]],
+    FrozenDictLike[Key, Value],
 ):
     """Provide usable frozen dict-like with slots."""
 

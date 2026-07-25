@@ -3,21 +3,21 @@
 from __future__ import annotations
 
 __all__: list[str] = [
-    "BaseDataAbstractSet",
-    "BaseDataCollection",
-    "BaseDataDict",
-    "BaseDataList",
-    "BaseDataMapping",
-    "BaseDataSequence",
-    "BaseDataSet",
     "BaseHoldObject",
-    "DataDict",
-    "DataList",
-    "DataSet",
-    "FrozenDataDict",
-    "FrozenDataList",
-    "FrozenDataMapping",
-    "FrozenDataSet",
+    "Collection",
+    "DictLike",
+    "FrozenDictLike",
+    "FrozenListLike",
+    "FrozenMapping",
+    "FrozenSetLike",
+    "ListLike",
+    "Mapping",
+    "MutableDictLike",
+    "MutableListLike",
+    "MutableSetLike",
+    "Sequence",
+    "Set",
+    "SetLike",
 ]
 
 import enum
@@ -81,7 +81,7 @@ class BaseHoldObject[HoldData: Copyable]:
 ### COLLECTION ###
 
 
-class BaseDataCollection[Item](
+class Collection[Item](
     abc.Sized,
     abc.Iterable[Item],
     abc.Container[object],
@@ -123,8 +123,8 @@ class BaseDataCollection[Item](
 ### ABSTRACT SET ###
 
 
-class BaseDataAbstractSet[Item](
-    BaseDataCollection[Item],
+class Set[Item](
+    Collection[Item],
     abc.Set[Item],
 ):
     """Provide an easy abc for a custom (abstract) set."""
@@ -135,7 +135,7 @@ class BaseDataAbstractSet[Item](
 ### SET ###
 
 
-class BaseDataSet[Item: abc.Hashable](BaseDataAbstractSet[Item]):
+class SetLike[Item: abc.Hashable](Set[Item]):
     """Provide an easy abc for custom set-like."""
 
     __slots__ = ()
@@ -190,7 +190,7 @@ class BaseDataSet[Item: abc.Hashable](BaseDataAbstractSet[Item]):
         return type(self)(self.__fget__().union(*others))
 
 
-class FrozenDataSet[Item: abc.Hashable](BaseDataSet[Item], abc.Hashable):
+class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
     """Provide easy abc for custom frozen set-like."""
 
     __slots__ = ()
@@ -200,8 +200,8 @@ class FrozenDataSet[Item: abc.Hashable](BaseDataSet[Item], abc.Hashable):
         return hash(frozenset(self.__fget__()))
 
 
-class DataSet[Item: abc.Hashable](
-    BaseDataSet[Item],
+class MutableSetLike[Item: abc.Hashable](
+    SetLike[Item],
     abc.MutableSet[Item],
 ):
     """Provide easy abc for custom mutable set-like."""
@@ -252,8 +252,8 @@ class DataSet[Item: abc.Hashable](
 
 
 ### MAPPING ###
-class BaseDataMapping[Key: abc.Hashable, Value](
-    BaseDataCollection[Key], abc.Mapping[Key, Value]
+class Mapping[Key: abc.Hashable, Value](
+    Collection[Key], abc.Mapping[Key, Value]
 ):
     """Provide an easy abc for a custom mapping."""
 
@@ -261,7 +261,7 @@ class BaseDataMapping[Key: abc.Hashable, Value](
 
     @setdoc.basic
     class Data[DataKey, DataValue](
-        BaseDataCollection.Data[DataKey],
+        Collection.Data[DataKey],
         Protocol,
     ):
         @setdoc.basic
@@ -279,8 +279,8 @@ class BaseDataMapping[Key: abc.Hashable, Value](
             raise KeyError(key) from None
 
 
-class FrozenDataMapping[Key: abc.Hashable, Value](
-    BaseDataMapping[Key, Value],
+class FrozenMapping[Key: abc.Hashable, Value](
+    Mapping[Key, Value],
     abc.Hashable,
 ):
     """Provide an easy abc for a custom frozen mapping."""
@@ -295,8 +295,8 @@ class FrozenDataMapping[Key: abc.Hashable, Value](
 ### DICT ###
 
 
-class BaseDataDict[Key: abc.Hashable, Value](
-    BaseDataMapping[Key | str, Optional[Value]],
+class DictLike[Key: abc.Hashable, Value](
+    Mapping[Key | str, Optional[Value]],
 ):
     """Provide an easy abc for custom dict-like."""
 
@@ -323,7 +323,7 @@ class BaseDataDict[Key: abc.Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        data_: BaseDataDict.Data[Key, Value]
+        data_: DictLike.Data[Key, Value]
         data_ = dict(  # type: ignore[assignment]
             data,  # type: ignore[arg-type]
             **kwargs,
@@ -333,7 +333,7 @@ class BaseDataDict[Key: abc.Hashable, Value](
     @setdoc.basic
     def __or__(
         self: Self,
-        other: BaseDataDict[Key, Value],
+        other: DictLike[Key, Value],
         /,
     ) -> Self:
         return type(self)(self.__fget__() | other.__fget__())
@@ -355,17 +355,17 @@ class BaseDataDict[Key: abc.Hashable, Value](
         return cls(dict.fromkeys(iterable, value))
 
 
-class FrozenDataDict[Key: abc.Hashable, Value](
-    BaseDataDict[Key, Value],
-    FrozenDataMapping[Key | str, Optional[Value]],
+class FrozenDictLike[Key: abc.Hashable, Value](
+    DictLike[Key, Value],
+    FrozenMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom frozen dict-like."""
 
     __slots__ = ()
 
 
-class DataDict[Key: abc.Hashable, Value](
-    BaseDataDict[Key, Value],
+class MutableDictLike[Key: abc.Hashable, Value](
+    DictLike[Key, Value],
     abc.MutableMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom mutable dict-like."""
@@ -374,7 +374,7 @@ class DataDict[Key: abc.Hashable, Value](
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key | str, /) -> None:
-        data: DataDict.Data[Key, Value]
+        data: MutableDictLike.Data[Key, Value]
         data = self.__fget__()
         del data[key]
         self.__fset__(data)
@@ -382,7 +382,7 @@ class DataDict[Key: abc.Hashable, Value](
     @setdoc.basic
     def __ior__(
         self: Self,
-        other: BaseDataDict[Key, Value],
+        other: DictLike[Key, Value],
         /,
     ) -> Self:
         self.__fset__(self.__fget__() | other.__fget__())
@@ -396,7 +396,7 @@ class DataDict[Key: abc.Hashable, Value](
         /,
     ) -> None:
         # what to do if Key includes unhashable types?
-        data: DataDict.Data[Key, Value]
+        data: MutableDictLike.Data[Key, Value]
         data = self.__fget__()
         data[key] = value
         self.__fset__(data)
@@ -409,8 +409,8 @@ class DataDict[Key: abc.Hashable, Value](
 ### SEQUENCE ###
 
 
-class BaseDataSequence[Item](
-    BaseDataCollection[Item],
+class Sequence[Item](
+    Collection[Item],
     abc.Sequence[Item],
 ):
     """Provide an easy abc for a custom sequence."""
@@ -419,7 +419,7 @@ class BaseDataSequence[Item](
 
     @setdoc.basic
     class Data[DataItem](
-        BaseDataCollection.Data[DataItem],
+        Collection.Data[DataItem],
         Protocol,
     ):
         """Provide sequence data protocol."""
@@ -457,7 +457,7 @@ class BaseDataSequence[Item](
 ### LIST ###
 
 
-class BaseDataList[Item](BaseDataSequence[Item]):
+class ListLike[Item](Sequence[Item]):
     """Provide an easy abc for custom list-like."""
 
     __slots__ = ()
@@ -466,7 +466,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
-    def __add__(self: Self, other: BaseDataList[Item], /) -> Self:
+    def __add__(self: Self, other: ListLike[Item], /) -> Self:
         # list.__add__ reveals Overload(
         #     def [_T] (list[_T], list[_T]) -> list[_T],
         #     def [_T, _S] (list[_T], list[_S]) -> list[_S | _T],
@@ -475,14 +475,14 @@ class BaseDataList[Item](BaseDataSequence[Item]):
         #     def [_T_co] (tuple[_T_co, ...], tuple[_T_co, ...]) -> tuple[_T_co, ...],
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return type(self)(self.__fget__() + other.__fget__())
         else:
             return NotImplemented
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return self.__fget__() == other.__fget__()
         else:
             return NotImplemented
@@ -497,7 +497,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return self.__fget__() >= other.__fget__()
         else:
             return NotImplemented
@@ -521,7 +521,7 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     @setdoc.basic
     def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return self.__fget__() > other.__fget__()
         else:
             return NotImplemented
@@ -532,14 +532,14 @@ class BaseDataList[Item](BaseDataSequence[Item]):
 
     @setdoc.basic
     def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return self.__fget__() <= other.__fget__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, BaseDataList):
+        if isinstance(other, ListLike):
             return self.__fget__() < other.__fget__()
         else:
             return NotImplemented
@@ -555,8 +555,8 @@ class BaseDataList[Item](BaseDataSequence[Item]):
     __rmul__ = __mul__
 
 
-class FrozenDataList[Item](
-    BaseDataList[Item],
+class FrozenListLike[Item](
+    ListLike[Item],
     abc.Hashable,
 ):
     """Provide easy abc for custom frozen list-like."""
@@ -568,8 +568,8 @@ class FrozenDataList[Item](
         return hash(tuple(self.__fget__()))
 
 
-class DataList[Item](
-    BaseDataList[Item],
+class MutableListLike[Item](
+    ListLike[Item],
     abc.MutableSequence[Item],
 ):
     """Provide easy abc for custom mutable list-like."""
