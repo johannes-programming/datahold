@@ -16,6 +16,7 @@ __all__: list[str] = [
     "DataSet",
     "FrozenDataDict",
     "FrozenDataList",
+    "FrozenDataMapping",
     "FrozenDataSet",
 ]
 
@@ -106,6 +107,10 @@ class BaseDataCollection[Item](
         except TypeError:
             return other in (x for x in self.__fget__())  # type: ignore[operator]
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
     @setdoc.basic
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__fget__())
@@ -113,10 +118,6 @@ class BaseDataCollection[Item](
     @setdoc.basic
     def __len__(self: Self, /) -> int:
         return len(self.__fget__())
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
 
 
 ### ABSTRACT SET ###
@@ -209,7 +210,10 @@ class DataSet[Item: abc.Hashable](
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
-        self.__fset__(self.__fget__() | {item})
+        data: set[Item]
+        data = self.__fget__()
+        data.add(item)
+        self.__fset__(data)
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -221,10 +225,7 @@ class DataSet[Item: abc.Hashable](
         /,
         *others: abc.Iterable[abc.Hashable],
     ) -> None:
-        data: set[Item]
-        data = self.__fget__()
-        data.difference_update(*others)
-        self.__fset__(data)
+        self.__fset__(self.__fget__().difference(*others))
 
     @setdoc.basic
     def discard(self: Self, item: abc.Hashable, /) -> None:
@@ -237,19 +238,13 @@ class DataSet[Item: abc.Hashable](
     def intersection_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> None:
-        data: set[Item]
-        data = self.__fget__()
-        data.intersection_update(*others)
-        self.__fset__(data)
+        self.__fset__(self.__fget__().intersection(*others))
 
     @setdoc.basic
     def symmetric_difference_update(
         self: Self, other: abc.Iterable[Item], /
     ) -> None:
-        data: set[Item]
-        data = self.__fget__()
-        data.symmetric_difference_update(other)
-        self.__fset__(data)
+        self.__fset__(self.__fget__().symmetric_difference(other))
 
     @setdoc.basic
     def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
@@ -257,7 +252,7 @@ class DataSet[Item: abc.Hashable](
 
 
 ### MAPPING ###
-class BaseDataMapping[Key, Value](
+class BaseDataMapping[Key: abc.Hashable, Value](
     BaseDataCollection[Key], abc.Mapping[Key, Value]
 ):
     """Provide an easy abc for a custom mapping."""
@@ -270,8 +265,11 @@ class BaseDataMapping[Key, Value](
         Protocol,
     ):
         @setdoc.basic
-        def __getitem__(self: Self, key: Never, /) -> DataValue:
-            pass
+        def __getitem__(self: Self, key: Never, /) -> DataValue: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Key, Value]: ...
 
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Value:
@@ -280,9 +278,18 @@ class BaseDataMapping[Key, Value](
         except TypeError:
             raise KeyError(key) from None
 
-    @abstractmethod
+
+class FrozenDataMapping[Key: abc.Hashable, Value](
+    BaseDataMapping[Key, Value],
+    abc.Hashable,
+):
+    """Provide an easy abc for a custom frozen mapping."""
+
+    __slots__ = ()
+
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Key, Value]: ...
+    def __hash__(self: Self) -> int:
+        return hash(frozendict(self.items()))
 
 
 ### DICT ###
@@ -350,15 +357,11 @@ class BaseDataDict[Key: abc.Hashable, Value](
 
 class FrozenDataDict[Key: abc.Hashable, Value](
     BaseDataDict[Key, Value],
-    abc.Hashable,
+    FrozenDataMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom frozen dict-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __hash__(self: Self) -> int:
-        return hash(frozendict(self.__fget__()))
 
 
 class DataDict[Key: abc.Hashable, Value](
@@ -434,6 +437,10 @@ class BaseDataSequence[Item](
             self: Self, key: int | Slice[int], /
         ) -> DataItem | abc.Sequence[DataItem]: ...
 
+    @abstractmethod
+    @setdoc.basic
+    def __fget__(self: Self) -> Data[Item]: ...
+
     @overload
     @setdoc.basic
     def __getitem__(self: Self, key: int, /) -> Item: ...
@@ -445,10 +452,6 @@ class BaseDataSequence[Item](
         self: Self, key: int | Slice[int], /
     ) -> Item | abc.Sequence[Item]:
         return self.__fget__()[key]
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
 
 
 ### LIST ###

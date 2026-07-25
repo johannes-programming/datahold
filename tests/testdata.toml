@@ -115,6 +115,8 @@ dirData = []
 isabstract = true
 
 [types.FrozenDataDict.parents]
+BaseDataDict = true
+FrozenDataMapping = true
 
 [types.FrozenDataList]
 Data = "tuple"
@@ -122,6 +124,13 @@ dirData = []
 isabstract = true
 
 [types.FrozenDataList.parents]
+
+[types.FrozenDataMapping]
+dirData = []
+
+[types.FrozenDataMapping.parents]
+BaseDataMapping = true
+Hashable = true
 
 [types.FrozenDataSet]
 Data = "frozenset"
