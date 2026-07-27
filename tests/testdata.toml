@@ -100,6 +100,12 @@ valid = false
 "collections.abc.Sequence" = true
 "datahold.ListLike" = true
 
+[types.MutableSet]
+dirData = []
+
+[types.MutableSet.parents]
+"collections.abc.Hashable" = false
+
 [types.MutableSetLike]
 Data = "frozenset"
 dirData = []

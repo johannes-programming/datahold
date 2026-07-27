@@ -14,6 +14,7 @@ __all__: list[str] = [
     "Mapping",
     "MutableDictLike",
     "MutableListLike",
+    "MutableSet",
     "MutableSetLike",
     "Sequence",
     "Set",
@@ -162,6 +163,33 @@ class FrozenSet[Item: abc.Hashable](Set[Item], abc.Hashable):
         return self._hash()
 
 
+class MutableSet[Item: abc.Hashable](
+    Set[Item],
+    abc.MutableSet[Item],
+):
+    """Provide easy abc for custom mutable set-like."""
+
+    __slots__ = ()
+
+    class Data[DataItem](Set.Data[DataItem], Protocol):
+        """Provide mutable set data protocol."""
+
+        @setdoc.basic
+        def add(self: Self, item: DataItem, /) -> None: ...
+        @setdoc.basic
+        def discard(self: Self, item: abc.Hashable, /) -> None: ...
+
+    @setdoc.basic
+    def add(self: Self, item: Item, /) -> None:
+        with self.__data__() as data:
+            data.add(item)
+
+    @setdoc.basic
+    def discard(self: Self, item: abc.Hashable, /) -> None:
+        with self.__data__() as data:
+            data.discard(item)
+
+
 ### SET LIKE ###
 
 
@@ -232,7 +260,7 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], FrozenSet[Item]):
 
 class MutableSetLike[Item: abc.Hashable](
     SetLike[Item],
-    abc.MutableSet[Item],
+    MutableSet[Item],
 ):
     """Provide easy abc for custom mutable set-like."""
 
