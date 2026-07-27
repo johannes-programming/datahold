@@ -14,6 +14,7 @@ __all__: list[str] = [
     "Mapping",
     "MutableDictLike",
     "MutableListLike",
+    "MutableMapping",
     "MutableSequence",
     "MutableSet",
     "MutableSetLike",
@@ -352,6 +353,31 @@ class FrozenMapping[Key: abc.Hashable, Value](
         return hash(frozendict(self.items()))
 
 
+class MutableMapping[Key: abc.Hashable, Value](
+    Mapping[Key, Value],
+    abc.MutableMapping[Key, Value],
+):
+    """Provide easy abc for custom mutable mapping."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __delitem__(self: Self, key: Key, /) -> None:
+        with self.__data__() as data:
+            del data[key]
+
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: Key,
+        value: Value,
+        /,
+    ) -> None:
+        # what to do if Key includes unhashable types?
+        with self.__data__() as data:
+            data[key] = value
+
+
 ### DICT LIKE ###
 
 
@@ -422,16 +448,11 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
-    abc.MutableMapping[Key | str, Optional[Value]],
+    MutableMapping[Key | str, Optional[Value]],
 ):
     """Provide easy abc for custom mutable dict-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __delitem__(self: Self, key: Key | str, /) -> None:
-        with self.__data__() as data:
-            del data[key]
 
     @setdoc.basic
     def __ior__(
@@ -442,17 +463,6 @@ class MutableDictLike[Key: abc.Hashable, Value](
         with self.__data__() as data, other.__data__() as data_:
             data.__ior__(data_)
         return self
-
-    @setdoc.basic
-    def __setitem__(
-        self: Self,
-        key: Key | str,
-        value: Optional[Value],
-        /,
-    ) -> None:
-        # what to do if Key includes unhashable types?
-        with self.__data__() as data:
-            data[key] = value
 
     @setdoc.basic
     def copy(self: Self) -> Self:
