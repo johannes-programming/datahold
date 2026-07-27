@@ -13,7 +13,7 @@
 --sort
 --key=types
 --all-keys
---key=attributes
+--key=data_attributes
 --sort
 --key=varia
 --all-keys

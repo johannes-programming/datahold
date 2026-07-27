@@ -181,6 +181,10 @@ class MutableSet[Item: abc.Hashable](
         @setdoc.basic
         def discard(self: Self, item: abc.Hashable, /) -> None: ...
 
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
+
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
         with self.__data__() as data:

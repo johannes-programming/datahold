@@ -4,7 +4,7 @@ METHODS = [
     "__str__",
 ]
 
-[types.Collection.attributes]
+[types.Collection.data_attributes]
 __contains__ = true
 __iter__ = true
 __len__ = true
@@ -13,7 +13,7 @@ __len__ = true
 "collections.abc.Collection" = true
 "collections.abc.Hashable" = true
 
-[types.DictLike.attributes]
+[types.DictLike.data_attributes]
 
 [types.DictLike.parents]
 "collections.abc.Hashable" = false
@@ -23,7 +23,7 @@ __len__ = true
 Data = "frozendict"
 isabstract = true
 
-[types.FrozenDictLike.attributes]
+[types.FrozenDictLike.data_attributes]
 
 [types.FrozenDictLike.parents]
 "datahold.DictLike" = true
@@ -33,17 +33,17 @@ isabstract = true
 Data = "tuple"
 isabstract = true
 
-[types.FrozenListLike.attributes]
+[types.FrozenListLike.data_attributes]
 
 [types.FrozenListLike.parents]
 
-[types.FrozenMapping.attributes]
+[types.FrozenMapping.data_attributes]
 
 [types.FrozenMapping.parents]
 "collections.abc.Hashable" = true
 "datahold.Mapping" = true
 
-[types.FrozenSet.attributes]
+[types.FrozenSet.data_attributes]
 
 [types.FrozenSet.parents]
 "collections.abc.Hashable" = true
@@ -52,17 +52,17 @@ isabstract = true
 Data = "frozenset"
 isabstract = true
 
-[types.FrozenSetLike.attributes]
+[types.FrozenSetLike.data_attributes]
 
 [types.FrozenSetLike.parents]
 
-[types.ListLike.attributes]
+[types.ListLike.data_attributes]
 
 [types.ListLike.parents]
 "collections.abc.Hashable" = false
 "collections.abc.Sequence" = true
 
-[types.Mapping.attributes]
+[types.Mapping.data_attributes]
 
 [types.Mapping.parents]
 "collections.abc.Hashable" = false
@@ -73,10 +73,10 @@ Data = "frozendict"
 isabstract = true
 n_type_params = 2
 
-[types.MutableDictLike.attributes]
-
 [types.MutableDictLike.constructor.empty]
 valid = false
+
+[types.MutableDictLike.data_attributes]
 
 [types.MutableDictLike.parents]
 "collections.abc.MutableMapping" = true
@@ -88,26 +88,26 @@ Data = "tuple"
 isabstract = true
 n_type_params = 1
 
-[types.MutableListLike.attributes]
-
 [types.MutableListLike.constructor.empty]
 valid = false
+
+[types.MutableListLike.data_attributes]
 
 [types.MutableListLike.parents]
 "collections.abc.MutableSequence" = true
 "collections.abc.Sequence" = true
 "datahold.ListLike" = true
 
-[types.MutableMapping.attributes]
+[types.MutableMapping.data_attributes]
 
 [types.MutableMapping.parents]
 
-[types.MutableSequence.attributes]
+[types.MutableSequence.data_attributes]
 
 [types.MutableSequence.parents]
 "collections.abc.MutableSequence" = true
 
-[types.MutableSet.attributes]
+[types.MutableSet.data_attributes]
 
 [types.MutableSet.parents]
 "collections.abc.Hashable" = false
@@ -117,17 +117,17 @@ Data = "frozenset"
 isabstract = true
 n_type_params = 1
 
-[types.MutableSetLike.attributes]
-
 [types.MutableSetLike.constructor.empty]
 valid = false
+
+[types.MutableSetLike.data_attributes]
 
 [types.MutableSetLike.parents]
 "collections.abc.MutableSet" = true
 "collections.abc.Set" = true
 "datahold.SetLike" = true
 
-[types.Sequence.attributes]
+[types.Sequence.data_attributes]
 __contains__ = true
 __getitem__ = true
 __iter__ = true
@@ -137,7 +137,7 @@ __len__ = true
 "collections.abc.Hashable" = true
 "datahold.Collection" = true
 
-[types.Set.attributes]
+[types.Set.data_attributes]
 __contains__ = true
 __iter__ = true
 __len__ = true
@@ -146,7 +146,7 @@ __len__ = true
 "collections.abc.Hashable" = false
 "datahold.Collection" = true
 
-[types.SetLike.attributes]
+[types.SetLike.data_attributes]
 
 [types.SetLike.parents]
 "collections.abc.Hashable" = false

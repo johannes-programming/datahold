@@ -201,19 +201,34 @@ class TestData(unittest.TestCase):
 
 
 class TestDirData(unittest.TestCase):
-    def go_attributes(
+    def go_data_attribute(
+        self: Self,
+        cls: type[Any],
+        attrname: str,
+        /,
+        hint: bool | str,
+    ) -> None:
+        cls_: type[Any]
+        if isinstance(hint, bool):
+            self.assertEqual(hasattr(cls, attrname), hint)
+            return
+        cls_ = Lazy.get_import(hint)
+        cls_ = cls_.Data
+        self.assertIs(getattr(cls, attrname), getattr(cls_, attrname))
+
+    def go_data_attributes(
         self: Self,
         typename: Any,
         /,
         *,
-        attributes: Optional[dict[str, bool]],
+        data_attributes: Optional[dict[str, bool | str]],
     ) -> None:
         cls: Any
         cls = getattr(datahold, typename)
-        if attributes is None:
+        if data_attributes is None:
             return
-        for x, y in attributes.items():
-            self.assertEqual(hasattr(cls.Data, x), y)
+        for x, y in data_attributes.items():
+            self.go_data_attribute(cls.Data, x, y)
 
     def go_init(self: Self, x: str, /) -> None:
         cls: Any
@@ -234,7 +249,10 @@ class TestDirData(unittest.TestCase):
     def test_types(self: Self) -> None:
         for x, y in Lazy.lazy.types.items():
             with self.subTest(type=x):
-                self.go_attributes(x, attributes=y.get("attributes"))
+                self.go_data_attributes(
+                    x,
+                    data_attributes=y.get("data_attributes"),
+                )
                 self.go_init(x)
 
 
