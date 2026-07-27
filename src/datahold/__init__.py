@@ -120,7 +120,7 @@ class Collection[Item](
         return len(self.__fget__())
 
 
-### ABSTRACT SET ###
+### SET ###
 
 
 class Set[Item](
@@ -132,7 +132,7 @@ class Set[Item](
     __slots__ = ()
 
 
-### SET ###
+### SET LIKE ###
 
 
 class SetLike[Item: abc.Hashable](Set[Item]):
@@ -292,7 +292,7 @@ class FrozenMapping[Key: abc.Hashable, Value](
         return hash(frozendict(self.items()))
 
 
-### DICT ###
+### DICT LIKE ###
 
 
 class DictLike[Key: abc.Hashable, Value](
@@ -454,7 +454,7 @@ class Sequence[Item](
         return self.__fget__()[key]
 
 
-### LIST ###
+### LIST LIKE ###
 
 
 class ListLike[Item](Sequence[Item]):
