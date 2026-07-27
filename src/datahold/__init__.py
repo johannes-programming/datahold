@@ -8,6 +8,7 @@ __all__: list[str] = [
     "FrozenDictLike",
     "FrozenListLike",
     "FrozenMapping",
+    "FrozenSet",
     "FrozenSetLike",
     "ListLike",
     "Mapping",
@@ -151,6 +152,17 @@ class Set[Item](
     __slots__ = ()
 
 
+class FrozenSet[Item: abc.Hashable](Set[Item], abc.Hashable):
+    """Provide easy abc for custom frozen set."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        with self.__data__() as data:
+            return hash(frozenset(data))
+
+
 ### SET LIKE ###
 
 
@@ -213,15 +225,10 @@ class SetLike[Item: abc.Hashable](Set[Item]):
             return type(self)(data.union(*others))
 
 
-class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
+class FrozenSetLike[Item: abc.Hashable](SetLike[Item], FrozenSet[Item]):
     """Provide easy abc for custom frozen set-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __hash__(self: Self) -> int:
-        with self.__data__() as data:
-            return hash(frozenset(data))
 
 
 class MutableSetLike[Item: abc.Hashable](

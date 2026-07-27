@@ -3,12 +3,13 @@ __all__: list[str] = [
     "TestDataAttribute",
     "TestFrozenHoldSet",
     "TestFrozenMutability",
+    "TestHash",
 ]
 import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import FrozenSetLike, attrdata
+from datahold import FrozenSet, FrozenSetLike, SetLike, attrdata
 
 
 class FrozenHoldSet[Item: abc.Hashable](
@@ -242,6 +243,12 @@ class TestFrozenMutability(unittest.TestCase):
             f.add(4)
         with self.assertRaises((TypeError, AttributeError)):
             f.remove(1)
+
+
+class TestHash(unittest.TestCase):
+    def test_hash(self: Self) -> None:
+        self.assertIs(FrozenSet.__hash__, FrozenSetLike.__hash__)
+        self.assertIs(None, SetLike.__hash__)
 
 
 if __name__ == "__main__":

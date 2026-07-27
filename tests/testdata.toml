@@ -45,6 +45,12 @@ dirData = []
 "collections.abc.Hashable" = true
 "datahold.Mapping" = true
 
+[types.FrozenSet]
+dirData = []
+
+[types.FrozenSet.parents]
+"collections.abc.Hashable" = true
+
 [types.FrozenSetLike]
 Data = "frozenset"
 dirData = []
