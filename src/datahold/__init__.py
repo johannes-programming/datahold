@@ -159,8 +159,7 @@ class FrozenSet[Item: abc.Hashable](Set[Item], abc.Hashable):
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        with self.__data__() as data:
-            return hash(frozenset(data))
+        return self._hash()
 
 
 ### SET LIKE ###
