@@ -13,7 +13,7 @@
 --sort
 --key=types
 --all-keys
---key=dirData
+--key=attributes
 --sort
 --key=varia
 --all-keys

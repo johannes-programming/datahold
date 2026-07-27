@@ -10,7 +10,6 @@ __all__: list[str] = [
     "TestParents",
 ]
 
-import collections.abc
 import enum
 import inspect as ins
 import io
@@ -19,7 +18,15 @@ import unittest
 from functools import cached_property
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Self, TypeAliasType, cast, get_args, get_origin
+from typing import (
+    Any,
+    Optional,
+    Self,
+    TypeAliasType,
+    cast,
+    get_args,
+    get_origin,
+)
 
 import datahold
 
@@ -194,13 +201,19 @@ class TestData(unittest.TestCase):
 
 
 class TestDirData(unittest.TestCase):
-    def go_dirData(self: Self, x: Any, /, **y: Any) -> None:
-        cls = getattr(datahold, x)
-        dirData = y.get("dirData")
-        if dirData is None:
+    def go_attributes(
+        self: Self,
+        typename: Any,
+        /,
+        *,
+        attributes: Optional[dict[str, bool]],
+    ) -> None:
+        cls: Any
+        cls = getattr(datahold, typename)
+        if attributes is None:
             return
-        for z in dirData:
-            self.assertTrue(hasattr(cls.Data, z))
+        for x, y in attributes.items():
+            self.assertEqual(hasattr(cls.Data, x), y)
 
     def go_init(self: Self, x: str, /) -> None:
         cls: Any
@@ -221,7 +234,7 @@ class TestDirData(unittest.TestCase):
     def test_types(self: Self) -> None:
         for x, y in Lazy.lazy.types.items():
             with self.subTest(type=x):
-                self.go_dirData(x, **y)
+                self.go_attributes(x, attributes=y.get("attributes"))
                 self.go_init(x)
 
 
