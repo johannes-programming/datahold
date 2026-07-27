@@ -5,6 +5,7 @@ __all__: list[str] = [
     "TestDataAttribute",
     "TestFrozenHoldDict",
     "TestFrozenMutability",
+    "TestHash",
 ]
 
 import unittest
@@ -13,7 +14,7 @@ from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold import FrozenDictLike, attrdata
+from datahold import DictLike, FrozenDictLike, FrozenMapping, attrdata
 
 
 class FrozenHoldDict[Key: abc.Hashable, Value](
@@ -185,6 +186,12 @@ class TestFrozenMutability(unittest.TestCase):
             f["b"] = 2
         with self.assertRaises((TypeError, AttributeError)):
             f.pop("a", None)
+
+
+class TestHash(unittest.TestCase):
+    def test_hash(self: Self) -> None:
+        self.assertIs(FrozenMapping.__hash__, FrozenDictLike.__hash__)
+        self.assertIs(None, DictLike.__hash__)
 
 
 if __name__ == "__main__":
