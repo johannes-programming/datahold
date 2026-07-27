@@ -14,6 +14,7 @@ __all__: list[str] = [
     "Mapping",
     "MutableDictLike",
     "MutableListLike",
+    "MutableSequence",
     "MutableSet",
     "MutableSetLike",
     "Sequence",
@@ -507,6 +508,52 @@ class Sequence[Item](
             return data[key]
 
 
+class MutableSequence[Item](
+    Sequence[Item],
+    abc.MutableSequence[Item],
+):
+    """Provide easy abc for custom mutable sequence."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __delitem__(
+        self: Self, other: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None:
+        with self.__data__() as data:
+            del data[other]
+
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: SupportsIndex, value: Item, /
+    ) -> None: ...
+
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: Slice[SupportsIndex],
+        value: abc.Iterable[Item],
+        /,
+    ) -> None: ...
+
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: SupportsIndex | Slice[SupportsIndex],
+        value: Item | abc.Iterable[Item],
+        /,
+    ) -> None:
+        with self.__data__() as data:
+            data[key] = value  # type: ignore[index, assignment]
+
+    @setdoc.basic
+    def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
+        with self.__data__() as data:
+            data.insert(index, item)
+
+
 ### LIST LIKE ###
 
 
@@ -630,18 +677,11 @@ class FrozenListLike[Item](
 
 class MutableListLike[Item](
     ListLike[Item],
-    abc.MutableSequence[Item],
+    MutableSequence[Item],
 ):
     """Provide easy abc for custom mutable list-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __delitem__(
-        self: Self, other: SupportsIndex | Slice[SupportsIndex], /
-    ) -> None:
-        with self.__data__() as data:
-            del data[other]
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
@@ -649,39 +689,9 @@ class MutableListLike[Item](
             data.__imul__(data * other)
         return self
 
-    @overload
-    @setdoc.basic
-    def __setitem__(
-        self: Self, key: SupportsIndex, value: Item, /
-    ) -> None: ...
-
-    @overload
-    @setdoc.basic
-    def __setitem__(
-        self: Self,
-        key: Slice[SupportsIndex],
-        value: abc.Iterable[Item],
-        /,
-    ) -> None: ...
-
-    @setdoc.basic
-    def __setitem__(
-        self: Self,
-        key: SupportsIndex | Slice[SupportsIndex],
-        value: Item | abc.Iterable[Item],
-        /,
-    ) -> None:
-        with self.__data__() as data:
-            data[key] = value  # type: ignore[index, assignment]
-
     @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self)
-
-    @setdoc.basic
-    def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        with self.__data__() as data:
-            data.insert(index, item)
 
     @setdoc.basic
     def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:
