@@ -3,6 +3,8 @@
 --all-keys
 --sort
 --key=types
+--sort
+--key=types
 --all-keys
 --sort
 --key=types
