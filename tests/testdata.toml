@@ -141,5 +141,5 @@ dirData = []
 
 [varia]
 HOLD_TYPES = [
-    "BaseHoldObject",
+    "attrdata",
 ]

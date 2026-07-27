@@ -8,16 +8,16 @@ import unittest
 from collections import abc
 from typing import Any, Self, cast
 
-from datahold import BaseHoldObject, MutableDictLike
+from datahold import MutableDictLike, attrdata
 
 
 class HoldDict[Key: abc.Hashable, Value](
-    BaseHoldObject[MutableDictLike.Data[Key, Value]],
     MutableDictLike[Key, Value],
 ):
     """Provide usable mutable dict-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=dict, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_dict_data_is_immutable_mapping(self: Self) -> None:
         m: HoldDict[Any, Any]
         m = HoldDict({"a": 1})
-        self.assertIsInstance(m.__fget__(), dict)
+        self.assertIsInstance(m.__data__().__enter__(), dict)
 
 
 class TestHoldDict(unittest.TestCase):
@@ -56,12 +56,12 @@ class TestHoldDict(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: Any
         obj = HoldDict({"x": 42})
-        self.assertEqual(obj.__fget__(), {"x": 42})
+        self.assertEqual(obj.__data__().__enter__(), {"x": 42})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), dict)
-        self.assertEqual(self.obj.__fget__(), {"a": 1, "b": 2})
+        self.assertIsInstance(self.obj.__data__().__enter__(), dict)
+        self.assertEqual(self.obj.__data__().__enter__(), {"a": 1, "b": 2})
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -207,7 +207,7 @@ class TestMutableBehavior(unittest.TestCase):
         x = HoldDict({"a": 1})
         x["b"] = 2
         self.assertEqual(x["b"], 2)
-        self.assertEqual(x.__fget__()["b"], 2)
+        self.assertEqual(x.__data__().__enter__()["b"], 2)
 
 
 if __name__ == "__main__":

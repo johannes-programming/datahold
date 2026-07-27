@@ -7,16 +7,14 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import BaseHoldObject, MutableListLike
+from datahold import MutableListLike, attrdata
 
 
-class HoldList[Item](
-    BaseHoldObject[MutableListLike.Data[Item]],
-    MutableListLike[Item],
-):
+class HoldList[Item](MutableListLike[Item]):
     """Provide usable mutable list-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=list, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -38,7 +36,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_list_data_is_tuple(self: Self) -> None:
         m: HoldList[Any]
         m = HoldList([1, 2, 3])
-        self.assertIsInstance(m.__fget__(), list)
+        self.assertIsInstance(m.__data__().__enter__(), list)
 
 
 class TestHoldList(unittest.TestCase):
@@ -55,12 +53,12 @@ class TestHoldList(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: HoldList[int]
         obj = HoldList([42])
-        self.assertEqual(obj.__fget__(), [42])
+        self.assertEqual(obj.__data__().__enter__(), [42])
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), list)
-        self.assertEqual(self.obj.__fget__(), [1, 2, 3])
+        self.assertIsInstance(self.obj.__data__().__enter__(), list)
+        self.assertEqual(self.obj.__data__().__enter__(), [1, 2, 3])
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -80,7 +78,7 @@ class TestHoldList(unittest.TestCase):
     # __delitem__
     def test_delitem(self: Self) -> None:
         del self.obj[1]
-        self.assertEqual(self.obj.__fget__(), [1, 3])
+        self.assertEqual(self.obj.__data__().__enter__(), [1, 3])
 
     # __iter__
     def test_iter(self: Self) -> None:
@@ -103,25 +101,33 @@ class TestHoldList(unittest.TestCase):
     # __lt__
     def test_lt(self: Self) -> None:
         expected: bool
-        expected = self.obj.__fget__() < self.other.__fget__()
+        expected = (
+            self.obj.__data__().__enter__() < self.other.__data__().__enter__()
+        )
         self.assertEqual(self.obj < self.other, expected)
 
     # __le__
     def test_le(self: Self) -> None:
         expected: bool
-        expected = self.obj.__fget__() <= self.same.__fget__()
+        expected = (
+            self.obj.__data__().__enter__() <= self.same.__data__().__enter__()
+        )
         self.assertEqual(self.obj <= self.same, expected)
 
     # __gt__
     def test_gt(self: Self) -> None:
         expected: bool
-        expected = self.other.__fget__() > self.obj.__fget__()
+        expected = (
+            self.other.__data__().__enter__() > self.obj.__data__().__enter__()
+        )
         self.assertEqual(self.other > self.obj, expected)
 
     # __ge__
     def test_ge(self: Self) -> None:
         expected: bool
-        expected = self.same.__fget__() >= self.obj.__fget__()
+        expected = (
+            self.same.__data__().__enter__() >= self.obj.__data__().__enter__()
+        )
         self.assertEqual(self.same >= self.obj, expected)
 
     # __repr__
@@ -255,7 +261,7 @@ class TestMutableBehavior(unittest.TestCase):
         x = HoldList([1, 2])
         x.append(3)
         self.assertEqual(list(x), [1, 2, 3])
-        self.assertEqual(x.__fget__(), [1, 2, 3])
+        self.assertEqual(x.__data__().__enter__(), [1, 2, 3])
 
 
 if __name__ == "__main__":

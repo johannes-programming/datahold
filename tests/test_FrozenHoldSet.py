@@ -8,16 +8,16 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import BaseHoldObject, FrozenSetLike
+from datahold import FrozenSetLike, attrdata
 
 
 class FrozenHoldSet[Item: abc.Hashable](
-    BaseHoldObject[FrozenSetLike.Data[Item]],
     FrozenSetLike[Item],
 ):
     """Provide usable frozen set-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=set, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -48,7 +48,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_set_data_is_frozenset(self: Self) -> None:
         f: FrozenHoldSet[Any]
         f = FrozenHoldSet({1, 2, 3})
-        self.assertIsInstance(f.__fget__(), set)
+        self.assertIsInstance(f.__data__().__enter__(), set)
 
 
 class TestFrozenHoldSet(unittest.TestCase):
@@ -61,12 +61,12 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __init__
     def test_init(self: Self) -> None:
         obj = FrozenHoldSet([1, 2, 3])
-        self.assertEqual(obj.__fget__(), {1, 2, 3})
+        self.assertEqual(obj.__data__().__enter__(), {1, 2, 3})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), set)
-        self.assertEqual(self.obj.__fget__(), {1, 2, 3})
+        self.assertIsInstance(self.obj.__data__().__enter__(), set)
+        self.assertEqual(self.obj.__data__().__enter__(), {1, 2, 3})
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -112,7 +112,9 @@ class TestFrozenHoldSet(unittest.TestCase):
     # __hash__
     def test_hash(self: Self) -> None:
         self.assertEqual(hash(self.obj), hash(self.same))
-        self.assertEqual(hash(self.obj), hash(frozenset(self.obj.__fget__())))
+        self.assertEqual(
+            hash(self.obj), hash(frozenset(self.obj.__data__().__enter__()))
+        )
 
     # __or__
     def test_or(self: Self) -> None:

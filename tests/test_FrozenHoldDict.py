@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__: list[str] = [
     "TestCopy",
     "TestDataAttribute",
@@ -11,16 +13,16 @@ from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold import BaseHoldObject, FrozenDictLike
+from datahold import FrozenDictLike, attrdata
 
 
 class FrozenHoldDict[Key: abc.Hashable, Value](
-    BaseHoldObject[FrozenDictLike.Data[Key, Value]],
     FrozenDictLike[Key, Value],
 ):
     """Provide usable frozen dict-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=dict, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -49,7 +51,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_dict_data_is_immutable_mapping(self: Self) -> None:
         f: FrozenHoldDict[Any, Any]
         f = FrozenHoldDict({"a": 1})
-        self.assertIsInstance(f.__fget__(), dict)
+        self.assertIsInstance(f.__data__().__enter__(), dict)
 
 
 class TestFrozenHoldDict(unittest.TestCase):
@@ -63,12 +65,14 @@ class TestFrozenHoldDict(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: Any
         obj = FrozenHoldDict({"x": 42})
-        self.assertEqual(obj.__fget__(), dict({"x": 42}))
+        self.assertEqual(obj.__data__().__enter__(), dict({"x": 42}))
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), dict)
-        self.assertEqual(self.obj.__fget__(), dict({"a": 1, "b": 2}))
+        self.assertIsInstance(self.obj.__data__().__enter__(), dict)
+        self.assertEqual(
+            self.obj.__data__().__enter__(), dict({"a": 1, "b": 2})
+        )
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -99,7 +103,9 @@ class TestFrozenHoldDict(unittest.TestCase):
 
     # __hash__
     def test_hash(self: Self) -> None:
-        self.assertEqual(hash(self.obj), hash(frozendict(self.obj.__fget__())))
+        self.assertEqual(
+            hash(self.obj), hash(frozendict(self.obj.__data__().__enter__()))
+        )
         self.assertEqual(hash(self.obj), hash(self.same))
 
     # __or__

@@ -8,16 +8,14 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import BaseHoldObject, MutableSetLike
+from datahold import MutableSetLike, attrdata
 
 
-class HoldSet[Item: abc.Hashable](
-    BaseHoldObject[MutableSetLike.Data[Item]],
-    MutableSetLike[Item],
-):
+class HoldSet[Item: abc.Hashable](MutableSetLike[Item]):
     """Provide usable mutable set-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=set, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -39,7 +37,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_set_data_is_frozenset(self: Self) -> None:
         m: HoldSet[Any]
         m = HoldSet({1, 2, 3})
-        self.assertIsInstance(m.__fget__(), set)
+        self.assertIsInstance(m.__data__().__enter__(), set)
 
 
 class TestHoldSet(unittest.TestCase):
@@ -56,12 +54,12 @@ class TestHoldSet(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: Any
         obj = HoldSet([1, 2, 3])
-        self.assertEqual(obj.__fget__(), {1, 2, 3})
+        self.assertEqual(obj.__data__().__enter__(), {1, 2, 3})
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), set)
-        self.assertEqual(self.obj.__fget__(), {1, 2, 3})
+        self.assertIsInstance(self.obj.__data__().__enter__(), set)
+        self.assertEqual(self.obj.__data__().__enter__(), {1, 2, 3})
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -278,7 +276,7 @@ class TestMutableBehavior(unittest.TestCase):
         s = HoldSet({1, 2})
         s.add(3)
         self.assertTrue(3 in s)
-        self.assertTrue(3 in s.__fget__())
+        self.assertTrue(3 in s.__data__().__enter__())
 
 
 if __name__ == "__main__":

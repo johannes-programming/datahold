@@ -7,16 +7,16 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import BaseHoldObject, FrozenListLike
+from datahold import FrozenListLike, attrdata
 
 
 class FrozenHoldList[Item](
-    BaseHoldObject[FrozenListLike.Data[Item]],
     FrozenListLike[Item],
 ):
     """Provide usable frozen list-like with slots."""
 
-    __slots__ = ()
+    __slots__ = ("_data",)
+    __data__ = attrdata(factory=list, name="_data")
 
 
 class TestCopy(unittest.TestCase):
@@ -45,7 +45,7 @@ class TestDataAttribute(unittest.TestCase):
     def test_list_data_is_tuple(self: Self) -> None:
         f: FrozenHoldList[Any]
         f = FrozenHoldList([1, 2, 3])
-        self.assertIsInstance(f.__fget__(), list)
+        self.assertIsInstance(f.__data__().__enter__(), list)
 
 
 class TestFrozenHoldList(unittest.TestCase):
@@ -59,12 +59,12 @@ class TestFrozenHoldList(unittest.TestCase):
     def test_init(self: Self) -> None:
         obj: FrozenHoldList[int]
         obj = FrozenHoldList([42])
-        self.assertEqual(obj.__fget__(), [42])
+        self.assertEqual(obj.__data__().__enter__(), [42])
 
     # data property
     def test_data(self: Self) -> None:
-        self.assertIsInstance(self.obj.__fget__(), list)
-        self.assertEqual(self.obj.__fget__(), [1, 2, 3])
+        self.assertIsInstance(self.obj.__data__().__enter__(), list)
+        self.assertEqual(self.obj.__data__().__enter__(), [1, 2, 3])
 
     # __contains__
     def test_contains(self: Self) -> None:
@@ -103,30 +103,40 @@ class TestFrozenHoldList(unittest.TestCase):
     # __lt__
     def test_lt(self: Self) -> None:
         expected: bool
-        expected = self.obj.__fget__() < self.other.__fget__()
+        expected = (
+            self.obj.__data__().__enter__() < self.other.__data__().__enter__()
+        )
         self.assertEqual(self.obj < self.other, expected)
 
     # __le__
     def test_le(self: Self) -> None:
         expected: bool
-        expected = self.obj.__fget__() <= self.same.__fget__()
+        expected = (
+            self.obj.__data__().__enter__() <= self.same.__data__().__enter__()
+        )
         self.assertEqual(self.obj <= self.same, expected)
 
     # __gt__
     def test_gt(self: Self) -> None:
         expected: bool
-        expected = self.other.__fget__() > self.obj.__fget__()
+        expected = (
+            self.other.__data__().__enter__() > self.obj.__data__().__enter__()
+        )
         self.assertEqual(self.other > self.obj, expected)
 
     # __ge__
     def test_ge(self: Self) -> None:
         expected: bool
-        expected = self.obj.__fget__() >= self.same.__fget__()
+        expected = (
+            self.obj.__data__().__enter__() >= self.same.__data__().__enter__()
+        )
         self.assertEqual(self.obj >= self.same, expected)
 
     # __hash__
     def test_hash(self: Self) -> None:
-        self.assertEqual(hash(self.obj), hash(tuple(self.obj.__fget__())))
+        self.assertEqual(
+            hash(self.obj), hash(tuple(self.obj.__data__().__enter__()))
+        )
         self.assertEqual(hash(self.obj), hash(self.same))
 
     # __add__

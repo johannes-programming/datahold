@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 __all__: list[str] = [
-    "BaseHoldObject",
     "Collection",
     "DictLike",
     "FrozenDictLike",
@@ -18,11 +17,13 @@ __all__: list[str] = [
     "Sequence",
     "Set",
     "SetLike",
+    "attrdata",
 ]
 
 import enum
 from abc import ABCMeta, abstractmethod
 from collections import abc
+from contextlib import contextmanager
 from types import NotImplementedType
 from typing import (
     Any,
@@ -45,6 +46,15 @@ class Copyable(Protocol):
     def copy(self: Self) -> Self: ...
 
 
+class DataContextManager[Data]:
+    @setdoc.basic
+    def __enter__(self: Self) -> Data: ...
+    @setdoc.basic
+    def __exit__(
+        self: Self, exc_type: Any, exc_value: Any, traceback: Any
+    ) -> None: ...
+
+
 class Missing(enum.Enum):
     missing = None
 
@@ -61,21 +71,27 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
     def keys(self: Self) -> abc.Iterable[Key]: ...
 
 
-### OBJECT ###
+###
 
 
-class BaseHoldObject[HoldData: Copyable]:
-    """Provide abc for usable classes with slots."""
-
-    __slots__ = ("_data",)
-
+def attrdata[Data: Copyable](
+    *,
+    factory: abc.Callable[[], Data],
+    name: str,
+) -> DataContextManager[Data]:
+    @contextmanager
     @setdoc.basic
-    def __fget__(self: Self) -> HoldData:
-        return self._data.copy()
+    def __data__(self: Self) -> abc.Generator[Data, None, None]:
+        data: Data | Missing
+        data = getattr(self, name, Missing.missing)
+        if isinstance(data, Missing):
+            data = factory()
+        else:
+            data = data.copy()
+        yield data
+        setattr(self, name, data)
 
-    @setdoc.basic
-    def __fset__(self: Self, data: HoldData, /) -> None:
-        self._data: HoldData = data
+    return __data__
 
 
 ### COLLECTION ###
@@ -102,22 +118,25 @@ class Collection[Item](
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
-        try:
-            return other in self.__fget__()
-        except TypeError:
-            return other in (x for x in self.__fget__())  # type: ignore[operator]
+        with self.__data__() as data:
+            try:
+                return other in data
+            except TypeError:
+                return other in (x for x in data)  # type: ignore[operator]
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @setdoc.basic
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        return iter(self.__fget__())
+        with self.__data__() as data:
+            return iter(data)
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
-        return len(self.__fget__())
+        with self.__data__() as data:
+            return len(data)
 
 
 ### SET ###
@@ -145,37 +164,39 @@ class SetLike[Item: abc.Hashable](Set[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: Data[Item], /) -> None: ...
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @setdoc.basic
     def __init__(self: Self, data: Init[Item] = (), /) -> None:
-        self.__fset__(set(data))
+        with self.__data__() as data_:
+            data_.update(data)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({set(self.__fget__())!r})"
+        with self.__data__() as data:
+            return f"{type(self).__name__}({set(data)!r})"
 
     @setdoc.basic
     def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
-        return type(self)(self.__fget__().difference(*others))
+        with self.__data__() as data:
+            return type(self)(data.difference(*others))
 
     @setdoc.basic
     def intersection(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> Self:
-        return type(self)(self.__fget__().intersection(*others))
+        with self.__data__() as data:
+            return type(self)(data.intersection(*others))
 
     @setdoc.basic
     def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
-        return self.__fget__().issubset(other)
+        with self.__data__() as data:
+            return data.issubset(other)
 
     @setdoc.basic
     def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
-        return self.__fget__().issuperset(other)
+        with self.__data__() as data:
+            return data.issuperset(other)
 
     @setdoc.basic
     def symmetric_difference(
@@ -183,11 +204,13 @@ class SetLike[Item: abc.Hashable](Set[Item]):
         other: abc.Iterable[Item],
         /,
     ) -> Self:
-        return type(self)(self.__fget__().symmetric_difference(other))
+        with self.__data__() as data:
+            return type(self)(data.symmetric_difference(other))
 
     @setdoc.basic
     def union(self: Self, /, *others: abc.Iterable[Item]) -> Self:
-        return type(self)(self.__fget__().union(*others))
+        with self.__data__() as data:
+            return type(self)(data.union(*others))
 
 
 class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
@@ -197,7 +220,8 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        return hash(frozenset(self.__fget__()))
+        with self.__data__() as data:
+            return hash(frozenset(data))
 
 
 class MutableSetLike[Item: abc.Hashable](
@@ -210,10 +234,8 @@ class MutableSetLike[Item: abc.Hashable](
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
-        data: set[Item]
-        data = self.__fget__()
-        data.add(item)
-        self.__fset__(data)
+        with self.__data__() as data:
+            data.add(item)
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -225,30 +247,32 @@ class MutableSetLike[Item: abc.Hashable](
         /,
         *others: abc.Iterable[abc.Hashable],
     ) -> None:
-        self.__fset__(self.__fget__().difference(*others))
+        with self.__data__() as data:
+            data.difference(*others)
 
     @setdoc.basic
     def discard(self: Self, item: abc.Hashable, /) -> None:
-        data: set[Item]
-        data = self.__fget__()
-        data.discard(item)
-        self.__fset__(data)
+        with self.__data__() as data:
+            data.discard(item)
 
     @setdoc.basic
     def intersection_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> None:
-        self.__fset__(self.__fget__().intersection(*others))
+        with self.__data__() as data:
+            data.intersection_update(*others)
 
     @setdoc.basic
     def symmetric_difference_update(
         self: Self, other: abc.Iterable[Item], /
     ) -> None:
-        self.__fset__(self.__fget__().symmetric_difference(other))
+        with self.__data__() as data:
+            data.symmetric_difference_update(other)
 
     @setdoc.basic
     def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
-        self.__fset__(self.__fget__().union(*others))
+        with self.__data__() as data:
+            data.update(*others)
 
 
 ### MAPPING ###
@@ -269,14 +293,15 @@ class Mapping[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Key, Value]: ...
+    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
 
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Value:
-        try:
-            return self.__fget__()[key]  # type: ignore[index]
-        except TypeError:
-            raise KeyError(key) from None
+        with self.__data__() as data:
+            try:
+                return data[key]  # type: ignore[index]
+            except TypeError:
+                raise KeyError(key) from None
 
 
 class FrozenMapping[Key: abc.Hashable, Value](
@@ -310,11 +335,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Key, Value]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: Data[Key, Value], /) -> None: ...
+    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
 
     @setdoc.basic
     def __init__(
@@ -323,12 +344,11 @@ class DictLike[Key: abc.Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        data_: DictLike.Data[Key, Value]
-        data_ = dict(  # type: ignore[assignment]
-            data,  # type: ignore[arg-type]
-            **kwargs,
-        )
-        self.__fset__(data_)
+        with self.__data__() as data_:
+            data_.update(
+                data,  # type: ignore[arg-type]
+                **kwargs,
+            )
 
     @setdoc.basic
     def __or__(
@@ -336,7 +356,8 @@ class DictLike[Key: abc.Hashable, Value](
         other: DictLike[Key, Value],
         /,
     ) -> Self:
-        return type(self)(self.__fget__() | other.__fget__())
+        with self.__data__() as data, other.__data__() as data_:
+            return type(self)(data | data_)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
@@ -374,10 +395,8 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key | str, /) -> None:
-        data: MutableDictLike.Data[Key, Value]
-        data = self.__fget__()
-        del data[key]
-        self.__fset__(data)
+        with self.__data__() as data:
+            del data[key]
 
     @setdoc.basic
     def __ior__(
@@ -385,7 +404,8 @@ class MutableDictLike[Key: abc.Hashable, Value](
         other: DictLike[Key, Value],
         /,
     ) -> Self:
-        self.__fset__(self.__fget__() | other.__fget__())
+        with self.__data__() as data, other.__data__() as data_:
+            data.__ior__(data_)
         return self
 
     @setdoc.basic
@@ -396,10 +416,8 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
     ) -> None:
         # what to do if Key includes unhashable types?
-        data: MutableDictLike.Data[Key, Value]
-        data = self.__fget__()
-        data[key] = value
-        self.__fset__(data)
+        with self.__data__() as data:
+            data[key] = value
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -439,7 +457,7 @@ class Sequence[Item](
 
     @abstractmethod
     @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @overload
     @setdoc.basic
@@ -451,7 +469,8 @@ class Sequence[Item](
     def __getitem__(
         self: Self, key: int | Slice[int], /
     ) -> Item | abc.Sequence[Item]:
-        return self.__fget__()[key]
+        with self.__data__() as data:
+            return data[key]
 
 
 ### LIST LIKE ###
@@ -476,29 +495,28 @@ class ListLike[Item](Sequence[Item]):
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
         if isinstance(other, ListLike):
-            return type(self)(self.__fget__() + other.__fget__())
+            with self.__data__() as data, other.__data__() as data_:
+                return type(self)(data + data_)
         else:
             return NotImplemented
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__fget__() == other.__fget__()
+            with self.__data__() as data, other.__data__() as data_:
+                return data == data_
         else:
             return NotImplemented
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self) -> Data[Item]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: Data[Item], /) -> None: ...
 
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__fget__() >= other.__fget__()
+            with self.__data__() as data, other.__data__() as data_:
+                return data >= data_
         else:
             return NotImplemented
 
@@ -514,43 +532,50 @@ class ListLike[Item](Sequence[Item]):
     def __getitem__(
         self: Self, index: SupportsIndex | Slice[SupportsIndex], /
     ) -> Item | Self:
-        if isinstance(index, SupportsIndex):
-            return self.__fget__()[index]
-        else:
-            return type(self)(self.__fget__()[index])
+        with self.__data__() as data:
+            if isinstance(index, SupportsIndex):
+                return data[index]
+            else:
+                return type(self)(data[index])
 
     @setdoc.basic
     def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__fget__() > other.__fget__()
+            with self.__data__() as data, other.__data__() as data_:
+                return data > data_
         else:
             return NotImplemented
 
     @setdoc.basic
     def __init__(self: Self, data: Init[Item] = (), /) -> None:
-        self.__fset__(list(data))
+        with self.__data__() as data_:
+            data_.extend(data)
 
     @setdoc.basic
     def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__fget__() <= other.__fget__()
+            with self.__data__() as data, other.__data__() as data_:
+                return data <= data_
         else:
             return NotImplemented
 
     @setdoc.basic
     def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__fget__() < other.__fget__()
+            with self.__data__() as data, other.__data__() as data_:
+                return data < data_
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
-        return type(self)(self.__fget__() * other)
+        with self.__data__() as data:
+            return type(self)(data * other)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({list(self.__fget__())!r})"
+        with self.__data__() as data:
+            return f"{type(self).__name__}({list(data)!r})"
 
     __rmul__ = __mul__
 
@@ -565,7 +590,8 @@ class FrozenListLike[Item](
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        return hash(tuple(self.__fget__()))
+        with self.__data__() as data:
+            return hash(tuple(data))
 
 
 class MutableListLike[Item](
@@ -580,14 +606,13 @@ class MutableListLike[Item](
     def __delitem__(
         self: Self, other: SupportsIndex | Slice[SupportsIndex], /
     ) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        del data[other]
-        self.__fset__(data)
+        with self.__data__() as data:
+            del data[other]
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        self.__fset__(self.__fget__() * other)
+        with self.__data__() as data:
+            data.__imul__(data * other)
         return self
 
     @overload
@@ -612,10 +637,8 @@ class MutableListLike[Item](
         value: Item | abc.Iterable[Item],
         /,
     ) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data[key] = value  # type: ignore[index, assignment]
-        self.__fset__(data)
+        with self.__data__() as data:
+            data[key] = value  # type: ignore[index, assignment]
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -623,14 +646,10 @@ class MutableListLike[Item](
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.insert(index, item)
-        self.__fset__(data)
+        with self.__data__() as data:
+            data.insert(index, item)
 
     @setdoc.basic
     def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.sort(key=key, reverse=reverse)
-        self.__fset__(data)
+        with self.__data__() as data:
+            data.sort(key=key, reverse=reverse)
