@@ -249,7 +249,7 @@ class TestHoldList(unittest.TestCase):
     # __rmul__
     def test_rmul(self: Self) -> None:
         result: HoldList[int]
-        result = 2 * HoldList([1, 2])
+        result = 2 * HoldList([1, 2])  # type: ignore[assignment]
         self.assertEqual(
             result,
             HoldList([1, 2, 1, 2]),
