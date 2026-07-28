@@ -36,6 +36,7 @@ from typing import (
     Protocol,
     Self,
     SupportsIndex,
+    cast,
     overload,
 )
 
@@ -100,12 +101,12 @@ def getDataSlot[Data: Copyable](
             if isinstance(data, Missing):
                 data = factory()
             else:
-                data = data.copy()
+                data = cast(Data, data.copy())
             yield data
             setattr(self, slotname, data)
 
     Ans.__name__ = "DataSlot"
-    return Ans
+    return Ans  # type: ignore[return-value]
 
 
 ### COLLECTION ###
