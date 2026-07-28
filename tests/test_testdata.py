@@ -311,12 +311,15 @@ class TestGeneric(unittest.TestCase):
 
 class TestHasCopy(unittest.TestCase):
     def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+        answer: Any
         cls: type[Any]
+        solution: Any
         cls = Lazy.get_type(typename)
-        if cls is None:
-            raise Exception
-        if typename.startswith("Base") or typename.startswith("Frozen"):
-            self.assertFalse(hasattr(cls, "copy"))
+        answer = hasattr(cls, "copy")
+        solution = typename.startswith("Mutable") and (
+            "__init__" in cls.__dict__
+        )
+        self.assertTrue(answer, solution)
 
     def test_has_copy(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():

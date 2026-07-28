@@ -273,6 +273,7 @@ class MutableSetLike[Item: abc.Hashable](
     """Provide easy abc for custom mutable set-like."""
 
     __slots__ = ()
+    type Data[DataItem] = set[DataItem]
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
@@ -290,7 +291,7 @@ class MutableSetLike[Item: abc.Hashable](
         *others: abc.Iterable[abc.Hashable],
     ) -> None:
         with self.__data__() as data:
-            data.difference(*others)
+            data.difference_update(*others)
 
     @setdoc.basic
     def discard(self: Self, item: abc.Hashable, /) -> None:
@@ -475,6 +476,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     """Provide easy abc for custom mutable dict-like."""
 
     __slots__ = ()
+    type Data[DataKey, DataValue] = dict[DataKey | str, Optional[DataValue]]
 
     @setdoc.basic
     def __ior__(
@@ -750,6 +752,7 @@ class MutableListLike[Item](
     """Provide easy abc for custom mutable list-like."""
 
     __slots__ = ()
+    type Data[DataItem] = list[DataItem]
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
