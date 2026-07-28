@@ -567,6 +567,18 @@ class MutableSequence[Item](
         ) -> None: ...
         @overload
         @setdoc.basic
+        def __getitem__(self: Self, key: int, /) -> DataItem: ...
+        @overload
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: Slice[int], /
+        ) -> abc.MutableSequence[DataItem]: ...
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: int | Slice[int], /
+        ) -> DataItem | abc.MutableSequence[DataItem]: ...
+        @overload
+        @setdoc.basic
         def __setitem__(
             self: Self, key: SupportsIndex, value: DataItem, /
         ) -> None: ...
@@ -600,6 +612,21 @@ class MutableSequence[Item](
     ) -> None:
         with self.__data__() as data:
             del data[other]
+
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: Slice[int], /
+    ) -> abc.MutableSequence[Item]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: int | Slice[int], /
+    ) -> Item | abc.MutableSequence[Item]:
+        with self.__data__() as data:
+            return data[key]
 
     @overload
     @setdoc.basic
