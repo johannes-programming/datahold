@@ -764,7 +764,10 @@ class ListLike[Item](Sequence[Item]):
         with self.__data__() as data:
             return f"{type(self).__name__}({list(data)!r})"
 
-    __rmul__ = __mul__
+    @setdoc.basic
+    def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
+        with self.__data__() as data:
+            return type(self)(other * data)
 
 
 class FrozenListLike[Item](

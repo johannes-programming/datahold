@@ -13,7 +13,7 @@ from datahold import FrozenSet, FrozenSetLike, SetLike, getDataSlot
 
 
 class FrozenHoldSet[Item: abc.Hashable](
-    getDataSlot(factory=set, slotname="_data"),
+    getDataSlot(factory=set, slotname="_data"),  # type: ignore[misc]
     FrozenSetLike[Item],
 ):
     """Provide usable frozen set-like with slots."""

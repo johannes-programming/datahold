@@ -18,7 +18,7 @@ from datahold import DictLike, FrozenDictLike, FrozenMapping, getDataSlot
 
 
 class FrozenHoldDict[Key: abc.Hashable, Value](
-    getDataSlot(factory=dict, slotname="_data"),
+    getDataSlot(factory=dict, slotname="_data"),  # type: ignore[misc]
     FrozenDictLike[Key, Value],
 ):
     """Provide usable frozen dict-like with slots."""

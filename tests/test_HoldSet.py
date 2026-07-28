@@ -12,7 +12,7 @@ from datahold import MutableSetLike, getDataSlot
 
 
 class HoldSet[Item: abc.Hashable](
-    getDataSlot(factory=set, slotname="_data"),
+    getDataSlot(factory=set, slotname="_data"),  # type: ignore[misc]
     MutableSetLike[Item],
 ):
     """Provide usable mutable set-like with slots."""

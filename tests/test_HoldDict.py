@@ -12,7 +12,7 @@ from datahold import MutableDictLike, getDataSlot
 
 
 class HoldDict[Key: abc.Hashable, Value](
-    getDataSlot(factory=dict, slotname="_data"),
+    getDataSlot(factory=dict, slotname="_data"),  # type: ignore[misc]
     MutableDictLike[Key, Value],
 ):
     """Provide usable mutable dict-like with slots."""

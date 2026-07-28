@@ -11,7 +11,7 @@ from datahold import FrozenListLike, getDataSlot
 
 
 class FrozenHoldList[Item](
-    getDataSlot(factory=list, slotname="_data"),
+    getDataSlot(factory=list, slotname="_data"),  # type: ignore[misc]
     FrozenListLike[Item],
 ):
     """Provide usable frozen list-like with slots."""

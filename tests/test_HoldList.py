@@ -11,7 +11,7 @@ from datahold import MutableListLike, getDataSlot
 
 
 class HoldList[Item](
-    getDataSlot(factory=list, slotname="_data"),
+    getDataSlot(factory=list, slotname="_data"),  # type: ignore[misc]
     MutableListLike[Item],
 ):
     """Provide usable mutable list-like with slots."""
