@@ -13,7 +13,13 @@
 --sort
 --key=types
 --all-keys
---key=data_attributes
+--key=Mutable
+--key=attributes
+--sort
+--key=types
+--all-keys
+--key=OneWay
+--key=attributes
 --sort
 --key=varia
 --all-keys
