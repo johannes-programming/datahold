@@ -50,7 +50,7 @@ class Copyable(Protocol):
     def copy(self: Self) -> Self: ...
 
 
-class DataContextManager[Data]:
+class DataContextManager[Data](Protocol):
     @setdoc.basic
     def __enter__(self: Self) -> Data: ...
     @setdoc.basic
@@ -82,10 +82,12 @@ def attrdata[Data: Copyable](
     *,
     factory: abc.Callable[[], Data],
     name: str,
-) -> DataContextManager[Data]:
+) -> abc.Callable[[Any], DataContextManager[Data]]:
     @contextmanager
     @setdoc.basic
-    def __data__(self: Self) -> abc.Generator[Data, None, None]:
+    def __data__(
+        self: Any,
+    ) -> abc.Generator[Data, None, None]:
         data: Data | Missing
         data = getattr(self, name, Missing.missing)
         if isinstance(data, Missing):
@@ -328,6 +330,8 @@ class Mapping[Key: abc.Hashable, Value](
         Collection.Data[DataKey],
         Protocol,
     ):
+        """Provide set data protocol."""
+
         @setdoc.basic
         def __getitem__(self: Self, key: Never, /) -> DataValue: ...
 
@@ -364,6 +368,20 @@ class MutableMapping[Key: abc.Hashable, Value](
     """Provide easy abc for custom mutable mapping."""
 
     __slots__ = ()
+
+    class Data[DataKey, DataValue](Mapping.Data[DataKey, DataValue], Protocol):
+        """Provide mutable mapping data protocol."""
+
+        @setdoc.basic
+        def __delitem__(self: Self, key: DataKey, /) -> None: ...
+        @setdoc.basic
+        def __setitem__(
+            self: Self, key: DataKey, value: DataValue, /
+        ) -> None: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key, /) -> None:
@@ -529,6 +547,42 @@ class MutableSequence[Item](
     """Provide easy abc for custom mutable sequence."""
 
     __slots__ = ()
+
+    class Data[DataItem](Sequence.Data[DataItem], Protocol):
+        """Provide mutable sequence data protocol."""
+
+        @setdoc.basic
+        def __delitem__(
+            self: Self, key: SupportsIndex | Slice[SupportsIndex], /
+        ) -> None: ...
+        @overload
+        @setdoc.basic
+        def __setitem__(
+            self: Self, key: SupportsIndex, value: DataItem, /
+        ) -> None: ...
+        @overload
+        @setdoc.basic
+        def __setitem__(
+            self: Self,
+            key: Slice[SupportsIndex],
+            value: abc.Iterable[DataItem],
+            /,
+        ) -> None: ...
+        @setdoc.basic
+        def __setitem__(
+            self: Self,
+            key: SupportsIndex | Slice[SupportsIndex],
+            value: DataItem | abc.Iterable[DataItem],
+            /,
+        ) -> None: ...
+        @setdoc.basic
+        def insert(
+            self: Self, index: SupportsIndex, item: DataItem, /
+        ) -> None: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @setdoc.basic
     def __delitem__(
@@ -700,7 +754,7 @@ class MutableListLike[Item](
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
         with self.__data__() as data:
-            data.__imul__(data * other)
+            data.__imul__(other)
         return self
 
     @setdoc.basic

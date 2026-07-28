@@ -233,10 +233,8 @@ class TestDirData(unittest.TestCase):
     def go_init(self: Self, x: str, /) -> None:
         cls: Any
         cls = getattr(datahold, x)
-        if "__fget__" in cls.__dict__:
+        if "__data__" in cls.__dict__:
             self.assertTrue("Data" in cls.__dict__ or not ins.isabstract(cls))
-        if "__fset__" in cls.__dict__:
-            self.assertIn("__fget__", cls.__dict__)
         self.assertEqual(
             "Init" in cls.__dict__,
             "__init__" in cls.__dict__,
@@ -327,22 +325,31 @@ class TestHasCopy(unittest.TestCase):
 
 
 class TestParents(unittest.TestCase):
-    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
-        cls: type[Any]
+
+    def go_parent(
+        self: Self, *, cls: type[Any], parentname: str, solution: bool
+    ) -> None:
         parenttype: type[Any]
+        parenttype = Lazy.get_import(parentname)
+        self.assertEqual(issubclass(cls, parenttype), solution)
+
+    def go_parents(self: Self, typename: str, /, **kwargs: Any) -> None:
+        cls: type[Any]
         x: Any
         y: Any
         cls = Lazy.get_type(typename)
-        if cls is None:
-            raise Exception
         for x, y in kwargs.get("parents", {}).items():
-            parenttype = Lazy.get_import(x)
-            self.assertEqual(issubclass(cls, parenttype), y, x)
+            with self.subTest(parentname=x):
+                self.go_parent(
+                    cls=cls,
+                    parentname=x,
+                    solution=y,
+                )
 
     def test_parents(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():
             with self.subTest(typename=typename):
-                self.go_types(typename, **kwargs)
+                self.go_parents(typename, **kwargs)
 
 
 if __name__ == "__main__":
