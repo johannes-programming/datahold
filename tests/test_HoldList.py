@@ -7,14 +7,16 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import MutableListLike, attrdata
+from datahold import MutableListLike, getDataSlot
 
 
-class HoldList[Item](MutableListLike[Item]):
+class HoldList[Item](
+    getDataSlot(factory=list, slotname="_data"),
+    MutableListLike[Item],
+):
     """Provide usable mutable list-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=list, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):

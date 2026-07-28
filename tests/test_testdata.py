@@ -317,9 +317,9 @@ class TestHasCopy(unittest.TestCase):
         cls = Lazy.get_type(typename)
         answer = hasattr(cls, "copy")
         solution = typename.startswith("Mutable") and (
-            "__init__" in cls.__dict__
+            cls.__init__ is not object.__init__
         )
-        self.assertTrue(answer, solution)
+        self.assertEqual(answer, solution)
 
     def test_has_copy(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():

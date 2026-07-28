@@ -59,6 +59,10 @@ class DataContextManager[Data](Protocol):
     ) -> None: ...
 
 
+class DataSlot[Data](Protocol):
+    def __data__(self: Self) -> DataContextManager[Data]: ...
+
+
 class Missing(enum.Enum):
     missing = None
 
@@ -78,26 +82,30 @@ class SupportsKeysAndGetitem[Key, Value](Protocol):
 ###
 
 
-def attrdata[Data: Copyable](
+def getDataSlot[Data: Copyable](
     *,
     factory: abc.Callable[[], Data],
-    name: str,
-) -> abc.Callable[[Any], DataContextManager[Data]]:
-    @contextmanager
-    @setdoc.basic
-    def __data__(
-        self: Any,
-    ) -> abc.Generator[Data, None, None]:
-        data: Data | Missing
-        data = getattr(self, name, Missing.missing)
-        if isinstance(data, Missing):
-            data = factory()
-        else:
-            data = data.copy()
-        yield data
-        setattr(self, name, data)
+    slotname: str,
+) -> type[DataSlot[Data]]:
+    class Ans:
+        __slots__ = (slotname,)
 
-    return __data__
+        @contextmanager
+        @setdoc.basic
+        def __data__(
+            self: Self,
+        ) -> abc.Generator[Data, None, None]:
+            data: Data | Missing
+            data = getattr(self, slotname, Missing.missing)
+            if isinstance(data, Missing):
+                data = factory()
+            else:
+                data = data.copy()
+            yield data
+            setattr(self, slotname, data)
+
+    Ans.__name__ = "DataSlot"
+    return Ans
 
 
 ### COLLECTION ###

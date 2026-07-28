@@ -7,16 +7,16 @@ __all__: list[str] = [
 import unittest
 from typing import Any, Self
 
-from datahold import FrozenListLike, attrdata
+from datahold import FrozenListLike, getDataSlot
 
 
 class FrozenHoldList[Item](
+    getDataSlot(factory=list, slotname="_data"),
     FrozenListLike[Item],
 ):
     """Provide usable frozen list-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=list, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):

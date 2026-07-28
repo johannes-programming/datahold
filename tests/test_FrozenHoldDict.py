@@ -14,16 +14,16 @@ from typing import Any, Self
 
 from frozendict import frozendict
 
-from datahold import DictLike, FrozenDictLike, FrozenMapping, attrdata
+from datahold import DictLike, FrozenDictLike, FrozenMapping, getDataSlot
 
 
 class FrozenHoldDict[Key: abc.Hashable, Value](
+    getDataSlot(factory=dict, slotname="_data"),
     FrozenDictLike[Key, Value],
 ):
     """Provide usable frozen dict-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=dict, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):

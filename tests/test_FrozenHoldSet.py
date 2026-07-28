@@ -9,16 +9,16 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import FrozenSet, FrozenSetLike, SetLike, attrdata
+from datahold import FrozenSet, FrozenSetLike, SetLike, getDataSlot
 
 
 class FrozenHoldSet[Item: abc.Hashable](
+    getDataSlot(factory=set, slotname="_data"),
     FrozenSetLike[Item],
 ):
     """Provide usable frozen set-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=set, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):

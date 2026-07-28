@@ -8,16 +8,16 @@ import unittest
 from collections import abc
 from typing import Any, Self, cast
 
-from datahold import MutableDictLike, attrdata
+from datahold import MutableDictLike, getDataSlot
 
 
 class HoldDict[Key: abc.Hashable, Value](
+    getDataSlot(factory=dict, slotname="_data"),
     MutableDictLike[Key, Value],
 ):
     """Provide usable mutable dict-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=dict, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):

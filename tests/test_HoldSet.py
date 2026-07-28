@@ -8,14 +8,16 @@ import unittest
 from collections import abc
 from typing import Any, Self
 
-from datahold import MutableSetLike, attrdata
+from datahold import MutableSetLike, getDataSlot
 
 
-class HoldSet[Item: abc.Hashable](MutableSetLike[Item]):
+class HoldSet[Item: abc.Hashable](
+    getDataSlot(factory=set, slotname="_data"),
+    MutableSetLike[Item],
+):
     """Provide usable mutable set-like with slots."""
 
-    __slots__ = ("_data",)
-    __data__ = attrdata(factory=set, name="_data")
+    __slots__ = ()
 
 
 class TestCopy(unittest.TestCase):
