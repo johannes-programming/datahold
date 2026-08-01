@@ -2,14 +2,7 @@
 --sort
 --all-keys
 --sort
---key=types
---all-keys
---key=parents
---sort
---key=types
---all-keys
---sort
---key=varia
+--key=datatypes
 --all-keys
 --
 tests/testdata.toml
