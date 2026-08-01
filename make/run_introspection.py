@@ -2,8 +2,6 @@ __all__: list[str] = []
 
 from typing import Any
 
-from datahold import ListLike
-
 
 def search_mro(cls_: type[Any], /, name: str) -> None:
     print("find %r from %s" % (name, cls_))
@@ -15,5 +13,3 @@ def search_mro(cls_: type[Any], /, name: str) -> None:
 
 # print("FrozenHoldList.__mro__", FrozenHoldList.__mro__)
 # print("FrozenHoldList.__hash__", FrozenHoldList.__hash__)
-
-search_mro(ListLike, "__hash__")

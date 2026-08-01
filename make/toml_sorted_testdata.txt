@@ -4,5 +4,9 @@
 --sort
 --key=datatypes
 --all-keys
+--sort
+--key=datatypes
+--all-keys
+--key=issubclass
 --
 tests/testdata.toml
