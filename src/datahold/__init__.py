@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 __all__: list[str] = [
+    "FrozenListLike",
     "Hold",
+    "ListLike",
     "MutableListLike",
 ]
 
-import sys
 from abc import ABC, abstractmethod
 from collections import abc
 from types import NotImplementedType
@@ -37,7 +38,7 @@ class Hold[Data](ABC):
 
 
 ### LIST-LIKE ###
-class MutableListLike[Item](abc.MutableSequence[Item]):
+class ListLike[Item](abc.Sequence[Item]):
     """Provide a base class for customized list-likes."""
 
     __slots__ = ()
@@ -49,21 +50,6 @@ class MutableListLike[Item](abc.MutableSequence[Item]):
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
         return other in self.__fget__()
-
-    @overload
-    @setdoc.basic
-    def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
-    @overload
-    @setdoc.basic
-    def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None: ...
-    @setdoc.basic
-    def __delitem__(
-        self: Self, key: SupportsIndex | Slice[SupportsIndex], /
-    ) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        del data[key]
-        self.__fset__(data)
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
@@ -114,22 +100,6 @@ class MutableListLike[Item](abc.MutableSequence[Item]):
             return NotImplemented
 
     @setdoc.basic
-    def __iadd__(self: Self, other: abc.Iterable[Item], /) -> Self:
-        data: list[Item]
-        data = self.__fget__()
-        data += other
-        self.__fset__(data)
-        return self
-
-    @setdoc.basic
-    def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        data: list[Item]
-        data = self.__fget__()
-        data *= other
-        self.__fset__(data)
-        return self
-
-    @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         self.__fset__(list(data))
 
@@ -161,6 +131,45 @@ class MutableListLike[Item](abc.MutableSequence[Item]):
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({self.__fget__()!r})"
 
+
+class FrozenListLike[Item](ListLike[Item], abc.Hashable):
+    """Provide a base class for customized frozen list-likes."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(tuple(self.__fget__()))
+
+
+class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
+    """Provide a base class for customized mutable list-likes."""
+
+    __slots__ = ()
+
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None: ...
+    @setdoc.basic
+    def __delitem__(
+        self: Self, key: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None:
+        data: list[Item]
+        data = self.__fget__()
+        del data[key]
+        self.__fset__(data)
+
+    @setdoc.basic
+    def __imul__(self: Self, other: SupportsIndex, /) -> Self:
+        data: list[Item]
+        data = self.__fget__()
+        data *= other
+        self.__fset__(data)
+        return self
+
     @overload
     @setdoc.basic
     def __setitem__(
@@ -184,72 +193,14 @@ class MutableListLike[Item](abc.MutableSequence[Item]):
         self.__fset__(data)
 
     @setdoc.basic
-    def append(self: Self, item: Item, /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.append(item)
-        self.__fset__(data)
-
-    @setdoc.basic
-    def clear(self: Self) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.clear()
-        self.__fset__(data)
-
-    @setdoc.basic
     def copy(self: Self) -> Self:
         return type(self)(self.__fget__())
-
-    @setdoc.basic
-    def count(self: Self, item: Item) -> int:
-        return self.__fget__().count(item)
-
-    @setdoc.basic
-    def extend(self: Self, other: abc.Iterable[Item], /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.extend(other)
-        self.__fset__(data)
-
-    @setdoc.basic
-    def index(
-        self: Self,
-        item: Item,
-        start: SupportsIndex = 0,
-        stop: SupportsIndex = sys.maxsize,
-        /,
-    ) -> int:
-        return self.__fget__().index(item, start, stop)
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
         data: list[Item]
         data = self.__fget__()
         data.insert(index, item)
-        self.__fset__(data)
-
-    @setdoc.basic
-    def pop(self: Self, index: SupportsIndex = -1, /) -> Item:
-        ans: Item
-        data: list[Item]
-        data = self.__fget__()
-        ans = data.pop(index)
-        self.__fset__(data)
-        return ans
-
-    @setdoc.basic
-    def remove(self: Self, item: Item, /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.remove(item)
-        self.__fset__(data)
-
-    @setdoc.basic
-    def reverse(self: Self, /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.reverse()
         self.__fset__(data)
 
     @setdoc.basic

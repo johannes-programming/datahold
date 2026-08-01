@@ -1,11 +1,56 @@
+[datatypes.FrozenListLike]
+abstractmethods = [
+    "__fget__",
+    "__fset__",
+]
+
+[datatypes.FrozenListLike.attributes]
+__fget__ = "datahold.ListLike"
+
+[datatypes.FrozenListLike.issubclass]
+"builtins.list" = false
+"builtins.tuple" = false
+"collections.abc.Hashable" = true
+
+[datatypes.ListLike]
+abstractmethods = [
+    "__fget__",
+    "__fset__",
+]
+
+[datatypes.ListLike.attributes]
+__fget__ = "datahold.ListLike"
+__reversed__ = "collections.abc.Sequence"
+count = "collections.abc.Sequence"
+index = "collections.abc.Sequence"
+
+[datatypes.ListLike.issubclass]
+"collections.abc.Hashable" = false
+
 [datatypes.MutableListLike]
 abstractmethods = [
     "__fget__",
     "__fset__",
 ]
 
+[datatypes.MutableListLike.attributes]
+__add__ = "datahold.MutableListLike"
+__fget__ = "datahold.ListLike"
+__iadd__ = "collections.abc.MutableSequence"
+__reversed__ = "collections.abc.Sequence"
+append = "collections.abc.MutableSequence"
+clear = "collections.abc.MutableSequence"
+count = "collections.abc.Sequence"
+extend = "collections.abc.MutableSequence"
+foo = ""
+index = "collections.abc.Sequence"
+pop = "collections.abc.MutableSequence"
+remove = "collections.abc.MutableSequence"
+reverse = "collections.abc.MutableSequence"
+
 [datatypes.MutableListLike.issubclass]
 "builtins.list" = false
+"collections.abc.Hashable" = false
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
 

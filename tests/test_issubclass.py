@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: list[str] = ["TestSuperclasses"]
+__all__: list[str] = ["TestIssubclass"]
 
 import unittest
 from typing import Self
@@ -10,7 +10,7 @@ from Lazy import Lazy
 import datahold
 
 
-class TestSuperclasses(unittest.TestCase):
+class TestIssubclass(unittest.TestCase):
     def _test_issubclass(self: Self, name: str, /, **kwargs: bool) -> None:
         datatype = getattr(datahold, name)
         for x, y in kwargs.items():
