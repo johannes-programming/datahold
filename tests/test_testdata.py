@@ -43,6 +43,10 @@ class Lazy(enum.Enum):
         return cast(tuple[str, ...], self.test_object["METHODS"])
 
     @cached_property
+    def abstractmethods(self: Self) -> frozenset[str]:
+        return frozenset(self.varia["abstractmethods"])
+
+    @cached_property
     def data(self: Self) -> dict[str, Any]:
         file: Path
         stream: io.BufferedReader
@@ -77,11 +81,35 @@ class Lazy(enum.Enum):
 
 class TestAbstractness(unittest.TestCase):
 
-    def go_types(self: Self, typename: str, /, **kwargs: Any) -> None:
+    def go_types(
+        self: Self,
+        typename: str,
+        /,
+        *,
+        abstractmethods: Any = None,
+        isabstract: Any = None,
+        **kwargs: Any,
+    ) -> None:
         cls: type[Any]
         cls = Lazy.get_type(typename)
-        if kwargs.get("isabstract") is not None:
-            self.assertEqual(ins.isabstract(cls), kwargs.get("isabstract"))
+        if isabstract is not None:
+            self.assertEqual(
+                ins.isabstract(cls),
+                isabstract,
+            )
+        if abstractmethods is not None:
+            self.assertSetEqual(
+                cls.__abstractmethods__,
+                frozenset(abstractmethods),
+            )
+        self.assertLessEqual(
+            cls.__abstractmethods__,
+            Lazy.lazy.abstractmethods,
+        )
+        self.assertFalse(
+            "__init__" in cls.__abstractmethods__
+            and "__mutable__" in cls.__abstractmethods__
+        )
 
     def test_abstract_classes(self: Self) -> None:
         for typename, kwargs in Lazy.lazy.types.items():
@@ -201,55 +229,81 @@ class TestData(unittest.TestCase):
 
 
 class TestDirData(unittest.TestCase):
-    def go_data_attribute(
-        self: Self,
-        cls: type[Any],
-        attrname: str,
-        /,
-        hint: bool | str,
-    ) -> None:
-        cls_: type[Any]
-        if isinstance(hint, bool):
-            self.assertEqual(hasattr(cls, attrname), hint)
-            return
-        cls_ = Lazy.get_import(hint)
-        cls_ = cls_.Data
-        self.assertIs(getattr(cls, attrname), getattr(cls_, attrname))
 
-    def go_data_attributes(
+    def go_Mutable(
         self: Self,
         typename: Any,
         /,
         *,
-        data_attributes: Optional[dict[str, bool | str]],
+        attributes: Optional[dict[str, bool | str]] = None,
     ) -> None:
         cls: Any
+        cls_: type[Any]
         cls = getattr(datahold, typename)
-        if data_attributes is None:
+        self.assertEqual(
+            "__mutable__" in cls.__dict__,
+            "Mutable" in cls.__dict__,
+        )
+        self.assertEqual(
+            "__mutable__" in cls.__dict__,
+            typename.startswith("Mutable"),
+        )
+        if attributes is None:
             return
-        for x, y in data_attributes.items():
-            self.go_data_attribute(cls.Data, x, y)
+        for attrname, hint in attributes.items():
+            if isinstance(hint, bool):
+                self.assertEqual(hasattr(cls.Mutable, attrname), hint)
+                continue
+            cls_ = Lazy.get_import(hint)
+            self.assertIs(
+                getattr(cls.Mutable, attrname),
+                getattr(cls_.Mutable, attrname),
+            )
+
+    def go_OneWay(
+        self: Self,
+        typename: Any,
+        /,
+        *,
+        attributes: Optional[dict[str, bool | str]] = None,
+    ) -> None:
+        cls: Any
+        cls_: type[Any]
+        cls = getattr(datahold, typename)
+        self.assertEqual(
+            "__one_way__" in cls.__dict__,
+            "OneWay" in cls.__dict__,
+        )
+        if attributes is None:
+            return
+        for attrname, hint in attributes.items():
+            if isinstance(hint, bool):
+                self.assertEqual(hasattr(cls.OneWay, attrname), hint)
+                continue
+            cls_ = Lazy.get_import(hint)
+            self.assertIs(
+                getattr(cls.OneWay, attrname),
+                getattr(cls_.OneWay, attrname),
+            )
 
     def go_init(self: Self, x: str, /) -> None:
         cls: Any
         cls = getattr(datahold, x)
-        if "__data__" in cls.__dict__:
-            self.assertTrue("Data" in cls.__dict__ or not ins.isabstract(cls))
-        self.assertEqual(
-            "Init" in cls.__dict__,
-            "__init__" in cls.__dict__,
-        )
         self.assertNotEqual(
-            hasattr(cls, "Init"),
             cls.__init__ is object.__init__,
+            hasattr(cls, "Init"),
         )
 
     def test_types(self: Self) -> None:
         for x, y in Lazy.lazy.types.items():
             with self.subTest(type=x):
-                self.go_data_attributes(
+                self.go_Mutable(
                     x,
-                    data_attributes=y.get("data_attributes"),
+                    **y.get("Mutable", {}),
+                )
+                self.go_OneWay(
+                    x,
+                    **y.get("OneWay", {}),
                 )
                 self.go_init(x)
 

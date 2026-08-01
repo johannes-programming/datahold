@@ -21,7 +21,6 @@ __all__: list[str] = [
     "Sequence",
     "Set",
     "SetLike",
-    "attrdata",
 ]
 
 import enum
@@ -123,35 +122,32 @@ class Collection[Item](
     __slots__ = ()
 
     @setdoc.basic
-    class Data[DataItem](
+    class OneWay[OneWayItem](
         abc.Sized,
-        abc.Iterable[DataItem],
+        abc.Iterable[OneWayItem],
         abc.Container[Never],
         Protocol,
-    ):
-        """Provide collection data protocol."""
+    ): ...
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
-        with self.__data__() as data:
-            try:
-                return other in data
-            except TypeError:
-                return other in (x for x in data)  # type: ignore[operator]
-
-    @abstractmethod
-    @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
+        data = self.__one_way__()
+        try:
+            return other in data
+        except TypeError:
+            return other in (x for x in data)  # type: ignore[operator]
 
     @setdoc.basic
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        with self.__data__() as data:
-            return iter(data)
+        return iter(self.__one_way__())
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
-        with self.__data__() as data:
-            return len(data)
+        return len(self.__one_way__())
+
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self) -> OneWay[Item]: ...
 
 
 ### SET ###
@@ -184,26 +180,25 @@ class MutableSet[Item: abc.Hashable](
 
     __slots__ = ()
 
-    class Data[DataItem](Set.Data[DataItem], Protocol):
-        """Provide mutable set data protocol."""
-
+    @setdoc.basic
+    class Mutable[MutableItem](Protocol):
         @setdoc.basic
-        def add(self: Self, item: DataItem, /) -> None: ...
+        def add(self: Self, item: MutableItem, /) -> object: ...
         @setdoc.basic
-        def discard(self: Self, item: abc.Hashable, /) -> None: ...
+        def discard(self: Self, item: abc.Hashable, /) -> object: ...
 
     @abstractmethod
     @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Item]]: ...
 
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.add(item)
 
     @setdoc.basic
     def discard(self: Self, item: abc.Hashable, /) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.discard(item)
 
 
@@ -215,44 +210,33 @@ class SetLike[Item: abc.Hashable](Set[Item]):
 
     __slots__ = ()
 
-    type Data[DataItem] = set[DataItem]
     type Init[InitItem] = abc.Iterable[InitItem]
 
     @abstractmethod
     @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
-
-    @setdoc.basic
-    def __init__(self: Self, data: Init[Item] = (), /) -> None:
-        with self.__data__() as data_:
-            data_.update(data)
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        with self.__data__() as data:
-            return f"{type(self).__name__}({set(data)!r})"
+        return f"{type(self).__name__}({set(self)!r})"
 
     @setdoc.basic
     def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
-        with self.__data__() as data:
-            return type(self)(data.difference(*others))
+        return type(self)(set(self).difference(*others))
 
     @setdoc.basic
     def intersection(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> Self:
-        with self.__data__() as data:
-            return type(self)(data.intersection(*others))
+        return type(self)(set(self).intersection(*others))
 
     @setdoc.basic
     def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
-        with self.__data__() as data:
-            return data.issubset(other)
+        return set(self).issubset(other)
 
     @setdoc.basic
     def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
-        with self.__data__() as data:
-            return data.issuperset(other)
+        return set(self).issuperset(other)
 
     @setdoc.basic
     def symmetric_difference(
@@ -260,13 +244,11 @@ class SetLike[Item: abc.Hashable](Set[Item]):
         other: abc.Iterable[Item],
         /,
     ) -> Self:
-        with self.__data__() as data:
-            return type(self)(data.symmetric_difference(other))
+        return type(self)(set(self).symmetric_difference(other))
 
     @setdoc.basic
     def union(self: Self, /, *others: abc.Iterable[Item]) -> Self:
-        with self.__data__() as data:
-            return type(self)(data.union(*others))
+        return type(self)(set(self).union(*others))
 
 
 class FrozenSetLike[Item: abc.Hashable](SetLike[Item], FrozenSet[Item]):
@@ -282,12 +264,35 @@ class MutableSetLike[Item: abc.Hashable](
     """Provide easy abc for custom mutable set-like."""
 
     __slots__ = ()
-    type Data[DataItem] = set[DataItem]
 
     @setdoc.basic
-    def add(self: Self, item: Item, /) -> None:
-        with self.__data__() as data:
-            data.add(item)
+    class Mutable[MutableData](
+        MutableSet.Mutable[MutableData],
+        Protocol,
+    ):
+        @setdoc.basic
+        def difference_update(
+            self: Self,
+            /,
+            *others: abc.Iterable[abc.Hashable],
+        ) -> object: ...
+
+        @setdoc.basic
+        def intersection_update(
+            self: Self, /, *others: abc.Iterable[abc.Hashable]
+        ) -> object: ...
+
+        @setdoc.basic
+        def symmetric_difference_update(
+            self: Self, other: abc.Iterable[Item], /
+        ) -> object: ...
+
+        @setdoc.basic
+        def update(self: Self, /, *others: abc.Iterable[Item]) -> object: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Item]]: ...
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -299,32 +304,29 @@ class MutableSetLike[Item: abc.Hashable](
         /,
         *others: abc.Iterable[abc.Hashable],
     ) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.difference_update(*others)
-
-    @setdoc.basic
-    def discard(self: Self, item: abc.Hashable, /) -> None:
-        with self.__data__() as data:
-            data.discard(item)
 
     @setdoc.basic
     def intersection_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
     ) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.intersection_update(*others)
 
     @setdoc.basic
     def symmetric_difference_update(
         self: Self, other: abc.Iterable[Item], /
     ) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.symmetric_difference_update(other)
 
     @setdoc.basic
     def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.update(*others)
+
+    __init__ = update
 
 
 ### MAPPING ###
@@ -336,26 +338,26 @@ class Mapping[Key: abc.Hashable, Value](
     __slots__ = ()
 
     @setdoc.basic
-    class Data[DataKey, DataValue](
-        Collection.Data[DataKey],
+    class OneWay[OneWayKey, OneWayValue](
+        Collection.OneWay[OneWayKey],
         Protocol,
     ):
         """Provide set data protocol."""
 
         @setdoc.basic
-        def __getitem__(self: Self, key: Never, /) -> DataValue: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
+        def __getitem__(self: Self, key: Never, /) -> OneWayValue: ...
 
     @setdoc.basic
     def __getitem__(self: Self, key: object, /) -> Value:
-        with self.__data__() as data:
-            try:
-                return data[key]  # type: ignore[index]
-            except TypeError:
-                raise KeyError(key) from None
+        data = self.__one_way__()
+        try:
+            return data[key]  # type: ignore[index]
+        except TypeError:
+            raise KeyError(key) from None
+
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self) -> OneWay[Key, Value]: ...
 
 
 class FrozenMapping[Key: abc.Hashable, Value](
@@ -379,24 +381,25 @@ class MutableMapping[Key: abc.Hashable, Value](
 
     __slots__ = ()
 
-    class Data[DataKey, DataValue](Mapping.Data[DataKey, DataValue], Protocol):
+    @setdoc.basic
+    class Mutable[MutableKey, MutableValue](Protocol):
         """Provide mutable mapping data protocol."""
 
         @setdoc.basic
-        def __delitem__(self: Self, key: DataKey, /) -> None: ...
+        def __delitem__(self: Self, key: MutableKey, /) -> object: ...
         @setdoc.basic
         def __setitem__(
-            self: Self, key: DataKey, value: DataValue, /
-        ) -> None: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
+            self: Self, key: MutableKey, value: MutableValue, /
+        ) -> object: ...
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key, /) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             del data[key]
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Key, Value]]: ...
 
     @setdoc.basic
     def __setitem__(
@@ -406,7 +409,7 @@ class MutableMapping[Key: abc.Hashable, Value](
         /,
     ) -> None:
         # what to do if Key includes unhashable types?
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data[key] = value
 
 
@@ -420,37 +423,50 @@ class DictLike[Key: abc.Hashable, Value](
 
     __slots__ = ()
 
-    type Data[DataKey, DataValue] = dict[DataKey | str, Optional[DataValue]]
     type Init[DataKey, DataValue] = (
         SupportsKeysAndGetitem[DataKey | str, Optional[DataValue]]
         | abc.Iterable[tuple[DataKey | str, Optional[DataValue]]]
     )
 
-    @abstractmethod
     @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Key, Value]]: ...
+    class OneWay[OneWayKey, OneWayValue](
+        Mapping.OneWay[OneWayKey | str, Optional[OneWayValue]],
+        Protocol,
+    ):
+        ...
 
+        @setdoc.basic
+        def __or__(
+            self: Self,
+            other: DictLike.OneWay[OneWayKey, OneWayValue],
+            /,
+        ) -> Self: ...
+
+        # __ror__ is unnecessary because of how __or__ is defined
+
+    @abstractmethod
     @setdoc.basic
     def __init__(
         self: Self,
         data: Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
-    ) -> None:
-        with self.__data__() as data_:
-            data_.update(
-                data,  # type: ignore[arg-type]
-                **kwargs,
-            )
+    ) -> None: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self) -> OneWay[Key, Value]: ...
 
     @setdoc.basic
     def __or__(
         self: Self,
-        other: DictLike[Key, Value],
+        other: object,
         /,
-    ) -> Self:
-        with self.__data__() as data, other.__data__() as data_:
-            return type(self)(data | data_)
+    ) -> NotImplementedType | Self:
+        if isinstance(other, DictLike):
+            return type(self)(dict(self) | dict(other))
+        else:
+            return NotImplemented
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
@@ -485,7 +501,26 @@ class MutableDictLike[Key: abc.Hashable, Value](
     """Provide easy abc for custom mutable dict-like."""
 
     __slots__ = ()
-    type Data[DataKey, DataValue] = dict[DataKey | str, Optional[DataValue]]
+
+    @setdoc.basic
+    class Mutable[MutableKey, MutableValue](
+        MutableMapping.Mutable[MutableKey | str, Optional[MutableValue]],
+        Protocol,
+    ):
+        @setdoc.basic
+        def __ior__(
+            self: Self,
+            other: DictLike.OneWay[MutableKey, MutableValue],
+            /,
+        ) -> object: ...
+
+    __init__ = MutableMapping.update
+    # dict.update reveals the overloads
+    #     def [_KT, _VT] (typing.MutableMapping[_KT, _VT], _typeshed.SupportsKeysAndGetItem[_KT, _VT]),
+    #     def [_KT, _VT] (_typeshed.SupportsGetItem[str, _VT], _typeshed.SupportsKeysAndGetItem[str, _VT], **kwargs: _VT),
+    #     def [_KT, _VT] (typing.MutableMapping[_KT, _VT], typing.Iterable[tuple[_KT, _VT]]),
+    #     def [_KT, _VT] (_typeshed.SupportsGetItem[str, _VT], typing.Iterable[tuple[str, _VT]], **kwargs: _VT),
+    #     def [_KT, _VT] (_typeshed.SupportsGetItem[str, _VT], **kwargs: _VT)
 
     @setdoc.basic
     def __ior__(
@@ -493,9 +528,13 @@ class MutableDictLike[Key: abc.Hashable, Value](
         other: DictLike[Key, Value],
         /,
     ) -> Self:
-        with self.__data__() as data, other.__data__() as data_:
-            data.__ior__(data_)
+        with self.__mutable__() as data:
+            data.__ior__(other.__one_way__())
         return self
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Key, Value]]: ...
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -514,28 +553,22 @@ class Sequence[Item](
     __slots__ = ()
 
     @setdoc.basic
-    class Data[DataItem](
-        Collection.Data[DataItem],
+    class OneWay[OneWayItem](
+        Collection.OneWay[OneWayItem],
         Protocol,
     ):
-        """Provide sequence data protocol."""
-
         @overload
         @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> DataItem: ...
+        def __getitem__(self: Self, key: int, /) -> OneWayItem: ...
         @overload
         @setdoc.basic
         def __getitem__(
             self: Self, key: Slice[int], /
-        ) -> abc.Sequence[DataItem]: ...
+        ) -> abc.Sequence[OneWayItem]: ...
         @setdoc.basic
         def __getitem__(
             self: Self, key: int | Slice[int], /
-        ) -> DataItem | abc.Sequence[DataItem]: ...
-
-    @abstractmethod
-    @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
+        ) -> OneWayItem | abc.Sequence[OneWayItem]: ...
 
     @overload
     @setdoc.basic
@@ -547,8 +580,11 @@ class Sequence[Item](
     def __getitem__(
         self: Self, key: int | Slice[int], /
     ) -> Item | abc.Sequence[Item]:
-        with self.__data__() as data:
-            return data[key]
+        return self.__one_way__()[key]
+
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self) -> OneWay[Item]: ...
 
 
 class MutableSequence[Item](
@@ -559,59 +595,59 @@ class MutableSequence[Item](
 
     __slots__ = ()
 
-    class Data[DataItem](Sequence.Data[DataItem], Protocol):
+    @setdoc.basic
+    class Mutable[MutableItem](Protocol):
         """Provide mutable sequence data protocol."""
 
         @setdoc.basic
         def __delitem__(
             self: Self, key: SupportsIndex | Slice[SupportsIndex], /
-        ) -> None: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> DataItem: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(
-            self: Self, key: Slice[int], /
-        ) -> abc.MutableSequence[DataItem]: ...
-        @setdoc.basic
-        def __getitem__(
-            self: Self, key: int | Slice[int], /
-        ) -> DataItem | abc.MutableSequence[DataItem]: ...
+        ) -> object: ...
         @overload
         @setdoc.basic
         def __setitem__(
-            self: Self, key: SupportsIndex, value: DataItem, /
-        ) -> None: ...
+            self: Self, key: SupportsIndex, value: MutableItem, /
+        ) -> object: ...
         @overload
         @setdoc.basic
         def __setitem__(
             self: Self,
             key: Slice[SupportsIndex],
-            value: abc.Iterable[DataItem],
+            value: abc.Iterable[MutableItem],
             /,
-        ) -> None: ...
+        ) -> object: ...
         @setdoc.basic
         def __setitem__(
             self: Self,
             key: SupportsIndex | Slice[SupportsIndex],
-            value: DataItem | abc.Iterable[DataItem],
+            value: MutableItem | abc.Iterable[MutableItem],
             /,
-        ) -> None: ...
+        ) -> object: ...
         @setdoc.basic
         def insert(
-            self: Self, index: SupportsIndex, item: DataItem, /
-        ) -> None: ...
+            self: Self, index: SupportsIndex, item: MutableItem, /
+        ) -> object: ...
 
-    @abstractmethod
     @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
+    class OneWay[OneWayItem](Sequence.OneWay[OneWayItem], Protocol):
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, key: int, /) -> OneWayItem: ...
+        @overload
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: Slice[int], /
+        ) -> abc.MutableSequence[OneWayItem]: ...
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: int | Slice[int], /
+        ) -> OneWayItem | abc.MutableSequence[OneWayItem]: ...
 
     @setdoc.basic
     def __delitem__(
         self: Self, other: SupportsIndex | Slice[SupportsIndex], /
     ) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             del data[other]
 
     @overload
@@ -626,8 +662,15 @@ class MutableSequence[Item](
     def __getitem__(
         self: Self, key: int | Slice[int], /
     ) -> Item | abc.MutableSequence[Item]:
-        with self.__data__() as data:
-            return data[key]
+        return self.__one_way__()[key]
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Item]]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self) -> OneWay[Item]: ...
 
     @overload
     @setdoc.basic
@@ -651,12 +694,12 @@ class MutableSequence[Item](
         value: Item | abc.Iterable[Item],
         /,
     ) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data[key] = value  # type: ignore[index, assignment]
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.insert(index, item)
 
 
@@ -668,11 +711,10 @@ class ListLike[Item](Sequence[Item]):
 
     __slots__ = ()
 
-    type Data[DataItem] = list[DataItem]
     type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
-    def __add__(self: Self, other: ListLike[Item], /) -> Self:
+    def __add__(self: Self, other: object, /) -> Self:
         # list.__add__ reveals Overload(
         #     def [_T] (list[_T], list[_T]) -> list[_T],
         #     def [_T, _S] (list[_T], list[_S]) -> list[_S | _T],
@@ -682,28 +724,21 @@ class ListLike[Item](Sequence[Item]):
         #     def [_T_co, _T] (tuple[_T_co, ...], tuple[_T, ...]) -> tuple[_T_co | _T, ...],
         # )
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return type(self)(data + data_)
+            return type(self)(list(self) + list(other))
         else:
             return NotImplemented
-
-    @abstractmethod
-    @setdoc.basic
-    def __data__(self: Self) -> DataContextManager[Data[Item]]: ...
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return data == data_
+            return list(self) == list(other)
         else:
             return NotImplemented
 
     @setdoc.basic
     def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return data >= data_
+            return list(self) >= list(other)
         else:
             return NotImplemented
 
@@ -719,55 +754,45 @@ class ListLike[Item](Sequence[Item]):
     def __getitem__(
         self: Self, index: SupportsIndex | Slice[SupportsIndex], /
     ) -> Item | Self:
-        with self.__data__() as data:
-            if isinstance(index, SupportsIndex):
-                return data[index]
-            else:
-                return type(self)(data[index])
+        if isinstance(index, SupportsIndex):
+            return list(self)[index]
+        else:
+            return type(self)(list(self)[index])
 
     @setdoc.basic
     def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return data > data_
+            return list(self) > list(other)
         else:
             return NotImplemented
 
+    @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: Init[Item] = (), /) -> None:
-        with self.__data__() as data_:
-            data_.extend(data)
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return data <= data_
+            return list(self) <= list(other)
         else:
             return NotImplemented
 
     @setdoc.basic
     def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            with self.__data__() as data, other.__data__() as data_:
-                return data < data_
+            return list(self) < list(other)
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
-        with self.__data__() as data:
-            return type(self)(data * other)
+        return type(self)(list(self) * other)
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        with self.__data__() as data:
-            return f"{type(self).__name__}({list(data)!r})"
+        return f"{type(self).__name__}({list(self)!r})"
 
-    @setdoc.basic
-    def __rmul__(self: Self, other: SupportsIndex, /) -> Self:
-        with self.__data__() as data:
-            return type(self)(other * data)
+    __rmul__ = __mul__
 
 
 class FrozenListLike[Item](
@@ -780,8 +805,7 @@ class FrozenListLike[Item](
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        with self.__data__() as data:
-            return hash(tuple(data))
+        return hash(tuple(self))
 
 
 class MutableListLike[Item](
@@ -791,13 +815,27 @@ class MutableListLike[Item](
     """Provide easy abc for custom mutable list-like."""
 
     __slots__ = ()
-    type Data[DataItem] = list[DataItem]
+
+    @setdoc.basic
+    class Mutable[Item](MutableSequence.Mutable[Item], Protocol):
+        @setdoc.basic
+        def __imul__(self: Self, other: SupportsIndex, /) -> object: ...
+        @setdoc.basic
+        def sort(
+            self: Self, *, key: Any = None, reverse: bool = False
+        ) -> object: ...
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.__imul__(other)
         return self
+
+    __init__ = MutableSequence.extend
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self) -> DataContextManager[Mutable[Item]]: ...
 
     @setdoc.basic
     def copy(self: Self) -> Self:
@@ -805,5 +843,5 @@ class MutableListLike[Item](
 
     @setdoc.basic
     def sort(self: Self, *, key: Any = None, reverse: bool = False) -> None:
-        with self.__data__() as data:
+        with self.__mutable__() as data:
             data.sort(key=key, reverse=reverse)
