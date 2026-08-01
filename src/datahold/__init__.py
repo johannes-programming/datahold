@@ -4,14 +4,15 @@ from __future__ import annotations
 
 __all__: list[str] = [
     "FrozenListLike",
-    "Hold",
+    "FrozenListSlot",
     "ListLike",
+    "ListSlot",
     "MutableListLike",
+    "MutableListSlot",
 ]
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections import abc
-from types import NotImplementedType
 from typing import Any, Optional, Self, SupportsIndex, overload
 
 import setdoc
@@ -19,22 +20,6 @@ import setdoc
 ### UTILS ###
 
 type Slice[Key] = slice[Optional[Key], Optional[Key], Optional[Key]]
-
-### HOLD ###
-
-
-class Hold[Data](ABC):
-    """Provide a base class for customized data-holds."""
-
-    __slots__ = ("_data",)
-
-    @setdoc.basic
-    def __fget__(self: Self, /) -> Data:
-        return self._data
-
-    @setdoc.basic
-    def __fset__(self: Self, data: Data, /) -> None:
-        self._data: Data = data
 
 
 ### LIST-LIKE ###
@@ -44,16 +29,21 @@ class ListLike[Item](abc.Sequence[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    def __add__(self: Self, other: MutableListLike[Item], /) -> Self:
-        return type(self)(self.__fget__() + other.__fget__())
+    def __add__[Item_](
+        self: Self, other: ListLike[Item_], /
+    ) -> ListLike[Item | Item_]:
+        if isinstance(other, ListLike):
+            return type(self)(self.__fget__() + other.__fget__())
+        else:
+            raise TypeError
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
         return other in self.__fget__()
 
     @setdoc.basic
-    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, MutableListLike):
+    def __eq__(self: Self, other: ListLike[Any], /) -> bool:
+        if isinstance(other, ListLike):
             return self.__fget__() == other.__fget__()
         else:
             return NotImplemented
@@ -62,13 +52,9 @@ class ListLike[Item](abc.Sequence[Item]):
     @setdoc.basic
     def __fget__(self: Self, /) -> list[Item]: ...
 
-    @abstractmethod
     @setdoc.basic
-    def __fset__(self: Self, data: list[Item], /) -> None: ...
-
-    @setdoc.basic
-    def __ge__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, MutableListLike):
+    def __ge__(self: Self, other: ListLike[Any], /) -> bool:
+        if isinstance(other, ListLike):
             return self.__fget__() >= other.__fget__()
         else:
             return NotImplemented
@@ -93,19 +79,19 @@ class ListLike[Item](abc.Sequence[Item]):
             return type(self)(self.__fget__()[key])
 
     @setdoc.basic
-    def __gt__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, MutableListLike):
+    def __gt__(self: Self, other: ListLike[Any], /) -> bool:
+        if isinstance(other, ListLike):
             return self.__fget__() > other.__fget__()
         else:
             return NotImplemented
 
+    @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.__fset__(list(data))
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
 
     @setdoc.basic
-    def __le__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, MutableListLike):
+    def __le__(self: Self, other: ListLike[Any], /) -> bool:
+        if isinstance(other, ListLike):
             return self.__fget__() <= other.__fget__()
         else:
             return NotImplemented
@@ -115,21 +101,34 @@ class ListLike[Item](abc.Sequence[Item]):
         return len(self.__fget__())
 
     @setdoc.basic
-    def __lt__(self: Self, other: object, /) -> NotImplementedType | bool:
-        if isinstance(other, MutableListLike):
+    def __lt__(self: Self, other: ListLike[Any], /) -> bool:
+        if isinstance(other, ListLike):
             return self.__fget__() < other.__fget__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
-        return type(self)(self.__fget__() * other)
+        if isinstance(other, SupportsIndex):
+            return type(self)(self.__fget__() * other)
+        else:
+            raise TypeError
 
     __rmul__ = __mul__
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({self.__fget__()!r})"
+
+
+class ListSlot[Item](ListLike[Item]):
+    """Provide slotted list-like class."""
+
+    __slots__ = ("_slot",)
+
+    @setdoc.basic
+    def __fget__(self: Self) -> None:
+        return self._slot
 
 
 class FrozenListLike[Item](ListLike[Item], abc.Hashable):
@@ -140,6 +139,16 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
     @setdoc.basic
     def __hash__(self: Self) -> int:
         return hash(tuple(self.__fget__()))
+
+
+class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
+    """Provide a base class for customized frozen data-holds."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self._slot: list[Item] = list(data)
 
 
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
@@ -162,6 +171,10 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         del data[key]
         self.__fset__(data)
 
+    @abstractmethod
+    @setdoc.basic
+    def __fset__(self: Self, data: list[Item], /) -> None: ...
+
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
         data: list[Item]
@@ -169,6 +182,10 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         data *= other
         self.__fset__(data)
         return self
+
+    @setdoc.basic
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self.__fset__(list(data))
 
     @overload
     @setdoc.basic
@@ -209,3 +226,13 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         data = self.__fget__()
         data.sort(key=key, reverse=reverse)
         self.__fset__(data)
+
+
+class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
+    """Provide slotted mutable list-like class."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __fset__(self: Self, data: list[Item], /) -> None:
+        self._slot: list[Item] = data

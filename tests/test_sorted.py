@@ -33,11 +33,11 @@ class TestAll(unittest.TestCase):
         for name, data in Lazy.lazy.datatypes.items():
             with self.subTest(datatype=name):
                 self._test_sorted(
-                    data["issubclass"],
+                    data.get("issubclass", {}),
                     name=f"testdata.toml['datatypes'][{name!r}]['issubclass']",
                 )
                 self._test_sorted(
-                    data["abstractmethods"],
+                    data.get("abstractmethods", []),
                     name=f"testdata.toml['datatypes'][{name!r}]['abstractmethods']",
                 )
 

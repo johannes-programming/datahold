@@ -2,7 +2,6 @@ from __future__ import annotations
 
 __all__: list[str] = ["TestAttributes"]
 
-import math
 import unittest
 from typing import Any, Self
 
@@ -33,7 +32,7 @@ class TestAttributes(unittest.TestCase):
     def test_attributes(self: Self, /) -> None:
         for name, data in Lazy.lazy.datatypes.items():
             with self.subTest(datatype=name):
-                self._test_attributes(name, **data["attributes"])
+                self._test_attributes(name, **data.get("attributes", {}))
 
 
 if __name__ == "__main__":

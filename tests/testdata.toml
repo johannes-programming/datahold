@@ -1,42 +1,70 @@
 [datatypes.FrozenListLike]
 abstractmethods = [
     "__fget__",
-    "__fset__",
+    "__init__",
+]
+type_params = [
+    { contravariant = false, covariant = true },
 ]
 
 [datatypes.FrozenListLike.attributes]
 __fget__ = "datahold.ListLike"
+__init__ = "datahold.ListLike"
 
 [datatypes.FrozenListLike.issubclass]
 "builtins.list" = false
 "builtins.tuple" = false
 "collections.abc.Hashable" = true
+"collections.abc.MutableSequence" = false
+"collections.abc.Sequence" = true
+
+[datatypes.FrozenListSlot]
+abstractmethods = []
 
 [datatypes.ListLike]
 abstractmethods = [
     "__fget__",
-    "__fset__",
+    "__init__",
+]
+type_params = [
+    { contravariant = false, covariant = true },
 ]
 
 [datatypes.ListLike.attributes]
 __fget__ = "datahold.ListLike"
+__fset__ = ""
+__init__ = "datahold.ListLike"
 __reversed__ = "collections.abc.Sequence"
 count = "collections.abc.Sequence"
 index = "collections.abc.Sequence"
 
 [datatypes.ListLike.issubclass]
 "collections.abc.Hashable" = false
+"collections.abc.MutableSequence" = false
+"collections.abc.Sequence" = true
+"datahold.ListLike" = true
+
+[datatypes.ListSlot]
+abstractmethods = [
+    "__init__",
+]
 
 [datatypes.MutableListLike]
 abstractmethods = [
     "__fget__",
     "__fset__",
 ]
+type_params = [
+    { contravariant = false, covariant = false },
+]
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
 __fget__ = "datahold.ListLike"
+__fset__ = "datahold.MutableListLike"
 __iadd__ = "collections.abc.MutableSequence"
+__imul__ = "datahold.MutableListLike"
+__init__ = "datahold.MutableListLike"
 __reversed__ = "collections.abc.Sequence"
 append = "collections.abc.MutableSequence"
 clear = "collections.abc.MutableSequence"
@@ -54,4 +82,13 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
 
-[non_datatypes.Hold]
+[datatypes.MutableListSlot]
+abstractmethods = []
+
+[datatypes.MutableListSlot.issubclass]
+"builtins.list" = false
+"datahold.ListLike" = true
+"datahold.MutableListLike" = true
+"datahold.MutableListSlot" = true
+
+[non_datatypes]

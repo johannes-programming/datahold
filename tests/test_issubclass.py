@@ -22,7 +22,7 @@ class TestIssubclass(unittest.TestCase):
     def test_issubclass(self: Self, /) -> None:
         for name, data in Lazy.lazy.datatypes.items():
             with self.subTest(datatype=name):
-                self._test_issubclass(name, **data["issubclass"])
+                self._test_issubclass(name, **data.get("issubclass", {}))
 
 
 if __name__ == "__main__":
