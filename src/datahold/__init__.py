@@ -13,7 +13,8 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Optional, Self, SupportsIndex, overload
+from contextlib import contextmanager
+from typing import Any, Optional, Protocol, Self, SupportsIndex, overload
 
 import setdoc
 
@@ -28,34 +29,32 @@ class ListLike[Item](abc.Sequence[Item]):
 
     __slots__ = ()
 
+    type OneWay[OneWayItem] = tuple[OneWayItem, ...]
+
     @setdoc.basic
     def __add__[Item_](
         self: Self, other: ListLike[Item_], /
     ) -> ListLike[Item | Item_]:
         if isinstance(other, ListLike):
-            return type(self)(self.__fget__() + other.__fget__())
+            return type(self)(self.__one_way__() + other.__one_way__())
         else:
             raise TypeError
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
-        return other in self.__fget__()
+        return other in self.__one_way__()
 
     @setdoc.basic
     def __eq__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__fget__() == other.__fget__()
+            return self.__one_way__() == other.__one_way__()
         else:
             return NotImplemented
-
-    @abstractmethod
-    @setdoc.basic
-    def __fget__(self: Self, /) -> list[Item]: ...
 
     @setdoc.basic
     def __ge__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__fget__() >= other.__fget__()
+            return self.__one_way__() >= other.__one_way__()
         else:
             return NotImplemented
 
@@ -74,14 +73,14 @@ class ListLike[Item](abc.Sequence[Item]):
         /,
     ) -> Item | Self:
         if isinstance(key, SupportsIndex):
-            return self.__fget__()[key]
+            return self.__one_way__()[key]
         else:
-            return type(self)(self.__fget__()[key])
+            return type(self)(self.__one_way__()[key])
 
     @setdoc.basic
     def __gt__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__fget__() > other.__fget__()
+            return self.__one_way__() > other.__one_way__()
         else:
             return NotImplemented
 
@@ -92,33 +91,37 @@ class ListLike[Item](abc.Sequence[Item]):
     @setdoc.basic
     def __le__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__fget__() <= other.__fget__()
+            return self.__one_way__() <= other.__one_way__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
-        return len(self.__fget__())
+        return len(self.__one_way__())
 
     @setdoc.basic
     def __lt__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__fget__() < other.__fget__()
+            return self.__one_way__() < other.__one_way__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
         if isinstance(other, SupportsIndex):
-            return type(self)(self.__fget__() * other)
+            return type(self)(self.__one_way__() * other)
         else:
             raise TypeError
 
     __rmul__ = __mul__
 
+    @abstractmethod
+    @setdoc.basic
+    def __one_way__(self: Self, /) -> OneWay[Item]: ...
+
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
-        return f"{type(self).__name__}({self.__fget__()!r})"
+        return f"{type(self).__name__}({list(self)!r})"
 
 
 class ListSlot[Item](ListLike[Item]):
@@ -127,7 +130,7 @@ class ListSlot[Item](ListLike[Item]):
     __slots__ = ("_slot",)
 
     @setdoc.basic
-    def __fget__(self: Self) -> None:
+    def __one_way__(self: Self) -> ListSlot.OneWay[Item]:
         return self._slot
 
 
@@ -138,7 +141,7 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        return hash(tuple(self.__fget__()))
+        return hash(tuple(self.__one_way__()))
 
 
 class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
@@ -156,6 +159,15 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     __slots__ = ()
 
+    @setdoc.basic
+    class Mutable[MutableItem](Protocol):
+        @setdoc.basic
+        def __enter__(self: Self, /) -> list[MutableItem]: ...
+        @setdoc.basic
+        def __exit__(
+            self: Self, exc_type: Any, exc: Any, tb: Any, /
+        ) -> None: ...
+
     @overload
     @setdoc.basic
     def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
@@ -166,26 +178,23 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     def __delitem__(
         self: Self, key: SupportsIndex | Slice[SupportsIndex], /
     ) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        del data[key]
-        self.__fset__(data)
-
-    @abstractmethod
-    @setdoc.basic
-    def __fset__(self: Self, data: list[Item], /) -> None: ...
+        with self.__mutable__() as mutable:
+            del mutable[key]
 
     @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        data: list[Item]
-        data = self.__fget__()
-        data *= other
-        self.__fset__(data)
+        with self.__mutable__() as mutable:
+            mutable *= other
         return self
 
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.__fset__(list(data))
+        with self.__mutable__() as mutable:
+            mutable.extend(data)
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutable__(self: Self, /) -> Mutable[Item]: ...
 
     @overload
     @setdoc.basic
@@ -204,28 +213,23 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         value: Item | abc.Iterable[Item],
         /,
     ) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data[key] = value  # type: ignore
-        self.__fset__(data)
+        with self.__mutable__() as mutable:
+            mutable[key] = value  # type: ignore
 
     @setdoc.basic
     def copy(self: Self) -> Self:
-        return type(self)(self.__fget__())
+        with self.__mutable__() as mutable:
+            return type(self)(mutable)
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.insert(index, item)
-        self.__fset__(data)
+        with self.__mutable__() as mutable:
+            mutable.insert(index, item)
 
     @setdoc.basic
     def sort(self: Self, /, *, key: Any = None, reverse: bool = False) -> None:
-        data: list[Item]
-        data = self.__fget__()
-        data.sort(key=key, reverse=reverse)
-        self.__fset__(data)
+        with self.__mutable__() as mutable:
+            mutable.sort(key=key, reverse=reverse)
 
 
 class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
@@ -233,6 +237,9 @@ class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
 
     __slots__ = ()
 
+    @contextmanager
     @setdoc.basic
-    def __fset__(self: Self, data: list[Item], /) -> None:
-        self._slot: list[Item] = data
+    def __mutable__(self: Self, /) -> abc.Generator[list[Item], None, None]:
+        slot = list(getattr(self, "_slot", ()))
+        yield slot
+        self._slot = slot

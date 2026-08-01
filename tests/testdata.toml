@@ -1,15 +1,13 @@
 [datatypes.FrozenListLike]
 abstractmethods = [
-    "__fget__",
     "__init__",
+    "__one_way__",
 ]
-type_params = [
-    { contravariant = false, covariant = true },
-]
+type_params = []
 
 [datatypes.FrozenListLike.attributes]
-__fget__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
+__one_way__ = "datahold.ListLike"
 
 [datatypes.FrozenListLike.issubclass]
 "builtins.list" = false
@@ -20,23 +18,19 @@ __init__ = "datahold.ListLike"
 
 [datatypes.FrozenListSlot]
 abstractmethods = []
-type_params = [
-    { contravariant = false, covariant = true },
-]
+type_params = []
 
 [datatypes.ListLike]
 abstractmethods = [
-    "__fget__",
     "__init__",
+    "__one_way__",
 ]
-type_params = [
-    { contravariant = false, covariant = true },
-]
+type_params = []
 
 [datatypes.ListLike.attributes]
-__fget__ = "datahold.ListLike"
-__fset__ = ""
 __init__ = "datahold.ListLike"
+__mutable__ = ""
+__one_way__ = "datahold.ListLike"
 __reversed__ = "collections.abc.Sequence"
 count = "collections.abc.Sequence"
 index = "collections.abc.Sequence"
@@ -51,26 +45,22 @@ index = "collections.abc.Sequence"
 abstractmethods = [
     "__init__",
 ]
-type_params = [
-    { contravariant = false, covariant = true },
-]
+type_params = []
 
 [datatypes.MutableListLike]
 abstractmethods = [
-    "__fget__",
-    "__fset__",
+    "__mutable__",
+    "__one_way__",
 ]
-type_params = [
-    { contravariant = false, covariant = false },
-]
+type_params = []
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
-__fget__ = "datahold.ListLike"
-__fset__ = "datahold.MutableListLike"
 __iadd__ = "collections.abc.MutableSequence"
 __imul__ = "datahold.MutableListLike"
 __init__ = "datahold.MutableListLike"
+__mutable__ = "datahold.MutableListLike"
+__one_way__ = "datahold.ListLike"
 __reversed__ = "collections.abc.Sequence"
 append = "collections.abc.MutableSequence"
 clear = "collections.abc.MutableSequence"
@@ -90,9 +80,7 @@ reverse = "collections.abc.MutableSequence"
 
 [datatypes.MutableListSlot]
 abstractmethods = []
-type_params = [
-    { contravariant = false, covariant = false },
-]
+type_params = []
 
 [datatypes.MutableListSlot.issubclass]
 "builtins.list" = false
