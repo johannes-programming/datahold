@@ -258,21 +258,25 @@ class TestGreaterThanOrEqualOperator(unittest.TestCase):
 
 class TestAugmentedAdditionOperator(unittest.TestCase):
     def test_augmented_add_nonempty_values(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         value += datahold.FrozenListSlot((3, 4))
         self.assertEqual(tuple(value), (1, 2, 3, 4))
 
     def test_augmented_add_empty_right_operand(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         value += datahold.FrozenListSlot(())
         self.assertEqual(tuple(value), (1, 2))
 
     def test_augmented_add_to_empty_value(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot(())
         value += datahold.FrozenListSlot((1, 2))
         self.assertEqual(tuple(value), (1, 2))
 
     def test_augmented_add_invalid_operand(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         with self.assertRaises(TypeError):
             value += [3, 4]
@@ -280,21 +284,25 @@ class TestAugmentedAdditionOperator(unittest.TestCase):
 
 class TestAugmentedMultiplicationOperator(unittest.TestCase):
     def test_augmented_multiply_positive_integer(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         value *= 2
         self.assertEqual(tuple(value), (1, 2, 1, 2))
 
     def test_augmented_multiply_by_zero(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         value *= 0
         self.assertEqual(tuple(value), ())
 
     def test_augmented_multiply_by_negative_integer(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         value *= -1
         self.assertEqual(tuple(value), ())
 
     def test_augmented_multiply_invalid_operand(self: Self) -> None:
+        value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         with self.assertRaises(TypeError):
             value *= 1.5

@@ -3,7 +3,6 @@ abstractmethods = [
     "__init__",
     "__one_way__",
 ]
-type_params = []
 
 [datatypes.FrozenListLike.attributes]
 __init__ = "datahold.ListLike"
@@ -16,16 +15,20 @@ __one_way__ = "datahold.ListLike"
 "collections.abc.MutableSequence" = false
 "collections.abc.Sequence" = true
 
+[datatypes.FrozenListLike.varia]
+generic = 1
+
 [datatypes.FrozenListSlot]
 abstractmethods = []
-type_params = []
+
+[datatypes.FrozenListSlot.varia]
+generic = 1
 
 [datatypes.ListLike]
 abstractmethods = [
     "__init__",
     "__one_way__",
 ]
-type_params = []
 
 [datatypes.ListLike.attributes]
 __init__ = "datahold.ListLike"
@@ -41,18 +44,22 @@ index = "collections.abc.Sequence"
 "collections.abc.Sequence" = true
 "datahold.ListLike" = true
 
+[datatypes.ListLike.varia]
+generic = 1
+
 [datatypes.ListSlot]
 abstractmethods = [
     "__init__",
 ]
-type_params = []
+
+[datatypes.ListSlot.varia]
+generic = 1
 
 [datatypes.MutableListLike]
 abstractmethods = [
     "__mutable__",
     "__one_way__",
 ]
-type_params = []
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
@@ -78,14 +85,19 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
 
+[datatypes.MutableListLike.varia]
+generic = 1
+
 [datatypes.MutableListSlot]
 abstractmethods = []
-type_params = []
 
 [datatypes.MutableListSlot.issubclass]
 "builtins.list" = false
 "datahold.ListLike" = true
 "datahold.MutableListLike" = true
 "datahold.MutableListSlot" = true
+
+[datatypes.MutableListSlot.varia]
+generic = 1
 
 [non_datatypes]

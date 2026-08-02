@@ -14,6 +14,7 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from contextlib import contextmanager
+from types import NotImplementedType
 from typing import Any, Optional, Protocol, Self, SupportsIndex, overload
 
 import setdoc
@@ -32,9 +33,7 @@ class ListLike[Item](abc.Sequence[Item]):
     type OneWay[OneWayItem] = tuple[OneWayItem, ...]
 
     @setdoc.basic
-    def __add__[Item_](
-        self: Self, other: ListLike[Item_], /
-    ) -> ListLike[Item | Item_]:
+    def __add__(self: Self, other: ListLike[Item], /) -> Self:
         if isinstance(other, ListLike):
             return type(self)(self.__one_way__() + other.__one_way__())
         else:
@@ -45,7 +44,7 @@ class ListLike[Item](abc.Sequence[Item]):
         return other in self.__one_way__()
 
     @setdoc.basic
-    def __eq__(self: Self, other: ListLike[Any], /) -> bool:
+    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
             return self.__one_way__() == other.__one_way__()
         else:
@@ -129,6 +128,8 @@ class ListSlot[Item](ListLike[Item]):
 
     __slots__ = ("_slot",)
 
+    _slot: ListSlot.OneWay[Item]
+
     @setdoc.basic
     def __one_way__(self: Self) -> ListSlot.OneWay[Item]:
         return self._slot
@@ -151,7 +152,7 @@ class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
 
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot: list[Item] = list(data)
+        self._slot = tuple(data)
 
 
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
@@ -166,7 +167,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         @setdoc.basic
         def __exit__(
             self: Self, exc_type: Any, exc: Any, tb: Any, /
-        ) -> None: ...
+        ) -> Any: ...
 
     @overload
     @setdoc.basic
@@ -242,4 +243,4 @@ class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
     def __mutable__(self: Self, /) -> abc.Generator[list[Item], None, None]:
         slot = list(getattr(self, "_slot", ()))
         yield slot
-        self._slot = slot
+        self._slot = tuple(slot)

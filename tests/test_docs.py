@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__: list[str] = ["TestDocs"]
 
 import unittest
+from types import MemberDescriptorType
 from typing import Any, Self
 
 from Lazy import Lazy
@@ -18,9 +19,11 @@ class TestDocs(unittest.TestCase):
         for x, y in datatype.__dict__.items():
             if y is None:
                 continue
+            if isinstance(y, MemberDescriptorType):
+                continue
             doc = getattr(y, "__doc__", "")
             self.assertIsNotNone(
-                doc, f"{datatype.__name__}.{x}.__doc__ is None"
+                doc, f"{datatype.__name__}.{x}.__doc__ is None ({type(y)})"
             )
 
     def test_datatypes(self: Self, /) -> None:
