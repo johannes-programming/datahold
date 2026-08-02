@@ -15,31 +15,25 @@ class TestUnhashable(unittest.TestCase):
 class TestAppend(unittest.TestCase):
     def test_append_integer(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
-        actual_result: datahold.MutableListSlot[int]
         expected: list[int]
-        expected_result: list[int]
         actual = datahold.MutableListSlot([1, 2])
         expected = [1, 2]
-        actual_result = actual.append(3)
-        expected_result = expected.append(3)
-        self.assertEqual(actual_result, expected_result)
+        actual.append(3)
+        expected.append(3)
         self.assertEqual(list(actual), expected)
 
     def test_append_none(self: Self) -> None:
-        actual: datahold.MutableListSlot[int]
-        actual_result: datahold.MutableListSlot[int]
-        expected: list[int]
-        expected_result: list[int]
+        actual: datahold.MutableListSlot[Optional[int]]
+        expected: list[Optional[int]]
         actual = datahold.MutableListSlot([])
         expected = []
-        actual_result = actual.append(None)
-        expected_result = expected.append(None)
-        self.assertEqual(actual_result, expected_result)
+        actual.append(None)
+        expected.append(None)
         self.assertEqual(list(actual), expected)
 
     def test_append_nested_list(self: Self) -> None:
-        actual: datahold.MutableListSlot[int]
-        expected: list[int]
+        actual: datahold.MutableListSlot[int|list[int]]
+        expected: list[int|list[int]]
         value: list[int]
         value = [2, 3]
         actual = datahold.MutableListSlot([1])
@@ -75,6 +69,8 @@ class TestClear(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_clear_empty(self: Self) -> None:
+        actual : datahold.MutableListSlot[Never]
+        expected : datahold.MutableListSlot[Never]
         actual = datahold.MutableListSlot([])
         expected = []
         actual.clear()
@@ -282,7 +278,7 @@ class TestPop(unittest.TestCase):
 class TestRemove(unittest.TestCase):
     def test_remove_present_value(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
-        expected:list[int]
+        expected: list[int]
         actual = datahold.MutableListSlot([1, 2, 3])
         expected = [1, 2, 3]
         actual.remove(2)
@@ -291,7 +287,7 @@ class TestRemove(unittest.TestCase):
 
     def test_remove_only_first_match(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
-        expected:list[int]
+        expected: list[int]
         actual = datahold.MutableListSlot([1, 2, 1])
         expected = [1, 2, 1]
         actual.remove(1)
@@ -300,7 +296,7 @@ class TestRemove(unittest.TestCase):
 
     def test_remove_none(self: Self) -> None:
         actual: datahold.MutableListSlot[Optional[int]]
-        expected:list[Optional[int]]
+        expected: list[Optional[int]]
         actual = datahold.MutableListSlot([1, None, 2])
         expected = [1, None, 2]
         actual.remove(None)
@@ -317,7 +313,7 @@ class TestRemove(unittest.TestCase):
 class TestReverse(unittest.TestCase):
     def test_reverse_even_length(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
-        expected:list[int]
+        expected: list[int]
         actual = datahold.MutableListSlot([1, 2, 3, 4])
         expected = [1, 2, 3, 4]
         actual.reverse()
@@ -344,7 +340,7 @@ class TestReverse(unittest.TestCase):
 
     def test_reverse_single_item(self: Self) -> None:
         actual: datahold.MutableListSlot[object]
-        value:object
+        value: object
         value = object()
         actual = datahold.MutableListSlot([value])
         actual.reverse()
@@ -811,6 +807,8 @@ class TestItemAssignmentOperator(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_set_nested_value(self: Self) -> None:
+        actual: datahold.MutableListSlot[int | list[int]]
+        value: list[int]
         value = [9]
         actual = datahold.MutableListSlot([1, 2, 3])
         actual[1] = value
