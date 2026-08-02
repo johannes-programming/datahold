@@ -1,5 +1,8 @@
+import operator
 import unittest
-from typing import Self
+from typing import Any, Self
+
+from Lazy import Lazy
 
 import datahold
 
@@ -42,16 +45,18 @@ class TestIndexMethod(unittest.TestCase):
 
 class TestAdditionOperator(unittest.TestCase):
     def test_add_two_nonempty_values(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = datahold.FrozenListSlot((1, 2)) + datahold.FrozenListSlot(
-            (3, 4)
-        )
-        self.assertEqual(tuple(result), (1, 2, 3, 4))
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((3, 4))
+        self.assertEqual(tuple(x + y), (1, 2, 3, 4))
 
     def test_add_empty_right_operand(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = datahold.FrozenListSlot((1, 2)) + datahold.FrozenListSlot(())
-        self.assertEqual(tuple(result), (1, 2))
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot(())
+        self.assertEqual(tuple(x + y), (1, 2))
 
     def test_add_empty_left_operand(self: Self) -> None:
         x: datahold.FrozenListSlot[int]
@@ -67,24 +72,24 @@ class TestAdditionOperator(unittest.TestCase):
 
 class TestMultiplicationOperator(unittest.TestCase):
     def test_multiply_by_positive_integer(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = datahold.FrozenListSlot((1, 2)) * 3
-        self.assertEqual(tuple(result), (1, 2, 1, 2, 1, 2))
+        x: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        self.assertEqual(tuple(x * 3), (1, 2, 1, 2, 1, 2))
 
     def test_multiply_by_zero(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = datahold.FrozenListSlot((1, 2)) * 0
-        self.assertEqual(tuple(result), ())
+        x: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        self.assertEqual(tuple(x * 0), ())
 
     def test_multiply_by_negative_integer(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = datahold.FrozenListSlot((1, 2)) * -2
-        self.assertEqual(tuple(result), ())
+        x: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        self.assertEqual(tuple(x * -2), ())
 
     def test_reflected_multiplication(self: Self) -> None:
-        result: datahold.FrozenListSlot[int]
-        result = 2 * datahold.FrozenListSlot((1, 2))
-        self.assertEqual(tuple(result), (1, 2, 1, 2))
+        x: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        self.assertEqual(tuple(2 * x), (1, 2, 1, 2))
 
 
 class TestMembershipOperator(unittest.TestCase):
@@ -137,9 +142,11 @@ class TestSubscriptionOperator(unittest.TestCase):
 
 class TestEqualityOperator(unittest.TestCase):
     def test_equal_values(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 2)) == datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x == y)
 
     def test_different_values(self: Self) -> None:
         self.assertFalse(
@@ -202,95 +209,118 @@ class TestLessThanOperator(unittest.TestCase):
 
 class TestLessThanOrEqualOperator(unittest.TestCase):
     def test_less_value(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 2)) <= datahold.FrozenListSlot((1, 3))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 3))
+        self.assertTrue(x <= y)
 
     def test_equal_value(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 2)) <= datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x <= y)
 
     def test_greater_value(self: Self) -> None:
-        self.assertFalse(
-            datahold.FrozenListSlot((2, 0)) <= datahold.FrozenListSlot((1, 9))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((2, 0))
+        y = datahold.FrozenListSlot((1, 9))
+        self.assertFalse(x <= y)
 
     def test_shorter_prefix(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1,)) <= datahold.FrozenListSlot((1, 0))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1,))
+        y = datahold.FrozenListSlot((1, 0))
+        self.assertTrue(x <= y)
 
 
 class TestGreaterThanOperator(unittest.TestCase):
     def test_greater_at_first_item(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((2, 0)) > datahold.FrozenListSlot((1, 9))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((2, 0))
+        y = datahold.FrozenListSlot((1, 9))
+        self.assertTrue(x > y)
 
     def test_greater_at_later_item(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 3)) > datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 3))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x > y)
 
     def test_longer_prefix_is_greater(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 2, 0))
-            > datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2, 0))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x > y)
 
     def test_equal_value_is_not_greater(self: Self) -> None:
-        self.assertFalse(
-            datahold.FrozenListSlot((1, 2)) > datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertFalse(x > y)
 
 
 class TestGreaterThanOrEqualOperator(unittest.TestCase):
     def test_greater_value(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 3)) >= datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 3))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x >= y)
 
     def test_equal_value(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 2)) >= datahold.FrozenListSlot((1, 2))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertTrue(x >= y)
 
     def test_less_value(self: Self) -> None:
-        self.assertFalse(
-            datahold.FrozenListSlot((1, 2)) >= datahold.FrozenListSlot((1, 3))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 2))
+        y = datahold.FrozenListSlot((1, 3))
+        self.assertFalse(x >= y)
 
     def test_longer_prefix(self: Self) -> None:
-        self.assertTrue(
-            datahold.FrozenListSlot((1, 0)) >= datahold.FrozenListSlot((1,))
-        )
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot((1, 0))
+        y = datahold.FrozenListSlot((1,))
+        self.assertTrue(x >= y)
 
 
 class TestAugmentedAdditionOperator(unittest.TestCase):
     def test_augmented_add_nonempty_values(self: Self) -> None:
-        value: datahold.FrozenListSlot[int]
+        value: datahold.ListLike[int]
         value = datahold.FrozenListSlot((1, 2))
         value += datahold.FrozenListSlot((3, 4))
         self.assertEqual(tuple(value), (1, 2, 3, 4))
 
     def test_augmented_add_empty_right_operand(self: Self) -> None:
-        value: datahold.FrozenListSlot[int]
+        value: datahold.ListLike[int]
         value = datahold.FrozenListSlot((1, 2))
         value += datahold.FrozenListSlot(())
         self.assertEqual(tuple(value), (1, 2))
 
     def test_augmented_add_to_empty_value(self: Self) -> None:
-        value: datahold.FrozenListSlot[int]
+        value: datahold.ListLike[int]
         value = datahold.FrozenListSlot(())
         value += datahold.FrozenListSlot((1, 2))
         self.assertEqual(tuple(value), (1, 2))
 
     def test_augmented_add_invalid_operand(self: Self) -> None:
-        value: datahold.FrozenListSlot[int]
+        value: Any
         value = datahold.FrozenListSlot((1, 2))
         with self.assertRaises(TypeError):
-            value += [3, 4]  # type: ignore[operator]
+            value += [3, 4]
 
 
 class TestAugmentedMultiplicationOperator(unittest.TestCase):

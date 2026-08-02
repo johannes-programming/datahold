@@ -1,12 +1,12 @@
 [datatypes.FrozenListLike]
 abstractmethods = [
+    "__frozen__",
     "__init__",
-    "__one_way__",
 ]
 
 [datatypes.FrozenListLike.attributes]
+__frozen__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
-__one_way__ = "datahold.ListLike"
 
 [datatypes.FrozenListLike.issubclass]
 "builtins.list" = false
@@ -15,25 +15,37 @@ __one_way__ = "datahold.ListLike"
 "collections.abc.MutableSequence" = false
 "collections.abc.Sequence" = true
 
+[datatypes.FrozenListLike.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+Mutable = ""
+
 [datatypes.FrozenListLike.varia]
 generic = 1
 
 [datatypes.FrozenListSlot]
 abstractmethods = []
 
+[datatypes.FrozenListSlot.examples]
+
+[datatypes.FrozenListSlot.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+Mutable = ""
+
 [datatypes.FrozenListSlot.varia]
 generic = 1
 
 [datatypes.ListLike]
 abstractmethods = [
+    "__frozen__",
     "__init__",
-    "__one_way__",
 ]
 
 [datatypes.ListLike.attributes]
+__frozen__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
 __mutable__ = ""
-__one_way__ = "datahold.ListLike"
 __reversed__ = "collections.abc.Sequence"
 count = "collections.abc.Sequence"
 index = "collections.abc.Sequence"
@@ -44,6 +56,11 @@ index = "collections.abc.Sequence"
 "collections.abc.Sequence" = true
 "datahold.ListLike" = true
 
+[datatypes.ListLike.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+Mutable = ""
+
 [datatypes.ListLike.varia]
 generic = 1
 
@@ -52,22 +69,27 @@ abstractmethods = [
     "__init__",
 ]
 
+[datatypes.ListSlot.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+Mutable = ""
+
 [datatypes.ListSlot.varia]
 generic = 1
 
 [datatypes.MutableListLike]
 abstractmethods = [
+    "__frozen__",
     "__mutable__",
-    "__one_way__",
 ]
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
+__frozen__ = "datahold.ListLike"
 __iadd__ = "collections.abc.MutableSequence"
 __imul__ = "datahold.MutableListLike"
 __init__ = "datahold.MutableListLike"
 __mutable__ = "datahold.MutableListLike"
-__one_way__ = "datahold.ListLike"
 __reversed__ = "collections.abc.Sequence"
 append = "collections.abc.MutableSequence"
 clear = "collections.abc.MutableSequence"
@@ -85,6 +107,11 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
 
+[datatypes.MutableListLike.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+__hash__ = ""
+
 [datatypes.MutableListLike.varia]
 generic = 1
 
@@ -96,6 +123,11 @@ abstractmethods = []
 "datahold.ListLike" = true
 "datahold.MutableListLike" = true
 "datahold.MutableListSlot" = true
+
+[datatypes.MutableListSlot.nested]
+Frozen = "builtins.tuple"
+Init = "collections.abc.Iterable"
+__hash__ = ""
 
 [datatypes.MutableListSlot.varia]
 generic = 1

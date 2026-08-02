@@ -8,6 +8,8 @@ from functools import cached_property
 from importlib import import_module
 from typing import Any, Self
 
+import datahold
+
 
 class Lazy(enum.Enum):
     """Provide a singleton to store testdata."""
@@ -28,8 +30,24 @@ class Lazy(enum.Enum):
         return self.data["datatypes"]
 
     @classmethod
+    def get_builtin_example(
+        cls: type[Self], typename: str, objname: str
+    ) -> Any:
+        datatype = getattr(datahold, typename)
+        info = cls.lazy.data[typename]["examples"][objname]
+        return datatype.Frozen(*info["args"], **info["kwargs"])
+
+    @classmethod
+    def get_example(cls: type[Self], typename: str, objname: str) -> Any:
+        datatype = getattr(datahold, typename)
+        info = cls.lazy.data[typename]["examples"][objname]
+        return datatype(*info["args"], **info["kwargs"])
+
+    @classmethod
     def get_import(cls: type[Self], name: str, /) -> Any:
         """Get the import for a given name."""
+        if name == "":
+            return None
         modulename = ".".join(name.split(".")[:-1])
         targetname = name.split(".")[-1]
         module = import_module(modulename)

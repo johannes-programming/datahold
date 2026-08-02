@@ -14,14 +14,14 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from contextlib import contextmanager
-from types import NotImplementedType
+from types import NotImplementedType, TracebackType
 from typing import Any, Optional, Protocol, Self, SupportsIndex, overload
 
 import setdoc
 
 ### UTILS ###
 
-type Slice[Key] = slice[Optional[Key], Optional[Key], Optional[Key]]
+type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
 ### LIST-LIKE ###
@@ -30,30 +30,39 @@ class ListLike[Item](abc.Sequence[Item]):
 
     __slots__ = ()
 
-    type OneWay[OneWayItem] = tuple[OneWayItem, ...]
+    type Frozen[FrozenItem] = tuple[FrozenItem, ...]
+    # Frozen has to be tuple to allow covariance
+
+    type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
-    def __add__(self: Self, other: ListLike[Item], /) -> Self:
+    def __add__[Item_](
+        self: Self, other: ListLike[Item_], /
+    ) -> ListLike[Item | Item_]:
         if isinstance(other, ListLike):
-            return type(self)(self.__one_way__() + other.__one_way__())
+            return type(self)(self.__frozen__() + other.__frozen__())  # type: ignore[operator]
         else:
             raise TypeError
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
-        return other in self.__one_way__()
+        return other in self.__frozen__()
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__one_way__() == other.__one_way__()
+            return self.__frozen__() == other.__frozen__()
         else:
             return NotImplemented
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen[Item]: ...
 
     @setdoc.basic
     def __ge__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__one_way__() >= other.__one_way__()
+            return self.__frozen__() >= other.__frozen__()
         else:
             return NotImplemented
 
@@ -72,51 +81,47 @@ class ListLike[Item](abc.Sequence[Item]):
         /,
     ) -> Item | Self:
         if isinstance(key, SupportsIndex):
-            return self.__one_way__()[key]
+            return self.__frozen__()[key]
         else:
-            return type(self)(self.__one_way__()[key])
+            return type(self)(self.__frozen__()[key])
 
     @setdoc.basic
     def __gt__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__one_way__() > other.__one_way__()
+            return self.__frozen__() > other.__frozen__()
         else:
             return NotImplemented
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __le__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__one_way__() <= other.__one_way__()
+            return self.__frozen__() <= other.__frozen__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __len__(self: Self, /) -> int:
-        return len(self.__one_way__())
+        return len(self.__frozen__())
 
     @setdoc.basic
     def __lt__(self: Self, other: ListLike[Any], /) -> bool:
         if isinstance(other, ListLike):
-            return self.__one_way__() < other.__one_way__()
+            return self.__frozen__() < other.__frozen__()
         else:
             return NotImplemented
 
     @setdoc.basic
     def __mul__(self: Self, other: SupportsIndex, /) -> Self:
         if isinstance(other, SupportsIndex):
-            return type(self)(self.__one_way__() * other)
+            return type(self)(self.__frozen__() * other)
         else:
             raise TypeError
 
     __rmul__ = __mul__
-
-    @abstractmethod
-    @setdoc.basic
-    def __one_way__(self: Self, /) -> OneWay[Item]: ...
 
     @setdoc.basic
     def __repr__(self: Self, /) -> str:
@@ -128,10 +133,10 @@ class ListSlot[Item](ListLike[Item]):
 
     __slots__ = ("_slot",)
 
-    _slot: ListSlot.OneWay[Item]
+    _slot: ListSlot.Frozen[Item]
 
     @setdoc.basic
-    def __one_way__(self: Self) -> ListSlot.OneWay[Item]:
+    def __frozen__(self: Self) -> ListSlot.Frozen[Item]:
         return self._slot
 
 
@@ -142,7 +147,7 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
 
     @setdoc.basic
     def __hash__(self: Self) -> int:
-        return hash(tuple(self.__one_way__()))
+        return hash(self.__frozen__())
 
 
 class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
@@ -166,8 +171,12 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         def __enter__(self: Self, /) -> list[MutableItem]: ...
         @setdoc.basic
         def __exit__(
-            self: Self, exc_type: Any, exc: Any, tb: Any, /
-        ) -> Any: ...
+            self,
+            exc_type: type[BaseException] | None,
+            exc_value: BaseException | None,
+            traceback: TracebackType | None,
+            /,
+        ) -> object: ...
 
     @overload
     @setdoc.basic
@@ -219,7 +228,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     @setdoc.basic
     def copy(self: Self) -> Self:
-        return type(self)(self.__one_way__())
+        return type(self)(self.__frozen__())
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
