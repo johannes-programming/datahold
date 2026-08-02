@@ -34,14 +34,16 @@ class Lazy(enum.Enum):
         cls: type[Self], typename: str, objname: str
     ) -> Any:
         datatype = getattr(datahold, typename)
-        info = cls.lazy.data[typename]["examples"][objname]
-        return datatype.Frozen(*info["args"], **info["kwargs"])
+        info = cls.lazy.datatypes[typename]["examples"][objname]
+        return datatype.Frozen.__value__(
+            *info.get("args", []), **info.get("kwargs", {})
+        )
 
     @classmethod
     def get_example(cls: type[Self], typename: str, objname: str) -> Any:
         datatype = getattr(datahold, typename)
-        info = cls.lazy.data[typename]["examples"][objname]
-        return datatype(*info["args"], **info["kwargs"])
+        info = cls.lazy.datatypes[typename]["examples"][objname]
+        return datatype(*info.get("args", []), **info.get("kwargs", {}))
 
     @classmethod
     def get_import(cls: type[Self], name: str, /) -> Any:

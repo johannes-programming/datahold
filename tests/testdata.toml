@@ -26,7 +26,93 @@ generic = 1
 [datatypes.FrozenListSlot]
 abstractmethods = []
 
-[datatypes.FrozenListSlot.examples]
+[datatypes.FrozenListSlot.TestInternalComparsion.ge.test_greater_value]
+a = "_1_3"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.ge.test_equal_value]
+a = "_1_2"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.ge.test_less_value]
+a = "_1_2"
+b = "_1_3"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.ge.test_longer_prefix]
+a = "_1_0"
+b = "_1"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.gt.test_greater_at_first_item]
+a = "_2_0"
+b = "_1_9"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.gt.test_equal_value_is_not_greater]
+a = "_1_2"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.gt.test_greater_at_later_item]
+a = "_1_3"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.gt.test_longer_prefix_is_greater]
+a = "_1_2_0"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.examples._1]
+args = [
+    [
+        1,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._1_0]
+args = [
+    [
+        1,
+        0,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._1_2]
+args = [
+    [
+        1,
+        2,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._1_2_0]
+args = [
+    [
+        1,
+        2,
+        0,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._1_3]
+args = [
+    [
+        1,
+        3,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._1_9]
+args = [
+    [
+        1,
+        9,
+    ],
+]
+
+[datatypes.FrozenListSlot.examples._2_0]
+args = [
+    [
+        2,
+        0,
+    ],
+]
 
 [datatypes.FrozenListSlot.nested]
 Frozen = "builtins.tuple"
