@@ -32,8 +32,8 @@ class TestAppend(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_append_nested_list(self: Self) -> None:
-        actual: datahold.MutableListSlot[int|list[int]]
-        expected: list[int|list[int]]
+        actual: datahold.MutableListSlot[int | list[int]]
+        expected: list[int | list[int]]
         value: list[int]
         value = [2, 3]
         actual = datahold.MutableListSlot([1])
@@ -69,8 +69,8 @@ class TestClear(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_clear_empty(self: Self) -> None:
-        actual : datahold.MutableListSlot[Never]
-        expected : datahold.MutableListSlot[Never]
+        actual: datahold.MutableListSlot[Never]
+        expected: list[Never]
         actual = datahold.MutableListSlot([])
         expected = []
         actual.clear()

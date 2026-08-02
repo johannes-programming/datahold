@@ -24,7 +24,9 @@ class TestAttributes(unittest.TestCase):
                 f"{datatype.__name__} has attribute {x}",
             )
 
-    def _test_attributes(self: Self, name: str, /, **kwargs: bool) -> None:
+    def _test_attributes(self: Self, name: str, /, **kwargs: str) -> None:
+        x: str
+        y: str
         for x, y in kwargs.items():
             with self.subTest(datatype=name, ancestor=y, attribute=x):
                 self._test_attribute(name, x, y)
