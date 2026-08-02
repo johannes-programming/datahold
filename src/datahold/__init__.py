@@ -9,6 +9,7 @@ __all__: list[str] = [
     "ListSlot",
     "MutableListLike",
     "MutableListSlot",
+    "Sequence",
 ]
 
 from abc import abstractmethod
@@ -24,8 +25,54 @@ import setdoc
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### SEQUENCE ###
+
+
+class Sequence[Item](abc.Sequence[Item]):
+    """Provide a base class for customized sequence."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class Frozen[FrozenItem](Protocol):
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, key: int, /) -> FrozenItem: ...
+        @overload
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: Slice[int], /
+        ) -> abc.Sequence[FrozenItem]: ...
+        @setdoc.basic
+        def __getitem__(
+            self: Self,
+            key: int | Slice[int],
+            /,
+        ) -> FrozenItem | abc.Sequence[FrozenItem]: ...
+        @setdoc.basic
+        def __len__(self: Self, /) -> int: ...
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen[Item]: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: int | Slice[int], /
+    ) -> Item | abc.Sequence[Item]:
+        return self.__frozen__()[key]
+
+    @setdoc.basic
+    def __len__(self: Self) -> int:
+        return len(self.__frozen__())
+
+
 ### LIST-LIKE ###
-class ListLike[Item](abc.Sequence[Item]):
+class ListLike[Item](Sequence[Item]):
     """Provide a base class for customized list-likes."""
 
     __slots__ = ()

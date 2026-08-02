@@ -234,4 +234,6 @@ __hash__ = ""
 [datatypes.MutableListSlot.varia]
 generic = 1
 
+[datatypes.Sequence]
+
 [non_datatypes]
