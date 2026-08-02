@@ -207,36 +207,6 @@ class TestLessThanOperator(unittest.TestCase):
         )
 
 
-class TestLessThanOrEqualOperator(unittest.TestCase):
-    def test_less_value(self: Self) -> None:
-        x: datahold.FrozenListSlot[int]
-        y: datahold.FrozenListSlot[int]
-        x = datahold.FrozenListSlot((1, 2))
-        y = datahold.FrozenListSlot((1, 3))
-        self.assertTrue(x <= y)
-
-    def test_equal_value(self: Self) -> None:
-        x: datahold.FrozenListSlot[int]
-        y: datahold.FrozenListSlot[int]
-        x = datahold.FrozenListSlot((1, 2))
-        y = datahold.FrozenListSlot((1, 2))
-        self.assertTrue(x <= y)
-
-    def test_greater_value(self: Self) -> None:
-        x: datahold.FrozenListSlot[int]
-        y: datahold.FrozenListSlot[int]
-        x = datahold.FrozenListSlot((2, 0))
-        y = datahold.FrozenListSlot((1, 9))
-        self.assertFalse(x <= y)
-
-    def test_shorter_prefix(self: Self) -> None:
-        x: datahold.FrozenListSlot[int]
-        y: datahold.FrozenListSlot[int]
-        x = datahold.FrozenListSlot((1,))
-        y = datahold.FrozenListSlot((1, 0))
-        self.assertTrue(x <= y)
-
-
 class TestAugmentedAdditionOperator(unittest.TestCase):
     def test_augmented_add_nonempty_values(self: Self) -> None:
         value: datahold.ListLike[int]

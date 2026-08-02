@@ -58,6 +58,22 @@ b = "_1_2"
 a = "_1_2_0"
 b = "_1_2"
 
+[datatypes.FrozenListSlot.TestInternalComparsion.le.test_less_value]
+a = "_1_2"
+b = "_1_3"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.le.test_equal_value]
+a = "_1_2"
+b = "_1_2"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.le.test_greater_value]
+a = "_2_0"
+b = "_1_9"
+
+[datatypes.FrozenListSlot.TestInternalComparsion.le.test_shorter_prefix]
+a = "_1"
+b = "_1_0"
+
 [datatypes.FrozenListSlot.examples._1]
 args = [
     [
