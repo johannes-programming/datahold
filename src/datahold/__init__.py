@@ -219,8 +219,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     @setdoc.basic
     def copy(self: Self) -> Self:
-        with self.__mutable__() as mutable:
-            return type(self)(mutable)
+        return type(self)(self.__one_way__())
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
@@ -229,6 +228,10 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     @setdoc.basic
     def sort(self: Self, /, *, key: Any = None, reverse: bool = False) -> None:
+        # list.sort reveals Overload(
+        #     def [_T, SupportsRichComparisonT <: _typeshed.SupportsDunderLT[Any] | _typeshed.SupportsDunderGT[Any]] (self: list[SupportsRichComparisonT], *, key: None =, reverse: bool =),
+        #     def [_T] (self: list[_T], *, key: def (_T) -> _typeshed.SupportsDunderLT[Any] | _typeshed.SupportsDunderGT[Any], reverse: bool =),
+        # )
         with self.__mutable__() as mutable:
             mutable.sort(key=key, reverse=reverse)
 

@@ -42,38 +42,47 @@ class TestIndexMethod(unittest.TestCase):
 
 class TestAdditionOperator(unittest.TestCase):
     def test_add_two_nonempty_values(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((1, 2)) + datahold.FrozenListSlot(
             (3, 4)
         )
         self.assertEqual(tuple(result), (1, 2, 3, 4))
 
     def test_add_empty_right_operand(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((1, 2)) + datahold.FrozenListSlot(())
         self.assertEqual(tuple(result), (1, 2))
 
     def test_add_empty_left_operand(self: Self) -> None:
-        result = datahold.FrozenListSlot(()) + datahold.FrozenListSlot((1, 2))
-        self.assertEqual(tuple(result), (1, 2))
+        x: datahold.FrozenListSlot[int]
+        y: datahold.FrozenListSlot[int]
+        x = datahold.FrozenListSlot(())
+        y = datahold.FrozenListSlot((1, 2))
+        self.assertEqual(tuple(x + y), (1, 2))
 
     def test_add_invalid_operand(self: Self) -> None:
         with self.assertRaises(TypeError):
-            datahold.FrozenListSlot((1, 2)) + [3, 4]
+            datahold.FrozenListSlot((1, 2)) + [3, 4]  # type: ignore[operator]
 
 
 class TestMultiplicationOperator(unittest.TestCase):
     def test_multiply_by_positive_integer(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((1, 2)) * 3
         self.assertEqual(tuple(result), (1, 2, 1, 2, 1, 2))
 
     def test_multiply_by_zero(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((1, 2)) * 0
         self.assertEqual(tuple(result), ())
 
     def test_multiply_by_negative_integer(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((1, 2)) * -2
         self.assertEqual(tuple(result), ())
 
     def test_reflected_multiplication(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = 2 * datahold.FrozenListSlot((1, 2))
         self.assertEqual(tuple(result), (1, 2, 1, 2))
 
@@ -116,10 +125,12 @@ class TestSubscriptionOperator(unittest.TestCase):
         self.assertEqual(datahold.FrozenListSlot(("a", "b", "c"))[-1], "c")
 
     def test_basic_slice(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((0, 1, 2, 3, 4))[1:4]
         self.assertEqual(tuple(result), (1, 2, 3))
 
     def test_extended_slice(self: Self) -> None:
+        result: datahold.FrozenListSlot[int]
         result = datahold.FrozenListSlot((0, 1, 2, 3, 4, 5))[::2]
         self.assertEqual(tuple(result), (0, 2, 4))
 
@@ -279,7 +290,7 @@ class TestAugmentedAdditionOperator(unittest.TestCase):
         value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         with self.assertRaises(TypeError):
-            value += [3, 4]
+            value += [3, 4]  # type: ignore[operator]
 
 
 class TestAugmentedMultiplicationOperator(unittest.TestCase):
@@ -305,7 +316,7 @@ class TestAugmentedMultiplicationOperator(unittest.TestCase):
         value: datahold.FrozenListSlot[int]
         value = datahold.FrozenListSlot((1, 2))
         with self.assertRaises(TypeError):
-            value *= 1.5
+            value *= 1.5  # type: ignore[operator]
 
 
 class TestAllBuiltin(unittest.TestCase):

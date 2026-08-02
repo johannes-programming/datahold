@@ -70,9 +70,8 @@ class TestClear(unittest.TestCase):
         expected: list[int]
         actual = datahold.MutableListSlot([1, 2, 3])
         expected = [1, 2, 3]
-        actual_result = actual.clear()
-        expected_result = expected.clear()
-        self.assertEqual(actual_result, expected_result)
+        actual.clear()
+        expected.clear()
         self.assertEqual(list(actual), expected)
 
     def test_clear_empty(self: Self) -> None:
@@ -94,10 +93,7 @@ class TestClear(unittest.TestCase):
         actual = datahold.MutableListSlot([1])
         expected = [1]
         actual.clear()
-        actual_result = actual.clear()
         expected.clear()
-        expected_result = expected.clear()
-        self.assertEqual(actual_result, expected_result)
         self.assertEqual(list(actual), expected)
 
 
@@ -165,9 +161,8 @@ class TestExtend(unittest.TestCase):
         expected: list[int]
         actual = datahold.MutableListSlot([1])
         expected = [1]
-        actual_result = actual.extend([2, 3])
-        expected_result = expected.extend([2, 3])
-        self.assertEqual(actual_result, expected_result)
+        actual.extend([2, 3])
+        expected.extend([2, 3])
         self.assertEqual(list(actual), expected)
 
     def test_extend_tuple(self: Self) -> None:
@@ -226,9 +221,8 @@ class TestInsert(unittest.TestCase):
         actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1, 3])
         expected = [1, 3]
-        actual_result = actual.insert(1, 2)
-        expected_result = expected.insert(1, 2)
-        self.assertEqual(actual_result, expected_result)
+        actual.insert(1, 2)
+        expected.insert(1, 2)
         self.assertEqual(list(actual), expected)
 
     def test_insert_negative_index(self: Self) -> None:
@@ -288,15 +282,16 @@ class TestPop(unittest.TestCase):
 class TestRemove(unittest.TestCase):
     def test_remove_present_value(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
+        expected:list[int]
         actual = datahold.MutableListSlot([1, 2, 3])
         expected = [1, 2, 3]
-        actual_result = actual.remove(2)
-        expected_result = expected.remove(2)
-        self.assertEqual(actual_result, expected_result)
+        actual.remove(2)
+        expected.remove(2)
         self.assertEqual(list(actual), expected)
 
     def test_remove_only_first_match(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
+        expected:list[int]
         actual = datahold.MutableListSlot([1, 2, 1])
         expected = [1, 2, 1]
         actual.remove(1)
@@ -305,6 +300,7 @@ class TestRemove(unittest.TestCase):
 
     def test_remove_none(self: Self) -> None:
         actual: datahold.MutableListSlot[Optional[int]]
+        expected:list[Optional[int]]
         actual = datahold.MutableListSlot([1, None, 2])
         expected = [1, None, 2]
         actual.remove(None)
@@ -321,12 +317,11 @@ class TestRemove(unittest.TestCase):
 class TestReverse(unittest.TestCase):
     def test_reverse_even_length(self: Self) -> None:
         actual: datahold.MutableListSlot[int]
-        actual_result: datahold.MutableListSlot[int]
+        expected:list[int]
         actual = datahold.MutableListSlot([1, 2, 3, 4])
         expected = [1, 2, 3, 4]
-        actual_result = actual.reverse()
-        expected_result = expected.reverse()
-        self.assertEqual(actual_result, expected_result)
+        actual.reverse()
+        expected.reverse()
         self.assertEqual(list(actual), expected)
 
     def test_reverse_odd_length(self: Self) -> None:
@@ -348,6 +343,8 @@ class TestReverse(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_reverse_single_item(self: Self) -> None:
+        actual: datahold.MutableListSlot[object]
+        value:object
         value = object()
         actual = datahold.MutableListSlot([value])
         actual.reverse()
@@ -394,14 +391,22 @@ class TestAdditionOperator(unittest.TestCase):
         self.assertEqual(list(actual), [1, 2] + [3, 4])
 
     def test_add_empty_left(self: Self) -> None:
-        actual = datahold.MutableListSlot([]) + datahold.MutableListSlot([1])
-        self.assertEqual(list(actual), [] + [1])
+        x: datahold.MutableListSlot[int]
+        y: datahold.MutableListSlot[int]
+        x = datahold.MutableListSlot([])
+        y = datahold.MutableListSlot([1])
+        self.assertEqual(list(x + y), [] + [1])
 
     def test_add_empty_right(self: Self) -> None:
-        actual = datahold.MutableListSlot([1]) + datahold.MutableListSlot([])
-        self.assertEqual(list(actual), [1] + [])
+        x: datahold.MutableListSlot[int]
+        y: datahold.MutableListSlot[int]
+        x = datahold.MutableListSlot([1])
+        y = datahold.MutableListSlot([])
+        self.assertEqual(list(x + y), [1] + [])
 
     def test_add_does_not_mutate_operands(self: Self) -> None:
+        left: datahold.MutableListSlot[int]
+        right: datahold.MutableListSlot[int]
         left = datahold.MutableListSlot([1])
         right = datahold.MutableListSlot([2])
         result = left + right
@@ -412,6 +417,7 @@ class TestAdditionOperator(unittest.TestCase):
 
 class TestInPlaceAdditionOperator(unittest.TestCase):
     def test_iadd_list_like(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1])
         expected = [1]
         actual += datahold.MutableListSlot([2, 3])
@@ -419,6 +425,7 @@ class TestInPlaceAdditionOperator(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_iadd_tuple(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1])
         expected = [1]
         actual += (2, 3)
@@ -426,6 +433,7 @@ class TestInPlaceAdditionOperator(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_iadd_generator(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1])
         expected = [1]
         actual += (x for x in [2, 3])
@@ -433,6 +441,7 @@ class TestInPlaceAdditionOperator(unittest.TestCase):
         self.assertEqual(list(actual), expected)
 
     def test_iadd_preserves_identity(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1])
         original_id = id(actual)
         actual += [2]
@@ -442,18 +451,23 @@ class TestInPlaceAdditionOperator(unittest.TestCase):
 
 class TestMultiplicationOperator(unittest.TestCase):
     def test_mul_positive(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1, 2]) * 3
         self.assertEqual(list(actual), [1, 2] * 3)
 
     def test_mul_zero(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1, 2]) * 0
         self.assertEqual(list(actual), [1, 2] * 0)
 
     def test_mul_negative(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = datahold.MutableListSlot([1, 2]) * -2
         self.assertEqual(list(actual), [1, 2] * -2)
 
     def test_mul_does_not_mutate_operand(self: Self) -> None:
+        result: datahold.MutableListSlot[int]
+        source: datahold.MutableListSlot[int]
         source = datahold.MutableListSlot([1, 2])
         result = source * 2
         self.assertEqual(list(source), [1, 2])
@@ -462,18 +476,23 @@ class TestMultiplicationOperator(unittest.TestCase):
 
 class TestReverseMultiplicationOperator(unittest.TestCase):
     def test_rmul_positive(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = 3 * datahold.MutableListSlot([1, 2])
         self.assertEqual(list(actual), 3 * [1, 2])
 
     def test_rmul_zero(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = 0 * datahold.MutableListSlot([1, 2])
         self.assertEqual(list(actual), 0 * [1, 2])
 
     def test_rmul_negative(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
         actual = -2 * datahold.MutableListSlot([1, 2])
         self.assertEqual(list(actual), -2 * [1, 2])
 
     def test_rmul_does_not_mutate_operand(self: Self) -> None:
+        result: datahold.MutableListSlot[int]
+        source: datahold.MutableListSlot[int]
         source = datahold.MutableListSlot([1, 2])
         result = 2 * source
         self.assertEqual(list(source), [1, 2])
@@ -482,6 +501,8 @@ class TestReverseMultiplicationOperator(unittest.TestCase):
 
 class TestInPlaceMultiplicationOperator(unittest.TestCase):
     def test_imul_positive(self: Self) -> None:
+        actual: datahold.MutableListSlot[int]
+        expected: list[int]
         actual = datahold.MutableListSlot([1, 2])
         expected = [1, 2]
         actual *= 3
