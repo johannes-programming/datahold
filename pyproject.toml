@@ -19,6 +19,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
+    "frozendict",
     "setdoc>=1.3.24,<2",
 ]
 description = "This project wraps common mutable datastructures for inheritance with modification."

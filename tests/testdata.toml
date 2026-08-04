@@ -1,5 +1,21 @@
 [datatypes.Collection]
 
+[datatypes.DictLike.issubclass]
+"collections.abc.Mapping" = true
+"datahold.Mapping" = true
+
+[datatypes.DictSlot.issubclass]
+"collections.abc.Mapping" = true
+"datahold.DictLike" = true
+
+[datatypes.FrozenDictLike.issubclass]
+"collections.abc.Hashable" = true
+"datahold.Mapping" = true
+
+[datatypes.FrozenDictSlot.issubclass]
+"collections.abc.Hashable" = true
+"datahold.FrozenDictLike" = true
+
 [datatypes.FrozenListLike]
 abstractmethods = [
     "__frozen__",
@@ -194,6 +210,21 @@ __Mutable__ = ""
 [datatypes.ListSlot.varia]
 generic = 1
 
+[datatypes.Mapping.issubclass]
+"collections.abc.Mapping" = true
+"datahold.Collection" = true
+
+[datatypes.MutableDictLike.issubclass]
+"collections.abc.Mapping" = true
+"collections.abc.MutableMapping" = true
+"datahold.MutableMapping" = true
+
+[datatypes.MutableDictSlot.issubclass]
+"collections.abc.Mapping" = true
+"collections.abc.MutableMapping" = true
+"datahold.MutableDictLike" = true
+"datahold.MutableMapping" = true
+
 [datatypes.MutableListLike]
 abstractmethods = [
     "__mutate__",
@@ -249,6 +280,10 @@ __hash__ = ""
 
 [datatypes.MutableListSlot.varia]
 generic = 1
+
+[datatypes.MutableMapping.issubclass]
+"collections.abc.MutableMapping" = true
+"datahold.Mapping" = true
 
 [datatypes.MutableSequence.attributes]
 __Frozen__ = "datahold.Sequence"

@@ -4,14 +4,22 @@ from __future__ import annotations
 
 __all__: list[str] = [
     "Collection",
+    "DictLike",
+    "DictSlot",
+    "FrozenDictLike",
+    "FrozenDictSlot",
     "FrozenListLike",
     "FrozenListSlot",
     "FrozenSetLike",
     "FrozenSetSlot",
     "ListLike",
     "ListSlot",
+    "Mapping",
+    "MutableDictLike",
+    "MutableDictSlot",
     "MutableListLike",
     "MutableListSlot",
+    "MutableMapping",
     "MutableSequence",
     "MutableSet",
     "MutableSetLike",
@@ -37,6 +45,7 @@ from typing import (
 )
 
 import setdoc
+from frozendict import frozendict
 
 ### UTILS ###
 
@@ -56,6 +65,20 @@ class ContextManager[Enter](Protocol):
         /,
     ) -> object: ...
 
+
+class SupportsKeysAndGetitem[Key, Value](Protocol):
+    """Provide protocol supporting keys and __getitem__."""
+
+    @setdoc.basic
+    def __getitem__(self: Self, key: Key, /) -> Value: ...
+    @setdoc.basic
+    def keys(self: Self, /) -> abc.Iterable[Key]: ...
+
+
+type DictInit[Key, Value] = (
+    SupportsKeysAndGetitem[Key | str, Optional[Value]]
+    | abc.Iterable[tuple[Key | str, Optional[Value]]]
+)
 
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
@@ -270,6 +293,213 @@ class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
         slot = set(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozenset(slot)
+
+
+### MAPPING ###
+
+
+class Mapping[Key: abc.Hashable, Value](
+    Collection[Key],
+    abc.Mapping[Key, Value],
+):
+    """Provide abc for custom mapping."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class __Frozen__[FrozenKey, FrozenValue](
+        Collection.__Frozen__[FrozenKey], Protocol
+    ):
+        @setdoc.basic
+        def __getitem__(self: Self, key: abc.Hashable, /) -> FrozenValue: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ...
+    @setdoc.basic
+    def __getitem__(self: Self, key: abc.Hashable, /) -> Value:
+        return self.__frozen__()[key]
+
+
+class MutableMapping[Key: abc.Hashable, Value](
+    Mapping[Key, Value],
+    abc.MutableMapping[Key, Value],
+):
+    """Provide abc for custom mutable mapping."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class __Mutable__[MutableKey, MutableValue](
+        Protocol,
+    ):
+        @setdoc.basic
+        def __delitem__(self: Self, key: MutableKey | str, /) -> object: ...
+        @setdoc.basic
+        def __setitem__(
+            self: Self, key: MutableKey | str, value: Optional[MutableValue], /
+        ) -> object: ...
+
+    @setdoc.basic
+    def __delitem__(self: Self, key: Key, /) -> None:
+        with self.__mutate__() as mutable:
+            del mutable[key]
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self) -> ContextManager[__Mutable__[Key, Value]]: ...
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: Key | str, value: Optional[Value], /
+    ) -> None:
+        self[key] = value
+
+
+### DICT-LIKE ###
+
+
+class DictLike[Key: abc.Hashable, Value](
+    Mapping[Key | str, Optional[Value]],
+):
+    """Provide abc for custom dict-like."""
+
+    __slots__ = ()
+    type __Frozen__[FrozenKey, FrozenValue] = frozendict[
+        FrozenKey | str, Optional[FrozenValue]
+    ]
+    type Init[Key, Value] = DictInit[Key, Value]
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ...
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: DictInit[Key, Value],
+        /,
+        **kwargs: Value,
+    ): ...
+
+    @setdoc.basic
+    def __or__[Key_, Value_](
+        self: Self,
+        other: DictLike[Key_, Value_],
+        /,
+    ) -> DictLike[Key | Key_, Value | Value_]:
+        return type(self)(self.__frozen__() | other.__frozen__())
+
+    @classmethod
+    @setdoc.basic
+    def fromkeys(
+        cls: type[Self],
+        iterable: abc.Iterable[Key | str],
+        value: Optional[Value],
+        /,
+    ) -> Self:
+        return cls(dict.fromkeys(iterable, value))
+
+
+class FrozenDictLike[Key: abc.Hashable, Value](
+    DictLike[Key, Value],
+    abc.Hashable,
+):
+    """Provide abc for custom frozen dict-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self, /) -> int:
+        return hash(self.__frozen__())
+
+
+class MutableDictLike[Key: abc.Hashable, Value](
+    DictLike[Key, Value],
+    MutableMapping[Key, Value],
+):
+    """Provide abc for custom mutable dict-like."""
+
+    __slots__ = ()
+
+    type __Mutable__[Key: abc.Hashable, Value] = dict[
+        Key | str, Optional[Value]
+    ]
+
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> MutableDictLike.__Frozen__[Key, Value]:
+        with self.__mutate__() as mutable:
+            return frozendict(mutable)
+
+    @setdoc.basic
+    def __init__(
+        self: Self,
+        data: DictInit[Key, Value],
+        /,
+        **kwargs: Value,
+    ):
+        self.update(data, **kwargs)
+
+    @setdoc.basic
+    def __ior__(self: Self, other: DictInit[Key, Value], /) -> Self:
+        with self.__mutate__() as mutable:
+            mutable |= other
+        return self
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self, /) -> __Mutable__[Key, Value]: ...
+
+    @setdoc.basic
+    def copy(self: Self, /) -> Self:
+        return type(self)(self)
+
+
+### DICT-SLOT ###
+
+
+class DictSlot[Key: abc.Hashable, Value](DictLike[Key, Value]):
+    """Provide slotted dict-like class."""
+
+    __slots__ = ("_slot",)
+
+    _slot: DictSlot.__Frozen__[Key, Value]
+
+    @setdoc.basic
+    def __frozen__(self: Self) -> DictSlot.__Frozen__[Key, Value]:
+        return self._slot
+
+
+class FrozenDictSlot[Key: abc.Hashable, Value](
+    DictSlot[Key, Value],
+    FrozenDictLike[Key, Value],
+):
+    """Provide slotted frozen dict-like class."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __init__(self: Self, data: DictInit[Key, Value] = (), /) -> None:
+        self._slot = frozendict(data)
+
+
+class MutableDictSlot[Key: abc.Hashable, Value](
+    DictSlot[Key, Value],
+    MutableDictLike[Key, Value],
+):
+    """Provide slotted mutable dict-like class."""
+
+    __slots__ = ()
+
+    @contextmanager
+    @setdoc.basic
+    def __mutate__(
+        self: Self,
+        /,
+    ) -> abc.Generator[MutableDictSlot.__Mutable__[Key, Value], None, None]:
+        slot = dict(getattr(self, "_slot", ()))
+        yield slot
+        self._slot = frozendict(slot)
 
 
 ### SEQUENCE ###
