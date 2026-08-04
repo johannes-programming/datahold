@@ -18,9 +18,9 @@ __init__ = "datahold.ListLike"
 "collections.abc.Sequence" = true
 
 [datatypes.FrozenListLike.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
-Mutable = ""
+__Frozen__ = "builtins.tuple"
+__Mutable__ = ""
 
 [datatypes.FrozenListLike.varia]
 generic = 1
@@ -133,9 +133,9 @@ args = [
 ]
 
 [datatypes.FrozenListSlot.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
-Mutable = ""
+__Frozen__ = "builtins.tuple"
+__Mutable__ = ""
 
 [datatypes.FrozenListSlot.varia]
 generic = 1
@@ -161,9 +161,9 @@ index = "collections.abc.Sequence"
 "datahold.ListLike" = true
 
 [datatypes.ListLike.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
-Mutable = ""
+__Frozen__ = "builtins.tuple"
+__Mutable__ = ""
 
 [datatypes.ListLike.varia]
 generic = 1
@@ -174,9 +174,9 @@ abstractmethods = [
 ]
 
 [datatypes.ListSlot.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
-Mutable = ""
+__Frozen__ = "builtins.tuple"
+__Mutable__ = ""
 
 [datatypes.ListSlot.varia]
 generic = 1
@@ -212,8 +212,8 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.MutableSequence" = true
 
 [datatypes.MutableListLike.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
+__Frozen__ = "builtins.tuple"
 __hash__ = ""
 
 [datatypes.MutableListLike.varia]
@@ -229,8 +229,8 @@ abstractmethods = []
 "datahold.MutableListSlot" = true
 
 [datatypes.MutableListSlot.nested]
-Frozen = "builtins.tuple"
 Init = "collections.abc.Iterable"
+__Frozen__ = "builtins.tuple"
 __hash__ = ""
 
 [datatypes.MutableListSlot.varia]
