@@ -140,6 +140,18 @@ __Mutable__ = ""
 [datatypes.FrozenListSlot.varia]
 generic = 1
 
+[datatypes.FrozenSetLike.issubclass]
+"collections.abc.Hashable" = true
+"collections.abc.Set" = true
+"datahold.Collection" = true
+"datahold.SetLike" = true
+
+[datatypes.FrozenSetSlot.issubclass]
+"collections.abc.Collection" = true
+"collections.abc.MutableSet" = false
+"collections.abc.Set" = true
+"datahold.Collection" = true
+
 [datatypes.ListLike]
 abstractmethods = [
     "__frozen__",
@@ -249,9 +261,45 @@ __setitem__ = "datahold.MutableSequence"
 insert = "datahold.MutableSequence"
 sort = ""
 
+[datatypes.MutableSet.issubclass]
+"collections.abc.MutableSet" = true
+"collections.abc.Set" = true
+"datahold.Collection" = true
+
+[datatypes.MutableSetLike.issubclass]
+"collections.abc.Hashable" = false
+"collections.abc.MutableSet" = true
+"collections.abc.Set" = true
+"datahold.Collection" = true
+"datahold.MutableSet" = true
+"datahold.SetLike" = true
+
+[datatypes.MutableSetSlot.issubclass]
+"collections.abc.MutableSet" = true
+"collections.abc.Set" = true
+"datahold.Collection" = true
+"datahold.MutableSet" = true
+"datahold.MutableSetLike" = true
+"datahold.SetSlot" = true
+
 [datatypes.Sequence]
 abstractmethods = [
     "__frozen__",
 ]
+
+[datatypes.Set.issubclass]
+"collections.abc.Set" = true
+"datahold.Collection" = true
+
+[datatypes.SetLike.issubclass]
+"collections.abc.Set" = true
+"datahold.Collection" = true
+"datahold.Set" = true
+"datahold.SetLike" = true
+
+[datatypes.SetSlot.issubclass]
+"collections.abc.Set" = true
+"datahold.Collection" = true
+"datahold.SetLike" = true
 
 [non_datatypes]

@@ -6,12 +6,20 @@ __all__: list[str] = [
     "Collection",
     "FrozenListLike",
     "FrozenListSlot",
+    "FrozenSetLike",
+    "FrozenSetSlot",
     "ListLike",
     "ListSlot",
     "MutableListLike",
     "MutableListSlot",
     "MutableSequence",
+    "MutableSet",
+    "MutableSetLike",
+    "MutableSetSlot",
     "Sequence",
+    "Set",
+    "SetLike",
+    "SetSlot",
 ]
 
 from abc import abstractmethod
@@ -89,6 +97,179 @@ class Collection[Item](
     @setdoc.basic
     def __len__(self: Self, /) -> int:
         return len(self.__frozen__())
+
+
+### SET ###
+
+
+class Set[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
+    """Provide abc for custom set."""
+
+    __slots__ = ()
+
+
+class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
+    """Provide abc for custom mutable set."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    class __Mutable__[MutableItem: abc.Hashable](Protocol):
+        @setdoc.basic
+        def add(self: Self, item: MutableItem, /) -> object: ...
+        @setdoc.basic
+        def discard(self: Self, item: abc.Hashable, /) -> object: ...
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+    @setdoc.basic
+    def add(self: Self, item: Item, /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.add(item)
+
+    @setdoc.basic
+    def discard(self: Self, item: abc.Hashable, /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.discard(item)
+
+
+### SET-LIKE ###
+
+
+class SetLike[Item: abc.Hashable](Set[Item]):
+    """Provide abc for custom set-like."""
+
+    __slots__ = ()
+    type __Frozen__[FrozenItem] = frozenset[FrozenItem]
+    type Init[FrozenItem] = abc.Iterable[FrozenItem]
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, data: Init[Item] = (), /) -> None: ...
+    @setdoc.basic
+    def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
+        return type(self)(self.__frozen__().difference(*others))
+
+    @setdoc.basic
+    def intersection(
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
+    ) -> Self:
+        return type(self)(self.__frozen__().intersection(*others))
+
+    @setdoc.basic
+    def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> Self:
+        return type(self)(self.__frozen__().issubset(other))  # type: ignore
+
+    @setdoc.basic
+    def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> Self:
+        return type(self)(self.__frozen__().issuperset(other))  # type: ignore
+
+    @setdoc.basic
+    def symmetric_difference(self: Self, other: abc.Iterable[Item], /) -> Self:
+        return type(self)(self.__frozen__().symmetric_difference(other))
+
+    @setdoc.basic
+    def union(self: Self, /, *others: abc.Iterable[Item]) -> Self:
+        return type(self)(self.__frozen__().union(others))  # type: ignore
+
+
+class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
+    """Provide abc for custom frozen set-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self) -> int:
+        return hash(self.__frozen__())
+
+
+class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
+    """Provide abc for custom mutable set-like."""
+
+    __slots__ = ()
+
+    type __Mutable__[MutableItem] = set[MutableItem]
+
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> MutableSetLike.__Frozen__[Item]:
+        with self.__mutate__() as mutable:
+            return frozenset(mutable)
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, data: MutableSetLike.Init[Item] = (), /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.update(data)
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+    @setdoc.basic
+    def difference_update(
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.difference_update(*others)
+
+    @setdoc.basic
+    def intersection_update(
+        self: Self, /, *others: abc.Iterable[abc.Hashable]
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.intersection_update(*others)
+
+    @setdoc.basic
+    def symmetric_difference_update(
+        self: Self, other: abc.Iterable[Item], /
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.symmetric_difference_update(other)
+
+    @setdoc.basic
+    def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
+        with self.__mutate__() as mutable:
+            mutable.update(*others)
+
+
+### SET-SLOT ###
+
+
+class SetSlot[Item: abc.Hashable](SetLike[Item]):
+    """Provide slotted set-like."""
+
+    __slots__ = ("_slot",)
+
+    _slot: SetSlot.__Frozen__[Item]
+
+    @setdoc.basic
+    def __frozen__(self: Self) -> SetSlot.__Frozen__[Item]:
+        return self._slot
+
+
+class FrozenSetSlot[Item](SetSlot[Item], FrozenSetLike[Item]):
+    """Provide slotted frozen set-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __init__(self: Self, data: FrozenSetSlot.Init[Item] = (), /) -> None:
+        self._slot = frozenset(data)
+
+
+class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
+    """Provide slotted mutable set-like."""
+
+    __slots__ = ()
+
+    @contextmanager
+    @setdoc.basic
+    def __mutate__(self: Self, /) -> abc.Generator[set[Item], None, None]:
+        slot = set(getattr(self, "_slot", ()))
+        yield slot
+        self._slot = frozenset(slot)
 
 
 ### SEQUENCE ###
