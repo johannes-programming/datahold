@@ -183,13 +183,13 @@ generic = 1
 
 [datatypes.MutableListLike]
 abstractmethods = [
-    "__frozen__",
     "__mutate__",
 ]
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
-__frozen__ = "datahold.ListLike"
+__frozen__ = "datahold.MutableListLike"
+insert = "datahold.MutableSequence"
 __iadd__ = "collections.abc.MutableSequence"
 __imul__ = "datahold.MutableListLike"
 __init__ = "datahold.MutableListLike"
