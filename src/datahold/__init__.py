@@ -379,15 +379,17 @@ class DictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __or__[Key_, Value_](
         self: Self,
-        other: DictLike[Key_, Value_],
+        other: DictInit[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
-        if isinstance(other, DictLike):
-            return type(self)(  # type: ignore[return-value]
-                self.__frozen__() | other.__frozen__()  # type: ignore[operator]
-            )
-        else:
+        data: DictLike.__Frozen__[Key_, Value_]
+        try:
+            data = frozendict(other)  # type: ignore[arg-type]
+        except TypeError:
             return NotImplemented
+        return type(self)(  # type: ignore[return-value]
+            self.__frozen__() | data  # type: ignore[operator]
+        )
 
     @classmethod
     @setdoc.basic
@@ -439,7 +441,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ):
-        self.update(data, **kwargs) 
+        self.update(data, **kwargs)
 
     @setdoc.basic
     def __ior__(self: Self, other: DictInit[Key, Value], /) -> Self:
@@ -467,7 +469,9 @@ class DictSlot[Key: abc.Hashable, Value](DictLike[Key, Value]):
     _slot: DictSlot.__Frozen__[Key, Value]
 
     @setdoc.basic
-    def __frozen__(self: Self) -> DictSlot.__Frozen__[Key, Value]:
+    def __frozen__(  # type: ignore[override]
+        self: Self,
+    ) -> DictSlot.__Frozen__[Key, Value]:
         return self._slot
 
 
