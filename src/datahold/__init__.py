@@ -74,9 +74,9 @@ class Collection[Item](
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
         try:
-            return other in self.__frozen__()
+            return other in self.__frozen__()  # type: ignore[operator]
         except TypeError:
-            return other in (x for x in self)
+            return other in (x for x in self)  # type: ignore[operator]
 
     @abstractmethod
     @setdoc.basic
@@ -190,9 +190,7 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
             key: int | Slice[int],
             value: MutableItem | abc.Iterable[MutableItem],
             /,
-        ) -> None:
-            with self.__mutate__() as mutable:
-                mutable[key] = value  # type: ignore
+        ) -> None: ...
 
         @setdoc.basic
         def insert(self: Self, index: int, item: MutableItem, /) -> None: ...
