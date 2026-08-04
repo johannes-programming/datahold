@@ -18,9 +18,23 @@ from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
 from typing import Any, Optional, Protocol, Self, SupportsIndex, overload
 
+from types import TracebackType
+from typing import Protocol
 import setdoc
 
 ### UTILS ###
+
+
+class ContextManager[Enter](Protocol):
+    def __enter__(self : Self, /) -> Enter: ...
+
+    def __exit__(
+        self:Self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+        /,
+    ) -> object: ...
 
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
@@ -34,7 +48,7 @@ class Sequence[Item](abc.Sequence[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    class Frozen[FrozenItem](Protocol):
+    class __Frozen__[FrozenItem](Protocol):
         @overload
         @setdoc.basic
         def __getitem__(self: Self, key: int, /) -> FrozenItem: ...
@@ -51,9 +65,11 @@ class Sequence[Item](abc.Sequence[Item]):
         ) -> FrozenItem | abc.Sequence[FrozenItem]: ...
         @setdoc.basic
         def __len__(self: Self, /) -> int: ...
+
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> Frozen[Item]: ...
+    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
+
     @overload
     @setdoc.basic
     def __getitem__(self: Self, key: int, /) -> Item: ...
@@ -77,10 +93,11 @@ class ListLike[Item](Sequence[Item]):
 
     __slots__ = ()
 
-    type Frozen[FrozenItem] = tuple[FrozenItem, ...]
+    type Init[InitItem] = abc.Iterable[InitItem]
+
+    type __Frozen__[FrozenItem] = tuple[FrozenItem, ...]
     # Frozen has to be tuple to allow covariance
 
-    type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
     def __add__[Item_](
@@ -104,7 +121,7 @@ class ListLike[Item](Sequence[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> Frozen[Item]: ...
+    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
 
     @setdoc.basic
     def __ge__(self: Self, other: ListLike[Any], /) -> bool:
@@ -175,16 +192,6 @@ class ListLike[Item](Sequence[Item]):
         return f"{type(self).__name__}({list(self)!r})"
 
 
-class ListSlot[Item](ListLike[Item]):
-    """Provide slotted list-like class."""
-
-    __slots__ = ("_slot",)
-
-    _slot: ListSlot.Frozen[Item]
-
-    @setdoc.basic
-    def __frozen__(self: Self) -> ListSlot.Frozen[Item]:
-        return self._slot
 
 
 class FrozenListLike[Item](ListLike[Item], abc.Hashable):
@@ -197,14 +204,6 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
         return hash(self.__frozen__())
 
 
-class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
-    """Provide a base class for customized frozen data-holds."""
-
-    __slots__ = ()
-
-    @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = tuple(data)
 
 
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
@@ -212,18 +211,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     __slots__ = ()
 
-    @setdoc.basic
-    class Mutable[MutableItem](Protocol):
-        @setdoc.basic
-        def __enter__(self: Self, /) -> list[MutableItem]: ...
-        @setdoc.basic
-        def __exit__(
-            self,
-            exc_type: type[BaseException] | None,
-            exc_value: BaseException | None,
-            traceback: TracebackType | None,
-            /,
-        ) -> object: ...
+    type __Mutable__[MutableItem] = list[MutableItem]
 
     @overload
     @setdoc.basic
@@ -235,23 +223,28 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     def __delitem__(
         self: Self, key: SupportsIndex | Slice[SupportsIndex], /
     ) -> None:
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             del mutable[key]
 
     @setdoc.basic
+    def __frozen__(self:Self) -> MutableListLike.__Frozen__[Item]:
+        with self.__mutate__() as mutable:
+            return mutable
+
+    @setdoc.basic
     def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             mutable *= other
         return self
 
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             mutable.extend(data)
 
     @abstractmethod
     @setdoc.basic
-    def __mutable__(self: Self, /) -> Mutable[Item]: ...
+    def __mutate__(self: Self, /) -> ContextManager[__Mutable__[Item]]: ...
 
     @overload
     @setdoc.basic
@@ -270,16 +263,16 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         value: Item | abc.Iterable[Item],
         /,
     ) -> None:
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             mutable[key] = value  # type: ignore
 
     @setdoc.basic
     def copy(self: Self) -> Self:
-        return type(self)(self.__frozen__())
+        return type(self)(self)
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             mutable.insert(index, item)
 
     @setdoc.basic
@@ -288,10 +281,33 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         #     def [_T, SupportsRichComparisonT <: _typeshed.SupportsDunderLT[Any] | _typeshed.SupportsDunderGT[Any]] (self: list[SupportsRichComparisonT], *, key: None =, reverse: bool =),
         #     def [_T] (self: list[_T], *, key: def (_T) -> _typeshed.SupportsDunderLT[Any] | _typeshed.SupportsDunderGT[Any], reverse: bool =),
         # )
-        with self.__mutable__() as mutable:
+        with self.__mutate__() as mutable:
             mutable.sort(key=key, reverse=reverse)
 
 
+
+### LIST-SLOT ###
+
+
+class ListSlot[Item](ListLike[Item]):
+    """Provide slotted list-like class."""
+
+    __slots__ = ("_slot",)
+
+    _slot: ListSlot.Frozen[Item]
+
+    @setdoc.basic
+    def __frozen__(self: Self) -> ListSlot.Frozen[Item]:
+        return self._slot
+
+class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
+    """Provide a base class for customized frozen data-holds."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self._slot = tuple(data)
 class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
     """Provide slotted mutable list-like class."""
 
@@ -299,7 +315,7 @@ class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
 
     @contextmanager
     @setdoc.basic
-    def __mutable__(self: Self, /) -> abc.Generator[list[Item], None, None]:
+    def __mutate__(self: Self, /) -> abc.Generator[list[Item], None, None]:
         slot = list(getattr(self, "_slot", ()))
         yield slot
         self._slot = tuple(slot)
