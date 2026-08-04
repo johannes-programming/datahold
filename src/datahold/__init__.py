@@ -367,7 +367,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ... # type: ignore[override]
+    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ...  # type: ignore[override]
     @abstractmethod
     @setdoc.basic
     def __init__(
@@ -382,9 +382,12 @@ class DictLike[Key: abc.Hashable, Value](
         other: DictLike[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
-        return type(self)(
-            self.__frozen__() | other.__frozen__() # type: ignore[operator]
-        )
+        if isinstance(other, DictLike):
+            return type(self)(  # type: ignore[return-value]
+                self.__frozen__() | other.__frozen__()  # type: ignore[operator]
+            )
+        else:
+            return NotImplemented
 
     @classmethod
     @setdoc.basic
@@ -431,7 +434,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         self: Self,
         data: DictInit[Key, Value] = (),
         /,
-        **kwargs: Value,
+        **kwargs: Optional[Value],
     ):
         self.update(data, **kwargs)
 
@@ -474,8 +477,13 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: DictInit[Key, Value] = (), /) -> None:
-        self._slot = frozendict(data)
+    def __init__(
+        self: Self,
+        data: DictInit[Key, Value] = (),
+        /,
+        **kwargs: Optional[Value],
+    ) -> None:
+        self._slot = frozendict(data)  # type: ignore[arg-type]
 
 
 class MutableDictSlot[Key: abc.Hashable, Value](
@@ -492,6 +500,7 @@ class MutableDictSlot[Key: abc.Hashable, Value](
         self: Self,
         /,
     ) -> abc.Generator[MutableDictSlot.__Mutable__[Key, Value], None, None]:
+        slot: MutableDictSlot.__Mutable__[Key, Value]
         slot = dict(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozendict(slot)
