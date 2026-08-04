@@ -447,10 +447,10 @@ class ListSlot[Item](ListLike[Item]):
 
     __slots__ = ("_slot",)
 
-    _slot: ListSlot.Frozen[Item]
+    _slot: ListSlot.__Frozen__[Item]
 
     @setdoc.basic
-    def __frozen__(self: Self) -> ListSlot.Frozen[Item]:
+    def __frozen__(self: Self) -> ListSlot.__Frozen__[Item]:
         return self._slot
 
 

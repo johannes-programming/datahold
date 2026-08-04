@@ -159,6 +159,7 @@ index = "collections.abc.Sequence"
 "collections.abc.MutableSequence" = false
 "collections.abc.Sequence" = true
 "datahold.ListLike" = true
+"datahold.MutableSequence" = false
 
 [datatypes.ListLike.nested]
 Init = "collections.abc.Iterable"
@@ -189,7 +190,6 @@ abstractmethods = [
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
 __frozen__ = "datahold.MutableListLike"
-insert = "datahold.MutableSequence"
 __iadd__ = "collections.abc.MutableSequence"
 __imul__ = "datahold.MutableListLike"
 __init__ = "datahold.MutableListLike"
@@ -201,6 +201,7 @@ count = "collections.abc.Sequence"
 extend = "collections.abc.MutableSequence"
 foo = ""
 index = "collections.abc.Sequence"
+insert = "datahold.MutableListLike"
 pop = "collections.abc.MutableSequence"
 remove = "collections.abc.MutableSequence"
 reverse = "collections.abc.MutableSequence"
@@ -210,6 +211,7 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.Hashable" = false
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
+"datahold.MutableSequence" = true
 
 [datatypes.MutableListLike.nested]
 Init = "collections.abc.Iterable"
@@ -236,8 +238,18 @@ __hash__ = ""
 [datatypes.MutableListSlot.varia]
 generic = 1
 
-[datatypes.MutableSequence]
+[datatypes.MutableSequence.attributes]
+__Frozen__ = "datahold.MutableSequence"
+__delitem__ = "datahold.MutableSequence"
+__frozen__ = "datahold.MutableSequence"
+__getitem__ = "datahold.MutableSequence"
+__setitem__ = "datahold.MutableSequence"
+insert = "datahold.MutableSequence"
+sort = ""
 
 [datatypes.Sequence]
+abstractmethods = [
+    "__frozen__",
+]
 
 [non_datatypes]
