@@ -367,7 +367,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ...
+    def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ... # type: ignore[override]
     @abstractmethod
     @setdoc.basic
     def __init__(
@@ -382,7 +382,9 @@ class DictLike[Key: abc.Hashable, Value](
         other: DictLike[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
-        return type(self)(self.__frozen__() | other.__frozen__())
+        return type(self)(
+            self.__frozen__() | other.__frozen__() # type: ignore[operator]
+        )
 
     @classmethod
     @setdoc.basic
