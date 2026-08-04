@@ -35,6 +35,7 @@ import setdoc
 
 class ContextManager[Enter](Protocol):
     """Provide context manager protocol."""
+
     @setdoc.basic
     def __enter__(self: Self, /) -> Enter: ...
 
