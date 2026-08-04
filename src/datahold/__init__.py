@@ -219,7 +219,6 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
         with self.__mutate__() as mutable:
             return frozenset(mutable)
 
-    @abstractmethod
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         with self.__mutate__() as mutable:

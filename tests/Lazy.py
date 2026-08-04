@@ -30,6 +30,28 @@ class Lazy(enum.Enum):
         return self.data["datatypes"]
 
     @classmethod
+    def get_abstractmethods(cls: type[Self], name: str, /) -> set[str]:
+        # slot
+        if name.endswith("Slot"):
+            if name.startswith("Frozen"):
+                return set()
+            elif name.startswith("Mutable"):
+                return set()
+            else:
+                return {"__init__"}
+        # like
+        if name.endswith("Like"):
+            if name.startswith("Mutable"):
+                return {"__mutate__"}
+            else:
+                return {"__frozen__", "__init__"}
+        # no suffix
+        if name.startswith("Mutable"):
+            return {"__frozen__", "__mutate__"}
+        else:
+            return {"__frozen__"}
+
+    @classmethod
     def get_builtin_example(
         cls: type[Self], typename: str, objname: str
     ) -> Any:

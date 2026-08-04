@@ -1,5 +1,8 @@
 [datatypes.Collection]
 
+[datatypes.DictLike.attributes]
+__or__ = "datahold.DictLike"
+
 [datatypes.DictLike.issubclass]
 "collections.abc.Mapping" = true
 "datahold.Mapping" = true
@@ -15,12 +18,6 @@
 [datatypes.FrozenDictSlot.issubclass]
 "collections.abc.Hashable" = true
 "datahold.FrozenDictLike" = true
-
-[datatypes.FrozenListLike]
-abstractmethods = [
-    "__frozen__",
-    "__init__",
-]
 
 [datatypes.FrozenListLike.attributes]
 __frozen__ = "datahold.ListLike"
@@ -39,9 +36,6 @@ __Mutable__ = ""
 
 [datatypes.FrozenListLike.varia]
 generic = 1
-
-[datatypes.FrozenListSlot]
-abstractmethods = []
 
 [datatypes.FrozenListSlot.TestInternalComparsion.ge.test_greater_value]
 a = "_1_3"
@@ -166,12 +160,6 @@ generic = 1
 "collections.abc.Set" = true
 "datahold.Collection" = true
 
-[datatypes.ListLike]
-abstractmethods = [
-    "__frozen__",
-    "__init__",
-]
-
 [datatypes.ListLike.attributes]
 __frozen__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
@@ -194,11 +182,6 @@ __Mutable__ = ""
 [datatypes.ListLike.varia]
 generic = 1
 
-[datatypes.ListSlot]
-abstractmethods = [
-    "__init__",
-]
-
 [datatypes.ListSlot.nested]
 __Frozen__ = "builtins.tuple"
 __Mutable__ = ""
@@ -210,6 +193,10 @@ generic = 1
 "collections.abc.Mapping" = true
 "datahold.Collection" = true
 
+[datatypes.MutableDictLike.attributes]
+__ior__ = "datahold.MutableDictLike"
+__or__ = "datahold.DictLike"
+
 [datatypes.MutableDictLike.issubclass]
 "collections.abc.Mapping" = true
 "collections.abc.MutableMapping" = true
@@ -220,11 +207,6 @@ generic = 1
 "collections.abc.MutableMapping" = true
 "datahold.MutableDictLike" = true
 "datahold.MutableMapping" = true
-
-[datatypes.MutableListLike]
-abstractmethods = [
-    "__mutate__",
-]
 
 [datatypes.MutableListLike.attributes]
 __add__ = "datahold.MutableListLike"
@@ -258,9 +240,6 @@ __hash__ = ""
 
 [datatypes.MutableListLike.varia]
 generic = 1
-
-[datatypes.MutableListSlot]
-abstractmethods = []
 
 [datatypes.MutableListSlot.issubclass]
 "builtins.list" = false
@@ -312,9 +291,6 @@ sort = ""
 "datahold.SetSlot" = true
 
 [datatypes.Sequence]
-abstractmethods = [
-    "__frozen__",
-]
 
 [datatypes.Set.issubclass]
 "collections.abc.Set" = true

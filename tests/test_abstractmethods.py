@@ -12,22 +12,18 @@ import datahold
 
 
 class TestAbstractmethods(unittest.TestCase):
-    def _test(
-        self: Self, name: str, abstractmethods: Optional[list[str]] = None, /
-    ) -> None:
+    def _test(self: Self, name: str, abstractmethods: set[str], /) -> None:
         datatype: Any
-        if abstractmethods is None:
-            return
         datatype = getattr(datahold, name)
-        self.assertSetEqual(datatype.__abstractmethods__, set(abstractmethods))
+        self.assertLessEqual(len(datatype.__abstractmethods__), 2)
+        self.assertSetEqual(datatype.__abstractmethods__, abstractmethods)
         self.assertEqual(ins.isabstract(datatype), bool(abstractmethods))
 
     def test_abstractmethods(self: Self, /) -> None:
-        data: Any
         name: Any
-        for name, data in Lazy.lazy.datatypes.items():
+        for name in Lazy.lazy.datatypes.keys():
             with self.subTest(datatype=name):
-                self._test(name, data.get("abstractmethods"))
+                self._test(name, Lazy.get_abstractmethods(name))
 
 
 if __name__ == "__main__":
