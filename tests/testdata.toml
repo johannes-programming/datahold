@@ -1,3 +1,5 @@
+[datatypes.Collection]
+
 [datatypes.FrozenListLike]
 abstractmethods = [
     "__frozen__",
@@ -233,6 +235,8 @@ __hash__ = ""
 
 [datatypes.MutableListSlot.varia]
 generic = 1
+
+[datatypes.MutableSequence]
 
 [datatypes.Sequence]
 
