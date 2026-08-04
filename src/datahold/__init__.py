@@ -320,7 +320,7 @@ class Mapping[Key: abc.Hashable, Value](
 
 class MutableMapping[Key: abc.Hashable, Value](
     Mapping[Key, Value],
-    abc.MutableMapping[Key, Value],
+    abc.MutableMapping[Key | str, Optional[Value]],
 ):
     """Provide abc for custom mutable mapping."""
 
@@ -338,7 +338,7 @@ class MutableMapping[Key: abc.Hashable, Value](
         ) -> object: ...
 
     @setdoc.basic
-    def __delitem__(self: Self, key: Key, /) -> None:
+    def __delitem__(self: Self, key: Key | str, /) -> None:
         with self.__mutate__() as mutable:
             del mutable[key]
 
@@ -425,10 +425,10 @@ class MutableDictLike[Key: abc.Hashable, Value](
     ]
 
     @setdoc.basic
-    def __frozen__(
+    def __frozen__(  # type: ignore[override]
         self: Self,
         /,
-    ) -> MutableDictLike.__Frozen__[Key, Value]:  # type: ignore[override]
+    ) -> MutableDictLike.__Frozen__[Key, Value]:
         with self.__mutate__() as mutable:
             return frozendict(mutable)
 
@@ -439,7 +439,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ):
-        self.update(data, **kwargs)
+        self.update(data, **kwargs) 
 
     @setdoc.basic
     def __ior__(self: Self, other: DictInit[Key, Value], /) -> Self:
