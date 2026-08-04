@@ -239,10 +239,12 @@ __hash__ = ""
 generic = 1
 
 [datatypes.MutableSequence.attributes]
-__Frozen__ = "datahold.MutableSequence"
+__Frozen__ = "datahold.Sequence"
+__Mutable__ = "datahold.MutableSequence"
 __delitem__ = "datahold.MutableSequence"
-__frozen__ = "datahold.MutableSequence"
+__frozen__ = "datahold.Sequence"
 __getitem__ = "datahold.MutableSequence"
+__mutate__ = "datahold.MutableSequence"
 __setitem__ = "datahold.MutableSequence"
 insert = "datahold.MutableSequence"
 sort = ""

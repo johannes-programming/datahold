@@ -142,25 +142,6 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
     __slots__ = ()
 
     @setdoc.basic
-    class __Frozen__[FrozenItem](
-        Collection.__Frozen__[FrozenItem],
-        Protocol,
-    ):
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> FrozenItem: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(
-            self: Self, key: Slice[int], /
-        ) -> abc.MutableSequence[FrozenItem]: ...
-        @setdoc.basic
-        def __getitem__(
-            self: Self,
-            key: int | Slice[int],
-            /,
-        ) -> FrozenItem | abc.MutableSequence[FrozenItem]: ...
-    @setdoc.basic
     class __Mutable__[MutableItem](Protocol):
 
         @overload
@@ -173,6 +154,21 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
         def __delitem__(
             self: Self, key: SupportsIndex | Slice[SupportsIndex], /
         ) -> None: ...
+
+        @overload
+        @setdoc.basic
+        def __getitem__(self: Self, key: int, /) -> MutableItem: ...
+        @overload
+        @setdoc.basic
+        def __getitem__(
+            self: Self, key: Slice[int], /
+        ) -> abc.MutableSequence[MutableItem]: ...
+        @setdoc.basic
+        def __getitem__(
+            self: Self,
+            key: int | Slice[int],
+            /,
+        ) -> MutableItem | abc.MutableSequence[MutableItem]: ...
 
         @overload
         @setdoc.basic
@@ -206,10 +202,6 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
         with self.__mutate__() as mutable:
             del mutable[key]
 
-    @abstractmethod
-    @setdoc.basic
-    def __frozen__(self: Self) -> __Frozen__[Item]: ...
-
     @overload
     @setdoc.basic
     def __getitem__(self: Self, key: int, /) -> Item: ...
@@ -222,7 +214,8 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
     def __getitem__(
         self: Self, key: int | Slice[int], /
     ) -> Item | abc.MutableSequence[Item]:
-        return self.__frozen__()[key]
+        with self.__mutate__() as mutable:
+            return mutable[key]
 
     @abstractmethod
     @setdoc.basic
