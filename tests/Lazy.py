@@ -35,7 +35,7 @@ class Lazy(enum.Enum):
     ) -> Any:
         datatype = getattr(datahold, typename)
         info = cls.lazy.datatypes[typename]["examples"][objname]
-        return datatype.Frozen.__value__(
+        return datatype.__Frozen__.__value__(
             *info.get("args", []), **info.get("kwargs", {})
         )
 
