@@ -444,7 +444,11 @@ class MutableDictLike[Key: abc.Hashable, Value](
         self.update(data, **kwargs)
 
     @setdoc.basic
-    def __ior__(self: Self, other: DictInit[Key, Value], /) -> Self:
+    def __ior__(  # type: ignore[override]
+        self: Self,
+        other: DictInit[Key, Value],
+        /,
+    ) -> Self:
         with self.__mutate__() as mutable:
             mutable |= other
         return self
