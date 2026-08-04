@@ -287,7 +287,11 @@ class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
 
     @contextmanager
     @setdoc.basic
-    def __mutate__(self: Self, /) -> abc.Generator[set[Item], None, None]:
+    def __mutate__(
+        self: Self,
+        /,
+    ) -> abc.Generator[MutableSetSlot.__Mutable__[Item], None, None]:
+        slot: MutableSetSlot.__Mutable__[Item]
         slot = set(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozenset(slot)
