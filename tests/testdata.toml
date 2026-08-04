@@ -34,7 +34,6 @@ __init__ = "datahold.ListLike"
 "collections.abc.Sequence" = true
 
 [datatypes.FrozenListLike.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __Mutable__ = ""
 
@@ -149,7 +148,6 @@ args = [
 ]
 
 [datatypes.FrozenListSlot.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __Mutable__ = ""
 
@@ -190,7 +188,6 @@ index = "collections.abc.Sequence"
 "datahold.MutableSequence" = false
 
 [datatypes.ListLike.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __Mutable__ = ""
 
@@ -203,7 +200,6 @@ abstractmethods = [
 ]
 
 [datatypes.ListSlot.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __Mutable__ = ""
 
@@ -257,7 +253,6 @@ reverse = "collections.abc.MutableSequence"
 "datahold.MutableSequence" = true
 
 [datatypes.MutableListLike.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __hash__ = ""
 
@@ -274,7 +269,6 @@ abstractmethods = []
 "datahold.MutableListSlot" = true
 
 [datatypes.MutableListSlot.nested]
-Init = "collections.abc.Iterable"
 __Frozen__ = "builtins.tuple"
 __hash__ = ""
 
