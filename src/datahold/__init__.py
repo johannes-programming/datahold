@@ -425,7 +425,10 @@ class MutableDictLike[Key: abc.Hashable, Value](
     ]
 
     @setdoc.basic
-    def __frozen__(self: Self, /) -> MutableDictLike.__Frozen__[Key, Value]:
+    def __frozen__(
+        self: Self,
+        /,
+    ) -> MutableDictLike.__Frozen__[Key, Value]:  # type: ignore[override]
         with self.__mutate__() as mutable:
             return frozendict(mutable)
 
