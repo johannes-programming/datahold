@@ -16,10 +16,9 @@ from abc import abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
-from typing import Any, Optional, Protocol, Self, SupportsIndex, overload
+from typing import Any, Optional, Protocol, Self, SupportsIndex, overload, Never
 
 from types import TracebackType
-from typing import Protocol
 import setdoc
 
 ### UTILS ###
@@ -39,16 +38,56 @@ class ContextManager[Enter](Protocol):
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### COLLECTION ###
+
+class Collection[Item](
+    abc.Sized,
+    abc.Iterable[Item],
+    abc.Container[object],
+):
+    """Provide abc for custom collections."""
+    @setdoc.basic
+    class __Frozen__[FrozenItem](
+        abc.Sized,
+        abc.Iterable[FrozenItem],
+        Protocol,
+    ):
+        @setdoc.basic
+        def __contains__(self:Self, other: Never, /) -> bool:
+            ...
+
+    @setdoc.basic
+    def __contains__(self:Self, other: object, /) -> bool:
+        try:
+            return other in self.__frozen__()
+        except TypeError:
+            return other in (x for x in self)
+    
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
+
+    @setdoc.basic
+    def __iter__(self:Self) -> abc.Iterator[Item]:
+        return iter(self.__frozen__())
+
+    @setdoc.basic
+    def __len__(self:Self, / )->int:
+        return len(self.__frozen__())
+
 ### SEQUENCE ###
 
 
-class Sequence[Item](abc.Sequence[Item]):
+class Sequence[Item](Collection[Item], abc.Sequence[Item]):
     """Provide a base class for customized sequence."""
 
     __slots__ = ()
 
     @setdoc.basic
-    class __Frozen__[FrozenItem](Protocol):
+    class __Frozen__[FrozenItem](
+        Collection.__Frozen__[FrozenItem],
+        Protocol,
+    ):
         @overload
         @setdoc.basic
         def __getitem__(self: Self, key: int, /) -> FrozenItem: ...
@@ -63,8 +102,6 @@ class Sequence[Item](abc.Sequence[Item]):
             key: int | Slice[int],
             /,
         ) -> FrozenItem | abc.Sequence[FrozenItem]: ...
-        @setdoc.basic
-        def __len__(self: Self, /) -> int: ...
 
     @abstractmethod
     @setdoc.basic
@@ -82,10 +119,6 @@ class Sequence[Item](abc.Sequence[Item]):
     ) -> Item | abc.Sequence[Item]:
         return self.__frozen__()[key]
 
-    @setdoc.basic
-    def __len__(self: Self) -> int:
-        return len(self.__frozen__())
-
 
 ### LIST-LIKE ###
 class ListLike[Item](Sequence[Item]):
@@ -93,11 +126,11 @@ class ListLike[Item](Sequence[Item]):
 
     __slots__ = ()
 
-    type Init[InitItem] = abc.Iterable[InitItem]
 
     type __Frozen__[FrozenItem] = tuple[FrozenItem, ...]
     # Frozen has to be tuple to allow covariance
 
+    type Init[InitItem] = abc.Iterable[InitItem]
 
     @setdoc.basic
     def __add__[Item_](
@@ -107,10 +140,6 @@ class ListLike[Item](Sequence[Item]):
             return type(self)(self.__frozen__() + other.__frozen__())  # type: ignore[operator]
         else:
             raise TypeError
-
-    @setdoc.basic
-    def __contains__(self: Self, other: object, /) -> bool:
-        return other in self.__frozen__()
 
     @setdoc.basic
     def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
@@ -166,10 +195,6 @@ class ListLike[Item](Sequence[Item]):
             return self.__frozen__() <= other.__frozen__()
         else:
             return NotImplemented
-
-    @setdoc.basic
-    def __len__(self: Self, /) -> int:
-        return len(self.__frozen__())
 
     @setdoc.basic
     def __lt__(self: Self, other: ListLike[Any], /) -> bool:
