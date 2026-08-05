@@ -86,9 +86,9 @@ type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 ### COLLECTION ###
 
 
-class Collection_Frozen[Item_](
+class Collection_Frozen[Item](
     abc.Sized,
-    abc.Iterable[Item_],
+    abc.Iterable[Item],
     Protocol,
 ):
     @setdoc.basic
@@ -116,7 +116,7 @@ class Collection[Item](
     def __frozen__(self: Self, /) -> Collection_Frozen[Item]: ...
 
     @setdoc.basic
-    def __iter__(self: Self) -> abc.Iterator[Item]:
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__frozen__())
 
     @setdoc.basic
@@ -206,7 +206,7 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
     __slots__ = ()
 
     @setdoc.basic
-    def __hash__(self: Self) -> int:
+    def __hash__(self: Self, /) -> int:
         return hash(self.__frozen__())
 
 
@@ -267,7 +267,7 @@ class SetSlot[Item: abc.Hashable](SetLike[Item]):
     _slot: SetSlot.__Frozen__[Item]
 
     @setdoc.basic
-    def __frozen__(self: Self) -> SetSlot.__Frozen__[Item]:
+    def __frozen__(self: Self, /) -> SetSlot.__Frozen__[Item]:
         return self._slot
 
 
@@ -525,22 +525,22 @@ class MutableDictSlot[Key: abc.Hashable, Value](
 ### SEQUENCE ###
 
 
-class Sequence_Frozen[Item_](
-    Collection_Frozen[Item_],
+class Sequence_Frozen[Item](
+    Collection_Frozen[Item],
     Protocol,
 ):
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, key: int, /) -> Item_: ...
+    def __getitem__(self: Self, key: int, /) -> Item: ...
     @overload
     @setdoc.basic
-    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item_]: ...
+    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item]: ...
     @setdoc.basic
     def __getitem__(
         self: Self,
         key: int | Slice[int],
         /,
-    ) -> Item_ | abc.Sequence[Item_]: ...
+    ) -> Item | abc.Sequence[Item]: ...
 class Sequence[Item](Collection[Item], abc.Sequence[Item]):
     """Provide abc for customized sequence."""
 
