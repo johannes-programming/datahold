@@ -95,6 +95,64 @@ class Object[Frozen](metaclass=ABCMeta):
     @setdoc.basic
     def __frozen__(self: Self, /) -> Frozen: ...
 
+class FrozenObject[Frozen](
+    Object[Frozen],
+    abc.Hashable,
+):
+    """Provide abc for custom frozen object."""
+    __slots__ = ()
+class MutableObject[Frozen](
+    Object[Frozen],
+    abc.Hashable,
+):
+    """Provide abc for custom mutable object."""
+    __slots__ = ()
+
+
+### OBJECT-LIKE ###
+
+class ObjectLike[Frozen](
+    Object[Frozen],
+):
+    """Provide abc for custom object-like."""
+    __slots__ = ()
+
+class FrozenObjectLike[Frozen](
+    ObjectLike[Frozen],
+    FrozenObject[Frozen],
+):
+    """Provide abc for custom frozen object-like."""
+    __slots__ = ()
+class MutableObjectLike[Frozen](
+    ObjectLike[Frozen],
+    MutableObject[Frozen],
+):
+    """Provide abc for custom mutable object-like."""
+    __slots__ = ()
+    
+
+
+### OBJECT-SLOT ###
+
+class ObjectSlot[Frozen](
+    ObjectLike[Frozen],
+):
+    """Provide slotted object-like."""
+    __slots__ = ("_data",)
+
+class FrozenObjectSlot[Frozen](
+    ObjectSlot[Frozen],
+    FrozenObject[Frozen],
+):
+    """Provide slotted frozen object-like."""
+    __slots__ = ()
+class MutableObjectSlot[Frozen](
+    ObjectSlot[Frozen],
+    MutableObject[Frozen],
+):
+    """Provide slotted mutable object-like."""
+    __slots__ = ()
+    
 
 ### COLLECTION ###
 
