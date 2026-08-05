@@ -174,10 +174,17 @@ type DictInit[Key, Value] = (
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### OBJECT ###
+class Object(metaclass=ABCMeta):
+    """Provide abc for custom object."""
+
+    __slots__ = ()
+
+
 ### OBJECT-LIKE ###
 
 
-class MutableObjectLike(metaclass=ABCMeta):
+class MutableObjectLike(Object):
     """Provide abc for custom mutable object."""
 
     __slots__ = ()
@@ -197,6 +204,7 @@ class Collection[Item](
     abc.Sized,
     abc.Iterable[Item],
     abc.Container[object],
+    Object,
 ):
     """Provide abc for custom collection."""
 
