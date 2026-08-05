@@ -52,16 +52,6 @@ class Lazy(enum.Enum):
             return {"__frozen__"}
 
     @classmethod
-    def get_builtin_example(
-        cls: type[Self], typename: str, objname: str
-    ) -> Any:
-        datatype = getattr(datahold, typename)
-        info = cls.lazy.datatypes[typename]["examples"][objname]
-        return datatype.__Frozen__.__value__(
-            *info.get("args", []), **info.get("kwargs", {})
-        )
-
-    @classmethod
     def get_example(cls: type[Self], typename: str, objname: str) -> Any:
         datatype = getattr(datahold, typename)
         info = cls.lazy.datatypes[typename]["examples"][objname]
