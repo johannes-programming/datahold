@@ -229,5 +229,248 @@ class TestNonMembershipOperator(unittest.TestCase):
         self.assertFalse({1, 2} not in FrozenSetSlot({frozenset({1, 2})}))
 
 
+class TestDifferenceMethod(unittest.TestCase):
+    def test_difference_with_overlapping_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).difference({2, 3, 4})
+
+        self.assertEqual(result, frozenset({1}))
+
+    def test_difference_with_disjoint_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).difference({3, 4})
+
+        self.assertEqual(result, frozenset({1, 2}))
+
+    def test_difference_with_multiple_iterables(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3, 4, 5}).difference(
+            {2, 3},
+            [4],
+            (5, 6),
+        )
+
+        self.assertEqual(result, frozenset({1}))
+
+    def test_difference_without_arguments(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).difference()
+
+        self.assertEqual(result, frozenset({1, 2}))
+
+    def test_difference_returns_frozen_set_slot(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).difference({3})
+
+        self.assertIsInstance(result, FrozenSetSlot)
+
+    def test_difference_rejects_non_iterable(self: Self) -> None:
+        with self.assertRaises(TypeError):
+            FrozenSetSlot({1, 2}).difference(3)  # type: ignore[arg-type]
+
+
+class TestIntersectionMethod(unittest.TestCase):
+    def test_intersection_with_overlapping_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).intersection({2, 3, 4})
+
+        self.assertEqual(result, frozenset({2, 3}))
+
+    def test_intersection_with_disjoint_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).intersection({3, 4})
+
+        self.assertEqual(result, frozenset())
+
+    def test_intersection_with_multiple_iterables(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3, 4}).intersection(
+            [2, 3, 4, 5],
+            (3, 4, 6),
+        )
+
+        self.assertEqual(result, frozenset({3, 4}))
+
+    def test_intersection_without_arguments(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).intersection()
+
+        self.assertEqual(result, frozenset({1, 2}))
+
+    def test_intersection_returns_frozen_set_slot(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).intersection({2, 3})
+
+        self.assertIsInstance(result, FrozenSetSlot)
+
+    def test_intersection_accepts_generator(self: Self) -> None:
+        values = (value for value in range(2, 5))
+        result = FrozenSetSlot({1, 2, 3}).intersection(values)
+
+        self.assertEqual(result, frozenset({2, 3}))
+
+
+class TestIsDisjointMethod(unittest.TestCase):
+    def test_disjoint_iterables(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).isdisjoint({3, 4})
+
+        self.assertTrue(result)
+
+    def test_overlapping_iterables(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).isdisjoint({3, 4})
+
+        self.assertFalse(result)
+
+    def test_empty_instance_is_disjoint(self: Self) -> None:
+        result = FrozenSetSlot().isdisjoint({1, 2})
+
+        self.assertTrue(result)
+
+    def test_is_disjoint_with_empty_iterable(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).isdisjoint([])
+
+        self.assertTrue(result)
+
+    def test_is_disjoint_accepts_generator(self: Self) -> None:
+        values = (value for value in range(3, 6))
+        result = FrozenSetSlot({1, 2, 3}).isdisjoint(values)
+
+        self.assertFalse(result)
+
+    def test_is_disjoint_rejects_non_iterable(self: Self) -> None:
+        with self.assertRaises(TypeError):
+            FrozenSetSlot({1, 2}).isdisjoint(3)  # type: ignore[arg-type]
+
+
+class TestIsSubsetMethod(unittest.TestCase):
+    def test_proper_subset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).issubset({1, 2, 3})
+
+        self.assertTrue(result)
+
+    def test_equal_set_is_subset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).issubset([2, 1])
+
+        self.assertTrue(result)
+
+    def test_non_subset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 4}).issubset({1, 2, 3})
+
+        self.assertFalse(result)
+
+    def test_empty_instance_is_subset(self: Self) -> None:
+        result = FrozenSetSlot().issubset({1, 2})
+
+        self.assertTrue(result)
+
+    def test_nonempty_instance_is_not_subset_of_empty_iterable(
+        self: Self,
+    ) -> None:
+        result = FrozenSetSlot({1}).issubset([])
+
+        self.assertFalse(result)
+
+    def test_is_subset_accepts_generator(self: Self) -> None:
+        values = (value for value in range(1, 4))
+        result = FrozenSetSlot({1, 2}).issubset(values)
+
+        self.assertTrue(result)
+
+
+class TestIsSupersetMethod(unittest.TestCase):
+    def test_proper_superset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).issuperset({1, 2})
+
+        self.assertTrue(result)
+
+    def test_equal_set_is_superset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).issuperset([2, 1])
+
+        self.assertTrue(result)
+
+    def test_non_superset(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).issuperset({1, 2, 3})
+
+        self.assertFalse(result)
+
+    def test_every_instance_is_superset_of_empty_iterable(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).issuperset([])
+
+        self.assertTrue(result)
+
+    def test_empty_instance_is_not_superset_of_nonempty_iterable(
+        self: Self,
+    ) -> None:
+        result = FrozenSetSlot().issuperset({1})
+
+        self.assertFalse(result)
+
+    def test_is_superset_accepts_generator(self: Self) -> None:
+        values = (value for value in range(1, 3))
+        result = FrozenSetSlot({1, 2, 3}).issuperset(values)
+
+        self.assertTrue(result)
+
+
+class TestSymmetricDifferenceMethod(unittest.TestCase):
+    def test_symmetric_difference_with_overlap(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).symmetric_difference({3, 4})
+
+        self.assertEqual(result, frozenset({1, 2, 4}))
+
+    def test_symmetric_difference_with_disjoint_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).symmetric_difference([3, 4])
+
+        self.assertEqual(result, frozenset({1, 2, 3, 4}))
+
+    def test_symmetric_difference_with_equal_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).symmetric_difference((2, 1))
+
+        self.assertEqual(result, frozenset())
+
+    def test_symmetric_difference_with_empty_iterable(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).symmetric_difference([])
+
+        self.assertEqual(result, frozenset({1, 2}))
+
+    def test_symmetric_difference_returns_frozen_set_slot(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).symmetric_difference({2, 3})
+
+        self.assertIsInstance(result, FrozenSetSlot)
+
+    def test_symmetric_difference_rejects_multiple_arguments(
+        self: Self,
+    ) -> None:
+        with self.assertRaises(TypeError):
+            FrozenSetSlot({1, 2}).symmetric_difference({2}, {3})  # type: ignore[call-arg]
+
+
+class TestUnionMethod(unittest.TestCase):
+    def test_union_with_overlapping_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2, 3}).union({3, 4})
+
+        self.assertEqual(result, frozenset({1, 2, 3, 4}))
+
+    def test_union_with_disjoint_values(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).union([3, 4])
+
+        self.assertEqual(result, frozenset({1, 2, 3, 4}))
+
+    def test_union_with_multiple_iterables(self: Self) -> None:
+        result = FrozenSetSlot({1}).union(
+            [2, 3],
+            (3, 4),
+            frozenset({5}),
+        )
+
+        self.assertEqual(result, frozenset({1, 2, 3, 4, 5}))
+
+    def test_union_without_arguments(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).union()
+
+        self.assertEqual(result, frozenset({1, 2}))
+
+    def test_union_returns_frozen_set_slot(self: Self) -> None:
+        result = FrozenSetSlot({1, 2}).union({3})
+
+        self.assertIsInstance(result, FrozenSetSlot)
+
+    def test_union_accepts_generator(self: Self) -> None:
+        values = (value for value in range(2, 5))
+        result = FrozenSetSlot({1, 2}).union(values)
+
+        self.assertEqual(result, frozenset({1, 2, 3, 4}))
+
+
 if __name__ == "__main__":
     unittest.main()
