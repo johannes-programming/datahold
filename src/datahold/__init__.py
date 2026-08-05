@@ -144,14 +144,21 @@ class ObjectSlot[Frozen](
     """Provide slotted object-like."""
 
     __slots__ = ("_data",)
+    _data: Frozen
 
 
-# class FrozenObjectSlot[Frozen](
-#    ObjectSlot[Frozen],
-#    FrozenObject[Frozen],
-# ):
-#    """Provide slotted frozen object-like."""
-#    __slots__ = ()
+class FrozenObjectSlot[Frozen](
+    ObjectSlot[Frozen],
+):
+    """Provide slotted frozen object-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen:
+        return self._slot
+
+
 # class MutableObjectSlot[Frozen](
 #    ObjectSlot[Frozen],
 #    MutableObject[Frozen],
@@ -337,19 +344,20 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
 ### SET-SLOT ###
 
 
-class SetSlot[Item: abc.Hashable](SetLike[Item], ObjectSlot[frozenset[Item]]):
+class SetSlot[Item: abc.Hashable](
+    SetLike[Item],
+    ObjectSlot[frozenset[Item]],
+):
     """Provide slotted set-like."""
 
     __slots__ = ()
 
-    _slot: SetSlot.__Frozen__[Item]
 
-    @setdoc.basic
-    def __frozen__(self: Self, /) -> SetSlot.__Frozen__[Item]:
-        return self._slot
-
-
-class FrozenSetSlot[Item](SetSlot[Item], FrozenSetLike[Item]):
+class FrozenSetSlot[Item](
+    FrozenObjectSlot[frozenset[Item]],
+    SetSlot[Item],
+    FrozenSetLike[Item],
+):
     """Provide slotted frozen set-like."""
 
     __slots__ = ()
@@ -557,16 +565,10 @@ class DictSlot[Key: abc.Hashable, Value](
     """Provide slotted dict-like."""
 
     __slots__ = ()
-    _slot: DictSlot.__Frozen__[Key, Value]
-
-    @setdoc.basic
-    def __frozen__(  # type: ignore[override]
-        self: Self,
-    ) -> DictSlot.__Frozen__[Key, Value]:
-        return self._slot
 
 
 class FrozenDictSlot[Key: abc.Hashable, Value](
+    FrozenObjectSlot[frozendict[Key | str, Optional[Value]]],
     DictSlot[Key, Value],
     FrozenDictLike[Key, Value],
 ):
@@ -935,18 +937,20 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
 ### LIST-SLOT ###
 
 
-class ListSlot[Item](ListLike[Item], ObjectSlot[tuple[Item, ...]]):
+class ListSlot[Item](
+    ListLike[Item],
+    ObjectSlot[tuple[Item, ...]],
+):
     """Provide slotted list-like class."""
 
     __slots__ = ()
-    _slot: ListSlot.__Frozen__[Item]
-
-    @setdoc.basic
-    def __frozen__(self: Self) -> ListSlot.__Frozen__[Item]:
-        return self._slot
 
 
-class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
+class FrozenListSlot[Item](
+    FrozenObjectSlot[tuple[Item, ...]],
+    ListSlot[Item],
+    FrozenListLike[Item],
+):
     """Provide slotted frozen list-like."""
 
     __slots__ = ()
