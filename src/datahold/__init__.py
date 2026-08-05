@@ -137,11 +137,14 @@ class ObjectLike[Frozen](
 
 ### OBJECT-SLOT ###
 
-# class ObjectSlot[Frozen](
-#    ObjectLike[Frozen],
-# ):
-#    """Provide slotted object-like."""
-#    __slots__ = ("_data",)
+
+class ObjectSlot[Frozen](
+    ObjectLike[Frozen],
+):
+    """Provide slotted object-like."""
+
+    __slots__ = ("_data",)
+
 
 # class FrozenObjectSlot[Frozen](
 #    ObjectSlot[Frozen],
@@ -334,10 +337,10 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
 ### SET-SLOT ###
 
 
-class SetSlot[Item: abc.Hashable](SetLike[Item]):
+class SetSlot[Item: abc.Hashable](SetLike[Item], ObjectSlot[frozenset[Item]]):
     """Provide slotted set-like."""
 
-    __slots__ = ("_slot",)
+    __slots__ = ()
 
     _slot: SetSlot.__Frozen__[Item]
 
@@ -547,10 +550,13 @@ class MutableDictLike[Key: abc.Hashable, Value](
 ### DICT-SLOT ###
 
 
-class DictSlot[Key: abc.Hashable, Value](DictLike[Key, Value]):
+class DictSlot[Key: abc.Hashable, Value](
+    DictLike[Key, Value],
+    ObjectSlot[frozendict[Key | str, Optional[Value]]],
+):
     """Provide slotted dict-like."""
 
-    __slots__ = ("_slot",)
+    __slots__ = ()
     _slot: DictSlot.__Frozen__[Key, Value]
 
     @setdoc.basic
@@ -929,10 +935,10 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
 ### LIST-SLOT ###
 
 
-class ListSlot[Item](ListLike[Item]):
+class ListSlot[Item](ListLike[Item], ObjectSlot[tuple[Item, ...]]):
     """Provide slotted list-like class."""
 
-    __slots__ = ("_slot",)
+    __slots__ = ()
     _slot: ListSlot.__Frozen__[Item]
 
     @setdoc.basic
