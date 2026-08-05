@@ -27,7 +27,7 @@ __all__: list[str] = [
     "SetLike",
 ]
 
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
@@ -173,6 +173,20 @@ type DictInit[Key, Value] = (
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### OBJECT-LIKE ###
+
+
+class MutableObjectLike(metaclass=ABCMeta):
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, other: Self, /) -> None: ...
+    @setdoc.basic
+    def copy(self: Self, /) -> Self:
+        return type(self)(self)
+
+
 ### COLLECTION ###
 
 
@@ -286,7 +300,9 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
         return hash(self.__frozen__())
 
 
-class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
+class MutableSetLike[Item: abc.Hashable](
+    SetLike[Item], MutableSet[Item], MutableObjectLike
+):
     """Provide abc for custom mutable set-like."""
 
     __slots__ = ()
@@ -305,10 +321,6 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
     @abstractmethod
     @setdoc.basic
     def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
-
-    @setdoc.basic
-    def copy(self: Self, /) -> Self:
-        return type(self)(self)
 
     @setdoc.basic
     def difference_update(
@@ -486,6 +498,7 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
     MutableMapping[Key, Value],
+    MutableObjectLike,
 ):
     """Provide abc for custom mutable dict-like."""
 
@@ -526,9 +539,6 @@ class MutableDictLike[Key: abc.Hashable, Value](
     def __mutate__(
         self: Self, /
     ) -> ContextManager[__Mutable__[Key, Value]]: ...
-    @setdoc.basic
-    def copy(self: Self, /) -> Self:
-        return type(self)(self)
 
     @setdoc.basic
     def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
@@ -775,7 +785,9 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
         return hash(self.__frozen__())
 
 
-class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
+class MutableListLike[Item](
+    ListLike[Item], MutableSequence[Item], MutableObjectLike
+):
     """Provide abc for custom mutable list-like."""
 
     __slots__ = ()
@@ -834,10 +846,6 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
     ) -> None:
         with self.__mutate__() as mutable:
             mutable[key] = value  # type: ignore
-
-    @setdoc.basic
-    def copy(self: Self) -> Self:
-        return type(self)(self)
 
     @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
