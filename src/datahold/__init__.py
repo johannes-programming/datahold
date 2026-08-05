@@ -178,16 +178,20 @@ type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
 ### OBJECT ###
-class Object(metaclass=ABCMeta):
+class Object[Frozen](metaclass=ABCMeta):
     """Provide abc for custom object."""
 
     __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen: ...
 
 
 ### OBJECT-LIKE ###
 
 
-class MutableObjectLike[Mutable](Object):
+class MutableObjectLike[Frozen, Mutable](Object[Frozen]):
     """Provide abc for custom mutable object."""
 
     __slots__ = ()
@@ -210,7 +214,7 @@ class Collection[Item](
     abc.Sized,
     abc.Iterable[Item],
     abc.Container[object],
-    Object,
+    Object[Collection_Frozen[Item]],
 ):
     """Provide abc for custom collection."""
 
@@ -220,10 +224,6 @@ class Collection[Item](
             return other in self.__frozen__()  # type: ignore[operator]
         except TypeError:
             return other in (x for x in self)  # type: ignore[operator]
-
-    @abstractmethod
-    @setdoc.basic
-    def __frozen__(self: Self, /) -> Collection_Frozen[Item]: ...
 
     @setdoc.basic
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
@@ -315,7 +315,7 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
 
 class MutableSetLike[Item: abc.Hashable](
     SetLike[Item],
-    MutableObjectLike[set[Item]],
+    MutableObjectLike[frozenset[Item], set[Item]],
     MutableSet[Item],
 ):
     """Provide abc for custom mutable set-like."""
@@ -506,7 +506,9 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
-    MutableObjectLike[dict[Key | str, Optional[Value]]],
+    MutableObjectLike[
+        FrozenDict[Key, Value], dict[Key | str, Optional[Value]]
+    ],
     MutableMapping[Key, Value],
 ):
     """Provide abc for custom mutable dict-like."""
@@ -786,7 +788,7 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
 
 class MutableListLike[Item](
     ListLike[Item],
-    MutableObjectLike[list[Item]],
+    MutableObjectLike[tuple[Item, ...], list[Item]],
     MutableSequence[Item],
 ):
     """Provide abc for custom mutable list-like."""
