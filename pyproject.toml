@@ -31,7 +31,7 @@ license-files = [
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "4.0.0.dev25"
+version = "4.0.0.dev26"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"
