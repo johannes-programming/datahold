@@ -352,7 +352,8 @@ class MutableMapping[Key: abc.Hashable, Value](
     def __setitem__(
         self: Self, key: Key | str, value: Optional[Value], /
     ) -> None:
-        self[key] = value
+        with self.__mutate__() as mutable:
+            mutable[key] = value
 
 
 ### DICT-LIKE ###
@@ -399,7 +400,7 @@ class DictLike[Key: abc.Hashable, Value](
     def fromkeys(
         cls: type[Self],
         iterable: abc.Iterable[Key | str],
-        value: Optional[Value],
+        value: Optional[Value] = None,
         /,
     ) -> Self:
         return cls(dict.fromkeys(iterable, value))
