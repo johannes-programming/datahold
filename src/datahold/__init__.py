@@ -189,10 +189,22 @@ class Object[Frozen](metaclass=ABCMeta):
     def __frozen__(self: Self, /) -> Frozen: ...
 
 
+class MutableObject[Frozen, Mutable](Object[Frozen]):
+    """Provide abc for custom mutable object."""
+
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self, /) -> ContextManager[Mutable]: ...
+
+
 ### OBJECT-LIKE ###
 
 
-class MutableObjectLike[Frozen, Mutable](Object[Frozen]):
+class MutableObjectLike[Frozen, Mutable](
+    MutableObject[Frozen, Mutable],
+):
     """Provide abc for custom mutable object."""
 
     __slots__ = ()
@@ -200,9 +212,6 @@ class MutableObjectLike[Frozen, Mutable](Object[Frozen]):
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, other: Self, /) -> None: ...
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(self: Self, /) -> ContextManager[Mutable]: ...
     @setdoc.basic
     def copy(self: Self, /) -> Self:
         return type(self)(self)
@@ -244,14 +253,15 @@ class Set[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     __slots__ = ()
 
 
-class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
+class MutableSet[Item: abc.Hashable](
+    Set[Item],
+    abc.MutableSet[Item],
+    MutableObject[Collection_Frozen[Item], MutableSet_Mutable[Item]],
+):
     """Provide abc for custom mutable set."""
 
     __slots__ = ()
 
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[MutableSet_Mutable[Item]]: ...
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
         with self.__mutate__() as mutable:
@@ -420,6 +430,7 @@ class Mapping[Key: abc.Hashable, Value](
 class MutableMapping[Key: abc.Hashable, Value](
     Mapping[Key, Value],
     abc.MutableMapping[Key | str, Optional[Value]],
+    MutableObject[FrozenDict[Key, Value], Dict[Key, Value]],
 ):
     """Provide abc for custom mutable mapping."""
 
@@ -430,11 +441,6 @@ class MutableMapping[Key: abc.Hashable, Value](
         with self.__mutate__() as mutable:
             del mutable[key]
 
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(
-        self: Self,
-    ) -> ContextManager[Dict[Key, Value]]: ...
     @setdoc.basic
     def __setitem__(
         self: Self, key: Key | str, value: Optional[Value], /
@@ -621,7 +627,11 @@ class Sequence[Item](Collection[Item], abc.Sequence[Item]):
         return self.__frozen__()[key]
 
 
-class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
+class MutableSequence[Item](
+    Sequence[Item],
+    abc.MutableSequence[Item],
+    MutableObject[Sequence_Frozen[Item], MutableSequence_Mutable[Item]],
+):
     """Provide abc for custom mutable sequence."""
 
     __slots__ = ()
@@ -651,12 +661,6 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
     ) -> Item | abc.MutableSequence[Item]:
         with self.__mutate__() as mutable:
             return mutable[key]
-
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(
-        self: Self, /
-    ) -> ContextManager[MutableSequence_Mutable[Item]]: ...
 
     @overload
     @setdoc.basic
