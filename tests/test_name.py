@@ -41,14 +41,16 @@ class TestName(unittest.TestCase):
         )
         for x, y in product(["", "Frozen", "Mutable"], ["", "Like", "Slot"]):
             z = x + "Object" + y
-            with self.subTest(ancestor=z):
+            with self.subTest(
+                ancestor=z, prefix=x in prefix, suffix=y <= suffix
+            ):
                 try:
                     ancestor = getattr(datahold, z)
                 except AttributeError:
                     continue
                 self.assertEqual(
                     issubclass(datatype, ancestor),
-                    prefix in x and suffix <= y,
+                    x in prefix and y <= suffix,
                 )
         # frozen
         if prefix == "Frozen":
