@@ -86,6 +86,15 @@ type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 ### COLLECTION ###
 
 
+class Collection_Frozen[Item_](
+    abc.Sized,
+    abc.Iterable[Item_],
+    Protocol,
+):
+    @setdoc.basic
+    def __contains__(self: Self, other: Never, /) -> bool: ...
+
+
 class Collection[Item](
     abc.Sized,
     abc.Iterable[Item],
@@ -93,14 +102,7 @@ class Collection[Item](
 ):
     """Provide abc for custom collection."""
 
-    @setdoc.basic
-    class __Frozen__[Item_](
-        abc.Sized,
-        abc.Iterable[Item_],
-        Protocol,
-    ):
-        @setdoc.basic
-        def __contains__(self: Self, other: Never, /) -> bool: ...
+    type __Frozen__[Item_] = Collection_Frozen[Item_]
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
@@ -111,7 +113,7 @@ class Collection[Item](
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
+    def __frozen__(self: Self, /) -> Collection_Frozen[Item]: ...
 
     @setdoc.basic
     def __iter__(self: Self) -> abc.Iterator[Item]:
@@ -131,20 +133,20 @@ class Set[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     __slots__ = ()
 
 
+class MutableSet_Mutable[Item: abc.Hashable](Protocol):
+    @setdoc.basic
+    def add(self: Self, item: Item, /) -> object: ...
+    @setdoc.basic
+    def discard(self: Self, item: abc.Hashable, /) -> object: ...
 class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
     """Provide abc for custom mutable set."""
 
     __slots__ = ()
+    type __Mutable__[Item_] = MutableSet_Mutable[Item_]
 
-    @setdoc.basic
-    class __Mutable__[Item_: abc.Hashable](Protocol):
-        @setdoc.basic
-        def add(self: Self, item: Item_, /) -> object: ...
-        @setdoc.basic
-        def discard(self: Self, item: abc.Hashable, /) -> object: ...
     @abstractmethod
     @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+    def __mutate__(self: Self) -> ContextManager[MutableSet_Mutable[Item]]: ...
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
         with self.__mutate__() as mutable:
@@ -299,6 +301,9 @@ class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
 ### MAPPING ###
 
 
+class Mapping_Frozen[Key, Value](Collection_Frozen[Key], Protocol):
+    @setdoc.basic
+    def __getitem__(self: Self, key: abc.Hashable, /) -> Value: ...
 class Mapping[Key: abc.Hashable, Value](
     Collection[Key],
     abc.Mapping[Key, Value],
@@ -307,12 +312,8 @@ class Mapping[Key: abc.Hashable, Value](
 
     __slots__ = ()
 
-    @setdoc.basic
-    class __Frozen__[FrozenKey, FrozenValue](
-        Collection.__Frozen__[FrozenKey], Protocol
-    ):
-        @setdoc.basic
-        def __getitem__(self: Self, key: abc.Hashable, /) -> FrozenValue: ...
+    type __Frozen__[Key_, Value_] = Mapping_Frozen[Key_, Value_]
+
     @abstractmethod
     @setdoc.basic
     def __frozen__(self: Self, /) -> __Frozen__[Key, Value]: ...
@@ -321,6 +322,15 @@ class Mapping[Key: abc.Hashable, Value](
         return self.__frozen__()[key]
 
 
+class MutableMapping_Mutable[Key_, Value_](
+    Protocol,
+):
+    @setdoc.basic
+    def __delitem__(self: Self, key: Key_ | str, /) -> object: ...
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: Key_ | str, value: Optional[Value_], /
+    ) -> object: ...
 class MutableMapping[Key: abc.Hashable, Value](
     Mapping[Key, Value],
     abc.MutableMapping[Key | str, Optional[Value]],
@@ -329,16 +339,7 @@ class MutableMapping[Key: abc.Hashable, Value](
 
     __slots__ = ()
 
-    @setdoc.basic
-    class __Mutable__[Key_, Value_](
-        Protocol,
-    ):
-        @setdoc.basic
-        def __delitem__(self: Self, key: Key_ | str, /) -> object: ...
-        @setdoc.basic
-        def __setitem__(
-            self: Self, key: Key_ | str, value: Optional[Value_], /
-        ) -> object: ...
+    type __Mutable__[Key_, Value_] = MutableMapping_Mutable[Key_, Value_]
 
     @setdoc.basic
     def __delitem__(self: Self, key: Key | str, /) -> None:
@@ -524,30 +525,28 @@ class MutableDictSlot[Key: abc.Hashable, Value](
 ### SEQUENCE ###
 
 
+class Sequence_Frozen[Item_](
+    Collection_Frozen[Item_],
+    Protocol,
+):
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item_: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: Slice[int], /) -> abc.Sequence[Item_]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self,
+        key: int | Slice[int],
+        /,
+    ) -> Item_ | abc.Sequence[Item_]: ...
 class Sequence[Item](Collection[Item], abc.Sequence[Item]):
     """Provide abc for customized sequence."""
 
     __slots__ = ()
+    type __Frozen__[Item_] = Sequence_Frozen[Item_]
 
-    @setdoc.basic
-    class __Frozen__[Item_](
-        Collection.__Frozen__[Item_],
-        Protocol,
-    ):
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> Item_: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(
-            self: Self, key: Slice[int], /
-        ) -> abc.Sequence[Item_]: ...
-        @setdoc.basic
-        def __getitem__(
-            self: Self,
-            key: int | Slice[int],
-            /,
-        ) -> Item_ | abc.Sequence[Item_]: ...
     @abstractmethod
     @setdoc.basic
     def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
@@ -564,54 +563,55 @@ class Sequence[Item](Collection[Item], abc.Sequence[Item]):
         return self.__frozen__()[key]
 
 
+class MutableSequence_Mutable[Item](Protocol):
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
+    @overload
+    @setdoc.basic
+    def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None: ...
+    @setdoc.basic
+    def __delitem__(
+        self: Self, key: SupportsIndex | Slice[SupportsIndex], /
+    ) -> None: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(self: Self, key: int, /) -> Item: ...
+    @overload
+    @setdoc.basic
+    def __getitem__(
+        self: Self, key: Slice[int], /
+    ) -> abc.MutableSequence[Item]: ...
+    @setdoc.basic
+    def __getitem__(
+        self: Self,
+        key: int | Slice[int],
+        /,
+    ) -> Item | abc.MutableSequence[Item]: ...
+    @overload
+    @setdoc.basic
+    def __setitem__(self: Self, key: int, value: Item, /) -> None: ...
+    @overload
+    @setdoc.basic
+    def __setitem__(
+        self: Self, key: Slice[int], value: abc.Iterable[Item], /
+    ) -> None: ...
+    @setdoc.basic
+    def __setitem__(
+        self: Self,
+        key: int | Slice[int],
+        value: Item | abc.Iterable[Item],
+        /,
+    ) -> None: ...
+    @setdoc.basic
+    def insert(self: Self, index: int, item: Item, /) -> None: ...
+
+
 class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
     """Provide abc for custom mutable sequence."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    class __Mutable__[Item_](Protocol):
-        @overload
-        @setdoc.basic
-        def __delitem__(self: Self, key: SupportsIndex, /) -> None: ...
-        @overload
-        @setdoc.basic
-        def __delitem__(self: Self, key: Slice[SupportsIndex], /) -> None: ...
-        @setdoc.basic
-        def __delitem__(
-            self: Self, key: SupportsIndex | Slice[SupportsIndex], /
-        ) -> None: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(self: Self, key: int, /) -> Item_: ...
-        @overload
-        @setdoc.basic
-        def __getitem__(
-            self: Self, key: Slice[int], /
-        ) -> abc.MutableSequence[Item_]: ...
-        @setdoc.basic
-        def __getitem__(
-            self: Self,
-            key: int | Slice[int],
-            /,
-        ) -> Item_ | abc.MutableSequence[Item_]: ...
-        @overload
-        @setdoc.basic
-        def __setitem__(self: Self, key: int, value: Item_, /) -> None: ...
-        @overload
-        @setdoc.basic
-        def __setitem__(
-            self: Self, key: Slice[int], value: abc.Iterable[Item_], /
-        ) -> None: ...
-        @setdoc.basic
-        def __setitem__(
-            self: Self,
-            key: int | Slice[int],
-            value: Item_ | abc.Iterable[Item_],
-            /,
-        ) -> None: ...
-        @setdoc.basic
-        def insert(self: Self, index: int, item: Item_, /) -> None: ...
+    type __Mutable__[Item_] = MutableSequence_Mutable[Item_]
 
     @overload
     @setdoc.basic
