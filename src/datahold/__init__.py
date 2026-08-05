@@ -30,7 +30,7 @@ __all__: list[str] = [
     "SetSlot",
 ]
 
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
@@ -83,24 +83,85 @@ type DictInit[Key, Value] = (
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### OBJECT
+
+
+class Object[Frozen](metaclass=ABCMeta):
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen: ...
+
+
+class FrozenObject[Frozen](Object[Frozen], abc.Hashable):
+    __slots__ = ()
+
+
+class MutableObject[Frozen, Mutable](Object[Frozen]):
+    __slots__=()
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self, /) -> ContextManager[Mutable]: ...
+
+
+### OBJECT-LIKE ###
+
+
+class ObjectLike[Frozen](Object[Frozen]):
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __init__(self: Self, data: Self, /) -> None: ...
+
+
+class FrozenObjectLike[Frozen](ObjectLike[Frozen], FrozenObject[Frozen]):
+    __slots__ =()
+    
+class MutableObjectLike[Frozen, Mutable](
+    ObjectLike[Frozen], 
+    MutableObject[Frozen, Mutable],
+):
+    __slots__ = ()
+
+    @setdoc.basic
+    def copy(self: Self, /) -> Self:
+        return type(self)(self)
+
+### OBJECT-SLOT
+class ObjectSlot[Frozen](ObjectLike[Frozen]):
+    __slots__=("_data")
+    _data:Frozen
+
+class FrozenObjectSlot[Frozen](ObjectSlot[Frozen], FrozenObjectLike[Frozen]):
+    __slots__=()
+
+class MutableObjectSlot[Frozen, Mutable](
+    ObjectSlot[Frozen], 
+    MutableObjectLike[Frozen, Mutable],
+):
+    __slots__=()
+
 ### COLLECTION ###
 
 
+class __Collection_Frozen__[Item](
+    abc.Sized,
+    abc.Iterable[Item],
+    Protocol,
+):
+    @setdoc.basic
+    def __contains__(self: Self, other: Never, /) -> bool: ...
 class Collection[Item](
+    Object[__Collection_Frozen__[Item]],
     abc.Sized,
     abc.Iterable[Item],
     abc.Container[object],
 ):
     """Provide abc for custom collection."""
 
-    @setdoc.basic
-    class __Frozen__[Item_](
-        abc.Sized,
-        abc.Iterable[Item_],
-        Protocol,
-    ):
-        @setdoc.basic
-        def __contains__(self: Self, other: Never, /) -> bool: ...
+    type __Frozen__[Item] = __Collection_Frozen__[Item]
 
     @setdoc.basic
     def __contains__(self: Self, other: object, /) -> bool:
@@ -109,12 +170,8 @@ class Collection[Item](
         except TypeError:
             return other in (x for x in self)  # type: ignore[operator]
 
-    @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> __Frozen__[Item]: ...
-
-    @setdoc.basic
-    def __iter__(self: Self) -> abc.Iterator[Item]:
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__frozen__())
 
     @setdoc.basic
@@ -125,26 +182,31 @@ class Collection[Item](
 ### SET ###
 
 
-class Set[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
+class Set[Item: abc.Hashable](
+    Collection[Item], 
+    abc.Set[Item],
+):
     """Provide abc for custom set."""
 
     __slots__ = ()
 
 
-class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
+class __MutableSet_Mutable__[Item_: abc.Hashable](Protocol):
+    @setdoc.basic
+    def add(self: Self, item: Item_, /) -> object: ...
+    @setdoc.basic
+    def discard(self: Self, item: abc.Hashable, /) -> object: ...
+class MutableSet[Item: abc.Hashable](
+    Set[Item], 
+    MutableObject[__Collection_Frozen__[Item], __MutableSet_Mutable__[Item]],
+    abc.MutableSet[Item],
+):
     """Provide abc for custom mutable set."""
 
     __slots__ = ()
 
-    @setdoc.basic
-    class __Mutable__[Item_: abc.Hashable](Protocol):
-        @setdoc.basic
-        def add(self: Self, item: Item_, /) -> object: ...
-        @setdoc.basic
-        def discard(self: Self, item: abc.Hashable, /) -> object: ...
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+    type __Mutable__[Item] = __MutableSet_Mutable__[Item]
+
     @setdoc.basic
     def add(self: Self, item: Item, /) -> None:
         with self.__mutate__() as mutable:
@@ -208,7 +270,11 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
         return hash(self.__frozen__())
 
 
-class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
+class MutableSetLike[Item: abc.Hashable](
+    SetLike[Item],
+    MutableSet[Item],
+    MutableLike[frozenset[Item], set[Item]],
+):
     """Provide abc for custom mutable set-like."""
 
     __slots__ = ()
@@ -226,7 +292,8 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+    def __mutate__(self: Self, /) -> ContextManager[__Mutable__[Item]]: ...
+
     @setdoc.basic
     def difference_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
@@ -256,30 +323,21 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
 
 ### SET-SLOT ###
 
-
-class SetSlot[Item: abc.Hashable](SetLike[Item]):
-    """Provide slotted set-like."""
-
-    __slots__ = ("_slot",)
-
-    _slot: SetSlot.__Frozen__[Item]
-
-    @setdoc.basic
-    def __frozen__(self: Self) -> SetSlot.__Frozen__[Item]:
-        return self._slot
-
-
-class FrozenSetSlot[Item](SetSlot[Item], FrozenSetLike[Item]):
+class FrozenSetSlot[Item](FrozenSetLike[Item], Slot[frozenset[Item]]):
     """Provide slotted frozen set-like."""
 
     __slots__ = ()
 
     @setdoc.basic
+    def __frozen__(self: Self) -> FrozenSetSlot.__Frozen__[Item]:
+        return self._slot
+
+    @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = frozenset(data)
+        self._slot : FrozenSetSlot.__Frozen__[Item]= frozenset(data)
 
 
-class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
+class MutableSetSlot[Item](MutableSetLike[Item], Slot[frozenset[Item]]):
     """Provide slotted mutable set-like."""
 
     __slots__ = ()
@@ -290,10 +348,10 @@ class MutableSetSlot[Item](SetSlot[Item], MutableSetLike[Item]):
         self: Self,
         /,
     ) -> abc.Generator[MutableSetSlot.__Mutable__[Item], None, None]:
-        slot: MutableSetSlot.__Mutable__[Item]
-        slot = set(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = frozenset(slot)
+        mutable: MutableSetSlot.__Mutable__[Item]
+        mutable = set(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozenset(mutable)
 
 
 ### MAPPING ###
@@ -422,6 +480,10 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
     MutableMapping[Key, Value],
+    MutableLike[
+        frozendict[Key | str, Optional[Value]],
+        dict[Key | str, Optional[Value]],
+    ],
 ):
     """Provide abc for custom mutable dict-like."""
 
@@ -462,35 +524,26 @@ class MutableDictLike[Key: abc.Hashable, Value](
     def __mutate__(
         self: Self, /
     ) -> ContextManager[__Mutable__[Key, Value]]: ...
-    @setdoc.basic
-    def copy(self: Self, /) -> Self:
-        return type(self)(self)
 
 
 ### DICT-SLOT ###
 
 
-class DictSlot[Key: abc.Hashable, Value](DictLike[Key, Value]):
-    """Provide slotted dict-like."""
-
-    __slots__ = ("_slot",)
-    _slot: DictSlot.__Frozen__[Key, Value]
-
-    @setdoc.basic
-    def __frozen__(  # type: ignore[override]
-        self: Self,
-    ) -> DictSlot.__Frozen__[Key, Value]:
-        return self._slot
-
 
 class FrozenDictSlot[Key: abc.Hashable, Value](
-    DictSlot[Key, Value],
     FrozenDictLike[Key, Value],
+    Slot[FrozenDictLike.__Frozen__[Key, Value]]
 ):
     """Provide slotted frozen dict-like."""
 
     __slots__ = ()
 
+    @setdoc.basic
+    def __frozen__(  # type: ignore[override]
+        self: Self,
+    ) -> FrozenDictLike.__Frozen__[Key, Value]:
+        return self._slot
+    
     @setdoc.basic
     def __init__(
         self: Self,
@@ -498,12 +551,12 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._slot = frozendict(data)  # type: ignore[arg-type]
+        self._slot = frozendict(data, **kwargs)  # type: ignore[arg-type]
 
 
 class MutableDictSlot[Key: abc.Hashable, Value](
-    DictSlot[Key, Value],
     MutableDictLike[Key, Value],
+    Slot[MutableDictLike.__Mutable__[Key, Value]],
 ):
     """Provide slotted mutable dict-like."""
 
@@ -515,10 +568,10 @@ class MutableDictSlot[Key: abc.Hashable, Value](
         self: Self,
         /,
     ) -> abc.Generator[MutableDictSlot.__Mutable__[Key, Value], None, None]:
-        slot: MutableDictSlot.__Mutable__[Key, Value]
-        slot = dict(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = frozendict(slot)
+        mutable: MutableDictSlot.__Mutable__[Key, Value]
+        mutable = dict(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozendict(mutable)
 
 
 ### SEQUENCE ###
@@ -771,7 +824,11 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
         return hash(self.__frozen__())
 
 
-class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
+class MutableListLike[Item](
+    ListLike[Item],
+    MutableSequence[Item],
+    MutableLike[tuple[Item, ...], list[Item]],
+):
     """Provide abc for custom mutable list-like."""
 
     __slots__ = ()
@@ -832,10 +889,6 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
             mutable[key] = value  # type: ignore
 
     @setdoc.basic
-    def copy(self: Self) -> Self:
-        return type(self)(self)
-
-    @setdoc.basic
     def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
         with self.__mutate__() as mutable:
             mutable.insert(index, item)
@@ -852,29 +905,27 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
 
 ### LIST-SLOT ###
 
-
-class ListSlot[Item](ListLike[Item]):
-    """Provide slotted list-like class."""
-
-    __slots__ = ("_slot",)
-    _slot: ListSlot.__Frozen__[Item]
-
-    @setdoc.basic
-    def __frozen__(self: Self) -> ListSlot.__Frozen__[Item]:
-        return self._slot
-
-
-class FrozenListSlot[Item](ListSlot[Item], FrozenListLike[Item]):
+class FrozenListSlot[Item](
+    FrozenListLike[Item],
+    Slot[FrozenListLike.__Frozen__[Item]],
+):
     """Provide slotted frozen list-like."""
 
     __slots__ = ()
 
     @setdoc.basic
+    def __frozen__(self: Self) -> FrozenListSlot.__Frozen__[Item]:
+        return self._slot
+    
+    @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         self._slot = tuple(data)
 
 
-class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
+class MutableListSlot[Item](
+    MutableListLike[Item],
+    Slot[MutableListLike.__Frozen__[Item]],
+):
     """Provide slotted mutable list-like."""
 
     __slots__ = ()
@@ -882,6 +933,6 @@ class MutableListSlot[Item](ListSlot[Item], MutableListLike[Item]):
     @contextmanager
     @setdoc.basic
     def __mutate__(self: Self, /) -> abc.Generator[list[Item], None, None]:
-        slot = list(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = tuple(slot)
+        mutable = list(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = tuple(mutable)

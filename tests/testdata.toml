@@ -1,7 +1,23 @@
-[datatypes.Collection]
+[datatypes.Collection.attributes]
+__contains__ = "datahold.Collection"
+__iter__ = "datahold.Collection"
+__len__ = "datahold.Collection"
 
 [datatypes.DictLike.attributes]
+__frozen__ = "datahold.DictLike"
+__init__ = "datahold.DictLike"
 __or__ = "datahold.DictLike"
+clear = ""
+copy = ""
+fromkeys = "datahold.DictLike"
+get = "datahold.DictLike"
+items = "datahold.DictLike"
+keys = "datahold.DictLike"
+pop = ""
+popitem = ""
+setdefault = ""
+update = ""
+values = ""
 
 [datatypes.DictLike.issubclass]
 "collections.abc.Mapping" = true
@@ -10,6 +26,19 @@ __or__ = "datahold.DictLike"
 [datatypes.DictSlot.issubclass]
 "collections.abc.Mapping" = true
 "datahold.DictLike" = true
+
+[datatypes.FrozenDictLike.attributes]
+clear = ""
+copy = ""
+fromkeys = "datahold.DictLike"
+get = "datahold.DictLike"
+items = "datahold.DictLike"
+keys = "datahold.DictLike"
+pop = ""
+popitem = ""
+setdefault = ""
+update = ""
+values = ""
 
 [datatypes.FrozenDictLike.issubclass]
 "collections.abc.Hashable" = true
@@ -22,6 +51,17 @@ __or__ = "datahold.DictLike"
 [datatypes.FrozenListLike.attributes]
 __frozen__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
+append = ""
+clear = ""
+copy = ""
+count = "datahold.ListLike"
+extend = ""
+index = "datahold.ListLike"
+insert = ""
+pop = ""
+remove = ""
+reverse = ""
+sort = ""
 
 [datatypes.FrozenListLike.issubclass]
 "builtins.list" = false
@@ -148,6 +188,25 @@ __Mutable__ = ""
 [datatypes.FrozenListSlot.varia]
 generic = 1
 
+[datatypes.FrozenSetLike.attributes]
+add = ""
+clear = ""
+copy = ""
+difference = "datahold.SetLike"
+difference_update = ""
+discard = ""
+intersection = "datahold.SetLike"
+intersection_update = ""
+isdisjoint = "datahold.SetLike"
+issubset = "datahold.SetLike"
+issuperset = "datahold.SetLike"
+pop = ""
+remove = ""
+symmetric_difference = "datahold.SetLike"
+symmetric_difference_update = ""
+union = "datahold.SetLike"
+update = ""
+
 [datatypes.FrozenSetLike.issubclass]
 "collections.abc.Hashable" = true
 "collections.abc.Set" = true
@@ -165,8 +224,17 @@ __frozen__ = "datahold.ListLike"
 __init__ = "datahold.ListLike"
 __mutate__ = ""
 __reversed__ = "collections.abc.Sequence"
+append = ""
+clear = ""
+copy = ""
 count = "collections.abc.Sequence"
+extend = ""
 index = "collections.abc.Sequence"
+insert = ""
+pop = ""
+remove = ""
+reverse = ""
+sort = ""
 
 [datatypes.ListLike.issubclass]
 "collections.abc.Hashable" = false
@@ -196,6 +264,17 @@ generic = 1
 [datatypes.MutableDictLike.attributes]
 __ior__ = "datahold.MutableDictLike"
 __or__ = "datahold.DictLike"
+clear = "datahold.MutableDictLike"
+copy = "datahold.MutableLike"
+fromkeys = "datahold.DictLike"
+get = "datahold.DictLike"
+items = "datahold.DictLike"
+keys = "datahold.DictLike"
+pop = "datahold.MutableDictLike"
+popitem = "datahold.MutableDictLike"
+setdefault = "datahold.MutableDictLike"
+update = "datahold.MutableDictLike"
+values = "datahold.MutableDictLike"
 
 [datatypes.MutableDictLike.issubclass]
 "collections.abc.Mapping" = true
@@ -218,6 +297,7 @@ __mutate__ = "datahold.MutableListLike"
 __reversed__ = "collections.abc.Sequence"
 append = "collections.abc.MutableSequence"
 clear = "collections.abc.MutableSequence"
+copy = "datahold.MutableLike"
 count = "collections.abc.Sequence"
 extend = "collections.abc.MutableSequence"
 foo = ""
@@ -274,6 +354,25 @@ sort = ""
 "collections.abc.Set" = true
 "datahold.Collection" = true
 
+[datatypes.MutableSetLike.attributes]
+add = "datahold.MutableSetLike"
+clear = "datahold.MutableSetLike"
+copy = "datahold.MutableLike"
+difference = "datahold.SetLike"
+difference_update = "datahold.MutableSetLike"
+discard = "datahold.MutableSetLike"
+intersection = "datahold.SetLike"
+intersection_update = "datahold.MutableSetLike"
+isdisjoint = "datahold.SetLike"
+issubset = "datahold.SetLike"
+issuperset = "datahold.SetLike"
+pop = "datahold.MutableSetLike"
+remove = "datahold.MutableSetLike"
+symmetric_difference = "datahold.SetLike"
+symmetric_difference_update = "datahold.MutableSetLike"
+union = "datahold.SetLike"
+update = "datahold.MutableSetLike"
+
 [datatypes.MutableSetLike.issubclass]
 "collections.abc.Hashable" = false
 "collections.abc.MutableSet" = true
@@ -295,6 +394,25 @@ sort = ""
 [datatypes.Set.issubclass]
 "collections.abc.Set" = true
 "datahold.Collection" = true
+
+[datatypes.SetLike.attributes]
+add = ""
+clear = ""
+copy = ""
+difference = "datahold.SetLike"
+difference_update = ""
+discard = ""
+intersection = "datahold.SetLike"
+intersection_update = ""
+isdisjoint = "datahold.SetLike"
+issubset = "datahold.SetLike"
+issuperset = "datahold.SetLike"
+pop = ""
+remove = ""
+symmetric_difference = "datahold.SetLike"
+symmetric_difference_update = ""
+union = "datahold.SetLike"
+update = ""
 
 [datatypes.SetLike.issubclass]
 "collections.abc.Set" = true

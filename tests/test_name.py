@@ -40,6 +40,7 @@ class TestName(unittest.TestCase):
             self.assertTrue(issubclass(datatype, abc.Hashable))
             self.assertFalse(hasattr(datatype, "__Mutable__"))
             self.assertFalse(hasattr(datatype, "__mutate__"))
+            self.assertFalse(hasattr(datatype, "copy"))
             self.assertTrue(
                 issubclass(datatype, Lazy.get_import("datahold." + name[6:]))
             )
@@ -51,11 +52,20 @@ class TestName(unittest.TestCase):
             self.assertTrue(
                 issubclass(datatype, Lazy.get_import("datahold." + name[7:]))
             )
+            self.assertEqual(
+                suffix in ["Like", "Slot"],
+                issubclass(datatype, datahold.MutableLike),
+            )
+            self.assertEqual(
+                hasattr(datatype, "copy"),
+                issubclass(datatype, datahold.MutableLike),
+            )
         # no prefix
         if prefix == "":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
             self.assertFalse(hasattr(datatype, "__Mutable__"))
             self.assertFalse(hasattr(datatype, "__mutate__"))
+            self.assertFalse(hasattr(datatype, "copy"))
         # like
         if suffix == "Like":
             self.assertTrue(hasattr(datatype, "__init__"))
@@ -70,6 +80,12 @@ class TestName(unittest.TestCase):
         # no suffix
         if suffix == "":
             self.assertIs(datatype.__init__, object.__init__)
+        ### combined
+        if prefix == "Mutable" and suffix == "Slot":
+            self.assertIs(
+                datatype.__frozen__,
+                getattr(datahold, name[:-4] + "Like").__frozen__,
+            )
 
     def test_name(self: Self, /) -> None:
         for name in Lazy.lazy.datatypes.keys():
