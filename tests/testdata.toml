@@ -144,6 +144,9 @@ generic = 1
 [datatypes.FrozenObjectSlot.issubclass]
 "datahold.ObjectSlot" = true
 
+[datatypes.FrozenObjectSlot.varia]
+generic = 1
+
 [datatypes.FrozenSetLike.issubclass]
 "collections.abc.Hashable" = true
 "collections.abc.Set" = true
@@ -290,10 +293,14 @@ copy = "datahold.MutableObjectLike"
 "datahold.MutableSet" = true
 "datahold.MutableSetLike" = true
 
-[datatypes.Object]
+[datatypes.Object.varia]
+generic = 1
 
 [datatypes.ObjectSlot.issubclass]
 "datahold.Object" = true
+
+[datatypes.ObjectSlot.varia]
+generic = 1
 
 [datatypes.Sequence]
 
