@@ -185,7 +185,7 @@ class Object(metaclass=ABCMeta):
 ### OBJECT-LIKE ###
 
 
-class MutableObjectLike(Object):
+class MutableObjectLike[Mutable](Object):
     """Provide abc for custom mutable object."""
 
     __slots__ = ()
@@ -193,6 +193,9 @@ class MutableObjectLike(Object):
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, other: Self, /) -> None: ...
+    @abstractmethod
+    @setdoc.basic
+    def __mutate__(self: Self, /) -> ContextManager[Mutable]: ...
     @setdoc.basic
     def copy(self: Self, /) -> Self:
         return type(self)(self)
@@ -313,7 +316,9 @@ class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
 
 
 class MutableSetLike[Item: abc.Hashable](
-    SetLike[Item], MutableSet[Item], MutableObjectLike
+    SetLike[Item],
+    MutableObjectLike[set[Item]],
+    MutableSet[Item],
 ):
     """Provide abc for custom mutable set-like."""
 
@@ -329,10 +334,6 @@ class MutableSetLike[Item: abc.Hashable](
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         with self.__mutate__() as mutable:
             mutable.update(data)
-
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
 
     @setdoc.basic
     def difference_update(
@@ -509,8 +510,8 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
+    MutableObjectLike[dict[Key | str, Optional[Value]]],
     MutableMapping[Key, Value],
-    MutableObjectLike,
 ):
     """Provide abc for custom mutable dict-like."""
 
@@ -545,12 +546,6 @@ class MutableDictLike[Key: abc.Hashable, Value](
         with self.__mutate__() as mutable:
             mutable |= other
         return self
-
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(
-        self: Self, /
-    ) -> ContextManager[__Mutable__[Key, Value]]: ...
 
     @setdoc.basic
     def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
@@ -798,7 +793,9 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
 
 
 class MutableListLike[Item](
-    ListLike[Item], MutableSequence[Item], MutableObjectLike
+    ListLike[Item],
+    MutableObjectLike[list[Item]],
+    MutableSequence[Item],
 ):
     """Provide abc for custom mutable list-like."""
 
@@ -834,10 +831,6 @@ class MutableListLike[Item](
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         with self.__mutate__() as mutable:
             mutable.extend(data)
-
-    @abstractmethod
-    @setdoc.basic
-    def __mutate__(self: Self, /) -> ContextManager[__Mutable__[Item]]: ...
 
     @overload
     @setdoc.basic
