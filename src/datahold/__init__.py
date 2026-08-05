@@ -805,7 +805,7 @@ class FrozenListLike[Item](ListLike[Item], abc.Hashable):
     __slots__ = ()
 
     @setdoc.basic
-    def __hash__(self: Self) -> int:
+    def __hash__(self: Self, /) -> int:
         return hash(self.__frozen__())
 
 
