@@ -112,11 +112,14 @@ class Object[Frozen](metaclass=ABCMeta):
 
 ### OBJECT-LIKE ###
 
-# class ObjectLike[Frozen](
-#    Object[Frozen],
-# ):
-#    """Provide abc for custom object-like."""
-#    __slots__ = ()
+
+class ObjectLike[Frozen](
+    Object[Frozen],
+):
+    """Provide abc for custom object-like."""
+
+    __slots__ = ()
+
 
 # class FrozenObjectLike[Frozen](
 #    ObjectLike[Frozen],
@@ -233,7 +236,7 @@ class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
 ### SET-LIKE ###
 
 
-class SetLike[Item: abc.Hashable](Set[Item]):
+class SetLike[Item: abc.Hashable](Set[Item], ObjectLike[frozenset[Item]]):
     """Provide abc for custom set-like."""
 
     __slots__ = ()
@@ -434,6 +437,7 @@ class MutableMapping[Key: abc.Hashable, Value](
 
 class DictLike[Key: abc.Hashable, Value](
     Mapping[Key | str, Optional[Value]],
+    ObjectLike[frozendict[Key | str, Optional[Value]]],
 ):
     """Provide abc for custom dict-like."""
 
@@ -740,7 +744,7 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
 
 
 ### LIST-LIKE ###
-class ListLike[Item](Sequence[Item]):
+class ListLike[Item](Sequence[Item], ObjectLike[tuple[Item, ...]]):
     """Provide abc for custom list-like."""
 
     __slots__ = ()
