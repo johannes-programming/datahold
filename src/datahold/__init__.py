@@ -426,9 +426,7 @@ class DictLike[Key: abc.Hashable, Value](
     """Provide abc for custom dict-like."""
 
     __slots__ = ()
-    type __Frozen__[FrozenKey, FrozenValue] = frozendict[
-        FrozenKey | str, Optional[FrozenValue]
-    ]
+    type __Frozen__[Key_, Value_] = frozendict[Key_ | str, Optional[Value_]]
 
     @abstractmethod
     @setdoc.basic
