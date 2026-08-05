@@ -28,7 +28,6 @@ __init__ = "datahold.ListLike"
 "collections.abc.Sequence" = true
 
 [datatypes.FrozenListLike.nested]
-__Mutable__ = ""
 
 [datatypes.FrozenListLike.varia]
 generic = 1
@@ -138,7 +137,6 @@ args = [
 ]
 
 [datatypes.FrozenListSlot.nested]
-__Mutable__ = ""
 
 [datatypes.FrozenListSlot.varia]
 generic = 1
@@ -171,7 +169,6 @@ index = "collections.abc.Sequence"
 "datahold.MutableSequence" = false
 
 [datatypes.ListLike.nested]
-__Mutable__ = ""
 
 [datatypes.ListLike.varia]
 generic = 1
@@ -255,7 +252,6 @@ copy = "datahold.MutableObjectLike"
 "datahold.Object" = true
 
 [datatypes.MutableSequence.attributes]
-__Mutable__ = "datahold.MutableSequence"
 __delitem__ = "datahold.MutableSequence"
 __frozen__ = "datahold.Sequence"
 __getitem__ = "datahold.MutableSequence"

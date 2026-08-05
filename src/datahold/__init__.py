@@ -247,7 +247,6 @@ class MutableSet[Item: abc.Hashable](Set[Item], abc.MutableSet[Item]):
     """Provide abc for custom mutable set."""
 
     __slots__ = ()
-    type __Mutable__[Item_] = MutableSet_Mutable[Item_]
 
     @abstractmethod
     @setdoc.basic
@@ -322,7 +321,6 @@ class MutableSetLike[Item: abc.Hashable](
     """Provide abc for custom mutable set-like."""
 
     __slots__ = ()
-    type __Mutable__[Item_] = set[Item_]
 
     @setdoc.basic
     def __frozen__(self: Self, /) -> frozenset[Item]:
@@ -392,8 +390,8 @@ class MutableSetSlot[Item](MutableSetLike[Item]):
     def __mutate__(
         self: Self,
         /,
-    ) -> abc.Generator[MutableSetSlot.__Mutable__[Item], None, None]:
-        slot: MutableSetSlot.__Mutable__[Item]
+    ) -> abc.Generator[set[Item], None, None]:
+        slot: set[Item]
         slot = set(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozenset(slot)
@@ -426,8 +424,6 @@ class MutableMapping[Key: abc.Hashable, Value](
 
     __slots__ = ()
 
-    type __Mutable__[Key_, Value_] = MutableMapping_Mutable[Key_, Value_]
-
     @setdoc.basic
     def __delitem__(self: Self, key: Key | str, /) -> None:
         with self.__mutate__() as mutable:
@@ -435,7 +431,9 @@ class MutableMapping[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __mutate__(self: Self) -> ContextManager[__Mutable__[Key, Value]]: ...
+    def __mutate__(
+        self: Self,
+    ) -> ContextManager[dict[Key | str, Optional[Value]]]: ...
     @setdoc.basic
     def __setitem__(
         self: Self, key: Key | str, value: Optional[Value], /
@@ -514,9 +512,6 @@ class MutableDictLike[Key: abc.Hashable, Value](
     """Provide abc for custom mutable dict-like."""
 
     __slots__ = ()
-    type __Mutable__[Key_: abc.Hashable, Value_] = dict[
-        Key_ | str, Optional[Value_]
-    ]
 
     @setdoc.basic
     def __frozen__(  # type: ignore[override]
@@ -594,8 +589,8 @@ class MutableDictSlot[Key: abc.Hashable, Value](
     def __mutate__(
         self: Self,
         /,
-    ) -> abc.Generator[MutableDictSlot.__Mutable__[Key, Value], None, None]:
-        slot: MutableDictSlot.__Mutable__[Key, Value]
+    ) -> abc.Generator[dict[Key | str, Optional[Value]], None, None]:
+        slot: dict[Key | str, Optional[Value]]
         slot = dict(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozendict(slot)
@@ -629,7 +624,6 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
     """Provide abc for custom mutable sequence."""
 
     __slots__ = ()
-    type __Mutable__[Item_] = MutableSequence_Mutable[Item_]
 
     @overload
     @setdoc.basic
@@ -659,7 +653,9 @@ class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __mutate__(self: Self, /) -> ContextManager[__Mutable__[Item]]: ...
+    def __mutate__(
+        self: Self, /
+    ) -> ContextManager[MutableSequence_Mutable[Item]]: ...
 
     @overload
     @setdoc.basic
@@ -796,8 +792,6 @@ class MutableListLike[Item](
     """Provide abc for custom mutable list-like."""
 
     __slots__ = ()
-
-    type __Mutable__[Item_] = list[Item_]
 
     @overload
     @setdoc.basic

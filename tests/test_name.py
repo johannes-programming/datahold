@@ -40,21 +40,18 @@ class TestName(unittest.TestCase):
         if prefix == "Frozen":
             self.assertIsNot(datatype.__hash__, object.__hash__)
             self.assertTrue(issubclass(datatype, abc.Hashable))
-            self.assertFalse(hasattr(datatype, "__Mutable__"))
             self.assertFalse(hasattr(datatype, "__mutate__"))
             ancestor = getattr(datahold, name[6:], object)
             self.assertTrue(issubclass(datatype, ancestor))
         # mutable
         if prefix == "Mutable":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
-            self.assertTrue(hasattr(datatype, "__Mutable__"))
             self.assertTrue(hasattr(datatype, "__mutate__"))
             ancestor = getattr(datahold, name[7:], object)
             self.assertTrue(issubclass(datatype, ancestor))
         # no prefix
         if prefix == "":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
-            self.assertFalse(hasattr(datatype, "__Mutable__"))
             self.assertFalse(hasattr(datatype, "__mutate__"))
         # like
         if suffix == "Like":
