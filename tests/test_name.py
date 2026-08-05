@@ -4,6 +4,7 @@ __all__: list[str] = ["TestName"]
 
 import unittest
 from collections import abc
+from itertools import product
 from typing import Self
 
 from Lazy import Lazy
@@ -33,7 +34,19 @@ class TestName(unittest.TestCase):
         self.assertEqual(datatype.__name__, name)
         self.assertTrue(hasattr(datatype, "__Frozen__"))
         self.assertTrue(hasattr(datatype, "__frozen__"))
-        self.assertTrue(issubclass(datatype, datahold.Collection))
+        self.assertTrue(issubclass(datatype, datahold.Object))
+        self.assertEqual(
+            issubclass(datatype, datahold.Collection),
+            name != prefix + "Object" + suffix,
+        )
+        for x, y in product(["", "Frozen", "Mutable"], ["", "Like", "Slot"]):
+            z = x + "Object" + y
+            with self.subTest(ancestor=z):
+                ancestor = getattr(datahold, z)
+                self.assertEqual(
+                    issubclass(datatype, ancestor),
+                    prefix in x and suffix <= y,
+                )
         # frozen
         if prefix == "Frozen":
             self.assertIsNot(datatype.__hash__, object.__hash__)
