@@ -260,12 +260,12 @@ class SetLike[Item: abc.Hashable](Set[Item]):
         return type(self)(self.__frozen__().intersection(*others))
 
     @setdoc.basic
-    def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> Self:
-        return type(self)(self.__frozen__().issubset(other))  # type: ignore
+    def issubset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
+        return self.__frozen__().issubset(other)
 
     @setdoc.basic
-    def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> Self:
-        return type(self)(self.__frozen__().issuperset(other))  # type: ignore
+    def issuperset(self: Self, other: abc.Iterable[abc.Hashable], /) -> bool:
+        return self.__frozen__().issuperset(other)
 
     @setdoc.basic
     def symmetric_difference(self: Self, other: abc.Iterable[Item], /) -> Self:
@@ -273,7 +273,7 @@ class SetLike[Item: abc.Hashable](Set[Item]):
 
     @setdoc.basic
     def union(self: Self, /, *others: abc.Iterable[Item]) -> Self:
-        return type(self)(self.__frozen__().union(others))  # type: ignore
+        return type(self)(self.__frozen__().union(*others))
 
 
 class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
@@ -305,6 +305,11 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], MutableSet[Item]):
     @abstractmethod
     @setdoc.basic
     def __mutate__(self: Self) -> ContextManager[__Mutable__[Item]]: ...
+
+    @setdoc.basic
+    def copy(self: Self, /) -> Self:
+        return type(self)(self)
+
     @setdoc.basic
     def difference_update(
         self: Self, /, *others: abc.Iterable[abc.Hashable]
@@ -524,6 +529,14 @@ class MutableDictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def copy(self: Self, /) -> Self:
         return type(self)(self)
+
+    @setdoc.basic
+    def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
+        # for most dict d
+        # dict.popitem(d) and collections.abc.MutableMapping.popitem(d)
+        # behave differently
+        with self.__mutate__() as mutable:
+            return mutable.popitem()
 
 
 ### DICT-SLOT ###
