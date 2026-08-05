@@ -141,6 +141,9 @@ args = [
 [datatypes.FrozenListSlot.varia]
 generic = 1
 
+[datatypes.FrozenObjectSlot.issubclass]
+"datahold.ObjectSlot" = true
+
 [datatypes.FrozenSetLike.issubclass]
 "collections.abc.Hashable" = true
 "collections.abc.Set" = true

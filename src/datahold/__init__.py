@@ -9,6 +9,7 @@ __all__: list[str] = [
     "FrozenDictSlot",
     "FrozenListLike",
     "FrozenListSlot",
+    "FrozenObjectSlot",
     "FrozenSetLike",
     "FrozenSetSlot",
     "ListLike",
@@ -231,6 +232,19 @@ class ObjectSlot[Frozen](
     _slot: Frozen
 
 
+class FrozenObjectSlot[Frozen](
+    ObjectSlot[Frozen],
+):
+    """Provide slotted abc for custom frozen object-like."""
+
+    __slots__ = ()
+    _slot: Frozen
+
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen:
+        return self._slot
+
+
 ### COLLECTION ###
 
 
@@ -388,16 +402,12 @@ class MutableSetLike[Item: abc.Hashable](
 
 
 class FrozenSetSlot[Item](
+    FrozenObjectSlot[frozenset[Item]],
     FrozenSetLike[Item],
-    ObjectSlot[frozenset[Item]],
 ):
     """Provide slotted frozen set-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __frozen__(self: Self, /) -> frozenset[Item]:
-        return self._slot
 
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
@@ -575,19 +585,13 @@ class MutableDictLike[Key: abc.Hashable, Value](
 ### DICT-SLOT ###
 
 
-class FrozenDictSlot[Key: abc.Hashable, Value](
+class FrozenDictSlot[Key: abc.Hashable, Value](  # type: ignore[misc]
+    FrozenObjectSlot[FrozenDict[Key, Value]],
     FrozenDictLike[Key, Value],
-    ObjectSlot[FrozenDict[Key, Value]],
 ):
     """Provide slotted frozen dict-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __frozen__(  # type: ignore[override]
-        self: Self,
-    ) -> FrozenDict[Key, Value]:
-        return self._slot
 
     @setdoc.basic
     def __init__(
@@ -882,16 +886,12 @@ class MutableListLike[Item](
 
 
 class FrozenListSlot[Item](
+    FrozenObjectSlot[tuple[Item, ...]],
     FrozenListLike[Item],
-    ObjectSlot[tuple[Item, ...]],
 ):
     """Provide slotted frozen list-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __frozen__(self: Self) -> tuple[Item, ...]:
-        return self._slot
 
     @setdoc.basic
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
