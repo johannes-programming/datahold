@@ -31,8 +31,10 @@ class TestName(unittest.TestCase):
         # all
         datatype = getattr(datahold, name)
         self.assertEqual(datatype.__name__, name)
+        self.assertTrue(issubclass(datatype, datahold.Object))
         if "Object" in name:
             return
+        self.assertTrue(issubclass(datatype, datahold.Collection))
         self.assertTrue(hasattr(datatype, "__Frozen__"))
         self.assertTrue(hasattr(datatype, "__frozen__"))
         # frozen

@@ -23,6 +23,7 @@ __all__: list[str] = [
     "MutableSet",
     "MutableSetLike",
     "MutableSetSlot",
+    "Object",
     "Sequence",
     "Set",
     "SetLike",

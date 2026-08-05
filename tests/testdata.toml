@@ -1,4 +1,5 @@
-[datatypes.Collection]
+[datatypes.Collection.issubclass]
+"datahold.Object" = true
 
 [datatypes.DictLike.attributes]
 __or__ = "datahold.DictLike"
@@ -255,6 +256,9 @@ generic = 1
 __init__ = "datahold.MutableObjectLike"
 copy = "datahold.MutableObjectLike"
 
+[datatypes.MutableObjectLike.issubclass]
+"datahold.Object" = true
+
 [datatypes.MutableSequence.attributes]
 __Frozen__ = "datahold.Sequence"
 __Mutable__ = "datahold.MutableSequence"
@@ -289,6 +293,8 @@ copy = "datahold.MutableObjectLike"
 "datahold.Collection" = true
 "datahold.MutableSet" = true
 "datahold.MutableSetLike" = true
+
+[datatypes.Object]
 
 [datatypes.Sequence]
 
