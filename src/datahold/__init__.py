@@ -166,6 +166,7 @@ class MutableSequence_Mutable[Item](Protocol):
 
 ### TYPE ALIASES ###
 
+type Dict[Key, Value] = dict[Key | str, Optional[Value]]
 
 type DictInit[Key, Value] = (
     SupportsKeysAndGetitem[Key | str, Optional[Value]]
@@ -433,7 +434,7 @@ class MutableMapping[Key: abc.Hashable, Value](
     @setdoc.basic
     def __mutate__(
         self: Self,
-    ) -> ContextManager[dict[Key | str, Optional[Value]]]: ...
+    ) -> ContextManager[Dict[Key, Value]]: ...
     @setdoc.basic
     def __setitem__(
         self: Self, key: Key | str, value: Optional[Value], /
@@ -506,9 +507,7 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 
 class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value],
-    MutableObjectLike[
-        FrozenDict[Key, Value], dict[Key | str, Optional[Value]]
-    ],
+    MutableObjectLike[FrozenDict[Key, Value], Dict[Key, Value]],
     MutableMapping[Key, Value],
 ):
     """Provide abc for custom mutable dict-like."""
@@ -591,8 +590,8 @@ class MutableDictSlot[Key: abc.Hashable, Value](
     def __mutate__(
         self: Self,
         /,
-    ) -> abc.Generator[dict[Key | str, Optional[Value]], None, None]:
-        slot: dict[Key | str, Optional[Value]]
+    ) -> abc.Generator[Dict[Key, Value], None, None]:
+        slot: Dict[Key, Value]
         slot = dict(getattr(self, "_slot", ()))
         yield slot
         self._slot = frozendict(slot)
