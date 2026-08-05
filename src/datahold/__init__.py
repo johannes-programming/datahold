@@ -18,6 +18,7 @@ __all__: list[str] = [
     "MutableListLike",
     "MutableListSlot",
     "MutableMapping",
+    "MutableObject",
     "MutableObjectLike",
     "MutableSequence",
     "MutableSet",

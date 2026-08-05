@@ -47,6 +47,7 @@ class TestName(unittest.TestCase):
         if prefix == "Mutable":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
             self.assertTrue(hasattr(datatype, "__mutate__"))
+            self.assertTrue(issubclass(datatype, datahold.MutableObject))
             ancestor = getattr(datahold, name[7:], object)
             self.assertTrue(issubclass(datatype, ancestor))
         # no prefix

@@ -244,6 +244,9 @@ generic = 1
 "collections.abc.MutableMapping" = true
 "datahold.Mapping" = true
 
+[datatypes.MutableObject.issubclass]
+"datahold.Object" = true
+
 [datatypes.MutableObjectLike.attributes]
 __init__ = "datahold.MutableObjectLike"
 copy = "datahold.MutableObjectLike"
