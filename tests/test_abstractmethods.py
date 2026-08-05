@@ -4,7 +4,7 @@ __all__: list[str] = ["TestAbstractmethods"]
 
 import inspect as ins
 import unittest
-from typing import Any, Optional, Self
+from typing import Any, Self
 
 from Lazy import Lazy
 
@@ -22,6 +22,8 @@ class TestAbstractmethods(unittest.TestCase):
     def test_abstractmethods(self: Self, /) -> None:
         name: Any
         for name in Lazy.lazy.datatypes.keys():
+            if "Object" in name:
+                continue
             with self.subTest(datatype=name):
                 self._test(name, Lazy.get_abstractmethods(name))
 

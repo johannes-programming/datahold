@@ -18,6 +18,7 @@ __all__: list[str] = [
     "MutableListLike",
     "MutableListSlot",
     "MutableMapping",
+    "MutableObjectLike",
     "MutableSequence",
     "MutableSet",
     "MutableSetLike",
@@ -177,6 +178,8 @@ type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
 class MutableObjectLike(metaclass=ABCMeta):
+    """Provide abc for custom mutable object."""
+
     __slots__ = ()
 
     @abstractmethod

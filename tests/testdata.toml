@@ -185,11 +185,13 @@ generic = 1
 [datatypes.MutableDictLike.attributes]
 __ior__ = "datahold.MutableDictLike"
 __or__ = "datahold.DictLike"
+copy = "datahold.MutableObjectLike"
 
 [datatypes.MutableDictLike.issubclass]
 "collections.abc.Mapping" = true
 "collections.abc.MutableMapping" = true
 "datahold.MutableMapping" = true
+"datahold.MutableObjectLike" = true
 
 [datatypes.MutableDictSlot.issubclass]
 "collections.abc.Mapping" = true
@@ -207,6 +209,7 @@ __mutate__ = "datahold.MutableListLike"
 __reversed__ = "collections.abc.Sequence"
 append = "collections.abc.MutableSequence"
 clear = "collections.abc.MutableSequence"
+copy = "datahold.MutableObjectLike"
 count = "collections.abc.Sequence"
 extend = "collections.abc.MutableSequence"
 foo = ""
@@ -221,6 +224,7 @@ reverse = "collections.abc.MutableSequence"
 "collections.abc.Hashable" = false
 "collections.abc.MutableMapping" = false
 "collections.abc.MutableSequence" = true
+"datahold.MutableObjectLike" = true
 "datahold.MutableSequence" = true
 
 [datatypes.MutableListLike.nested]
@@ -247,6 +251,10 @@ generic = 1
 "collections.abc.MutableMapping" = true
 "datahold.Mapping" = true
 
+[datatypes.MutableObjectLike.attributes]
+__init__ = "datahold.MutableObjectLike"
+copy = "datahold.MutableObjectLike"
+
 [datatypes.MutableSequence.attributes]
 __Frozen__ = "datahold.Sequence"
 __Mutable__ = "datahold.MutableSequence"
@@ -263,11 +271,15 @@ sort = ""
 "collections.abc.Set" = true
 "datahold.Collection" = true
 
+[datatypes.MutableSetLike.attributes]
+copy = "datahold.MutableObjectLike"
+
 [datatypes.MutableSetLike.issubclass]
 "collections.abc.Hashable" = false
 "collections.abc.MutableSet" = true
 "collections.abc.Set" = true
 "datahold.Collection" = true
+"datahold.MutableObjectLike" = true
 "datahold.MutableSet" = true
 "datahold.SetLike" = true
 
