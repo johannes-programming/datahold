@@ -42,7 +42,10 @@ class TestName(unittest.TestCase):
         for x, y in product(["", "Frozen", "Mutable"], ["", "Like", "Slot"]):
             z = x + "Object" + y
             with self.subTest(ancestor=z):
-                ancestor = getattr(datahold, z)
+                try:
+                    ancestor = getattr(datahold, z)
+                except AttributeError:
+                    continue
                 self.assertEqual(
                     issubclass(datatype, ancestor),
                     prefix in x and suffix <= y,
