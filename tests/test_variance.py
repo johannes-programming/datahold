@@ -2,7 +2,7 @@
 
 import unittest
 
-from datahold import FrozenListLike, FrozenListSlot, ListLike, ListSlot
+from datahold import FrozenListLike, FrozenListSlot, ListLike
 
 
 class Animal:
@@ -23,12 +23,6 @@ def cast_ListLikeAnimal(
 def cast_FrozenListLikeAnimal(
     x: FrozenListLike[Bear],
 ) -> FrozenListLike[Animal]:
-    return x
-
-
-def cast_ListSlotAnimal(
-    x: ListSlot[Bear],
-) -> ListSlot[Animal]:
     return x
 
 

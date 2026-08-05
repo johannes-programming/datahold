@@ -7,10 +7,6 @@ __or__ = "datahold.DictLike"
 "collections.abc.Mapping" = true
 "datahold.Mapping" = true
 
-[datatypes.DictSlot.issubclass]
-"collections.abc.Mapping" = true
-"datahold.DictLike" = true
-
 [datatypes.FrozenDictLike.issubclass]
 "collections.abc.Hashable" = true
 "datahold.Mapping" = true
@@ -182,13 +178,6 @@ __Mutable__ = ""
 [datatypes.ListLike.varia]
 generic = 1
 
-[datatypes.ListSlot.nested]
-__Frozen__ = "builtins.tuple"
-__Mutable__ = ""
-
-[datatypes.ListSlot.varia]
-generic = 1
-
 [datatypes.Mapping.issubclass]
 "collections.abc.Mapping" = true
 "datahold.Collection" = true
@@ -288,7 +277,6 @@ sort = ""
 "datahold.Collection" = true
 "datahold.MutableSet" = true
 "datahold.MutableSetLike" = true
-"datahold.SetSlot" = true
 
 [datatypes.Sequence]
 
@@ -300,11 +288,6 @@ sort = ""
 "collections.abc.Set" = true
 "datahold.Collection" = true
 "datahold.Set" = true
-"datahold.SetLike" = true
-
-[datatypes.SetSlot.issubclass]
-"collections.abc.Set" = true
-"datahold.Collection" = true
 "datahold.SetLike" = true
 
 [non_datatypes]

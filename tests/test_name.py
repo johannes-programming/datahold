@@ -40,17 +40,15 @@ class TestName(unittest.TestCase):
             self.assertTrue(issubclass(datatype, abc.Hashable))
             self.assertFalse(hasattr(datatype, "__Mutable__"))
             self.assertFalse(hasattr(datatype, "__mutate__"))
-            self.assertTrue(
-                issubclass(datatype, Lazy.get_import("datahold." + name[6:]))
-            )
+            ancestor = getattr(datahold, name[6:], object)
+            self.assertTrue(issubclass(datatype, ancestor))
         # mutable
         if prefix == "Mutable":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
             self.assertTrue(hasattr(datatype, "__Mutable__"))
             self.assertTrue(hasattr(datatype, "__mutate__"))
-            self.assertTrue(
-                issubclass(datatype, Lazy.get_import("datahold." + name[7:]))
-            )
+            ancestor = getattr(datahold, name[7:], object)
+            self.assertTrue(issubclass(datatype, ancestor))
         # no prefix
         if prefix == "":
             self.assertIn(datatype.__hash__, [None, object.__hash__])
@@ -62,11 +60,8 @@ class TestName(unittest.TestCase):
         # slot
         if suffix == "Slot":
             self.assertTrue(hasattr(datatype, "__init__"))
-            self.assertTrue(
-                issubclass(
-                    datatype, Lazy.get_import("datahold." + name[:-4] + "Like")
-                )
-            )
+            ancestor = getattr(datahold, name[:-4] + "Like")
+            self.assertTrue(issubclass(datatype, ancestor))
         # no suffix
         if suffix == "":
             self.assertIs(datatype.__init__, object.__init__)
