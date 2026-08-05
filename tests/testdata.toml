@@ -289,6 +289,9 @@ copy = "datahold.MutableObjectLike"
 
 [datatypes.Object]
 
+[datatypes.ObjectSlot.issubclass]
+"datahold.Object" = true
+
 [datatypes.Sequence]
 
 [datatypes.Set.issubclass]

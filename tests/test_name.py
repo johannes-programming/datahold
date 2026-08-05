@@ -60,6 +60,7 @@ class TestName(unittest.TestCase):
         # slot
         if suffix == "Slot":
             self.assertTrue(hasattr(datatype, "__init__"))
+            self.assertTrue(issubclass(datatype, datahold.ObjectSlot))
             ancestor = getattr(datahold, name[:-4] + "Like")
             self.assertTrue(issubclass(datatype, ancestor))
         # no suffix
