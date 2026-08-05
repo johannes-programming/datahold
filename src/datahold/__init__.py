@@ -30,7 +30,7 @@ __all__: list[str] = [
     "SetSlot",
 ]
 
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
@@ -83,6 +83,19 @@ type DictInit[Key, Value] = (
 type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
 
 
+### OBJECT ###
+
+
+class Object[Frozen](metaclass=ABCMeta):
+    """Provide abc for custom object."""
+
+    __slots__ = ()
+
+    @abstractmethod
+    @setdoc.basic
+    def __frozen__(self: Self, /) -> Frozen: ...
+
+
 ### COLLECTION ###
 
 
@@ -96,6 +109,7 @@ class Collection_Frozen[Item](
 
 
 class Collection[Item](
+    Object[Collection_Frozen[Item]],
     abc.Sized,
     abc.Iterable[Item],
     abc.Container[object],

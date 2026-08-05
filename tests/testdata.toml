@@ -1,4 +1,6 @@
-[datatypes.Collection]
+[datatypes.Collection.issubclass]
+"collections.abc.Collection" = true
+"datahold.Object" = true
 
 [datatypes.DictLike.attributes]
 __or__ = "datahold.DictLike"
