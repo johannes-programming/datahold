@@ -3,9 +3,11 @@
 
 [datatypes.DictLike.attributes]
 __or__ = "datahold.DictLike"
+__reversed__ = "datahold.DictLike"
 
 [datatypes.DictLike.issubclass]
 "collections.abc.Mapping" = true
+"collections.abc.Reversible" = true
 "datahold.Mapping" = true
 
 [datatypes.FrozenDictLike.issubclass]
@@ -182,6 +184,9 @@ index = "collections.abc.Sequence"
 
 [datatypes.ListLike.varia]
 generic = 1
+
+[datatypes.Mapping.attributes]
+__reversed__ = "collections.abc.Mapping"
 
 [datatypes.Mapping.issubclass]
 "collections.abc.Mapping" = true

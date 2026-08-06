@@ -16,11 +16,21 @@ class TestAll(unittest.TestCase):
             Lazy.lazy.non_datatypes.keys() & Lazy.lazy.datatypes.keys()
         )
 
+    def test_len(self: Self, /) -> None:
+        self.assertEqual(
+            len(datahold.__all__),
+            len(set(datahold.__all__)),
+        )
+
     def test_or(self: Self, /) -> None:
         self.assertSetEqual(
             Lazy.lazy.non_datatypes.keys() | Lazy.lazy.datatypes.keys(),
             set(datahold.__all__),
         )
+
+    def test_type(self: Self, /) -> None:
+        self.assertIs(type(datahold.__all__), list)
+        self.assertFalse({type(x) for x in datahold.__all__} - {str})
 
 
 if __name__ == "__main__":

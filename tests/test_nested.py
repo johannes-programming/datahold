@@ -24,7 +24,7 @@ class TestNested(unittest.TestCase):
             with self.subTest(nested=x, solution=y):
                 self._test(datatype, nestedname=x, solutionname=y)
 
-    def test_nested(self: Self) -> None:
+    def test_nested(self: Self, /) -> None:
         datatype: Any
         for typename, info in Lazy.lazy.datatypes.items():
             with self.subTest(typename=typename):

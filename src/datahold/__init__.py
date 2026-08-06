@@ -165,7 +165,8 @@ class MutableSequence_Mutable[Item](Protocol):
 type Dict[Key, Value] = dict[Key | str, Value | None]
 
 type Dict_Init[Key, Value] = (
-    SupportsKeysAndGetitem[Key | str, Value | None]
+    SupportsKeysAndGetitem[Key, Value | None]
+    | SupportsKeysAndGetitem[Key | str, Value | None]
     | abc.Iterable[tuple[Key | str, Value | None]]
 )
 
@@ -462,9 +463,11 @@ class Mapping[Key: abc.Hashable, Value](
             raise KeyError(key) from None
 
     @overload
-    def get(self, key: object) -> Value | None: ...
+    def get(self, key: object, /) -> Value | None: ...
     @overload
-    def get[Value_](self, key: object, default: Value_) -> Value | Value_: ...
+    def get[Value_](
+        self, key: object, default: Value_, /
+    ) -> Value | Value_: ...
     @setdoc.basic
     def get[Value_](
         self: Self, key: object, default: Value_ | None = None
@@ -507,6 +510,7 @@ class MutableMapping[Key: abc.Hashable, Value](
 
 class DictLike[Key: abc.Hashable, Value](
     Mapping[Key | str, Value | None],
+    abc.Reversible[Key | str],
 ):
     """Provide abc for custom dict-like."""
 
@@ -525,19 +529,23 @@ class DictLike[Key: abc.Hashable, Value](
         **kwargs: Value,
     ): ...
     @setdoc.basic
-    def __or__[Key_, Value_](
+    def __or__[Key_: abc.Hashable, Value_](
         self: Self,
         other: Dict_Init[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
-        data: FrozenDict[Key, Value]
+        other_: FrozenDict[Key, Value]
         try:
-            data = frozendict(other)  # type: ignore[arg-type]
+            other_ = frozendict(other)  # type: ignore[arg-type]
         except TypeError:
             return NotImplemented
         return type(self)(  # type: ignore[return-value]
-            self.__frozen__() | data
+            self.__frozen__() | other_
         )
+
+    @setdoc.basic
+    def __reversed__(self: Self, /) -> abc.Iterator[Key | str]:
+        yield from reversed(self.__frozen__())
 
     @classmethod
     @setdoc.basic
@@ -583,7 +591,10 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
         **kwargs: Value | None,
     ):
-        self.update(other, **kwargs)
+        self.update(
+            other,  # type: ignore[arg-type]
+            **kwargs,
+        )
 
     @setdoc.basic
     def __ior__(  # type: ignore[override]
@@ -592,7 +603,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
     ) -> Self:
         with self.__mutate__() as mutable:
-            mutable |= other
+            mutable |= other  # type: ignore[arg-type]
         return self
 
     @setdoc.basic
@@ -622,7 +633,10 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
         /,
         **kwargs: Value | None,
     ) -> None:
-        self._slot = frozendict(other, **kwargs)  # type: ignore[arg-type]
+        self._slot = frozendict(
+            other,  # type: ignore[arg-type]
+            **kwargs,
+        )
 
 
 class MutableDictSlot[Key: abc.Hashable, Value](
