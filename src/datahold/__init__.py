@@ -79,7 +79,7 @@ class Collection_Frozen[Item](
     def __contains__(self: Self, other: Never, /) -> bool: ...
 
 
-class MutableSet_Mutable[Item: abc.Hashable](Protocol):
+class SupportsAddAndDiscard[Item: abc.Hashable](Protocol):
     @setdoc.basic
     def add(self: Self, item: Item, /) -> object: ...
     @setdoc.basic
@@ -89,14 +89,14 @@ class MutableSet_Mutable[Item: abc.Hashable](Protocol):
 class Mapping_Frozen[Key, Value](Collection_Frozen[Key], Protocol):
     @setdoc.basic
     def __getitem__(self: Self, key: Never, /) -> Value: ...
-class MutableMapping_Mutable[Key_, Value_](
+class SupportsDelitemAndSetitem[Key, Value](
     Protocol,
 ):
     @setdoc.basic
-    def __delitem__(self: Self, key: Key_ | str, /) -> object: ...
+    def __delitem__(self: Self, key: Key | str, /) -> object: ...
     @setdoc.basic
     def __setitem__(
-        self: Self, key: Key_ | str, value: Value_ | None, /
+        self: Self, key: Key | str, value: Value | None, /
     ) -> object: ...
 class Sequence_Frozen[Item](
     Collection_Frozen[Item],
@@ -291,7 +291,7 @@ class Set[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
 class MutableSet[Item: abc.Hashable](
     Set[Item],
     abc.MutableSet[Item],
-    MutableObject[Collection_Frozen[Item], MutableSet_Mutable[Item]],
+    MutableObject[Collection_Frozen[Item], SupportsAddAndDiscard[Item]],
 ):
     """Provide abc for custom mutable set."""
 
@@ -480,7 +480,10 @@ class Mapping[Key: abc.Hashable, Value](
 class MutableMapping[Key: abc.Hashable, Value](
     Mapping[Key, Value],
     abc.MutableMapping[Key | str, Value | None],
-    MutableObject[FrozenDict[Key, Value], Dict[Key, Value]],
+    MutableObject[
+        Mapping_Frozen[Key | str, Value | None],
+        SupportsDelitemAndSetitem[Key | str, Value | None],
+    ],
 ):
     """Provide abc for custom mutable mapping."""
 
