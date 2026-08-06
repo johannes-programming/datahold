@@ -1,3 +1,30 @@
+__all__: list[str] = [
+    "TestMethodClear",
+    "TestMethodCopy",
+    "TestMethodFromKeys",
+    "TestMethodGet",
+    "TestMethodItems",
+    "TestMethodKeys",
+    "TestMethodPop",
+    "TestMethodPopItem",
+    "TestMethodSetDefault",
+    "TestMethodUpdate",
+    "TestMethodValues",
+    "TestOperatorContains",
+    "TestOperatorDelItem",
+    "TestOperatorEqual",
+    "TestOperatorGetItem",
+    "TestOperatorInPlaceUnion",
+    "TestOperatorIteration",
+    "TestOperatorLength",
+    "TestOperatorNotEqual",
+    "TestOperatorReversed",
+    "TestOperatorReverseUnion",
+    "TestOperatorSetItem",
+    "TestOperatorTruthiness",
+]
+
+
 import unittest
 from collections import abc
 from typing import Any, Self
@@ -5,7 +32,7 @@ from typing import Any, Self
 from datahold import MutableDictSlot
 
 
-class TestClear(unittest.TestCase):
+class TestMethodClear(unittest.TestCase):
     def test_clear_removes_all_entries(self: Self, /) -> None:
         value: MutableDictSlot[Any, Any]
         value = MutableDictSlot({"a": 1, "b": 2})
@@ -40,7 +67,7 @@ class TestClear(unittest.TestCase):
         self.assertEqual(list(items_view), [])
 
 
-class TestCopy(unittest.TestCase):
+class TestMethodCopy(unittest.TestCase):
     def test_copy_has_equal_contents(self: Self, /) -> None:
         copied: MutableDictSlot[Any, Any]
         original: MutableDictSlot[Any, Any]
@@ -79,7 +106,7 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(copied, {"a": 2, "b": 3})
 
 
-class TestFromKeys(unittest.TestCase):
+class TestMethodFromKeys(unittest.TestCase):
     def test_fromkeys_uses_none_by_default(self: Self, /) -> None:
         result: MutableDictSlot[Any, Any]
         result = MutableDictSlot.fromkeys(["a", "b", "c"])
@@ -109,7 +136,7 @@ class TestFromKeys(unittest.TestCase):
         self.assertEqual(result["b"], [1])
 
 
-class TestGet(unittest.TestCase):
+class TestMethodGet(unittest.TestCase):
     def test_get_returns_existing_value(self: Self, /) -> None:
         value: MutableDictSlot[Any, Any]
         value = MutableDictSlot({"a": 1})
@@ -140,7 +167,7 @@ class TestGet(unittest.TestCase):
         self.assertEqual(value, {"a": 1})
 
 
-class TestItems(unittest.TestCase):
+class TestMethodItems(unittest.TestCase):
     def test_items_contains_key_value_pairs(self: Self, /) -> None:
         result: abc.Collection[Any]
         value: MutableDictSlot[Any, Any]
@@ -180,7 +207,7 @@ class TestItems(unittest.TestCase):
         self.assertNotIn(("missing", 1), result)
 
 
-class TestKeys(unittest.TestCase):
+class TestMethodKeys(unittest.TestCase):
     def test_keys_contains_all_keys(self: Self, /) -> None:
         result: abc.Collection[Any]
         value: MutableDictSlot[Any, Any]
@@ -220,7 +247,7 @@ class TestKeys(unittest.TestCase):
         self.assertNotIn(1, result)
 
 
-class TestPop(unittest.TestCase):
+class TestMethodPop(unittest.TestCase):
     def test_pop_returns_and_removes_existing_value(self: Self, /) -> None:
         result: Any
         value: MutableDictSlot[Any, Any]
@@ -256,7 +283,7 @@ class TestPop(unittest.TestCase):
         self.assertEqual(value, {})
 
 
-class TestPopItem(unittest.TestCase):
+class TestMethodPopItem(unittest.TestCase):
     def test_popitem_removes_last_inserted_pair(self: Self, /) -> None:
         result: tuple[Any, Any]
         value: MutableDictSlot[Any, Any]
@@ -295,7 +322,7 @@ class TestPopItem(unittest.TestCase):
         self.assertEqual(value, {})
 
 
-class TestSetDefault(unittest.TestCase):
+class TestMethodSetDefault(unittest.TestCase):
     def test_setdefault_returns_existing_value(self: Self, /) -> None:
         result: Any
         value: MutableDictSlot[Any, Any]
@@ -335,7 +362,7 @@ class TestSetDefault(unittest.TestCase):
         self.assertEqual(value["a"], [1])
 
 
-class TestUpdate(unittest.TestCase):
+class TestMethodUpdate(unittest.TestCase):
     def test_update_from_mapping(self: Self, /) -> None:
         value: MutableDictSlot[Any, Any]
         value = MutableDictSlot({"a": 1})
@@ -363,7 +390,7 @@ class TestUpdate(unittest.TestCase):
         self.assertEqual(value, {"a": 10, "b": 20, "c": 30})
 
 
-class TestValues(unittest.TestCase):
+class TestMethodValues(unittest.TestCase):
     def test_values_contains_all_values(self: Self, /) -> None:
         result: Any
         value: MutableDictSlot[Any, Any]
@@ -398,6 +425,288 @@ class TestValues(unittest.TestCase):
         result = list(value.values())
         self.assertEqual(result, [1, 1, 2])
         self.assertEqual(result.count(1), 2)
+
+
+class TestOperatorGetItem(unittest.TestCase):
+    def test_existing_key(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"name": "Alice"})
+        self.assertEqual(slot["name"], "Alice")
+
+    def test_missing_key_raises_key_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"name": "Alice"})
+        with self.assertRaises(KeyError):
+            _ = slot["missing"]
+
+    def test_none_value(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"value": None})
+        self.assertIsNone(slot["value"])
+
+    def test_unhashable_key_raises_type_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        with self.assertRaises(Exception):
+            _ = slot[["unhashable"]]
+
+
+class TestOperatorSetItem(unittest.TestCase):
+    def test_adds_new_key(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        slot["name"] = "Alice"
+        self.assertEqual(slot, {"name": "Alice"})
+
+    def test_replaces_existing_value(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"count": 1})
+        slot["count"] = 2
+        self.assertEqual(slot["count"], 2)
+
+    def test_accepts_none_value(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        slot["value"] = None
+        self.assertIn("value", slot)
+        self.assertIsNone(slot["value"])
+
+    def test_unhashable_key_raises_type_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        with self.assertRaises(TypeError):
+            slot[["unhashable"]] = "value"
+
+
+class TestOperatorDelItem(unittest.TestCase):
+    def test_deletes_existing_key(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1, "b": 2})
+        del slot["a"]
+        self.assertEqual(slot, {"b": 2})
+
+    def test_missing_key_raises_key_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        with self.assertRaises(KeyError):
+            del slot["missing"]
+
+    def test_delete_only_item_makes_empty(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        del slot["a"]
+        self.assertEqual(slot, {})
+
+    def test_unhashable_key_raises_type_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        with self.assertRaises(TypeError):
+            del slot[["unhashable"]]
+
+
+class TestOperatorContains(unittest.TestCase):
+    def test_existing_key_is_contained(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        self.assertIn("a", slot)
+
+    def test_missing_key_is_not_contained(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        self.assertNotIn("b", slot)
+
+    def test_values_are_not_checked(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": "value"})
+        self.assertNotIn("value", slot)
+
+    def test_unhashable_key_raises_type_error(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        self.assertFalse(["unhashable"] in slot)
+
+
+class TestOperatorEqual(unittest.TestCase):
+    def test_equal_contents(self: Self, /) -> None:
+        x: MutableDictSlot[str, int]
+        y: MutableDictSlot[str, int]
+        x = MutableDictSlot({"a": 1, "b": 2})
+        y = MutableDictSlot({"a": 1, "b": 2})
+        self.assertTrue(x == x)
+        self.assertTrue(x == y)
+
+    def test_order_does_not_affect_equality(self: Self, /) -> None:
+        x: MutableDictSlot[str, int]
+        y: MutableDictSlot[str, int]
+        x = MutableDictSlot({"a": 1, "b": 2})
+        y = MutableDictSlot({"b": 2, "a": 1})
+        self.assertTrue(x == y)
+
+    def test_equal_to_plain_dict(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertTrue(slot == {"a": 1})
+
+    def test_different_values_are_not_equal(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertFalse(slot == {"a": 2})
+
+
+class TestOperatorNotEqual(unittest.TestCase):
+    def test_different_values(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertTrue(slot != {"a": 2})
+
+    def test_different_keys(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertTrue(slot != {"b": 1})
+
+    def test_different_lengths(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertTrue(slot != {"a": 1, "b": 2})
+
+    def test_identical_contents_are_not_unequal(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot[str, int]({"a": 1})
+        self.assertFalse(slot != {"a": 1})
+
+
+class TestOperatorInPlaceUnion(unittest.TestCase):
+    def test_adds_distinct_keys(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        slot |= {"b": 2}
+        self.assertEqual(slot, {"a": 1, "b": 2})
+
+    def test_overrides_duplicate_key(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        slot |= {"a": 2}
+        self.assertEqual(slot, {"a": 2})
+
+    def test_preserves_object_identity(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        original_id = id(slot)
+        slot |= {"b": 2}
+        self.assertEqual(id(slot), original_id)
+
+    def test_accepts_iterable_of_pairs(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        slot |= [("b", 2), ("c", 3)]
+        self.assertEqual(slot, {"a": 1, "b": 2, "c": 3})
+
+
+class TestOperatorIteration(unittest.TestCase):
+    def test_iterates_over_keys(self: Self, /) -> None:
+        slot: MutableDictSlot[str, int]
+        slot = MutableDictSlot({"a": 1, "b": 2})
+        self.assertEqual(list(slot), ["a", "b"])
+
+    def test_empty_slot_has_no_iterations(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        self.assertEqual(list(slot), [])
+
+    def test_iteration_preserves_insertion_order(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        slot["third"] = 3
+        slot["first"] = 1
+        slot["second"] = 2
+        self.assertEqual(list(slot), ["third", "first", "second"])
+
+    def test_size_change_during_iteration_raises_runtime_error(
+        self: Self, /
+    ) -> None:
+        init: list[tuple[str, int]]
+        x: dict[str, int]
+        x_iter: abc.Iterator[str]
+        x_next: str
+        y: MutableDictSlot[str, int]
+        y_iter: abc.Iterator[str]
+        y_next: str
+        init = [("a", 1), ("b", 2)]
+        x = dict(init)
+        y = MutableDictSlot(init)
+        x_iter = iter(x)
+        y_iter = iter(y)
+        x_next = next(x_iter)
+        y_next = next(y_iter)
+        self.assertEqual(x_next, y_next)
+        x["c"] = 3
+        y["c"] = 3
+        self.assertListEqual(list(x), list(y))
+        self.assertListEqual(list("abc"), list(y))
+
+
+class TestOperatorReversed(unittest.TestCase):
+    def test_reverses_key_order(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1, "b": 2, "c": 3})
+        self.assertEqual(list(reversed(slot)), ["c", "b", "a"])
+
+    def test_empty_slot_reverses_to_empty(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        self.assertEqual(list(reversed(slot)), [])
+
+    def test_single_key(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        self.assertEqual(list(reversed(slot)), ["a"])
+
+    def test_replacing_value_does_not_change_order(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1, "b": 2})
+        slot["a"] = 3
+        self.assertEqual(list(reversed(slot)), ["b", "a"])
+
+
+class TestOperatorLength(unittest.TestCase):
+    def test_empty_length(self: Self, /) -> None:
+        self.assertEqual(len(MutableDictSlot()), 0)
+
+    def test_nonempty_length(self: Self, /) -> None:
+        x: MutableDictSlot[str, int]
+        x = MutableDictSlot({"a": 1, "b": 2})
+        self.assertEqual(len(x), 2)
+
+    def test_replacing_value_does_not_change_length(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        slot["a"] = 2
+        self.assertEqual(len(slot), 1)
+
+    def test_adding_and_deleting_changes_length(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot()
+        slot["a"] = 1
+        slot["b"] = 2
+        del slot["a"]
+        self.assertEqual(len(slot), 1)
+
+
+class TestOperatorTruthiness(unittest.TestCase):
+    def test_empty_slot_is_false(self: Self, /) -> None:
+        self.assertFalse(MutableDictSlot())
+
+    def test_nonempty_slot_is_true(self: Self, /) -> None:
+        self.assertTrue(MutableDictSlot({"a": 1}))
+
+    def test_false_value_still_makes_slot_true(self: Self, /) -> None:
+        self.assertTrue(MutableDictSlot({"a": False}))
+
+    def test_deleting_last_key_makes_slot_false(self: Self, /) -> None:
+        slot: MutableDictSlot[Any, Any]
+        slot = MutableDictSlot({"a": 1})
+        del slot["a"]
+        self.assertFalse(slot)
 
 
 if __name__ == "__main__":

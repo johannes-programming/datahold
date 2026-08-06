@@ -531,17 +531,15 @@ class DictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __or__[Key_: abc.Hashable, Value_](
         self: Self,
-        other: Dict_Init[Key_, Value_],
+        other: DictLike[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
-        other_: FrozenDict[Key, Value]
-        try:
-            other_ = frozendict(other)  # type: ignore[arg-type]
-        except TypeError:
+        if isinstance(other, DictLike):
+            return type(self)(  # type: ignore[return-value]
+                self.__frozen__() | other  # type: ignore[operator]
+            )
+        else:
             return NotImplemented
-        return type(self)(  # type: ignore[return-value]
-            self.__frozen__() | other_
-        )
 
     @setdoc.basic
     def __reversed__(self: Self, /) -> abc.Iterator[Key | str]:

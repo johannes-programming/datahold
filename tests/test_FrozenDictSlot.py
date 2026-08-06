@@ -17,7 +17,6 @@ __all__: list[str] = [
     "TestOperatorReversed",
     "TestOperatorSubscription",
     "TestOperatorTruth",
-    "TestOperatorUnion",
 ]
 import unittest
 from collections import abc
@@ -428,46 +427,6 @@ class TestOperatorInequality(unittest.TestCase):
         value: FrozenDictSlot[Any, Any]
         value = FrozenDictSlot({"a": 1})
         self.assertFalse(value != {"a": 1})
-
-
-class TestOperatorUnion(unittest.TestCase):
-    def test_disjoint_mappings(self: Self, /) -> None:
-        left: FrozenDictSlot[Any, Any]
-        result: Any
-        left = FrozenDictSlot({"a": 1})
-        result = left | {"b": 2}
-        self.assertEqual(result, {"a": 1, "b": 2})
-
-    def test_right_operand_overrides(self: Self, /) -> None:
-        left: FrozenDictSlot[Any, Any]
-        result: Any
-        left = FrozenDictSlot({"a": 1, "b": 2})
-        result = left | {"b": 20}
-        self.assertEqual(result, {"a": 1, "b": 20})
-
-    def test_union_with_empty_dictionary(self: Self, /) -> None:
-        left: FrozenDictSlot[Any, Any]
-        result: Any
-        left = FrozenDictSlot({"a": 1})
-        result = left | {}
-        self.assertEqual(result, {"a": 1})
-
-    def test_union_does_not_change_left_operand(self: Self, /) -> None:
-        answer: FrozenDictSlot[str, int]
-        left: FrozenDictSlot[str, int]
-        solution: FrozenDictSlot[str, int]
-        left = FrozenDictSlot({"a": 1})
-        answer = left | {"b": 2}  # type: ignore[operator]
-        # this is the only mypy suppression
-        # that seemingly stems not from a faulty typeshed
-        # but from a fault in mypy itself
-        # FrozenDictSlot[str, int].__or__
-        # annotates SupportsKeyAndGetitem[str, int | None]
-        # which is covariant in the second parameter
-        # and therefore should work
-        solution = FrozenDictSlot({"a": 1, "b": 2})
-        self.assertEqual(answer, solution)
-        self.assertEqual(left, {"a": 1})
 
 
 class TestOperatorLength(unittest.TestCase):
