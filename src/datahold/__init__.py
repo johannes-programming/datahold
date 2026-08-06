@@ -232,7 +232,7 @@ class ObjectSlot[Frozen](
     _slot: Frozen
 
 
-class FrozenObjectSlot[Frozen](
+class FrozenObjectSlot[Frozen: abc.Hashable](
     ObjectSlot[Frozen],
 ):
     """Provide slotted abc for custom frozen object-like."""
