@@ -172,7 +172,7 @@ class MutableSequence_Mutable[Item](Protocol):
 
 type Dict[Key, Value] = dict[Key | str, Optional[Value]]
 
-type DictInit[Key, Value] = (
+type Dict_Init[Key, Value] = (
     SupportsKeysAndGetitem[Key | str, Optional[Value]]
     | abc.Iterable[tuple[Key | str, Optional[Value]]]
 )
@@ -525,14 +525,14 @@ class DictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        other: DictInit[Key, Value] = (),
+        other: Dict_Init[Key, Value] = (),
         /,
         **kwargs: Value,
     ): ...
     @setdoc.basic
     def __or__[Key_, Value_](
         self: Self,
-        other: DictInit[Key_, Value_],
+        other: Dict_Init[Key_, Value_],
         /,
     ) -> DictLike[Key | Key_, Value | Value_]:
         data: FrozenDict[Key, Value]
@@ -584,7 +584,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        other: DictInit[Key, Value] = (),
+        other: Dict_Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ):
@@ -593,7 +593,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __ior__(  # type: ignore[override]
         self: Self,
-        other: DictInit[Key, Value],
+        other: Dict_Init[Key, Value],
         /,
     ) -> Self:
         with self.__mutate__() as mutable:
@@ -623,7 +623,7 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        other: DictInit[Key, Value] = (),
+        other: Dict_Init[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ) -> None:
