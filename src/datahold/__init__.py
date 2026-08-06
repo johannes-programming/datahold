@@ -95,7 +95,7 @@ class MutableSet_Mutable[Item: abc.Hashable](Protocol):
 
 class Mapping_Frozen[Key, Value](Collection_Frozen[Key], Protocol):
     @setdoc.basic
-    def __getitem__(self: Self, key: abc.Hashable, /) -> Value: ...
+    def __getitem__(self: Self, key: Never, /) -> Value: ...
 class MutableMapping_Mutable[Key_, Value_](
     Protocol,
 ):
@@ -449,8 +449,28 @@ class Mapping[Key: abc.Hashable, Value](
     @setdoc.basic
     def __frozen__(self: Self, /) -> Mapping_Frozen[Key, Value]: ...
     @setdoc.basic
-    def __getitem__(self: Self, key: abc.Hashable, /) -> Value:
-        return self.__frozen__()[key]
+    def __getitem__(self: Self, key: object, /) -> Value:
+        try:
+            return self.__frozen__()[key]  # type: ignore[index]
+        except TypeError:
+            raise KeyError(key) from None
+
+    @overload
+    def get(self, key: object) -> Optional[Value]: ...
+    @overload
+    def get(self, key: object, default: Value) -> Value: ...
+    @overload
+    def get[Value_](self, key: object, default: Value_) -> Value | Value_: ...
+    @setdoc.basic
+    def get[Value_](
+        self: Self, key: object, default: Optional[Value_] = None
+    ) -> Optional[Value | Value_]:
+        # this method is just as Mapping.get
+        # with the signature corrected
+        try:
+            return self[key]
+        except KeyError:
+            return default
 
 
 class MutableMapping[Key: abc.Hashable, Value](
@@ -487,8 +507,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> FrozenDict[Key, Value]:  # type: ignore[override]
-        ...
+    def __frozen__(self: Self, /) -> FrozenDict[Key, Value]: ...
 
     @abstractmethod
     @setdoc.basic
@@ -547,7 +566,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     __slots__ = ()
 
     @setdoc.basic
-    def __frozen__(  # type: ignore[override]
+    def __frozen__(
         self: Self,
         /,
     ) -> FrozenDict[Key, Value]:
@@ -585,7 +604,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
 ### DICT-SLOT ###
 
 
-class FrozenDictSlot[Key: abc.Hashable, Value](  # type: ignore[misc]
+class FrozenDictSlot[Key: abc.Hashable, Value](
     FrozenObjectSlot[FrozenDict[Key, Value]],
     FrozenDictLike[Key, Value],
 ):

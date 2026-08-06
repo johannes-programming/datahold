@@ -136,8 +136,7 @@ class TestGet(unittest.TestCase):
     def test_get_rejects_unhashable_key(self: Self) -> None:
         value: MutableDictSlot[Any, Any]
         value = MutableDictSlot({"a": 1})
-        with self.assertRaises(TypeError):
-            value.get([])
+        self.assertIsNone(value.get([]))
         self.assertEqual(value, {"a": 1})
 
 

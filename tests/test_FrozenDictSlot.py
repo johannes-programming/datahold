@@ -96,8 +96,7 @@ class TestGetMethod(unittest.TestCase):
         self.assertEqual(mapping.get(None), "none")
 
     def test_get_rejects_unhashable_key(self: Self) -> None:
-        with self.assertRaises(TypeError):
-            FrozenDictSlot().get([])  # type: ignore[call-overload]
+        self.assertIsNone(FrozenDictSlot().get([]))
 
     def test_get_rejects_too_many_arguments(self: Self) -> None:
         with self.assertRaises(TypeError):
