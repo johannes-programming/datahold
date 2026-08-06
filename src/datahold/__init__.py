@@ -9,6 +9,7 @@ __all__: list[str] = [
     "FrozenDictSlot",
     "FrozenListLike",
     "FrozenListSlot",
+    "FrozenObjectLike",
     "FrozenObjectSlot",
     "FrozenSetLike",
     "FrozenSetSlot",
