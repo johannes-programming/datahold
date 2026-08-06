@@ -205,6 +205,19 @@ class MutableObject[Frozen, Mutable](Object[Frozen]):
 ### OBJECT-LIKE ###
 
 
+class FrozenObjectLike[Frozen: abc.Hashable](
+    Object[Frozen],
+    abc.Hashable,
+):
+    """Provide abc for custom frozen object-like."""
+
+    __slots__ = ()
+
+    @setdoc.basic
+    def __hash__(self: Self, /) -> int:
+        return hash(self.__frozen__())
+
+
 class MutableObjectLike[Frozen, Mutable](
     MutableObject[Frozen, Mutable],
 ):
@@ -233,8 +246,8 @@ class ObjectSlot[Frozen](
 
 
 class FrozenObjectSlot[Frozen: abc.Hashable](
+    FrozenObjectLike[Frozen],
     ObjectSlot[Frozen],
-    abc.Hashable,
 ):
     """Provide slotted abc for custom frozen object-like."""
 
@@ -244,10 +257,6 @@ class FrozenObjectSlot[Frozen: abc.Hashable](
     @setdoc.basic
     def __frozen__(self: Self, /) -> Frozen:
         return self._slot
-
-    @setdoc.basic
-    def __hash__(self: Self, /) -> int:
-        return hash(self.__frozen__())
 
 
 ### COLLECTION ###
@@ -347,14 +356,13 @@ class SetLike[Item: abc.Hashable](Set[Item]):
         return type(self)(self.__frozen__().union(*others))
 
 
-class FrozenSetLike[Item: abc.Hashable](SetLike[Item], abc.Hashable):
+class FrozenSetLike[Item: abc.Hashable](
+    FrozenObjectLike[frozenset[Item]],
+    SetLike[Item],
+):
     """Provide abc for custom frozen set-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __hash__(self: Self, /) -> int:
-        return hash(self.__frozen__())
 
 
 class MutableSetLike[Item: abc.Hashable](
@@ -547,16 +555,12 @@ class DictLike[Key: abc.Hashable, Value](
 
 
 class FrozenDictLike[Key: abc.Hashable, Value](
+    FrozenObjectLike[FrozenDict[Key, Value]],
     DictLike[Key, Value],
-    abc.Hashable,
 ):
     """Provide abc for custom frozen dict-like."""
 
     __slots__ = ()
-
-    @setdoc.basic
-    def __hash__(self: Self, /) -> int:
-        return hash(self.__frozen__())
 
 
 class MutableDictLike[Key: abc.Hashable, Value](
@@ -821,7 +825,10 @@ class ListLike[Item](Sequence[Item]):
         return f"{type(self).__name__}({list(self)!r})"
 
 
-class FrozenListLike[Item](ListLike[Item], abc.Hashable):
+class FrozenListLike[Item](
+    FrozenObjectLike[tuple[Item, ...]],
+    ListLike[Item],
+):
     """Provide abc for custom frozen list-like."""
 
     __slots__ = ()
