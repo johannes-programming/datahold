@@ -442,10 +442,10 @@ class MutableSetSlot[Item](
         self: Self,
         /,
     ) -> abc.Generator[set[Item], None, None]:
-        slot: set[Item]
-        slot = set(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = frozenset(slot)
+        mutable: set[Item]
+        mutable = set(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozenset(mutable)
 
 
 ### MAPPING ###
@@ -644,10 +644,10 @@ class MutableDictSlot[Key: abc.Hashable, Value](
         self: Self,
         /,
     ) -> abc.Generator[Dict[Key, Value], None, None]:
-        slot: Dict[Key, Value]
-        slot = dict(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = frozendict(slot)
+        mutable: Dict[Key, Value]
+        mutable = dict(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozendict(mutable)
 
 
 ### SEQUENCE ###
@@ -939,6 +939,7 @@ class MutableListSlot[Item](
     @contextmanager
     @setdoc.basic
     def __mutate__(self: Self, /) -> abc.Generator[list[Item], None, None]:
-        slot = list(getattr(self, "_slot", ()))
-        yield slot
-        self._slot = tuple(slot)
+        mutable: list[Item]
+        mutable = list(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = tuple(mutable)
