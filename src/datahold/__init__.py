@@ -328,7 +328,7 @@ class SetLike[Item: abc.Hashable](Set[Item]):
     def __frozen__(self: Self, /) -> frozenset[Item]: ...
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
     @setdoc.basic
     def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
         return type(self)(self.__frozen__().difference(*others))
@@ -380,9 +380,9 @@ class MutableSetLike[Item: abc.Hashable](
             return frozenset(mutable)
 
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
         with self.__mutate__() as mutable:
-            mutable.update(data)
+            mutable.update(other)
 
     @setdoc.basic
     def difference_update(
@@ -423,8 +423,8 @@ class FrozenSetSlot[Item](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = frozenset(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self._slot = frozenset(other)
 
 
 class MutableSetSlot[Item](
@@ -524,7 +524,7 @@ class DictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        data: DictInit[Key, Value] = (),
+        other: DictInit[Key, Value] = (),
         /,
         **kwargs: Value,
     ): ...
@@ -583,11 +583,11 @@ class MutableDictLike[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        data: DictInit[Key, Value] = (),
+        other: DictInit[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ):
-        self.update(data, **kwargs)
+        self.update(other, **kwargs)
 
     @setdoc.basic
     def __ior__(  # type: ignore[override]
@@ -622,11 +622,11 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
     @setdoc.basic
     def __init__(
         self: Self,
-        data: DictInit[Key, Value] = (),
+        other: DictInit[Key, Value] = (),
         /,
         **kwargs: Optional[Value],
     ) -> None:
-        self._slot = frozendict(data, **kwargs)  # type: ignore[arg-type]
+        self._slot = frozendict(other, **kwargs)  # type: ignore[arg-type]
 
 
 class MutableDictSlot[Key: abc.Hashable, Value](
@@ -795,7 +795,7 @@ class ListLike[Item](Sequence[Item]):
 
     @abstractmethod
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
 
     @setdoc.basic
     def __le__(self: Self, other: ListLike[Any], /) -> bool:
@@ -872,9 +872,9 @@ class MutableListLike[Item](
         return self
 
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
         with self.__mutate__() as mutable:
-            mutable.extend(data)
+            mutable.extend(other)
 
     @overload
     @setdoc.basic
@@ -923,8 +923,8 @@ class FrozenListSlot[Item](
     __slots__ = ()
 
     @setdoc.basic
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = tuple(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self._slot = tuple(other)
 
 
 class MutableListSlot[Item](
