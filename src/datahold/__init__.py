@@ -37,15 +37,7 @@ from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
-from typing import (
-    Any,
-    Never,
-    Optional,
-    Protocol,
-    Self,
-    SupportsIndex,
-    overload,
-)
+from typing import Any, Never, Protocol, Self, SupportsIndex, overload
 
 import setdoc
 from frozendict import frozendict
@@ -104,7 +96,7 @@ class MutableMapping_Mutable[Key_, Value_](
     def __delitem__(self: Self, key: Key_ | str, /) -> object: ...
     @setdoc.basic
     def __setitem__(
-        self: Self, key: Key_ | str, value: Optional[Value_], /
+        self: Self, key: Key_ | str, value: Value_ | None, /
     ) -> object: ...
 class Sequence_Frozen[Item](
     Collection_Frozen[Item],
@@ -170,16 +162,16 @@ class MutableSequence_Mutable[Item](Protocol):
 
 ### TYPE ALIASES ###
 
-type Dict[Key, Value] = dict[Key | str, Optional[Value]]
+type Dict[Key, Value] = dict[Key | str, Value | None]
 
 type Dict_Init[Key, Value] = (
-    SupportsKeysAndGetitem[Key | str, Optional[Value]]
-    | abc.Iterable[tuple[Key | str, Optional[Value]]]
+    SupportsKeysAndGetitem[Key | str, Value | None]
+    | abc.Iterable[tuple[Key | str, Value | None]]
 )
 
-type FrozenDict[Key, Value] = frozendict[Key | str, Optional[Value]]
+type FrozenDict[Key, Value] = frozendict[Key | str, Value | None]
 
-type Slice[Index] = slice[Optional[Index], Optional[Index], Optional[Index]]
+type Slice[Index] = slice[Index | None, Index | None, Index | None]
 
 
 ### OBJECT ###
@@ -470,13 +462,13 @@ class Mapping[Key: abc.Hashable, Value](
             raise KeyError(key) from None
 
     @overload
-    def get(self, key: object) -> Optional[Value]: ...
+    def get(self, key: object) -> Value | None: ...
     @overload
     def get[Value_](self, key: object, default: Value_) -> Value | Value_: ...
     @setdoc.basic
     def get[Value_](
-        self: Self, key: object, default: Optional[Value_] = None
-    ) -> Optional[Value | Value_]:
+        self: Self, key: object, default: Value_ | None = None
+    ) -> Value | Value_ | None:
         # this method is just as Mapping.get
         # with the signature corrected
         try:
@@ -487,7 +479,7 @@ class Mapping[Key: abc.Hashable, Value](
 
 class MutableMapping[Key: abc.Hashable, Value](
     Mapping[Key, Value],
-    abc.MutableMapping[Key | str, Optional[Value]],
+    abc.MutableMapping[Key | str, Value | None],
     MutableObject[FrozenDict[Key, Value], Dict[Key, Value]],
 ):
     """Provide abc for custom mutable mapping."""
@@ -501,7 +493,7 @@ class MutableMapping[Key: abc.Hashable, Value](
 
     @setdoc.basic
     def __setitem__(
-        self: Self, key: Key | str, value: Optional[Value], /
+        self: Self, key: Key | str, value: Value | None, /
     ) -> None:
         with self.__mutate__() as mutable:
             mutable[key] = value
@@ -511,7 +503,7 @@ class MutableMapping[Key: abc.Hashable, Value](
 
 
 class DictLike[Key: abc.Hashable, Value](
-    Mapping[Key | str, Optional[Value]],
+    Mapping[Key | str, Value | None],
 ):
     """Provide abc for custom dict-like."""
 
@@ -549,7 +541,7 @@ class DictLike[Key: abc.Hashable, Value](
     def fromkeys(
         cls: type[Self],
         iterable: abc.Iterable[Key | str],
-        value: Optional[Value] = None,
+        value: Value | None = None,
         /,
     ) -> Self:
         return cls(dict.fromkeys(iterable, value))
@@ -586,7 +578,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         self: Self,
         other: Dict_Init[Key, Value] = (),
         /,
-        **kwargs: Optional[Value],
+        **kwargs: Value | None,
     ):
         self.update(other, **kwargs)
 
@@ -601,7 +593,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         return self
 
     @setdoc.basic
-    def popitem(self: Self, /) -> tuple[Key | str, Optional[Value]]:
+    def popitem(self: Self, /) -> tuple[Key | str, Value | None]:
         # for most dict d
         # dict.popitem(d) and collections.abc.MutableMapping.popitem(d)
         # behave differently
@@ -625,7 +617,7 @@ class FrozenDictSlot[Key: abc.Hashable, Value](
         self: Self,
         other: Dict_Init[Key, Value] = (),
         /,
-        **kwargs: Optional[Value],
+        **kwargs: Value | None,
     ) -> None:
         self._slot = frozendict(other, **kwargs)  # type: ignore[arg-type]
 
