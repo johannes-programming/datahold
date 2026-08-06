@@ -234,6 +234,7 @@ class ObjectSlot[Frozen](
 
 class FrozenObjectSlot[Frozen: abc.Hashable](
     ObjectSlot[Frozen],
+    abc.Hashable,
 ):
     """Provide slotted abc for custom frozen object-like."""
 
@@ -243,6 +244,10 @@ class FrozenObjectSlot[Frozen: abc.Hashable](
     @setdoc.basic
     def __frozen__(self: Self, /) -> Frozen:
         return self._slot
+
+    @setdoc.basic
+    def __hash__(self: Self, /) -> int:
+        return hash(self.__frozen__())
 
 
 ### COLLECTION ###
