@@ -16,29 +16,46 @@ __all__: list[str] = [
     "TestMethodSymmetricDifferenceUpdate",
     "TestMethodUnion",
     "TestMethodUpdate",
+    "TestOperatorAnd",
+    "TestOperatorContains",
+    "TestOperatorEquality",
+    "TestOperatorGreaterThan",
+    "TestOperatorGreaterThanOrEqual",
+    "TestOperatorInPlaceAnd",
+    "TestOperatorInPlaceOr",
+    "TestOperatorInPlaceSubtract",
+    "TestOperatorInPlaceXor",
+    "TestOperatorLessThan",
+    "TestOperatorLessThanOrEqual",
+    "TestOperatorNotContains",
+    "TestOperatorNotEqual",
+    "TestOperatorOr",
+    "TestOperatorSubtract",
+    "TestOperatorXor",
 ]
 
+
 import unittest
-from typing import Any, Self
+from typing import Any, Never, Self
 
 from datahold import MutableSetSlot
 
 
 class TestMethodAdd(unittest.TestCase):
     def test_adds_new_element(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2})
         value.add(3)
         self.assertEqual(set(value), {1, 2, 3})
 
     def test_adding_duplicate_does_not_change_set(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2})
         value.add(2)
         self.assertEqual(set(value), {1, 2})
 
     def test_adds_hashable_tuple(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[tuple[int, int]]
         value = MutableSetSlot()
         value.add((1, 2))
         self.assertEqual(set(value), {(1, 2)})
@@ -55,7 +72,7 @@ class TestMethodAdd(unittest.TestCase):
 
 class TestMethodClear(unittest.TestCase):
     def test_clears_populated_set(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2, 3})
         value.clear()
         self.assertEqual(set(value), set())
@@ -290,36 +307,37 @@ class TestMethodIsSubset(unittest.TestCase):
         self.assertFalse(value.issubset({1, 2, 3}))
 
     def test_empty_set_is_subset_of_any_set(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[Never]
         value = MutableSetSlot()
         self.assertTrue(value.issubset({1, 2}))
 
 
 class TestMethodIsSuperset(unittest.TestCase):
     def test_proper_superset_returns_true(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2, 3})
         self.assertTrue(value.issuperset({1, 2}))
 
     def test_equal_set_is_superset(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2})
         self.assertTrue(value.issuperset({1, 2}))
 
     def test_non_superset_returns_false(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2})
         self.assertFalse(value.issuperset({1, 3}))
 
     def test_every_set_is_superset_of_empty_set(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2})
         self.assertTrue(value.issuperset(set()))
 
 
 class TestMethodPop(unittest.TestCase):
     def test_pop_returns_and_removes_only_element(self: Self, /) -> None:
-        value: MutableSetSlot[Any]
+        result: int
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1})
         result = value.pop()
         self.assertEqual(result, 1)
@@ -333,8 +351,8 @@ class TestMethodPop(unittest.TestCase):
 
     def test_pop_removes_one_element_from_populated_set(self: Self, /) -> None:
         original: set[int]
-        result: Any
-        value: MutableSetSlot[Any]
+        result: int
+        value: MutableSetSlot[int]
         original = {1, 2, 3}
         value = MutableSetSlot(original)
         result = value.pop()
@@ -342,8 +360,8 @@ class TestMethodPop(unittest.TestCase):
         self.assertEqual(set(value), original - {result})
 
     def test_repeated_pop_exhausts_set(self: Self, /) -> None:
-        popped: set[Any]
-        value: MutableSetSlot[Any]
+        popped: set[int]
+        value: MutableSetSlot[int]
         value = MutableSetSlot({1, 2, 3})
         popped = {value.pop(), value.pop(), value.pop()}
         self.assertEqual(popped, {1, 2, 3})
@@ -505,6 +523,301 @@ class TestMethodUpdate(unittest.TestCase):
         result = value.update({2, 3})
         self.assertIsNone(result)
         self.assertEqual(set(value), {1, 2, 3})
+
+
+class TestOperatorEquality(unittest.TestCase):
+
+    # this TestCase really demonstrates how bugging mypy is
+    # in regards to the equality and inequality operator:
+    # every single test requires an ignore-comment...
+
+    def test_equal_same_elements(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot({1, 2, 3}) == {1, 2, 3}  # type: ignore[comparison-overlap]
+        )
+
+    def test_equal_different_order(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot({1, 2, 3}) == {3, 2, 1}  # type: ignore[comparison-overlap]
+        )
+
+    def test_equal_empty(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot() == set()  # type: ignore[comparison-overlap]
+        )
+
+    def test_equal_different_elements(self: Self, /) -> None:
+        self.assertFalse(
+            MutableSetSlot({1, 2}) == {1, 3}  # type: ignore[comparison-overlap]
+        )
+
+    def test_not_equal_different_elements(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot({1, 2}) != {1, 3}  # type: ignore[comparison-overlap]
+        )
+
+    def test_not_equal_different_size(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot({1, 2}) != {1, 2, 3}  # type: ignore[comparison-overlap]
+        )
+
+    def test_not_equal_empty_and_nonempty(self: Self, /) -> None:
+        self.assertTrue(
+            MutableSetSlot() != {1}  # type: ignore[comparison-overlap]
+        )
+
+    def test_not_equal_same_elements(self: Self, /) -> None:
+        self.assertFalse(
+            MutableSetSlot({1, 2, 3}) != {1, 2, 3}  # type: ignore[comparison-overlap]
+        )
+
+
+class TestOperatorLessThan(unittest.TestCase):
+    def test_proper_subset(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2}) < {1, 2, 3})
+
+    def test_equal_sets_are_not_less(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 2}) < {1, 2})
+
+    def test_non_subset_is_not_less(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 4}) < {1, 2, 3})
+
+    def test_empty_is_less_than_nonempty(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot() < {1})
+
+
+class TestOperatorLessThanOrEqual(unittest.TestCase):
+    def test_proper_subset(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2}) <= {1, 2, 3})
+
+    def test_equal_sets(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2}) <= {1, 2})
+
+    def test_non_subset(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 4}) <= {1, 2, 3})
+
+    def test_empty_subset(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot() <= {1, 2})
+
+
+class TestOperatorGreaterThan(unittest.TestCase):
+    def test_proper_superset(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2, 3}) > {1, 2})
+
+    def test_equal_sets_are_not_greater(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 2}) > {1, 2})
+
+    def test_non_superset_is_not_greater(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 4}) > {1, 2})
+
+    def test_nonempty_greater_than_empty(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1}) > set())
+
+
+class TestOperatorGreaterThanOrEqual(unittest.TestCase):
+    def test_proper_superset(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2, 3}) >= {1, 2})
+
+    def test_equal_sets(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1, 2}) >= {1, 2})
+
+    def test_non_superset(self: Self, /) -> None:
+        self.assertFalse(MutableSetSlot({1, 4}) >= {1, 2})
+
+    def test_nonempty_superset_of_empty(self: Self, /) -> None:
+        self.assertTrue(MutableSetSlot({1}) >= set())
+
+
+class TestOperatorOr(unittest.TestCase):
+    def test_disjoint_union(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) | {3, 4}, {1, 2, 3, 4})
+
+    def test_overlapping_union(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) | {2, 3}, {1, 2, 3})
+
+    def test_union_with_empty(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) | set(), {1, 2})
+
+    def test_empty_union(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot() | {1, 2}, {1, 2})
+
+
+class TestOperatorAnd(unittest.TestCase):
+    def test_overlapping_intersection(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2, 3}) & {2, 3, 4}, {2, 3})
+
+    def test_disjoint_intersection(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) & {3, 4}, set())
+
+    def test_intersection_with_empty(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) & set(), set())
+
+    def test_intersection_with_self_elements(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) & {1, 2}, {1, 2})
+
+
+class TestOperatorSubtract(unittest.TestCase):
+    def test_remove_present_elements(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2, 3}) - {2}, {1, 3})
+
+    def test_remove_multiple_elements(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2, 3, 4}) - {2, 4}, {1, 3})
+
+    def test_subtract_disjoint_set(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) - {3, 4}, {1, 2})
+
+    def test_subtract_all_elements(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) - {1, 2}, set())
+
+
+class TestOperatorXor(unittest.TestCase):
+    def test_partially_overlapping_sets(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2, 3}) ^ {3, 4}, {1, 2, 4})
+
+    def test_disjoint_sets(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) ^ {3, 4}, {1, 2, 3, 4})
+
+    def test_identical_sets(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) ^ {1, 2}, set())
+
+    def test_xor_with_empty(self: Self, /) -> None:
+        self.assertEqual(MutableSetSlot({1, 2}) ^ set(), {1, 2})
+
+
+class TestOperatorInPlaceOr(unittest.TestCase):
+    def test_adds_new_elements(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value |= {3, 4}
+        self.assertEqual(value, {1, 2, 3, 4})
+
+    def test_ignores_existing_elements(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value |= {2, 3}
+        self.assertEqual(value, {1, 2, 3})
+
+    def test_empty_operand(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value |= set()
+        self.assertEqual(value, {1, 2})
+
+    def test_mutates_same_object(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1})
+        original_id = id(value)
+        value |= {2}
+        self.assertEqual(id(value), original_id)
+
+
+class TestOperatorInPlaceAnd(unittest.TestCase):
+    def test_keeps_common_elements(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2, 3})
+        value &= {2, 3, 4}
+        self.assertEqual(value, {2, 3})
+
+    def test_disjoint_sets_become_empty(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value &= {3, 4}
+        self.assertEqual(value, set())
+
+    def test_identical_sets_unchanged(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value &= {1, 2}
+        self.assertEqual(value, {1, 2})
+
+    def test_mutates_same_object(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        original_id = id(value)
+        value &= {2}
+        self.assertEqual(id(value), original_id)
+
+
+class TestOperatorInPlaceSubtract(unittest.TestCase):
+    def test_removes_elements(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2, 3})
+        value -= {2}
+        self.assertEqual(value, {1, 3})
+
+    def test_disjoint_operand_changes_nothing(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value -= {3, 4}
+        self.assertEqual(value, {1, 2})
+
+    def test_removing_everything(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value -= {1, 2}
+        self.assertEqual(value, set())
+
+    def test_mutates_same_object(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        original_id = id(value)
+        value -= {2}
+        self.assertEqual(id(value), original_id)
+
+
+class TestOperatorInPlaceXor(unittest.TestCase):
+    def test_partial_overlap(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2, 3})
+        value ^= {3, 4}
+        self.assertEqual(value, {1, 2, 4})
+
+    def test_disjoint_sets(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value ^= {3, 4}
+        self.assertEqual(value, {1, 2, 3, 4})
+
+    def test_identical_sets_become_empty(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        value ^= {1, 2}
+        self.assertEqual(value, set())
+
+    def test_mutates_same_object(self: Self, /) -> None:
+        value: MutableSetSlot[Any]
+        value = MutableSetSlot({1, 2})
+        original_id = id(value)
+        value ^= {2, 3}
+        self.assertEqual(id(value), original_id)
+
+
+class TestOperatorContains(unittest.TestCase):
+    def test_contains_existing_integer(self: Self, /) -> None:
+        self.assertTrue(1 in MutableSetSlot({1, 2, 3}))
+
+    def test_does_not_contain_missing_integer(self: Self, /) -> None:
+        self.assertFalse(4 in MutableSetSlot({1, 2, 3}))
+
+    def test_contains_existing_string(self: Self, /) -> None:
+        self.assertTrue("a" in MutableSetSlot({"a", "b"}))
+
+    def test_empty_contains_nothing(self: Self, /) -> None:
+        self.assertFalse(1 in MutableSetSlot())
+
+
+class TestOperatorNotContains(unittest.TestCase):
+    def test_missing_integer(self: Self, /) -> None:
+        self.assertTrue(4 not in MutableSetSlot({1, 2, 3}))
+
+    def test_existing_integer(self: Self, /) -> None:
+        self.assertFalse(1 not in MutableSetSlot({1, 2, 3}))
+
+    def test_missing_string(self: Self, /) -> None:
+        self.assertTrue("c" not in MutableSetSlot({"a", "b"}))
+
+    def test_everything_not_in_empty(self: Self, /) -> None:
+        self.assertTrue(1 not in MutableSetSlot())
 
 
 if __name__ == "__main__":
