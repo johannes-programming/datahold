@@ -1,10 +1,30 @@
+__all__: list[str] = [
+    "TestMethodAdd",
+    "TestMethodClear",
+    "TestMethodCopy",
+    "TestMethodDifference",
+    "TestMethodDifferenceUpdate",
+    "TestMethodDiscard",
+    "TestMethodIntersection",
+    "TestMethodIntersectionUpdate",
+    "TestMethodIsDisjoint",
+    "TestMethodIsSubset",
+    "TestMethodIsSuperset",
+    "TestMethodPop",
+    "TestMethodRemove",
+    "TestMethodSymmetricDifference",
+    "TestMethodSymmetricDifferenceUpdate",
+    "TestMethodUnion",
+    "TestMethodUpdate",
+]
+
 import unittest
 from typing import Any, Self
 
 from datahold import MutableSetSlot
 
 
-class TestAdd(unittest.TestCase):
+class TestMethodAdd(unittest.TestCase):
     def test_adds_new_element(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2})
@@ -33,7 +53,7 @@ class TestAdd(unittest.TestCase):
         self.assertEqual(set(value), {1})
 
 
-class TestClear(unittest.TestCase):
+class TestMethodClear(unittest.TestCase):
     def test_clears_populated_set(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -59,7 +79,7 @@ class TestClear(unittest.TestCase):
         self.assertEqual(set(value), {3})
 
 
-class TestCopy(unittest.TestCase):
+class TestMethodCopy(unittest.TestCase):
     def test_copy_has_same_contents(self: Self, /) -> None:
         copied: MutableSetSlot[Any]
         value: MutableSetSlot[Any]
@@ -90,7 +110,7 @@ class TestCopy(unittest.TestCase):
         self.assertEqual(set(copied), set())
 
 
-class TestDifference(unittest.TestCase):
+class TestMethodDifference(unittest.TestCase):
     def test_difference_removes_shared_elements(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -116,7 +136,7 @@ class TestDifference(unittest.TestCase):
         self.assertEqual(set(value), {1, 2, 3})
 
 
-class TestDifferenceUpdate(unittest.TestCase):
+class TestMethodDifferenceUpdate(unittest.TestCase):
     def test_difference_update_removes_shared_elements(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -146,7 +166,7 @@ class TestDifferenceUpdate(unittest.TestCase):
         self.assertEqual(set(value), set())
 
 
-class TestDiscard(unittest.TestCase):
+class TestMethodDiscard(unittest.TestCase):
     def test_discards_existing_element(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -174,7 +194,7 @@ class TestDiscard(unittest.TestCase):
         self.assertEqual(set(value), {1, 2})
 
 
-class TestIntersection(unittest.TestCase):
+class TestMethodIntersection(unittest.TestCase):
     def test_intersection_returns_shared_elements(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -200,7 +220,7 @@ class TestIntersection(unittest.TestCase):
         self.assertEqual(set(value), {1, 2, 3})
 
 
-class TestIntersectionUpdate(unittest.TestCase):
+class TestMethodIntersectionUpdate(unittest.TestCase):
     def test_intersection_update_keeps_shared_elements(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -230,7 +250,7 @@ class TestIntersectionUpdate(unittest.TestCase):
         self.assertEqual(set(value), {1, 2, 3})
 
 
-class TestIsDisjoint(unittest.TestCase):
+class TestMethodIsDisjoint(unittest.TestCase):
     def test_disjoint_sets_return_true(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2})
@@ -253,7 +273,7 @@ class TestIsDisjoint(unittest.TestCase):
         self.assertTrue(value.isdisjoint(other))
 
 
-class TestIsSubset(unittest.TestCase):
+class TestMethodIsSubset(unittest.TestCase):
     def test_proper_subset_returns_true(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2})
@@ -275,7 +295,7 @@ class TestIsSubset(unittest.TestCase):
         self.assertTrue(value.issubset({1, 2}))
 
 
-class TestIsSuperset(unittest.TestCase):
+class TestMethodIsSuperset(unittest.TestCase):
     def test_proper_superset_returns_true(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -297,7 +317,7 @@ class TestIsSuperset(unittest.TestCase):
         self.assertTrue(value.issuperset(set()))
 
 
-class TestPop(unittest.TestCase):
+class TestMethodPop(unittest.TestCase):
     def test_pop_returns_and_removes_only_element(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1})
@@ -330,7 +350,7 @@ class TestPop(unittest.TestCase):
         self.assertEqual(set(value), set())
 
 
-class TestRemove(unittest.TestCase):
+class TestMethodRemove(unittest.TestCase):
     def test_removes_existing_element(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2, 3})
@@ -361,7 +381,7 @@ class TestRemove(unittest.TestCase):
         self.assertEqual(set(value), {1, 2})
 
 
-class TestSymmetricDifference(unittest.TestCase):
+class TestMethodSymmetricDifference(unittest.TestCase):
     def test_symmetric_difference_excludes_shared_elements(
         self: Self, /
     ) -> None:
@@ -398,7 +418,7 @@ class TestSymmetricDifference(unittest.TestCase):
         self.assertEqual(set(value), {1, 2, 3})
 
 
-class TestSymmetricDifferenceUpdate(unittest.TestCase):
+class TestMethodSymmetricDifferenceUpdate(unittest.TestCase):
     def test_symmetric_difference_update_excludes_shared_elements(
         self: Self,
     ) -> None:
@@ -431,7 +451,7 @@ class TestSymmetricDifferenceUpdate(unittest.TestCase):
         self.assertEqual(set(value), {1, 3})
 
 
-class TestUnion(unittest.TestCase):
+class TestMethodUnion(unittest.TestCase):
     def test_union_combines_elements(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2})
@@ -460,7 +480,7 @@ class TestUnion(unittest.TestCase):
         self.assertEqual(set(value), {1, 2})
 
 
-class TestUpdate(unittest.TestCase):
+class TestMethodUpdate(unittest.TestCase):
     def test_update_adds_elements_from_iterable(self: Self, /) -> None:
         value: MutableSetSlot[Any]
         value = MutableSetSlot({1, 2})

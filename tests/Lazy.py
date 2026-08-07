@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__: list[str] = ["TestAll"]
+__all__: list[str] = ["Lazy"]
 
 import enum
 import tomllib

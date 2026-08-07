@@ -1,3 +1,5 @@
+__all__: list[str] = ["TestNested"]
+
 import unittest
 from typing import Any, Self, TypeAliasType, get_origin
 

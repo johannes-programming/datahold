@@ -1,4 +1,10 @@
-# check_listlike_covariance.py
+__all__: list[str] = [
+    "Animal",
+    "Bear",
+    "cast_FrozenListLikeAnimal",
+    "cast_FrozenListSlotAnimal",
+    "cast_ListLikeAnimal",
+]
 
 import unittest
 
