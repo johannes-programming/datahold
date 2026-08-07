@@ -10,6 +10,8 @@ reveal_type(list.__ge__)
 reveal_type(list.sort)
 reveal_type(datahold.MutableSequence.__frozen__)
 reveal_type(datahold.MutableListLike.__frozen__)
+reveal_type(datahold.MutableSetSlot.__eq__)
+reveal_type(set.__eq__)
 
 
 def cast_as_Mapping_Frozen[Key: abc.Hashable, Value](
