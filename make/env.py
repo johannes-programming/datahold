@@ -7,7 +7,10 @@ import subprocess
 from typing import Any, Optional
 
 
-def env_create(env: str, python: Optional[str]) -> subprocess.CompletedProcess:  # type: ignore[type-arg]
+def env_create(
+    env: str,
+    python: str | None,
+) -> subprocess.CompletedProcess:  # type: ignore[type-arg]
     """Create conda env."""
     args: list[str]
     args = [
