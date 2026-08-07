@@ -20,7 +20,7 @@ class TestAbstractmethods(unittest.TestCase):
         self.assertEqual(ins.isabstract(datatype), bool(abstractmethods))
 
     def test_abstractmethods(self: Self, /) -> None:
-        name: Any
+        name: str
         for name in Lazy.lazy.datatypes.keys():
             if "Object" in name:
                 continue

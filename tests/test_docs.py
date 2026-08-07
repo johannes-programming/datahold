@@ -13,6 +13,9 @@ import datahold
 
 class TestDocs(unittest.TestCase):
     def _test_datatype(self: Self, datatype: type[Any], /) -> None:
+        doc: Any
+        x: Any
+        y: Any
         self.assertIsNotNone(
             datatype.__doc__, f"{datatype.__name__}.__doc__ is None"
         )
@@ -27,6 +30,7 @@ class TestDocs(unittest.TestCase):
             )
 
     def test_datatypes(self: Self, /) -> None:
+        name: str
         for name in Lazy.lazy.datatypes:
             with self.subTest(datatype=name):
                 self._test_datatype(getattr(datahold, name))

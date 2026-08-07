@@ -22,6 +22,8 @@ class TestAll(unittest.TestCase):
         )
 
     def test_sorted(self: Self, /) -> None:
+        data: Any
+        name: str
         self._test_sorted(datahold.__all__, name="datahold.__all__")
         self._test_sorted(Lazy.lazy.data, name="testdata.toml")
         self._test_sorted(

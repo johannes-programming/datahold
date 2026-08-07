@@ -32,6 +32,8 @@ class TestAttributes(unittest.TestCase):
                 self._test_attribute(name, x, y)
 
     def test_attributes(self: Self, /) -> None:
+        data: Any
+        name: str
         for name, data in Lazy.lazy.datatypes.items():
             with self.subTest(datatype=name):
                 self._test_attributes(name, **data.get("attributes", {}))

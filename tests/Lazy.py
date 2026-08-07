@@ -53,6 +53,8 @@ class Lazy(enum.Enum):
 
     @classmethod
     def get_example(cls: type[Self], typename: str, objname: str) -> Any:
+        datatype: Any
+        info: Any
         datatype = getattr(datahold, typename)
         info = cls.lazy.datatypes[typename]["examples"][objname]
         return datatype(*info.get("args", []), **info.get("kwargs", {}))
@@ -60,6 +62,9 @@ class Lazy(enum.Enum):
     @classmethod
     def get_import(cls: type[Self], name: str, /) -> Any:
         """Get the import for a given name."""
+        module: Any
+        modulename: str
+        targetname: str
         if name == "":
             return None
         modulename = ".".join(name.split(".")[:-1])

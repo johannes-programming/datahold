@@ -4,7 +4,7 @@ __all__: list[str] = ["TestName"]
 
 import unittest
 from collections import abc
-from typing import Self
+from typing import Any, Self
 
 from Lazy import Lazy
 
@@ -14,6 +14,8 @@ import datahold
 class TestName(unittest.TestCase):
 
     def _test_name(self: Self, name: str, /) -> None:
+        ancestor: Any
+        datatype: Any
         prefix: str
         suffix: str
         if name.startswith("Frozen"):
@@ -68,6 +70,7 @@ class TestName(unittest.TestCase):
             self.assertIs(datatype.__init__, object.__init__)
 
     def test_name(self: Self, /) -> None:
+        name: str
         for name in Lazy.lazy.datatypes.keys():
             with self.subTest(datatype=name):
                 self._test_name(name)

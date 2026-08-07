@@ -15,6 +15,7 @@ class TestMetaclass(unittest.TestCase):
 
     def test_metaclass(self: Self, /) -> None:
         datatype: type[Any]
+        name: str
         for name in Lazy.lazy.datatypes.keys():
             with self.subTest(datatype=name):
                 datatype = getattr(datahold, name)

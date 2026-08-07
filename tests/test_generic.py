@@ -25,6 +25,8 @@ class TestGeneric(unittest.TestCase):
                 datatype[Any]
 
     def test_generic(self: Self, /) -> None:
+        data: Any
+        name: str
         for name, data in Lazy.lazy.datatypes.items():
             with self.subTest(datatype=name):
                 self._test(name, data.get("varia", {}).get("generic"))
