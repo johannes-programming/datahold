@@ -322,9 +322,11 @@ class SetLike[Item: abc.Hashable](Set[Item]):
     @abstractmethod
     @setdoc.basic
     def __frozen__(self: Self, /) -> frozenset[Item]: ...
+
     @abstractmethod
     @setdoc.basic
     def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
+
     @setdoc.basic
     def difference(self: Self, /, *others: abc.Iterable[abc.Hashable]) -> Self:
         return type(self)(self.__frozen__().difference(*others))
