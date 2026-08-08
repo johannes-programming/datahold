@@ -608,7 +608,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         other: Dict_Init[Key, Value] = (),
         /,
         **kwargs: Value | None,
-    ):
+    ) -> None:
         self.update(
             other,  # type: ignore[arg-type]
             **kwargs,
