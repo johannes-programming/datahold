@@ -91,7 +91,7 @@ class Mapping_Frozen[Key, Value](Collection_Frozen[Key], Protocol):
     def __getitem__(self: Self, key: Never, /) -> Value: ...
 
 
-class SupportsDelitemAndSetitem[Key, Value](
+class SupportsDelItemAndSetItem[Key, Value](
     Protocol,
 ):
     @setdoc.basic
@@ -489,7 +489,7 @@ class MutableMapping[Key: abc.Hashable, Value](
     abc.MutableMapping[Key | str, Value | None],
     MutableObject[
         Mapping_Frozen[Key | str, Value | None],
-        SupportsDelitemAndSetitem[Key | str, Value | None],
+        SupportsDelItemAndSetItem[Key | str, Value | None],
     ],
 ):
     """Provide abc for custom mutable mapping."""
