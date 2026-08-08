@@ -272,6 +272,7 @@ __setitem__ = "datahold.MutableMapping"
 clear = "collections.abc.MutableMapping"
 pop = "datahold.MutableMapping"
 popitem = "datahold.MutableMapping"
+setdefault = "datahold.MutableMapping"
 
 [datatypes.MutableMapping.issubclass]
 "collections.abc.MutableMapping" = true
