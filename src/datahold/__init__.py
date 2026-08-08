@@ -61,7 +61,7 @@ class ContextManager[Enter](Protocol):
     ) -> object: ...
 
 
-class SupportsKeysAndGetitem[Key, Value](Protocol):
+class SupportsKeysAndGetItem[Key, Value](Protocol):
     """Provide protocol supporting keys and __getitem__."""
 
     @setdoc.basic
@@ -167,8 +167,8 @@ class MutableSequence_Mutable[Item](Protocol):
 type Dict[Key, Value] = dict[Key | str, Value | None]
 
 type Dict_Init[Key, Value] = (
-    SupportsKeysAndGetitem[Key, Value | None]
-    | SupportsKeysAndGetitem[Key | str, Value | None]
+    SupportsKeysAndGetItem[Key, Value | None]
+    | SupportsKeysAndGetItem[Key | str, Value | None]
     | abc.Iterable[tuple[Key | str, Value | None]]
 )
 
@@ -546,7 +546,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @setdoc.basic
     def __reversed__(self: Self, /) -> abc.Iterator[Key]:
-        yield from reversed(self.__frozen__())
+        return reversed(self.__frozen__())
 
     @overload
     @classmethod
