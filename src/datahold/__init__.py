@@ -529,6 +529,7 @@ class MutableMapping[Key: abc.Hashable, Value](
         self: Self,
         key: Key | str,
         default: Missing | Value_ = Missing.MISSING,
+        /,
     ) -> Value | Value_ | None:
         try:
             value = self[key]
