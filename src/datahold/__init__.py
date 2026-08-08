@@ -33,6 +33,7 @@ __all__: list[str] = [
     "SetLike",
 ]
 
+import enum
 from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
@@ -41,6 +42,13 @@ from typing import Any, Never, Protocol, Self, SupportsIndex, overload
 
 import setdoc
 from frozendict import frozendict
+
+### SENTINEL ###
+
+
+class Missing(enum.Enum):
+    MISSING = enum.auto()
+
 
 ### PROTOCOLS ###
 
@@ -507,6 +515,30 @@ class MutableMapping[Key: abc.Hashable, Value](
     ) -> None:
         with self.__mutate__() as mutable:
             mutable[key] = value
+
+    @overload
+    @setdoc.basic
+    def pop(self: Self, key: Key | str, /) -> Value: ...
+    @overload
+    @setdoc.basic
+    def pop[Value_](
+        self: Self, key: Key | str, default: Value_, /
+    ) -> Value | Value_: ...
+    @setdoc.basic
+    def pop[Value_](
+        self: Self,
+        key: Key | str,
+        default: Missing | Value_ = Missing.MISSING,
+    ) -> Value | Value_ | None:
+        try:
+            value = self[key]
+        except KeyError:
+            if isinstance(default, Missing):
+                raise
+            return default
+        else:
+            del self[key]
+            return value
 
 
 ### DICT-LIKE ###
