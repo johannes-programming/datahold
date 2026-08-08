@@ -541,6 +541,19 @@ class MutableMapping[Key: abc.Hashable, Value](
             del self[key]
             return value
 
+    @setdoc.basic
+    def setdefault(
+        self: Self,
+        key: Key | str,
+        default: Value | None = None,
+        /,
+    ) -> Value | None:
+        try:
+            return self[key]
+        except KeyError:
+            self[key] = default
+        return default
+
 
 ### DICT-LIKE ###
 
