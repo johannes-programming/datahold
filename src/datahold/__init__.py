@@ -38,7 +38,15 @@ from abc import ABCMeta, abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from types import NotImplementedType, TracebackType
-from typing import Any, Never, Protocol, Self, SupportsIndex, overload
+from typing import (
+    Any,
+    Never,
+    Protocol,
+    Self,
+    SupportsIndex,
+    overload,
+    runtime_checkable,
+)
 
 import setdoc
 from frozendict import frozendict
@@ -69,6 +77,7 @@ class ContextManager[Enter](Protocol):
     ) -> object: ...
 
 
+@runtime_checkable
 class SupportsKeysAndGetItem[Key, Value](Protocol):
     """Provide protocol supporting keys and __getitem__."""
 
@@ -176,6 +185,7 @@ type Dict[Key, Value] = dict[Key | str, Value | None]
 
 type Dict_Init[Key, Value] = (
     SupportsKeysAndGetItem[Key, Value | None]
+    | SupportsKeysAndGetItem[str, Value | None]
     | SupportsKeysAndGetItem[Key | str, Value | None]
     | abc.Iterable[tuple[Key | str, Value | None]]
 )
@@ -554,6 +564,24 @@ class MutableMapping[Key: abc.Hashable, Value](
             self[key] = default
         return default
 
+    @setdoc.basic
+    def update(
+        self: Self,
+        other: Dict_Init[Key, Value] = (),
+        /,
+        **kwargs: Value | None,
+    ) -> None:
+        key: Any
+        value: Value | None
+        if isinstance(other, SupportsKeysAndGetItem):
+            for key in other.keys():
+                self[key] = other[key]
+        else:
+            for key, value in other:
+                self[key] = value
+        for key, value in kwargs.items():
+            self[key] = value
+
 
 ### DICT-LIKE ###
 
@@ -658,7 +686,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         **kwargs: Value | None,
     ) -> None:
         self.update(
-            other,  # type: ignore[arg-type]
+            other,
             **kwargs,
         )
 
