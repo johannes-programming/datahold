@@ -264,6 +264,10 @@ __hash__ = ""
 [datatypes.MutableListSlot.varia]
 generic = 1
 
+[datatypes.MutableMapping.attributes]
+__delitem__ = "datahold.MutableMapping"
+__setitem__ = "datahold.MutableMapping"
+
 [datatypes.MutableMapping.issubclass]
 "collections.abc.MutableMapping" = true
 "datahold.Mapping" = true
