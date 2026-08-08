@@ -483,7 +483,7 @@ class Mapping[Key: abc.Hashable, Value](
 
 
 class MutableMapping[Key: abc.Hashable, Value](
-    Mapping[Key, Value],
+    Mapping[Key | str, Value | None],
     abc.MutableMapping[Key | str, Value | None],
     MutableObject[
         Mapping_Frozen[Key | str, Value | None],
