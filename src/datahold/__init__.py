@@ -89,15 +89,17 @@ class SupportsAddAndDiscard[Item: abc.Hashable](Protocol):
 class Mapping_Frozen[Key, Value](Collection_Frozen[Key], Protocol):
     @setdoc.basic
     def __getitem__(self: Self, key: Never, /) -> Value: ...
+
+
 class SupportsDelitemAndSetitem[Key, Value](
     Protocol,
 ):
     @setdoc.basic
-    def __delitem__(self: Self, key: Key | str, /) -> object: ...
+    def __delitem__(self: Self, key: Key, /) -> object: ...
     @setdoc.basic
-    def __setitem__(
-        self: Self, key: Key | str, value: Value | None, /
-    ) -> object: ...
+    def __setitem__(self: Self, key: Key, value: Value, /) -> object: ...
+
+
 class Sequence_Frozen[Item](
     Collection_Frozen[Item],
     Protocol,
