@@ -108,7 +108,7 @@ class TestMethodCopy(unittest.TestCase):
 
 class TestMethodFromKeys(unittest.TestCase):
     def test_fromkeys_uses_none_by_default(self: Self, /) -> None:
-        result: MutableDictSlot[Any, Any]
+        result: Any
         result = MutableDictSlot.fromkeys(["a", "b", "c"])
         self.assertEqual(result, {"a": None, "b": None, "c": None})
         self.assertEqual(list(result), ["a", "b", "c"])

@@ -520,7 +520,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @abstractmethod
     @setdoc.basic
-    def __frozen__(self: Self, /) -> FrozenDict[Key, Value]: ...
+    def __frozen__(self: Self, /) -> frozendict[Key, Value]: ...
 
     @abstractmethod
     @setdoc.basic
@@ -539,7 +539,7 @@ class DictLike[Key: abc.Hashable, Value](
     ) -> DictLike[Key | Key_, Value | Value_]:
         if isinstance(other, DictLike):
             return type(self)(  # type: ignore[return-value]
-                self.__frozen__() | other  # type: ignore[operator]
+                self.__frozen__() | other  # type: ignore[arg-type]
             )
         else:
             return NotImplemented
@@ -577,8 +577,8 @@ class DictLike[Key: abc.Hashable, Value](
 
 
 class FrozenDictLike[Key: abc.Hashable, Value](
-    FrozenObjectLike[FrozenDict[Key, Value]],
-    DictLike[Key | str, Value | None],
+    FrozenObjectLike[frozendict[Key, Value]],
+    DictLike[Key, Value],
 ):
     """Provide abc for custom frozen dict-like."""
 
@@ -637,7 +637,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
 
 class FrozenDictSlot[Key: abc.Hashable, Value](
-    FrozenObjectSlot[FrozenDict[Key, Value]],
+    FrozenObjectSlot[frozendict[Key, Value]],
     FrozenDictLike[Key, Value],
 ):
     """Provide slotted frozen dict-like."""
