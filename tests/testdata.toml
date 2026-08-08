@@ -186,7 +186,16 @@ index = "collections.abc.Sequence"
 generic = 1
 
 [datatypes.Mapping.attributes]
+__contains__ = "datahold.Collection"
+__eq__ = "collections.abc.Mapping"
+__getitem__ = "datahold.Mapping"
+__iter__ = "datahold.Collection"
+__len__ = "datahold.Collection"
 __reversed__ = "collections.abc.Mapping"
+get = "datahold.Mapping"
+items = "collections.abc.Mapping"
+keys = "collections.abc.Mapping"
+values = "collections.abc.Mapping"
 
 [datatypes.Mapping.issubclass]
 "collections.abc.Mapping" = true
