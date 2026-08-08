@@ -6,7 +6,6 @@ __frozen__ = "datahold.DictLike"
 __init__ = "datahold.DictLike"
 __or__ = "datahold.DictLike"
 __reversed__ = "datahold.DictLike"
-fromkeys = "datahold.DictLike"
 
 [datatypes.DictLike.issubclass]
 "collections.abc.Mapping" = true

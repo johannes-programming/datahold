@@ -511,8 +511,8 @@ class MutableMapping[Key: abc.Hashable, Value](
 
 
 class DictLike[Key: abc.Hashable, Value](
-    Mapping[Key | str, Value | None],
-    abc.Reversible[Key | str],
+    Mapping[Key, Value],
+    abc.Reversible[Key],
 ):
     """Provide abc for custom dict-like."""
 
@@ -545,23 +545,40 @@ class DictLike[Key: abc.Hashable, Value](
             return NotImplemented
 
     @setdoc.basic
-    def __reversed__(self: Self, /) -> abc.Iterator[Key | str]:
+    def __reversed__(self: Self, /) -> abc.Iterator[Key]:
         yield from reversed(self.__frozen__())
 
+    @overload
     @classmethod
     @setdoc.basic
     def fromkeys(
         cls: type[Self],
-        iterable: abc.Iterable[Key | str],
-        value: Value | None = None,
+        iterable: abc.Iterable[Key],
         /,
-    ) -> Self:
+    ) -> DictLike[Key, None]: ...
+    @overload
+    @classmethod
+    @setdoc.basic
+    def fromkeys(
+        cls: type[Self],
+        iterable: abc.Iterable[Key],
+        value: Value,
+        /,
+    ) -> Self: ...
+    @classmethod
+    @setdoc.basic
+    def fromkeys(
+        cls: type[Self],
+        iterable: abc.Iterable[Key],
+        value: Any = None,
+        /,
+    ) -> Any:
         return cls(dict.fromkeys(iterable, value))
 
 
 class FrozenDictLike[Key: abc.Hashable, Value](
     FrozenObjectLike[FrozenDict[Key, Value]],
-    DictLike[Key, Value],
+    DictLike[Key | str, Value | None],
 ):
     """Provide abc for custom frozen dict-like."""
 
@@ -569,7 +586,7 @@ class FrozenDictLike[Key: abc.Hashable, Value](
 
 
 class MutableDictLike[Key: abc.Hashable, Value](
-    DictLike[Key, Value],
+    DictLike[Key | str, Value | None],
     MutableObjectLike[FrozenDict[Key, Value], Dict[Key, Value]],
     MutableMapping[Key, Value],
 ):
