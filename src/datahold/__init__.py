@@ -33,7 +33,7 @@ type Sort = SupportsDunderGT[Self] | SupportsDunderGT[Self]  # type: ignore[misc
 ### LIST-SLOT ###
 
 
-class MutableListSlot[Item]:
+class MutableListSlot[Item](abc.Sequence[Item]):
     """Provide easily customized, slotted, mutable list-like."""
 
     __slots__ = ("_slot",)
@@ -140,15 +140,16 @@ class MutableListSlot[Item]:
     def __iter__(
         self: MutableListSlot[Item], /
     ) -> abc.Generator[Item, None, None]:
+        frozen: tuple[Item, ...]
         i: int
         i = 0
         while True:
-            try:
-                v = self[i]
-            except IndexError:
-                return
-            yield v
-            i += 1
+            frozen = self.__frozen__()
+            if i < len(frozen):
+                yield frozen[i]
+                i += 1
+            else:
+                break
 
     def __le__(
         self: MutableListSlot[Item],
@@ -189,9 +190,16 @@ class MutableListSlot[Item]:
     def __reversed__(
         self: MutableListSlot[Item], /
     ) -> abc.Generator[Item, None, None]:
+        frozen: tuple[Item, ...]
         i: int
-        for i in reversed(range(len(self))):
-            yield self[i]
+        i = len(self.__frozen__())
+        while True:
+            frozen = self.__frozen__()
+            if 0 < i <= len(frozen):
+                i -= 1
+                yield frozen[i]
+            else:
+                break
 
     @overload
     def __setitem__(
@@ -301,4 +309,4 @@ class MutableListSlot[Item]:
 
 setdoc.Basics(
     excepts=(AttributeError, TypeError),
-)(*MutableListSlot.__dict__)
+)(*MutableListSlot.__dict__.values())
