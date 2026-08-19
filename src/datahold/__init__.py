@@ -30,6 +30,24 @@ class SupportsDunderLT[Other](Protocol):
 type Slice[Index] = slice[Index | None, Index | None, Index | None]
 type Sort = SupportsDunderGT[Self] | SupportsDunderGT[Self]  # type: ignore[misc]
 
+
+### HELPER ###
+
+
+def reverse_sequence[Item](
+    sequence: MutableListSlot[Item],
+    length: int,
+) -> abc.Generator[Item, None, None]:
+    frozen: tuple[Item, ...]
+    while True:
+        frozen = sequence.__frozen__()
+        length -= 1
+        if 0 <= length < len(frozen):
+            yield frozen[length]
+        else:
+            break
+
+
 ### LIST-SLOT ###
 
 
@@ -187,19 +205,11 @@ class MutableListSlot[Item](abc.Sequence[Item]):
     def __repr__(self: MutableListSlot[Item], /) -> str:
         return f"{type(self).__name__}({list(self.__frozen__())})"
 
-    def __reversed__(
-        self: MutableListSlot[Item], /
-    ) -> abc.Generator[Item, None, None]:
-        frozen: tuple[Item, ...]
-        i: int
-        i = len(self.__frozen__())
-        while True:
-            frozen = self.__frozen__()
-            if 0 < i <= len(frozen):
-                i -= 1
-                yield frozen[i]
-            else:
-                break
+    def __reversed__(self: MutableListSlot[Item], /) -> abc.Iterator[Item]:
+        return reverse_sequence(
+            sequence=self,
+            length=len(self.__frozen__()),
+        )
 
     @overload
     def __setitem__(

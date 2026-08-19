@@ -16,20 +16,22 @@ __all__: list[str] = [
     "TestMethodReverse",
     "TestMethodSort",
     "TestOperatorAdd",
-    "TestOperatorIAdd",
-    "TestOperatorMul",
-    "TestOperatorRMul",
-    "TestOperatorIMul",
+    "TestOperatorContains",
+    "TestOperatorDelItem",
     "TestOperatorEqual",
-    "TestOperatorNotEqual",
-    "TestOperatorLessThan",
-    "TestOperatorLessThanOrEqual",
+    "TestOperatorGetItem",
     "TestOperatorGreaterThan",
     "TestOperatorGreaterThanOrEqual",
-    "TestOperatorContains",
-    "TestOperatorGetItem",
+    "TestOperatorIAdd",
+    "TestOperatorIMul",
+    "TestOperatorIterSequence",
+    "TestOperatorLessThan",
+    "TestOperatorLessThanOrEqual",
+    "TestOperatorMul",
+    "TestOperatorNotEqual",
+    "TestOperatorRMul",
+    "TestOperatorReversedSequence",
     "TestOperatorSetItem",
-    "TestOperatorDelItem",
 ]
 
 
@@ -293,85 +295,40 @@ class TestOperatorAdd(unittest.TestCase):
         self.assertEqual(list(value), [1, 2])
 
 
-class TestOperatorIAdd(unittest.TestCase):
-    def test_iadd_nonempty_list(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        value += [3, 4]
-        self.assertEqual(list(value), [1, 2, 3, 4])
+class TestOperatorContains(unittest.TestCase):
+    def test_contains_first_element(self: Self, /) -> None:
+        self.assertTrue(1 in MutableListSlot([1, 2, 3]))
 
-    def test_iadd_empty_list(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        value += ""  # type: ignore[arg-type]
+    def test_contains_last_element(self: Self, /) -> None:
+        self.assertTrue(3 in MutableListSlot([1, 2, 3]))
+
+    def test_does_not_contain_missing_element(self: Self, /) -> None:
+        self.assertFalse(4 in MutableListSlot([1, 2, 3]))
+
+    def test_empty_slot_contains_nothing(self: Self, /) -> None:
+        self.assertFalse(1 in MutableListSlot([]))
+
+
+class TestOperatorDelItem(unittest.TestCase):
+    def test_delete_first_item(self: Self, /) -> None:
+        value = MutableListSlot([1, 2, 3])
+        del value[0]
+        self.assertEqual(list(value), [2, 3])
+
+    def test_delete_last_item(self: Self, /) -> None:
+        value = MutableListSlot([1, 2, 3])
+        del value[-1]
         self.assertEqual(list(value), [1, 2])
 
-    def test_iadd_to_empty_slot(self: Self, /) -> None:
-        value: MutableListSlot[int] = MutableListSlot([])
-        value += (1, 2)
-        self.assertEqual(list(value), [1, 2])
+    def test_delete_slice(self: Self, /) -> None:
+        value = MutableListSlot([1, 2, 3, 4])
+        del value[1:3]
+        self.assertEqual(list(value), [1, 4])
 
-    def test_iadd_multiple_times(self: Self, /) -> None:
-        value = MutableListSlot([1])
-        value += [2]
-        value += [3]
-        self.assertEqual(list(value), [1, 2, 3])
-
-
-class TestOperatorMul(unittest.TestCase):
-    def test_multiply_by_positive_integer(self: Self, /) -> None:
-        result = MutableListSlot([1, 2]) * 3
-        self.assertEqual(list(result), [1, 2, 1, 2, 1, 2])
-
-    def test_multiply_by_one(self: Self, /) -> None:
-        result = MutableListSlot([1, 2]) * 1
-        self.assertEqual(list(result), [1, 2])
-
-    def test_multiply_by_zero(self: Self, /) -> None:
-        result = MutableListSlot([1, 2]) * 0
-        self.assertEqual(list(result), [])
-
-    def test_multiply_by_negative_integer(self: Self, /) -> None:
-        result = MutableListSlot([1, 2]) * -2
-        self.assertEqual(list(result), [])
-
-
-class TestOperatorRMul(unittest.TestCase):
-    def test_rmul_by_positive_integer(self: Self, /) -> None:
-        result = 3 * MutableListSlot([1, 2])
-        self.assertEqual(list(result), [1, 2, 1, 2, 1, 2])
-
-    def test_rmul_by_one(self: Self, /) -> None:
-        result = 1 * MutableListSlot([1, 2])
-        self.assertEqual(list(result), [1, 2])
-
-    def test_rmul_by_zero(self: Self, /) -> None:
-        result = 0 * MutableListSlot([1, 2])
-        self.assertEqual(list(result), [])
-
-    def test_rmul_by_negative_integer(self: Self, /) -> None:
-        result = -3 * MutableListSlot([1, 2])
-        self.assertEqual(list(result), [])
-
-
-class TestOperatorIMul(unittest.TestCase):
-    def test_imul_by_positive_integer(self: Self, /) -> None:
+    def test_delete_out_of_range_raises(self: Self, /) -> None:
         value = MutableListSlot([1, 2])
-        value *= 2
-        self.assertEqual(list(value), [1, 2, 1, 2])
-
-    def test_imul_by_one(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        value *= 1
-        self.assertEqual(list(value), [1, 2])
-
-    def test_imul_by_zero(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        value *= 0
-        self.assertEqual(list(value), [])
-
-    def test_imul_by_negative_integer(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        value *= -1
-        self.assertEqual(list(value), [])
+        with self.assertRaises(IndexError):
+            del value[5]
 
 
 class TestOperatorEqual(unittest.TestCase):
@@ -388,46 +345,23 @@ class TestOperatorEqual(unittest.TestCase):
         self.assertFalse(MutableListSlot([1, 2]) == MutableListSlot([1, 2, 3]))
 
 
-class TestOperatorNotEqual(unittest.TestCase):
-    def test_not_equal_different_contents(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1, 2]) != MutableListSlot([1, 3]))
+class TestOperatorGetItem(unittest.TestCase):
+    def test_get_first_item(self: Self, /) -> None:
+        value = MutableListSlot([10, 20, 30])
+        self.assertEqual(value[0], 10)
 
-    def test_not_equal_different_lengths(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1]) != MutableListSlot([1, 2]))
+    def test_get_last_item_with_negative_index(self: Self, /) -> None:
+        value = MutableListSlot([10, 20, 30])
+        self.assertEqual(value[-1], 30)
 
-    def test_equal_values_are_not_unequal(self: Self, /) -> None:
-        self.assertFalse(MutableListSlot([1, 2]) != MutableListSlot([1, 2]))
+    def test_get_slice(self: Self, /) -> None:
+        value = MutableListSlot([1, 2, 3, 4])
+        self.assertEqual(value[1:3], MutableListSlot([2, 3]))
 
-    def test_empty_values_are_not_unequal(self: Self, /) -> None:
-        self.assertFalse(MutableListSlot([]) != MutableListSlot([]))
-
-
-class TestOperatorLessThan(unittest.TestCase):
-    def test_less_than_by_first_element(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1, 9]) < MutableListSlot([2, 0]))
-
-    def test_less_than_by_later_element(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1, 2]) < MutableListSlot([1, 3]))
-
-    def test_prefix_is_less_than_longer_list(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1, 2]) < MutableListSlot([1, 2, 3]))
-
-    def test_equal_list_is_not_less_than(self: Self, /) -> None:
-        self.assertFalse(MutableListSlot([1, 2]) < MutableListSlot([1, 2]))
-
-
-class TestOperatorLessThanOrEqual(unittest.TestCase):
-    def test_less_value_is_less_or_equal(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1]) <= MutableListSlot([2]))
-
-    def test_equal_value_is_less_or_equal(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1, 2]) <= MutableListSlot([1, 2]))
-
-    def test_prefix_is_less_or_equal(self: Self, /) -> None:
-        self.assertTrue(MutableListSlot([1]) <= MutableListSlot([1, 2]))
-
-    def test_greater_value_is_not_less_or_equal(self: Self, /) -> None:
-        self.assertFalse(MutableListSlot([2]) <= MutableListSlot([1]))
+    def test_out_of_range_index_raises(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        with self.assertRaises(IndexError):
+            value[5]
 
 
 class TestOperatorGreaterThan(unittest.TestCase):
@@ -458,37 +392,244 @@ class TestOperatorGreaterThanOrEqual(unittest.TestCase):
         self.assertFalse(MutableListSlot([1]) >= MutableListSlot([2]))
 
 
-class TestOperatorContains(unittest.TestCase):
-    def test_contains_first_element(self: Self, /) -> None:
-        self.assertTrue(1 in MutableListSlot([1, 2, 3]))
-
-    def test_contains_last_element(self: Self, /) -> None:
-        self.assertTrue(3 in MutableListSlot([1, 2, 3]))
-
-    def test_does_not_contain_missing_element(self: Self, /) -> None:
-        self.assertFalse(4 in MutableListSlot([1, 2, 3]))
-
-    def test_empty_slot_contains_nothing(self: Self, /) -> None:
-        self.assertFalse(1 in MutableListSlot([]))
-
-
-class TestOperatorGetItem(unittest.TestCase):
-    def test_get_first_item(self: Self, /) -> None:
-        value = MutableListSlot([10, 20, 30])
-        self.assertEqual(value[0], 10)
-
-    def test_get_last_item_with_negative_index(self: Self, /) -> None:
-        value = MutableListSlot([10, 20, 30])
-        self.assertEqual(value[-1], 30)
-
-    def test_get_slice(self: Self, /) -> None:
-        value = MutableListSlot([1, 2, 3, 4])
-        self.assertEqual(value[1:3], MutableListSlot([2, 3]))
-
-    def test_out_of_range_index_raises(self: Self, /) -> None:
+class TestOperatorIAdd(unittest.TestCase):
+    def test_iadd_nonempty_list(self: Self, /) -> None:
         value = MutableListSlot([1, 2])
-        with self.assertRaises(IndexError):
-            value[5]
+        value += [3, 4]
+        self.assertEqual(list(value), [1, 2, 3, 4])
+
+    def test_iadd_empty_list(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        value += ""  # type: ignore[arg-type]
+        self.assertEqual(list(value), [1, 2])
+
+    def test_iadd_to_empty_slot(self: Self, /) -> None:
+        value: MutableListSlot[int] = MutableListSlot([])
+        value += (1, 2)
+        self.assertEqual(list(value), [1, 2])
+
+    def test_iadd_multiple_times(self: Self, /) -> None:
+        value = MutableListSlot([1])
+        value += [2]
+        value += [3]
+        self.assertEqual(list(value), [1, 2, 3])
+
+
+class TestOperatorLessThan(unittest.TestCase):
+    def test_less_than_by_first_element(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1, 9]) < MutableListSlot([2, 0]))
+
+    def test_less_than_by_later_element(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1, 2]) < MutableListSlot([1, 3]))
+
+    def test_prefix_is_less_than_longer_list(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1, 2]) < MutableListSlot([1, 2, 3]))
+
+    def test_equal_list_is_not_less_than(self: Self, /) -> None:
+        self.assertFalse(MutableListSlot([1, 2]) < MutableListSlot([1, 2]))
+
+
+class TestOperatorLessThanOrEqual(unittest.TestCase):
+    def test_less_value_is_less_or_equal(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1]) <= MutableListSlot([2]))
+
+    def test_equal_value_is_less_or_equal(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1, 2]) <= MutableListSlot([1, 2]))
+
+    def test_prefix_is_less_or_equal(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1]) <= MutableListSlot([1, 2]))
+
+    def test_greater_value_is_not_less_or_equal(self: Self, /) -> None:
+        self.assertFalse(MutableListSlot([2]) <= MutableListSlot([1]))
+
+
+class TestOperatorMul(unittest.TestCase):
+    def test_multiply_by_positive_integer(self: Self, /) -> None:
+        result = MutableListSlot([1, 2]) * 3
+        self.assertEqual(list(result), [1, 2, 1, 2, 1, 2])
+
+    def test_multiply_by_one(self: Self, /) -> None:
+        result = MutableListSlot([1, 2]) * 1
+        self.assertEqual(list(result), [1, 2])
+
+    def test_multiply_by_zero(self: Self, /) -> None:
+        result = MutableListSlot([1, 2]) * 0
+        self.assertEqual(list(result), [])
+
+    def test_multiply_by_negative_integer(self: Self, /) -> None:
+        result = MutableListSlot([1, 2]) * -2
+        self.assertEqual(list(result), [])
+
+
+class TestOperatorIMul(unittest.TestCase):
+    def test_imul_by_positive_integer(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        value *= 2
+        self.assertEqual(list(value), [1, 2, 1, 2])
+
+    def test_imul_by_one(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        value *= 1
+        self.assertEqual(list(value), [1, 2])
+
+    def test_imul_by_zero(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        value *= 0
+        self.assertEqual(list(value), [])
+
+    def test_imul_by_negative_integer(self: Self, /) -> None:
+        value = MutableListSlot([1, 2])
+        value *= -1
+        self.assertEqual(list(value), [])
+
+
+class TestOperatorIterSequence(unittest.TestCase):
+    def test_shrinking_makes_next_index_out_of_range(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = iter(values)
+
+        self.assertEqual(next(iterator), 0)
+        del values[1:]
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+    def test_exhaustion_remains_after_regrowth(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = iter(values)
+
+        self.assertEqual(next(iterator), 0)
+        del values[1:]
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+        values.extend([10, 11, 12, 13])
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+    def test_regrowth_before_next_restores_valid_index(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = iter(values)
+
+        self.assertEqual(next(iterator), 0)
+        del values[1:]
+        values.extend([10, 11, 12])
+
+        self.assertEqual(next(iterator), 10)
+
+    def test_deletion_before_cursor_does_not_repair_index(
+        self: Self, /
+    ) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = iter(values)
+
+        self.assertEqual(next(iterator), 0)
+        del values[0]
+
+        self.assertEqual(next(iterator), 2)
+
+    def test_growth_before_exhaustion_is_seen(self: Self, /) -> None:
+        values = MutableListSlot([0, 1])
+        iterator = iter(values)
+
+        self.assertEqual(next(iterator), 0)
+        self.assertEqual(next(iterator), 1)
+
+        values.append(2)
+
+        self.assertEqual(next(iterator), 2)
+
+
+class TestOperatorNotEqual(unittest.TestCase):
+    def test_not_equal_different_contents(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1, 2]) != MutableListSlot([1, 3]))
+
+    def test_not_equal_different_lengths(self: Self, /) -> None:
+        self.assertTrue(MutableListSlot([1]) != MutableListSlot([1, 2]))
+
+    def test_equal_values_are_not_unequal(self: Self, /) -> None:
+        self.assertFalse(MutableListSlot([1, 2]) != MutableListSlot([1, 2]))
+
+    def test_empty_values_are_not_unequal(self: Self, /) -> None:
+        self.assertFalse(MutableListSlot([]) != MutableListSlot([]))
+
+
+class TestOperatorRMul(unittest.TestCase):
+    def test_rmul_by_positive_integer(self: Self, /) -> None:
+        result = 3 * MutableListSlot([1, 2])
+        self.assertEqual(list(result), [1, 2, 1, 2, 1, 2])
+
+    def test_rmul_by_one(self: Self, /) -> None:
+        result = 1 * MutableListSlot([1, 2])
+        self.assertEqual(list(result), [1, 2])
+
+    def test_rmul_by_zero(self: Self, /) -> None:
+        result = 0 * MutableListSlot([1, 2])
+        self.assertEqual(list(result), [])
+
+    def test_rmul_by_negative_integer(self: Self, /) -> None:
+        result = -3 * MutableListSlot([1, 2])
+        self.assertEqual(list(result), [])
+
+
+class TestOperatorReversedSequence(unittest.TestCase):
+    def test_shrinking_makes_next_index_out_of_range(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = reversed(values)
+
+        self.assertEqual(next(iterator), 4)
+        del values[1:]
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+    def test_exhaustion_remains_after_regrowth(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = reversed(values)
+
+        self.assertEqual(next(iterator), 4)
+        del values[1:]
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+        values.extend([10, 11, 12, 13])
+
+        with self.assertRaises(StopIteration):
+            next(iterator)
+
+    def test_regrowth_before_next_restores_valid_index(self: Self, /) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = reversed(values)
+
+        self.assertEqual(next(iterator), 4)
+        del values[1:]
+        values.extend([10, 11, 12, 13])
+
+        self.assertEqual(next(iterator), 12)
+
+    def test_deletion_before_cursor_does_not_repair_index(
+        self: Self, /
+    ) -> None:
+        values = MutableListSlot([0, 1, 2, 3, 4])
+        iterator = reversed(values)
+
+        self.assertEqual(next(iterator), 4)
+        del values[0]
+
+        self.assertEqual(next(iterator), 4)
+
+    def test_growth_beyond_initial_reverse_range_is_not_seen(
+        self: Self, /
+    ) -> None:
+        values = MutableListSlot([0, 1, 2])
+        iterator = reversed(values)
+
+        values.append(3)
+
+        self.assertEqual(list(iterator), [2, 1, 0])
 
 
 class TestOperatorSetItem(unittest.TestCase):
@@ -511,28 +652,6 @@ class TestOperatorSetItem(unittest.TestCase):
         value = MutableListSlot([1, 2, 3])
         value[1:2] = [10, 20, 30]
         self.assertEqual(list(value), [1, 10, 20, 30, 3])
-
-
-class TestOperatorDelItem(unittest.TestCase):
-    def test_delete_first_item(self: Self, /) -> None:
-        value = MutableListSlot([1, 2, 3])
-        del value[0]
-        self.assertEqual(list(value), [2, 3])
-
-    def test_delete_last_item(self: Self, /) -> None:
-        value = MutableListSlot([1, 2, 3])
-        del value[-1]
-        self.assertEqual(list(value), [1, 2])
-
-    def test_delete_slice(self: Self, /) -> None:
-        value = MutableListSlot([1, 2, 3, 4])
-        del value[1:3]
-        self.assertEqual(list(value), [1, 4])
-
-    def test_delete_out_of_range_raises(self: Self, /) -> None:
-        value = MutableListSlot([1, 2])
-        with self.assertRaises(IndexError):
-            del value[5]
 
 
 if __name__ == "__main__":
