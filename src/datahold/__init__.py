@@ -83,7 +83,9 @@ class ListLike[Item](abc.Sequence[Item]):
         /,
     ) -> ListLike[Item | Item_]:
         if isinstance(other, ListLike):
-            return self.__type__(self.__frozen__() + other.__frozen__())
+            return self.__type__(
+                self.__frozen__() + other.__frozen__()  # type: ignore[operator]
+            )
         else:
             return NotImplemented
 
@@ -229,11 +231,11 @@ class ListLike[Item](abc.Sequence[Item]):
 
     @classmethod
     @abstractmethod
-    def __type__[Item_](
-        cls: type[ListLike[Item]],
-        other: abc.Iterable[Item_],
+    def __type__(
+        cls: type[Any],
+        other: abc.Iterable[Item],
         /,
-    ) -> ListLike[Item_]: ...
+    ) -> ListLike[Item]: ...
 
     def count(self: ListLike[Item], item: object, /) -> int:
         return self.__frozen__().count(item)
