@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-__all__: list[str] = ["ListLike", "MutableListSlot"]
+__all__: list[str] = ["ListLike", "MutableListLike", "MutableListSlot"]
 
 import sys
 from abc import abstractmethod
@@ -101,12 +101,24 @@ class ListLike[Item](abc.Sequence[Item]):
     @abstractmethod
     def __frozen__(self: ListLike[Item], /) -> tuple[Item, ...]: ...
 
+    @overload
+    def __ge__[Item_](
+        self: ListLike[SupportsDunderGE[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
     def __ge__(
         self: ListLike[Item],
         other: ListLike[SupportsDunderLE[Item]],
         /,
+    ) -> bool: ...
+    def __ge__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
     ) -> bool:
-        return self.__frozen__() >= other.__frozen__()  # type: ignore[no-any-return, operator]
+        return self.__frozen__() >= other.__frozen__()
 
     @overload
     def __getitem__(self: ListLike[Item], key: SupportsIndex, /) -> Item: ...
@@ -120,12 +132,24 @@ class ListLike[Item](abc.Sequence[Item]):
         else:
             return self.__type__(self.__frozen__()[key])
 
+    @overload
+    def __gt__[Item_](
+        self: ListLike[SupportsDunderGT[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
     def __gt__(
         self: ListLike[Item],
         other: ListLike[SupportsDunderLT[Item]],
         /,
+    ) -> bool: ...
+    def __gt__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
     ) -> bool:
-        return self.__frozen__() > other.__frozen__()  # type: ignore[no-any-return, operator]
+        return self.__frozen__() > other.__frozen__()
 
     @abstractmethod
     def __init__(
@@ -146,22 +170,46 @@ class ListLike[Item](abc.Sequence[Item]):
             else:
                 break
 
+    @overload
+    def __le__[Item_](
+        self: ListLike[SupportsDunderLE[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
     def __le__(
         self: ListLike[Item],
         other: ListLike[SupportsDunderGE[Item]],
         /,
+    ) -> bool: ...
+    def __le__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
     ) -> bool:
-        return self.__frozen__() <= other.__frozen__()  # type: ignore[no-any-return, operator]
+        return self.__frozen__() <= other.__frozen__()
 
     def __len__(self: ListLike[Item], /) -> int:
         return len(self.__frozen__())
 
+    @overload
+    def __lt__[Item_](
+        self: ListLike[SupportsDunderLT[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
     def __lt__(
         self: ListLike[Item],
         other: ListLike[SupportsDunderGT[Item]],
         /,
+    ) -> bool: ...
+    def __lt__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
     ) -> bool:
-        return self.__frozen__() < other.__frozen__()  # type: ignore[no-any-return, operator]
+        return self.__frozen__() < other.__frozen__()
 
     def __mul__(
         self: ListLike[Item], other: SupportsIndex, /
@@ -203,25 +251,25 @@ class ListLike[Item](abc.Sequence[Item]):
 ### LIST-SLOT ###
 
 
-class ListSlot[Item](ListLike[Item]):
+class MutableListLike[Item](ListLike[Item]):
     """Provide easily customizable, slotted list-like."""
 
     __slots__ = ()
 
     @overload
     def __delitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: SupportsIndex,
         /,
     ) -> None: ...
     @overload
     def __delitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: Slice[SupportsIndex],
         /,
     ) -> None: ...
     def __delitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: Any,
         /,
     ) -> None:
@@ -229,49 +277,51 @@ class ListSlot[Item](ListLike[Item]):
             del mutable[key]
 
     def __iadd__(  # type: ignore[misc, override]
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         other: abc.Iterable[Item],  # type: ignore[override]
         /,
-    ) -> ListSlot[Item]:
+    ) -> MutableListLike[Item]:
         with self.__mutate__() as mutable:
             mutable += other
         return self
 
     def __imul__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         other: SupportsIndex,
         /,
-    ) -> ListSlot[Item]:
+    ) -> MutableListLike[Item]:
         with self.__mutate__() as mutable:
             mutable *= other
         return self
 
     def __init__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         other: abc.Iterable[Item] = (),
         /,
     ) -> None:
         self.extend(other)
 
     @abstractmethod
-    def __mutate__(self: ListSlot[Item], /) -> ContextManager[list[Item]]: ...
+    def __mutate__(
+        self: MutableListLike[Item], /
+    ) -> ContextManager[list[Item]]: ...
 
     @overload
     def __setitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: SupportsIndex,
         value: Item,
         /,
     ) -> None: ...
     @overload
     def __setitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: Slice[SupportsIndex],
         value: abc.Iterable[Item],
         /,
     ) -> None: ...
     def __setitem__(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         key: Any,
         value: Any,
         /,
@@ -279,58 +329,60 @@ class ListSlot[Item](ListLike[Item]):
         with self.__mutate__() as mutable:
             mutable[key] = value
 
-    def append(self: ListSlot[Item], item: Item, /) -> None:
+    def append(self: MutableListLike[Item], item: Item, /) -> None:
         with self.__mutate__() as mutable:
             mutable.append(item)
 
-    def clear(self: ListSlot[Item], /) -> None:
+    def clear(self: MutableListLike[Item], /) -> None:
         with self.__mutate__() as mutable:
             mutable.clear()
 
-    def copy(self: ListSlot[Item], /) -> ListLike[Item]:
+    def copy(self: MutableListLike[Item], /) -> ListLike[Item]:
         return self.__type__(self.__frozen__())
 
-    def extend(self: ListSlot[Item], other: abc.Iterable[Item], /) -> None:
+    def extend(
+        self: MutableListLike[Item], other: abc.Iterable[Item], /
+    ) -> None:
         with self.__mutate__() as mutable:
             mutable.extend(other)
 
     def insert(
-        self: ListSlot[Item], index: SupportsIndex, item: Item, /
+        self: MutableListLike[Item], index: SupportsIndex, item: Item, /
     ) -> None:
         with self.__mutate__() as mutable:
             mutable.insert(index, item)
 
-    def pop(self: ListSlot[Item], index: SupportsIndex = -1, /) -> Item:
+    def pop(self: MutableListLike[Item], index: SupportsIndex = -1, /) -> Item:
         with self.__mutate__() as mutable:
             return mutable.pop(index)
 
-    def remove(self: ListSlot[Item], item: object, /) -> None:
+    def remove(self: MutableListLike[Item], item: object, /) -> None:
         with self.__mutate__() as mutable:
             mutable.remove(
                 item,  # type: ignore[arg-type]
             )
 
-    def reverse(self: ListSlot[Item], /) -> None:
+    def reverse(self: MutableListLike[Item], /) -> None:
         with self.__mutate__() as mutable:
             mutable.reverse()
 
     @overload
     def sort[T: Sort](
-        self: ListSlot[T],
+        self: MutableListLike[T],
         /,
         *,
         reverse: bool = False,
     ) -> None: ...
     @overload
     def sort[T: Sort](
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         /,
         *,
         key: abc.Callable[[Item], T],
         reverse: bool = False,
     ) -> None: ...
     def sort(
-        self: ListSlot[Item],
+        self: MutableListLike[Item],
         /,
         *,
         key: Any = None,
@@ -340,7 +392,7 @@ class ListSlot[Item](ListLike[Item]):
             mutable.sort(key=key, reverse=reverse)
 
 
-class MutableListSlot[Item](ListSlot[Item]):
+class MutableListSlot[Item](MutableListLike[Item]):
     """Provide easily customizable, mutable, slotted list-like."""
 
     __slots__ = ("_slot",)
