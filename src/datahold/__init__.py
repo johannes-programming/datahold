@@ -414,11 +414,11 @@ class MutableListSlot[Item](MutableListLike[Item]):
         self._slot = tuple(mutable)
 
     @classmethod
-    def __type__[Item_](
-        cls: type[MutableListSlot[Item]],
-        other: abc.Iterable[Item_],
+    def __type__(
+        cls: type[Any],
+        other: abc.Iterable[Item],
         /,
-    ) -> MutableListSlot[Item_]:
+    ) -> MutableListSlot[Item]:
         return MutableListSlot(other)
 
 
