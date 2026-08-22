@@ -28,20 +28,20 @@ class ContextManager[Enter](Protocol):
         traceback: TracebackType | None,
         /,
     ) -> object: ...
-class SupportsDunderGE[Other](Protocol):
-    def __ge__(self: Any, other: Other, /) -> bool: ...
-class SupportsDunderGT[Other](Protocol):
-    def __gt__(self: Any, other: Other, /) -> bool: ...
-class SupportsDunderLE[Other](Protocol):
-    def __le__(self: Any, other: Other, /) -> bool: ...
-class SupportsDunderLT[Other](Protocol):
-    def __lt__(self: Any, other: Other, /) -> bool: ...
+class SupportsDunderGE[Other, Return](Protocol):
+    def __ge__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderGT[Other, Return](Protocol):
+    def __gt__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderLE[Other, Return](Protocol):
+    def __le__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderLT[Other, Return](Protocol):
+    def __lt__(self: Any, other: Other, /) -> Return: ...
 
 
 ### ALIASES ###
 
 type Slice[Index] = slice[Index | None, Index | None, Index | None]
-type Sort = SupportsDunderGT[Self] | SupportsDunderGT[Self]  # type: ignore[misc]
+type Sort = SupportsDunderGT[Self, object] | SupportsDunderLT[Self, object]  # type: ignore[misc]
 
 
 ### HELPER ###
@@ -102,22 +102,22 @@ class ListLike[Item](abc.Sequence[Item]):
     def __frozen__(self: ListLike[Item], /) -> tuple[Item, ...]: ...
 
     @overload
-    def __ge__[Item_](
-        self: ListLike[SupportsDunderGE[Item_]],
+    def __ge__[Item_, Return](
+        self: ListLike[SupportsDunderGE[Item_, Return]],
         other: ListLike[Item_],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     @overload
-    def __ge__(
+    def __ge__[Return](
         self: ListLike[Item],
-        other: ListLike[SupportsDunderLE[Item]],
+        other: ListLike[SupportsDunderLE[Item, Return]],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     def __ge__(
         self: ListLike[Any],
         other: ListLike[Any],
         /,
-    ) -> bool:
+    ) -> Any:
         return self.__frozen__() >= other.__frozen__()
 
     @overload
@@ -133,22 +133,22 @@ class ListLike[Item](abc.Sequence[Item]):
             return self.__type__(self.__frozen__()[key])
 
     @overload
-    def __gt__[Item_](
-        self: ListLike[SupportsDunderGT[Item_]],
+    def __gt__[Item_, Return](
+        self: ListLike[SupportsDunderGT[Item_, Return]],
         other: ListLike[Item_],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     @overload
-    def __gt__(
+    def __gt__[Return](
         self: ListLike[Item],
-        other: ListLike[SupportsDunderLT[Item]],
+        other: ListLike[SupportsDunderLT[Item, Return]],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     def __gt__(
         self: ListLike[Any],
         other: ListLike[Any],
         /,
-    ) -> bool:
+    ) -> Any:
         return self.__frozen__() > other.__frozen__()
 
     @abstractmethod
@@ -171,44 +171,44 @@ class ListLike[Item](abc.Sequence[Item]):
                 break
 
     @overload
-    def __le__[Item_](
-        self: ListLike[SupportsDunderLE[Item_]],
+    def __le__[Item_, Return](
+        self: ListLike[SupportsDunderLE[Item_, Return]],
         other: ListLike[Item_],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     @overload
-    def __le__(
+    def __le__[Return](
         self: ListLike[Item],
-        other: ListLike[SupportsDunderGE[Item]],
+        other: ListLike[SupportsDunderGE[Item, Return]],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     def __le__(
         self: ListLike[Any],
         other: ListLike[Any],
         /,
-    ) -> bool:
+    ) -> Any:
         return self.__frozen__() <= other.__frozen__()
 
     def __len__(self: ListLike[Item], /) -> int:
         return len(self.__frozen__())
 
     @overload
-    def __lt__[Item_](
-        self: ListLike[SupportsDunderLT[Item_]],
+    def __lt__[Item_, Return](
+        self: ListLike[SupportsDunderLT[Item_, Return]],
         other: ListLike[Item_],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     @overload
-    def __lt__(
+    def __lt__[Return](
         self: ListLike[Item],
-        other: ListLike[SupportsDunderGT[Item]],
+        other: ListLike[SupportsDunderGT[Item, Return]],
         /,
-    ) -> bool: ...
+    ) -> Return: ...
     def __lt__(
         self: ListLike[Any],
         other: ListLike[Any],
         /,
-    ) -> bool:
+    ) -> Any:
         return self.__frozen__() < other.__frozen__()
 
     def __mul__(
