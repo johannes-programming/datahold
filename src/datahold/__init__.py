@@ -120,7 +120,10 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__freeze__() >= other.__freeze__()
+        if isinstance(other, ListLike):
+            return self.__freeze__() >= other.__freeze__()
+        else:
+            return NotImplemented
 
     @overload
     def __getitem__(self: ListLike[Item], key: SupportsIndex, /) -> Item: ...
@@ -151,7 +154,10 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__freeze__() > other.__freeze__()
+        if isinstance(other, ListLike):
+            return self.__freeze__() > other.__freeze__()
+        else:
+            return NotImplemented
 
     @abstractmethod
     def __init__(
@@ -189,7 +195,10 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__freeze__() <= other.__freeze__()
+        if isinstance(other, ListLike):
+            return self.__freeze__() <= other.__freeze__()
+        else:
+            return NotImplemented
 
     def __len__(self: ListLike[Item], /) -> int:
         return len(self.__freeze__())
@@ -211,7 +220,10 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__freeze__() < other.__freeze__()
+        if isinstance(other, ListLike):
+            return self.__freeze__() < other.__freeze__()
+        else:
+            return NotImplemented
 
     def __mul__(
         self: ListLike[Item], other: SupportsIndex, /
