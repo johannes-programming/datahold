@@ -61,7 +61,7 @@ def reverse_sequence[Item](
 ) -> abc.Generator[Item, None, None]:
     frozen: tuple[Item, ...]
     while True:
-        frozen = sequence.__frozen__()
+        frozen = sequence.__freeze__()
         length -= 1
         if 0 <= length < len(frozen):
             yield frozen[length]
@@ -84,24 +84,24 @@ class ListLike[Item](abc.Sequence[Item]):
     ) -> ListLike[Item | Item_]:
         if isinstance(other, ListLike):
             return self.__type__(
-                self.__frozen__() + other.__frozen__()  # type: ignore[operator]
+                self.__freeze__() + other.__freeze__()  # type: ignore[operator]
             )
         else:
             return NotImplemented
 
     def __contains__(self: ListLike[Item], other: object, /) -> bool:
-        return other in self.__frozen__()
+        return other in self.__freeze__()
 
     def __eq__(
         self: ListLike[Item], other: object, /
     ) -> NotImplementedType | bool:
         if isinstance(other, ListLike):
-            return self.__frozen__() == other.__frozen__()
+            return self.__freeze__() == other.__freeze__()
         else:
             return NotImplemented
 
     @abstractmethod
-    def __frozen__(self: ListLike[Item], /) -> tuple[Item, ...]: ...
+    def __freeze__(self: ListLike[Item], /) -> tuple[Item, ...]: ...
 
     @overload
     def __ge__[Item_, Return](
@@ -120,7 +120,7 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__frozen__() >= other.__frozen__()
+        return self.__freeze__() >= other.__freeze__()
 
     @overload
     def __getitem__(self: ListLike[Item], key: SupportsIndex, /) -> Item: ...
@@ -130,9 +130,9 @@ class ListLike[Item](abc.Sequence[Item]):
     ) -> ListLike[Item]: ...
     def __getitem__(self: ListLike[Item], key: Any, /) -> Any:
         if isinstance(key, SupportsIndex):
-            return self.__frozen__()[key]
+            return self.__freeze__()[key]
         else:
-            return self.__type__(self.__frozen__()[key])
+            return self.__type__(self.__freeze__()[key])
 
     @overload
     def __gt__[Item_, Return](
@@ -151,7 +151,7 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__frozen__() > other.__frozen__()
+        return self.__freeze__() > other.__freeze__()
 
     @abstractmethod
     def __init__(
@@ -165,7 +165,7 @@ class ListLike[Item](abc.Sequence[Item]):
         i: int
         i = 0
         while True:
-            frozen = self.__frozen__()
+            frozen = self.__freeze__()
             if i < len(frozen):
                 yield frozen[i]
                 i += 1
@@ -189,10 +189,10 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__frozen__() <= other.__frozen__()
+        return self.__freeze__() <= other.__freeze__()
 
     def __len__(self: ListLike[Item], /) -> int:
-        return len(self.__frozen__())
+        return len(self.__freeze__())
 
     @overload
     def __lt__[Item_, Return](
@@ -211,22 +211,22 @@ class ListLike[Item](abc.Sequence[Item]):
         other: ListLike[Any],
         /,
     ) -> Any:
-        return self.__frozen__() < other.__frozen__()
+        return self.__freeze__() < other.__freeze__()
 
     def __mul__(
         self: ListLike[Item], other: SupportsIndex, /
     ) -> ListLike[Item]:
-        return self.__type__(self.__frozen__() * other)
+        return self.__type__(self.__freeze__() * other)
 
     __rmul__ = __mul__
 
     def __repr__(self: ListLike[Item], /) -> str:
-        return f"{type(self).__name__}({list(self.__frozen__())})"
+        return f"{type(self).__name__}({list(self.__freeze__())})"
 
     def __reversed__(self: ListLike[Item], /) -> abc.Iterator[Item]:
         return reverse_sequence(
             sequence=self,
-            length=len(self.__frozen__()),
+            length=len(self.__freeze__()),
         )
 
     @classmethod
@@ -238,7 +238,7 @@ class ListLike[Item](abc.Sequence[Item]):
     ) -> ListLike[Item]: ...
 
     def count(self: ListLike[Item], item: object, /) -> int:
-        return self.__frozen__().count(item)
+        return self.__freeze__().count(item)
 
     def index(
         self: ListLike[Item],
@@ -247,7 +247,7 @@ class ListLike[Item](abc.Sequence[Item]):
         stop: SupportsIndex = sys.maxsize,
         /,
     ) -> int:
-        return self.__frozen__().index(item, start, stop)
+        return self.__freeze__().index(item, start, stop)
 
 
 ### LIST-SLOT ###
@@ -340,7 +340,7 @@ class MutableListLike[Item](ListLike[Item]):
             mutable.clear()
 
     def copy(self: MutableListLike[Item], /) -> ListLike[Item]:
-        return self.__type__(self.__frozen__())
+        return self.__type__(self.__freeze__())
 
     def extend(
         self: MutableListLike[Item], other: abc.Iterable[Item], /
@@ -401,7 +401,7 @@ class MutableListSlot[Item](MutableListLike[Item]):
 
     _slot: tuple[Item, ...]
 
-    def __frozen__(self: MutableListSlot[Item], /) -> tuple[Item, ...]:
+    def __freeze__(self: MutableListSlot[Item], /) -> tuple[Item, ...]:
         return self._slot
 
     @contextmanager
