@@ -105,24 +105,22 @@ For other object types, the method returns ``NotImplemented``.
 This abstract method returns the current immutable representation of ``self``.
 All non-mutating operations obtain their items through this method.
 
-``__ge__(other: ListLike[Any], /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__[Item: SupportsDunderGE[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__ge__[Return](other: ListLike[SupportsDunderLE[Item, Return]], /) -> Return``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``self >= other`` by comparing frozen tuples.
-Its overloads preserve the comparison return type of the contained items.
+This magic method implements ``self >= other``.
 
-``__getitem__(key: SupportsIndex, /) -> Item`` ``__getitem__(key: slice, /) -> ListLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: SupportsIndex, /) -> Item`` ``__getitem__(key: Slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self[key]``.
 An index returns an item; a slice is passed to ``__type__`` and returns a new
 list-like object.
 
-``__gt__(other: ListLike[Any], /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__[Item: SupportsDunderGT[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__gt__[Return](other: ListLike[SupportsDunderLT[Item, Return]], /) -> Return``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``self > other`` by comparing frozen tuples.
-Its overloads preserve the comparison return type of the contained items.
+This magic method implements ``self > other``.
 
 ``__init__(other: Iterable[Item] = (), /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -136,22 +134,20 @@ This magic method implements ``iter(self)``.
 It obtains a new frozen representation before yielding each item,
 so later iterations can observe mutations made during iteration.
 
-``__le__(other: ListLike[Any], /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__le__[Item: SupportsDunderLE[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__le__[Return](other: ListLike[SupportsDunderGE[Item, Return]], /) -> Return``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``self <= other`` by comparing frozen tuples.
-Its overloads preserve the comparison return type of the contained items.
+This magic method implements ``self <= other``.
 
 ``__len__() -> int``
 ^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``len(self)``.
 
-``__lt__(other: ListLike[Any], /) -> Any``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__lt__[Item: SupportsDunderLT[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__lt__[Return](other: ListLike[SupportsDunderGT[Item, Return]], /) -> Return``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``self < other`` by comparing frozen tuples.
-Its overloads preserve the comparison return type of the contained items.
+This magic method implements ``self < other``.
 
 ``__mul__(other: SupportsIndex, /) -> ListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -168,11 +164,6 @@ This magic method implements ``other * self`` analogously to ``__mul__``.
 ^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``repr(self)``.
-
-.. code-block:: python
-
-    def __repr__(self):
-        return f"{type(self).__name__}({list(self.__freeze__())})"
 
 ``__reversed__() -> Iterator[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -208,8 +199,8 @@ The initializer is concrete and extends an initially empty mutable view with
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``__delitem__(key: SupportsIndex | slice, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__delitem__(key: SupportsIndex, /) -> None`` ``__delitem__(key: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``del self[key]``.
 
@@ -219,7 +210,7 @@ This magic method implements ``del self[key]``.
 This magic method implements ``self += other`` and returns ``self``.
 
 ``__imul__(other: SupportsIndex, /) -> MutableListLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self *= other`` and returns ``self``.
 
@@ -231,8 +222,8 @@ Mutating operations modify that list inside the context.
 An implementation can validate, normalize, or store the items when the context
 exits successfully.
 
-``__setitem__(key: SupportsIndex, value: Item, /) -> None`` ``__setitem__(key: slice, value: Iterable[Item], /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__setitem__(key: SupportsIndex, value: Item, /) -> None`` ``__setitem__(key: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], value: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self[key] = value``.
 
@@ -276,11 +267,10 @@ This method removes the first item equal to ``item``.
 
 This method reverses the items in place.
 
-``sort(*, key: Callable[[Item], Sort] | None = None, reverse: bool = False) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``sort[Item: SupportsDunderGT[Self, object] | SupportsDunderLT[Self, object]](*, key: None = None, reverse: bool = False) -> None`` ``sort[T: SupportsDunderGT[Self, object] | SupportsDunderLT[Self, object]](*, key: Callable[[Item], T], reverse: bool = False) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method sorts the items in place.
-Its overloads distinguish natural ordering from ordering through ``key``.
 
 ``class datahold.MutableListSlot[Item](other: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

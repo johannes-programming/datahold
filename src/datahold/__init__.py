@@ -385,6 +385,7 @@ class MutableListLike[Item](ListLike[Item]):
         self: MutableListLike[T],
         /,
         *,
+        key: None = None,
         reverse: bool = False,
     ) -> None: ...
     @overload
