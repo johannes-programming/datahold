@@ -1,0 +1,342 @@
+Overview
+--------
+
+This project provides easily customized list-like collections.
+
+Of course, similar base classes are provided by ``collections``.
+They were also the main inspiration for this project.
+But customizing them often requires overriding several methods
+to ensure that every operation follows the same rules.
+Version 4 routes the behavior of its list-like classes through three hooks:
+``__freeze__`` supplies a tuple for non-mutating operations,
+``__mutate__`` supplies a temporary list for mutating operations,
+and ``__type__`` constructs the result of operations that create a new object.
+Therefore, implementing these hooks is sufficient to customize the behavior
+shared by all proper methods and magic methods.
+
+``MutableListSlot`` is the ready-to-use implementation.
+It stores its items as a tuple in the ``_slot`` slot and mutates them through
+a temporary list.
+For example, it is possible to create a list-like class
+that converts every stored integer to its absolute value.
+
+.. code-block:: python
+
+    from collections.abc import Iterable, Iterator
+    from contextlib import contextmanager
+
+    from datahold import MutableListSlot
+
+    class AbsoluteList(MutableListSlot[int]):
+
+        __slots__ = ()
+
+        @contextmanager
+        def __mutate__(self) -> Iterator[list[int]]:
+            mutable = list(getattr(self, "_slot", ()))
+            yield mutable
+            self._slot = tuple(map(abs, mutable))
+
+        @classmethod
+        def __type__(cls, other: Iterable[int]) -> "AbsoluteList":
+            return cls(other)
+
+    values = AbsoluteList([-1, 2])
+    values.append(-3)
+    assert list(values) == [1, 2, 3]
+
+Installation
+------------
+
+To install ``datahold``, you can use ``pip``.
+Open your terminal and run:
+
+.. code-block:: shell
+
+    pip install datahold
+
+Typing
+------
+
+The typing conforms strictly to ``mypy``.
+
+Features
+--------
+
+Inherited features are not mentioned again, unless something changed.
+
+``datahold``
+''''''''''''
+
+The following classes can be accessed directly from ``datahold``.
+
+``class datahold.ListLike[Item](other: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``collections.abc.Sequence[Item]``.
+It implements the non-mutating operations of a list-like object.
+Subclasses must implement ``__init__``, ``__freeze__``, and ``__type__``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__add__[Item_](other: ListLike[Item_], /) -> ListLike[Item | Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self + other``.
+It accepts another ``ListLike`` and constructs the result through ``__type__``.
+For other operand types, it returns ``NotImplemented``.
+
+``__contains__(other: object, /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``other in self`` using ``__freeze__``.
+
+``__eq__(other: object, /) -> NotImplementedType | bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self == other``.
+Two ``ListLike`` objects compare by their frozen tuples.
+For other object types, the method returns ``NotImplemented``.
+
+``__freeze__() -> tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method returns the current immutable representation of ``self``.
+All non-mutating operations obtain their items through this method.
+
+``__ge__(other: ListLike[Any], /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self >= other`` by comparing frozen tuples.
+Its overloads preserve the comparison return type of the contained items.
+
+``__getitem__(key: SupportsIndex, /) -> Item`` ``__getitem__(key: slice, /) -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self[key]``.
+An index returns an item; a slice is passed to ``__type__`` and returns a new
+list-like object.
+
+``__gt__(other: ListLike[Any], /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self > other`` by comparing frozen tuples.
+Its overloads preserve the comparison return type of the contained items.
+
+``__init__(other: Iterable[Item] = (), /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract initializer must be implemented by subclasses.
+
+``__iter__() -> Generator[Item, None, None]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``iter(self)``.
+It obtains a new frozen representation before yielding each item,
+so later iterations can observe mutations made during iteration.
+
+``__le__(other: ListLike[Any], /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self <= other`` by comparing frozen tuples.
+Its overloads preserve the comparison return type of the contained items.
+
+``__len__() -> int``
+^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``len(self)``.
+
+``__lt__(other: ListLike[Any], /) -> Any``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self < other`` by comparing frozen tuples.
+Its overloads preserve the comparison return type of the contained items.
+
+``__mul__(other: SupportsIndex, /) -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self * other`` and constructs the result through
+``__type__``.
+
+``__rmul__(other: SupportsIndex, /) -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``other * self`` analogously to ``__mul__``.
+
+``__repr__() -> str``
+^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``repr(self)``.
+
+.. code-block:: python
+
+    def __repr__(self):
+        return f"{type(self).__name__}({list(self.__freeze__())})"
+
+``__reversed__() -> Iterator[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``reversed(self)``.
+It starts with the current length and obtains a new frozen representation
+before yielding each item.
+
+``__type__(other: Iterable[Item], /) -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract ``classmethod`` constructs the result of slicing, addition,
+multiplication, and copying.
+
+``count(item: object, /) -> int``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method returns the number of occurrences of ``item``.
+
+``index(item: Item, start: SupportsIndex = 0, stop: SupportsIndex = sys.maxsize, /) -> int``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method returns the first index of ``item`` between ``start`` and ``stop``.
+
+``class datahold.MutableListLike[Item](other: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This abstract base class inherits from ``ListLike[Item]``.
+It implements list mutation through the ``__mutate__`` context manager.
+The initializer is concrete and extends an initially empty mutable view with
+``other``.
+
+``__slots__ = ()``
+^^^^^^^^^^^^^^^^^^
+
+``__delitem__(key: SupportsIndex | slice, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``del self[key]``.
+
+``__iadd__(other: Iterable[Item], /) -> MutableListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self += other`` and returns ``self``.
+
+``__imul__(other: SupportsIndex, /) -> MutableListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self *= other`` and returns ``self``.
+
+``__mutate__() -> ContextManager[list[Item]]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This abstract method returns a context manager which yields a mutable list.
+Mutating operations modify that list inside the context.
+An implementation can validate, normalize, or store the items when the context
+exits successfully.
+
+``__setitem__(key: SupportsIndex, value: Item, /) -> None`` ``__setitem__(key: slice, value: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This magic method implements ``self[key] = value``.
+
+``append(item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method appends ``item``.
+
+``clear() -> None``
+^^^^^^^^^^^^^^^^^^^
+
+This method removes all items.
+
+``copy() -> ListLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method constructs a shallow copy through ``__type__``.
+
+``extend(other: Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method appends every item from ``other``.
+
+``insert(index: SupportsIndex, item: Item, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method inserts ``item`` before ``index``.
+
+``pop(index: SupportsIndex = -1, /) -> Item``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method removes and returns the item at ``index``.
+
+``remove(item: object, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method removes the first item equal to ``item``.
+
+``reverse() -> None``
+^^^^^^^^^^^^^^^^^^^^^
+
+This method reverses the items in place.
+
+``sort(*, key: Callable[[Item], Sort] | None = None, reverse: bool = False) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method sorts the items in place.
+Its overloads distinguish natural ordering from ordering through ``key``.
+
+``class datahold.MutableListSlot[Item](other: Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This concrete class inherits from ``MutableListLike[Item]``.
+It stores its immutable representation in ``_slot`` and uses a temporary list
+for each mutation.
+
+``__slots__ = ("_slot",)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``__freeze__() -> tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This method returns ``_slot``.
+
+``__mutate__() -> Generator[list[Item], None, None]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This context manager copies ``_slot`` into a list, yields that list, and stores
+its final contents as a tuple when the context exits successfully.
+If the operation raises an exception, the stored tuple is left unchanged.
+
+``__type__(other: Iterable[Item], /) -> MutableListSlot[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This ``classmethod`` returns ``MutableListSlot(other)``.
+It deliberately constructs the concrete base class; subclasses that should be
+preserved by slicing, addition, multiplication, or copying can override this
+method and return ``cls(other)``.
+
+Testing
+-------
+
+This project can be tested through its ``run_tests.py`` script
+which runs the tests in its ``tests/`` directory.
+
+License
+-------
+
+This project is licensed under the MIT License.
+
+Links
+-----
+
+- Download: https://pypi.org/project/datahold/#files
+- Index: https://pypi.org/project/datahold/
+- Source: https://github.com/johannes-programming/datahold/
+- Website: https://datahold.johannes-programming.online/
+
+Impressum
+---------
+
+**Johannes Programming**
+
+- Name: Johannes
+- Email: johannes.programming@gmail.com
+- Homepage: https://www.johannes-programming.online/
+- Gravatar: https://www.johannes-programming.fyi/
