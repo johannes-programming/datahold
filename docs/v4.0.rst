@@ -65,16 +65,11 @@ Features
 
 Inherited features are not mentioned again, unless something changed.
 
-``datahold``
-''''''''''''
-
-The following classes can be accessed directly from ``datahold``.
-
 ``class datahold.ListLike[Item](other: Iterable[Item] = (), /)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``collections.abc.Sequence[Item]``.
-It implements the non-mutating operations of a list-like object.
+It implements the non-mutating magic methods and public methods of a list-like object.
 Subclasses must implement ``__init__``, ``__freeze__``, and ``__type__``.
 
 ``__slots__ = ()``
@@ -90,19 +85,17 @@ For other operand types, it returns ``NotImplemented``.
 ``__contains__(other: object, /) -> bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``other in self`` using ``__freeze__``.
+This magic method implements ``other in self``.
 
 ``__eq__(other: object, /) -> NotImplementedType | bool``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self == other``.
-Two ``ListLike`` objects compare by their frozen tuples.
-For other object types, the method returns ``NotImplemented``.
 
 ``__freeze__() -> tuple[Item, ...]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This abstract method returns the current immutable representation of ``self``.
+This abstract method returns a frozen representation of ``self``.
 All non-mutating operations obtain their items through this method.
 
 ``__ge__[Item: SupportsDunderGE[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__ge__[Return](other: ListLike[SupportsDunderLE[Item, Return]], /) -> Return``
@@ -114,8 +107,6 @@ This magic method implements ``self >= other``.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self[key]``.
-An index returns an item; a slice is passed to ``__type__`` and returns a new
-list-like object.
 
 ``__gt__[Item: SupportsDunderGT[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__gt__[Return](other: ListLike[SupportsDunderLT[Item, Return]], /) -> Return``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -127,12 +118,10 @@ This magic method implements ``self > other``.
 
 This abstract initializer must be implemented by subclasses.
 
-``__iter__() -> Generator[Item, None, None]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__iter__() -> Iterator[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``iter(self)``.
-It obtains a new frozen representation before yielding each item,
-so later iterations can observe mutations made during iteration.
 
 ``__le__[Item: SupportsDunderLE[Item_, Return], Item_, Return](other: ListLike[Item_], /) -> Return`` ``__le__[Return](other: ListLike[SupportsDunderGE[Item, Return]], /) -> Return``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -149,16 +138,10 @@ This magic method implements ``len(self)``.
 
 This magic method implements ``self < other``.
 
-``__mul__(other: SupportsIndex, /) -> ListLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__mul__(other: SupportsIndex, /) -> ListLike[Item]`` ``__rmul__ = __mul__``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This magic method implements ``self * other`` and constructs the result through
-``__type__``.
-
-``__rmul__(other: SupportsIndex, /) -> ListLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``other * self`` analogously to ``__mul__``.
+This magic method implements ``self * other``.
 
 ``__repr__() -> str``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -169,14 +152,11 @@ This magic method implements ``repr(self)``.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``reversed(self)``.
-It starts with the current length and obtains a new frozen representation
-before yielding each item.
 
 ``__type__(other: Iterable[Item], /) -> ListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This abstract ``classmethod`` constructs the result of slicing, addition,
-multiplication, and copying.
+This abstract ``staticmethod`` is used wherever ``list[Item]`` would return ``list[Item]``.
 
 ``count(item: object, /) -> int``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,9 +172,8 @@ This method returns the first index of ``item`` between ``start`` and ``stop``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``ListLike[Item]``.
-It implements list mutation through the ``__mutate__`` context manager.
-The initializer is concrete and extends an initially empty mutable view with
-``other``.
+It serves as a base for customizable mutable list-likes.
+A subclass must only override ``__mutate__`` and ``__type__``.
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -203,6 +182,16 @@ The initializer is concrete and extends an initially empty mutable view with
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``del self[key]``.
+
+``__freeze__() -> tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def __freeze__(self: Self, /) -> tuple[Item, ...]:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            return tuple(mutable)
 
 ``__iadd__(other: Iterable[Item], /) -> MutableListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -217,10 +206,8 @@ This magic method implements ``self *= other`` and returns ``self``.
 ``__mutate__() -> ContextManager[list[Item]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This abstract method returns a context manager which yields a mutable list.
-Mutating operations modify that list inside the context.
-An implementation can validate, normalize, or store the items when the context
-exits successfully.
+This abstract method is called by all proper methods and magic methods that mutate ``self``.
+It is also called by ``__freeze__``.
 
 ``__setitem__(key: SupportsIndex, value: Item, /) -> None`` ``__setitem__(key: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], value: Iterable[Item], /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -282,25 +269,42 @@ for each mutation.
 ``__slots__ = ("_slot",)``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+``_slot: tuple[Item, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``__freeze__() -> tuple[Item, ...]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This method returns ``_slot``.
+.. code-block:: python
 
-``__mutate__() -> Generator[list[Item], None, None]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def __freeze__(self: MutableListSlot[Item], /) -> tuple[Item, ...]:
+        return self._slot
 
-This context manager copies ``_slot`` into a list, yields that list, and stores
-its final contents as a tuple when the context exits successfully.
-If the operation raises an exception, the stored tuple is left unchanged.
+``__mutate__() -> ContextManager[list[Item]]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    @contextmanager
+    def __mutate__(
+        self: MutableListSlot[Item], /
+    ) -> abc.Generator[list[Item], None, None]:
+        mutable: list[Item]
+        mutable = list(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = tuple(mutable)
 
 ``__type__(other: Iterable[Item], /) -> MutableListSlot[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This ``classmethod`` returns ``MutableListSlot(other)``.
-It deliberately constructs the concrete base class; subclasses that should be
-preserved by slicing, addition, multiplication, or copying can override this
-method and return ``cls(other)``.
+.. code-block:: python
+
+    @staticmethod
+    def __type__(
+        other: abc.Iterable[Item],
+        /,
+    ) -> MutableListSlot[Item]:
+        return MutableListSlot(other)
 
 Testing
 -------

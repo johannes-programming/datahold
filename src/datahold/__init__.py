@@ -8,6 +8,7 @@ import sys
 from abc import abstractmethod
 from collections import abc
 from contextlib import contextmanager
+from reprlib import recursive_repr
 from types import NotImplementedType, TracebackType
 from typing import Any, Protocol, Self, SupportsIndex, overload
 
@@ -27,7 +28,7 @@ class ContextManager[Enter](Protocol):
         exc_value: BaseException | None,
         traceback: TracebackType | None,
         /,
-    ) -> object: ...
+    ) -> bool | None: ...
 class SupportsDunderGE[Other, Return](Protocol):
     def __ge__(self: Any, other: Other, /) -> Return: ...
 class SupportsDunderGT[Other, Return](Protocol):
@@ -48,11 +49,22 @@ type Sort = SupportsDunderGT[Self, object] | SupportsDunderLT[Self, object]  # t
 
 
 def init() -> None:
-    x: str
-    for x in __all__:
-        setdoc.Basics(
-            excepts=(AttributeError, TypeError),
-        )(*globals()[x].__dict__.values())
+    basics: setdoc.Basics
+    cls: type[object]
+    types: set[type[object]]
+    basics = setdoc.Basics(excepts=(AttributeError, TypeError))
+    types = {
+        ContextManager,
+        ListLike,
+        MutableListLike,
+        MutableListSlot,
+        SupportsDunderGE,
+        SupportsDunderGT,
+        SupportsDunderLE,
+        SupportsDunderLT,
+    }
+    for cls in types:
+        basics(cls.__dict__.values())
 
 
 def reverse_sequence[Item](
@@ -166,7 +178,7 @@ class ListLike[Item](abc.Sequence[Item]):
         /,
     ) -> None: ...
 
-    def __iter__(self: ListLike[Item], /) -> abc.Generator[Item, None, None]:
+    def __iter__(self: ListLike[Item], /) -> abc.Iterator[Item]:
         frozen: tuple[Item, ...]
         i: int
         i = 0
@@ -232,6 +244,7 @@ class ListLike[Item](abc.Sequence[Item]):
 
     __rmul__ = __mul__
 
+    @recursive_repr()
     def __repr__(self: ListLike[Item], /) -> str:
         return f"{type(self).__name__}({list(self.__freeze__())})"
 
@@ -241,10 +254,9 @@ class ListLike[Item](abc.Sequence[Item]):
             length=len(self.__freeze__()),
         )
 
-    @classmethod
+    @staticmethod
     @abstractmethod
     def __type__(
-        cls: type[Any],
         other: abc.Iterable[Item],
         /,
     ) -> ListLike[Item]: ...
@@ -289,6 +301,11 @@ class MutableListLike[Item](ListLike[Item]):
     ) -> None:
         with self.__mutate__() as mutable:
             del mutable[key]
+
+    def __freeze__(self: Self, /) -> tuple[Item, ...]:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            return tuple(mutable)
 
     def __iadd__(  # type: ignore[misc, override]
         self: MutableListLike[Item],
@@ -420,15 +437,14 @@ class MutableListSlot[Item](MutableListLike[Item]):
     @contextmanager
     def __mutate__(
         self: MutableListSlot[Item], /
-    ) -> abc.Generator[list[Item]]:
+    ) -> abc.Generator[list[Item], None, None]:
         mutable: list[Item]
         mutable = list(getattr(self, "_slot", ()))
         yield mutable
         self._slot = tuple(mutable)
 
-    @classmethod
+    @staticmethod
     def __type__(
-        cls: type[Any],
         other: abc.Iterable[Item],
         /,
     ) -> MutableListSlot[Item]:
