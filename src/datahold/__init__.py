@@ -1,53 +1,456 @@
-"""Provide __init__."""
+"""Provide easily customized collections."""
 
-__all__ = [
-    "BaseDataDict",
-    "BaseDataList",
-    "BaseDataObject",
-    "BaseDataSet",
-    "BaseHoldDict",
-    "BaseHoldList",
-    "BaseHoldObject",
-    "BaseHoldSet",
-    "DataDict",
-    "DataList",
-    "DataObject",
-    "DataSet",
-    "FrozenDataDict",
-    "FrozenDataList",
-    "FrozenDataObject",
-    "FrozenDataSet",
-    "FrozenHoldDict",
-    "FrozenHoldList",
-    "FrozenHoldObject",
-    "FrozenHoldSet",
-    "HoldDict",
-    "HoldList",
-    "HoldObject",
-    "HoldSet",
-]
+from __future__ import annotations
 
-from datahold.base.BaseDataDict import BaseDataDict
-from datahold.base.BaseDataList import BaseDataList
-from datahold.base.BaseDataObject import BaseDataObject
-from datahold.base.BaseDataSet import BaseDataSet
-from datahold.base.BaseHoldDict import BaseHoldDict
-from datahold.base.BaseHoldList import BaseHoldList
-from datahold.base.BaseHoldObject import BaseHoldObject
-from datahold.base.BaseHoldSet import BaseHoldSet
-from datahold.core.DataDict import DataDict
-from datahold.core.DataList import DataList
-from datahold.core.DataObject import DataObject
-from datahold.core.DataSet import DataSet
-from datahold.core.HoldDict import HoldDict
-from datahold.core.HoldList import HoldList
-from datahold.core.HoldObject import HoldObject
-from datahold.core.HoldSet import HoldSet
-from datahold.frozen.FrozenDataDict import FrozenDataDict
-from datahold.frozen.FrozenDataList import FrozenDataList
-from datahold.frozen.FrozenDataObject import FrozenDataObject
-from datahold.frozen.FrozenDataSet import FrozenDataSet
-from datahold.frozen.FrozenHoldDict import FrozenHoldDict
-from datahold.frozen.FrozenHoldList import FrozenHoldList
-from datahold.frozen.FrozenHoldObject import FrozenHoldObject
-from datahold.frozen.FrozenHoldSet import FrozenHoldSet
+__all__: list[str] = ["ListLike", "MutableListLike", "MutableListSlot"]
+
+import sys
+from abc import abstractmethod
+from collections import abc
+from contextlib import contextmanager
+from reprlib import recursive_repr
+from types import NotImplementedType, TracebackType
+from typing import Any, Protocol, Self, SupportsIndex, overload
+
+import setdoc
+
+### PROTOCOLS ###
+
+
+class ContextManager[Enter](Protocol):
+    def __enter__(
+        self: Any,
+        /,
+    ) -> Enter: ...
+    def __exit__(
+        self: Any,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+        /,
+    ) -> bool | None: ...
+class SupportsDunderGE[Other, Return](Protocol):
+    def __ge__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderGT[Other, Return](Protocol):
+    def __gt__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderLE[Other, Return](Protocol):
+    def __le__(self: Any, other: Other, /) -> Return: ...
+class SupportsDunderLT[Other, Return](Protocol):
+    def __lt__(self: Any, other: Other, /) -> Return: ...
+
+
+### ALIASES ###
+
+type Slice[Index] = slice[Index | None, Index | None, Index | None]
+type Sort[Other] = (
+    SupportsDunderGT[Other, object] | SupportsDunderLT[Other, object]
+)
+
+
+### HELPER ###
+
+
+def init() -> None:
+    basics: setdoc.Basics
+    cls: type[object]
+    types: set[type[object]]
+    basics = setdoc.Basics(excepts=(AttributeError, TypeError))
+    types = {
+        ContextManager,
+        ListLike,
+        MutableListLike,
+        MutableListSlot,
+        SupportsDunderGE,
+        SupportsDunderGT,
+        SupportsDunderLE,
+        SupportsDunderLT,
+    }
+    for cls in types:
+        basics(*cls.__dict__.values())
+
+
+def reverse_sequence[Item](
+    sequence: ListLike[Item],
+    length: int,
+) -> abc.Generator[Item, None, None]:
+    frozen: tuple[Item, ...]
+    while True:
+        frozen = sequence.__freeze__()
+        length -= 1
+        if 0 <= length < len(frozen):
+            yield frozen[length]
+        else:
+            break
+
+
+### LIST-LIKE ###
+
+
+class ListLike[Item](abc.Sequence[Item]):
+    """Provide easily customizable list-like."""
+
+    __slots__ = ()
+
+    def __add__[Item_](
+        self: ListLike[Item],
+        other: ListLike[Item_],
+        /,
+    ) -> ListLike[Item | Item_]:
+        if isinstance(other, ListLike):
+            return self.__type__(
+                self.__freeze__() + other.__freeze__()  # type: ignore[operator]
+            )
+        else:
+            return NotImplemented
+
+    def __contains__(self: ListLike[Item], other: object, /) -> bool:
+        return other in self.__freeze__()
+
+    def __eq__(
+        self: ListLike[Item], other: object, /
+    ) -> NotImplementedType | bool:
+        if isinstance(other, ListLike):
+            return self.__freeze__() == other.__freeze__()
+        else:
+            return NotImplemented
+
+    @abstractmethod
+    def __freeze__(self: ListLike[Item], /) -> tuple[Item, ...]: ...
+
+    @overload
+    def __ge__[Item_, Return](
+        self: ListLike[SupportsDunderGE[Item_, Return]],
+        other: ListLike[Item_],
+        /,
+    ) -> Return: ...
+    @overload
+    def __ge__[Return](
+        self: ListLike[Item],
+        other: ListLike[SupportsDunderLE[Item, Return]],
+        /,
+    ) -> Return: ...
+    def __ge__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
+    ) -> Any:
+        if isinstance(other, ListLike):
+            return self.__freeze__() >= other.__freeze__()
+        else:
+            return NotImplemented
+
+    @overload
+    def __getitem__(self: ListLike[Item], key: SupportsIndex, /) -> Item: ...
+    @overload
+    def __getitem__(
+        self: ListLike[Item], key: Slice[SupportsIndex], /
+    ) -> ListLike[Item]: ...
+    def __getitem__(self: ListLike[Item], key: Any, /) -> Any:
+        if isinstance(key, SupportsIndex):
+            return self.__freeze__()[key]
+        else:
+            return self.__type__(self.__freeze__()[key])
+
+    @overload
+    def __gt__[Item_, Return](
+        self: ListLike[SupportsDunderGT[Item_, Return]],
+        other: ListLike[Item_],
+        /,
+    ) -> Return: ...
+    @overload
+    def __gt__[Return](
+        self: ListLike[Item],
+        other: ListLike[SupportsDunderLT[Item, Return]],
+        /,
+    ) -> Return: ...
+    def __gt__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
+    ) -> Any:
+        if isinstance(other, ListLike):
+            return self.__freeze__() > other.__freeze__()
+        else:
+            return NotImplemented
+
+    @abstractmethod
+    def __init__(
+        self: ListLike[Item],
+        other: abc.Iterable[Item] = (),
+        /,
+    ) -> None: ...
+
+    def __iter__(self: ListLike[Item], /) -> abc.Iterator[Item]:
+        frozen: tuple[Item, ...]
+        i: int
+        i = 0
+        while True:
+            frozen = self.__freeze__()
+            if i < len(frozen):
+                yield frozen[i]
+                i += 1
+            else:
+                break
+
+    @overload
+    def __le__[Item_, Return](
+        self: ListLike[SupportsDunderLE[Item_, Return]],
+        other: ListLike[Item_],
+        /,
+    ) -> Return: ...
+    @overload
+    def __le__[Return](
+        self: ListLike[Item],
+        other: ListLike[SupportsDunderGE[Item, Return]],
+        /,
+    ) -> Return: ...
+    def __le__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
+    ) -> Any:
+        if isinstance(other, ListLike):
+            return self.__freeze__() <= other.__freeze__()
+        else:
+            return NotImplemented
+
+    def __len__(self: ListLike[Item], /) -> int:
+        return len(self.__freeze__())
+
+    @overload
+    def __lt__[Item_, Return](
+        self: ListLike[SupportsDunderLT[Item_, Return]],
+        other: ListLike[Item_],
+        /,
+    ) -> Return: ...
+    @overload
+    def __lt__[Return](
+        self: ListLike[Item],
+        other: ListLike[SupportsDunderGT[Item, Return]],
+        /,
+    ) -> Return: ...
+    def __lt__(
+        self: ListLike[Any],
+        other: ListLike[Any],
+        /,
+    ) -> Any:
+        if isinstance(other, ListLike):
+            return self.__freeze__() < other.__freeze__()
+        else:
+            return NotImplemented
+
+    def __mul__(
+        self: ListLike[Item], other: SupportsIndex, /
+    ) -> ListLike[Item]:
+        return self.__type__(self.__freeze__() * other)
+
+    __rmul__ = __mul__
+
+    @recursive_repr()
+    def __repr__(self: ListLike[Item], /) -> str:
+        return f"{type(self).__name__}({list(self.__freeze__())})"
+
+    def __reversed__(self: ListLike[Item], /) -> abc.Iterator[Item]:
+        return reverse_sequence(
+            sequence=self,
+            length=len(self.__freeze__()),
+        )
+
+    @staticmethod
+    @abstractmethod
+    def __type__(
+        other: abc.Iterable[Item],
+        /,
+    ) -> ListLike[Item]: ...
+
+    def count(self: ListLike[Item], item: object, /) -> int:
+        return self.__freeze__().count(item)
+
+    def index(
+        self: ListLike[Item],
+        item: Item,
+        start: SupportsIndex = 0,
+        stop: SupportsIndex = sys.maxsize,
+        /,
+    ) -> int:
+        return self.__freeze__().index(item, start, stop)
+
+
+### LIST-SLOT ###
+
+
+class MutableListLike[Item](ListLike[Item]):
+    """Provide easily customizable, slotted list-like."""
+
+    __slots__ = ()
+
+    @overload
+    def __delitem__(
+        self: MutableListLike[Item],
+        key: SupportsIndex,
+        /,
+    ) -> None: ...
+    @overload
+    def __delitem__(
+        self: MutableListLike[Item],
+        key: Slice[SupportsIndex],
+        /,
+    ) -> None: ...
+    def __delitem__(
+        self: MutableListLike[Item],
+        key: Any,
+        /,
+    ) -> None:
+        with self.__mutate__() as mutable:
+            del mutable[key]
+
+    def __freeze__(self: Self, /) -> tuple[Item, ...]:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            return tuple(mutable)
+
+    def __iadd__(  # type: ignore[misc, override]
+        self: MutableListLike[Item],
+        other: abc.Iterable[Item],  # type: ignore[override]
+        /,
+    ) -> MutableListLike[Item]:
+        with self.__mutate__() as mutable:
+            mutable += other
+        return self
+
+    def __imul__(
+        self: MutableListLike[Item],
+        other: SupportsIndex,
+        /,
+    ) -> MutableListLike[Item]:
+        with self.__mutate__() as mutable:
+            mutable *= other
+        return self
+
+    def __init__(
+        self: MutableListLike[Item],
+        other: abc.Iterable[Item] = (),
+        /,
+    ) -> None:
+        self.extend(other)
+
+    @abstractmethod
+    def __mutate__(
+        self: MutableListLike[Item], /
+    ) -> ContextManager[list[Item]]: ...
+
+    @overload
+    def __setitem__(
+        self: MutableListLike[Item],
+        key: SupportsIndex,
+        value: Item,
+        /,
+    ) -> None: ...
+    @overload
+    def __setitem__(
+        self: MutableListLike[Item],
+        key: Slice[SupportsIndex],
+        value: abc.Iterable[Item],
+        /,
+    ) -> None: ...
+    def __setitem__(
+        self: MutableListLike[Item],
+        key: Any,
+        value: Any,
+        /,
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable[key] = value
+
+    def append(self: MutableListLike[Item], item: Item, /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.append(item)
+
+    def clear(self: MutableListLike[Item], /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.clear()
+
+    def copy(self: MutableListLike[Item], /) -> ListLike[Item]:
+        return self.__type__(self.__freeze__())
+
+    def extend(
+        self: MutableListLike[Item], other: abc.Iterable[Item], /
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.extend(other)
+
+    def insert(
+        self: MutableListLike[Item], index: SupportsIndex, item: Item, /
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.insert(index, item)
+
+    def pop(self: MutableListLike[Item], index: SupportsIndex = -1, /) -> Item:
+        with self.__mutate__() as mutable:
+            return mutable.pop(index)
+
+    def remove(self: MutableListLike[Item], item: object, /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.remove(
+                item,  # type: ignore[arg-type]
+            )
+
+    def reverse(self: MutableListLike[Item], /) -> None:
+        with self.__mutate__() as mutable:
+            mutable.reverse()
+
+    @overload
+    def sort[T: Sort[Self]](
+        self: MutableListLike[T],
+        /,
+        *,
+        key: None = None,
+        reverse: bool = False,
+    ) -> None: ...
+    @overload
+    def sort[T: Sort[Self]](
+        self: MutableListLike[Item],
+        /,
+        *,
+        key: abc.Callable[[Item], T],
+        reverse: bool = False,
+    ) -> None: ...
+    def sort(
+        self: MutableListLike[Item],
+        /,
+        *,
+        key: Any = None,
+        reverse: bool = False,
+    ) -> None:
+        with self.__mutate__() as mutable:
+            mutable.sort(key=key, reverse=reverse)
+
+
+class MutableListSlot[Item](MutableListLike[Item]):
+    """Provide easily customizable, mutable, slotted list-like."""
+
+    __slots__ = ("_slot",)
+
+    _slot: tuple[Item, ...]
+
+    def __freeze__(self: MutableListSlot[Item], /) -> tuple[Item, ...]:
+        return self._slot
+
+    @contextmanager
+    def __mutate__(
+        self: MutableListSlot[Item], /
+    ) -> abc.Generator[list[Item], None, None]:
+        mutable: list[Item]
+        mutable = list(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = tuple(mutable)
+
+    @staticmethod
+    def __type__(
+        other: abc.Iterable[Item],
+        /,
+    ) -> MutableListSlot[Item]:
+        return MutableListSlot(other)
+
+
+init()
