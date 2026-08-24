@@ -9,7 +9,6 @@ authors = [
     { email = "johannes.programming@gmail.com", name = "Johannes" },
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: OS Independent",
@@ -21,7 +20,7 @@ classifiers = [
 dependencies = [
     "setdoc>=1.4.6,<2",
 ]
-description = "This project wraps common mutable datastructures for inheritance with modification."
+description = "This project wraps common mutable data-structures for inheritance with modification."
 keywords = []
 license = "MIT"
 license-files = [
@@ -30,7 +29,7 @@ license-files = [
 name = "datahold"
 readme = "README.rst"
 requires-python = ">=3.12"
-version = "4.0.0a10"
+version = "4.0.0a11"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"

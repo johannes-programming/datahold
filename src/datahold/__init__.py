@@ -42,7 +42,9 @@ class SupportsDunderLT[Other, Return](Protocol):
 ### ALIASES ###
 
 type Slice[Index] = slice[Index | None, Index | None, Index | None]
-type Sort = SupportsDunderGT[Self, object] | SupportsDunderLT[Self, object]  # type: ignore[misc]
+type Sort[Other] = (
+    SupportsDunderGT[Other, object] | SupportsDunderLT[Other, object]
+)
 
 
 ### HELPER ###
@@ -64,7 +66,7 @@ def init() -> None:
         SupportsDunderLT,
     }
     for cls in types:
-        basics(cls.__dict__.values())
+        basics(*cls.__dict__.values())
 
 
 def reverse_sequence[Item](
@@ -398,7 +400,7 @@ class MutableListLike[Item](ListLike[Item]):
             mutable.reverse()
 
     @overload
-    def sort[T: Sort](
+    def sort[T: Sort[Self]](
         self: MutableListLike[T],
         /,
         *,
@@ -406,7 +408,7 @@ class MutableListLike[Item](ListLike[Item]):
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[T: Sort](
+    def sort[T: Sort[Self]](
         self: MutableListLike[Item],
         /,
         *,

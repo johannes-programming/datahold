@@ -1,9 +1,19 @@
+__all__: list[str] = ["main", "run"]
+
+import sys
 import unittest
+from typing import Never
 
-__all__ = ["main"]
+import setdoc
 
 
-def main() -> unittest.TextTestResult:
+@setdoc.basic
+def main() -> Never:
+    sys.exit(not run().wasSuccessful())
+
+
+@setdoc.basic
+def run() -> unittest.TextTestResult:
     loader: unittest.TestLoader
     suite: unittest.TestSuite
     runner: unittest.TextTestRunner
