@@ -1,9 +1,15 @@
+__all__: list[str] = ["main", "run"]
+
+import sys
 import unittest
+from typing import Never
 
-__all__ = ["main"]
+
+def main() -> Never:
+    sys.exit(not run().wasSuccessful())
 
 
-def main() -> unittest.TextTestResult:
+def run() -> unittest.TextTestResult:
     loader: unittest.TestLoader
     suite: unittest.TestSuite
     runner: unittest.TextTestRunner
