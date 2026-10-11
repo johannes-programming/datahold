@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 __all__: list[str] = [
+    "Collection",
     "FrozenListLike",
     "FrozenListSlot",
     "ListLike",
@@ -13,7 +14,7 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Protocol, Self, SupportsIndex, overload
+from typing import Any, Never, Protocol, Self, SupportsIndex, overload
 
 type Slice[Index] = slice[Index, Index, Index]
 
@@ -28,7 +29,38 @@ class SupportsLT[Other, Return](Protocol):
     def __lt__(self: Self, other: Other, /) -> Return: ...
 
 
-class ListLike[Item](abc.Sequence[Item]):
+class Collection_Fget[Item](
+    abc.Sized,
+    abc.Iterable[Item],
+    abc.Container[Never],
+    Protocol,
+): ...
+
+
+class Collection[Item](
+    abc.Sized,
+    abc.Iterable[Item],
+    abc.Container[object],
+):
+    __slots__ = ()
+
+    def __contains__(self, value: object, /) -> bool:
+        try:
+            return value in self.__fget__()
+        except TypeError:
+            return False
+
+    @abstractmethod
+    def __fget__(self: Self, /) -> Collection_Fget[Item]: ...
+
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
+        yield from self.__fget__()
+
+    def __len__(self: Self, /) -> int:
+        return len(self.__fget__())
+
+
+class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     __slots__ = ()
 
     def __add__[Item_](
@@ -42,9 +74,6 @@ class ListLike[Item](abc.Sequence[Item]):
             )
         else:
             return NotImplemented
-
-    def __contains__(self, value: object, /) -> bool:
-        return value in self.__fget__()
 
     def __eq__(
         self: Self,
@@ -128,9 +157,6 @@ class ListLike[Item](abc.Sequence[Item]):
     @abstractmethod
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
 
-    def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        yield from self.__fget__()
-
     @overload
     def __le__[Item_, Return](
         self: ListLike[SupportsLE[Item_, Return]],
@@ -154,9 +180,6 @@ class ListLike[Item](abc.Sequence[Item]):
             return self.__fget__() <= other.__fget__()
         else:
             return NotImplemented
-
-    def __len__(self: Self, /) -> int:
-        return len(self.__fget__())
 
     @overload
     def __lt__[Item_, Return](
