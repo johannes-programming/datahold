@@ -37,6 +37,19 @@ class Collection_Fget[Item](
 ): ...
 
 
+class Sequence_Fget[Item](
+    Collection_Fget[Item],
+    Protocol,
+):
+    @overload
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    def __getitem__(
+        self: Self, index: Slice[SupportsIndex | None], /
+    ) -> abc.Iterable[Item]: ...
+
+
 class Collection[Item](
     abc.Sized,
     abc.Iterable[Item],
@@ -60,7 +73,38 @@ class Collection[Item](
         return len(self.__fget__())
 
 
-class ListLike[Item](Collection[Item], abc.Sequence[Item]):
+class Sequence[Item](Collection[Item], abc.Sequence[Item]):
+    __slots__ = ()
+
+    @abstractmethod
+    def __fget__(self: Self, /) -> Sequence_Fget[Item]: ...
+
+    @overload
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    def __getitem__(
+        self: Self, index: Slice[SupportsIndex | None], /
+    ) -> abc.Sequence[Item]: ...
+
+    def __getitem__(
+        self: Self,
+        index: Any,
+        /,
+    ) -> Any:
+        if isinstance(index, SupportsIndex):
+            return self.__fget__()[index]
+        else:
+            return self.__type__(self.__fget__()[index])
+
+    @classmethod
+    @abstractmethod
+    def __type__(
+        cls: type[Self], data: abc.Iterable[Item], /
+    ) -> abc.Sequence[Item]: ...
+
+
+class ListLike[Item](Sequence[Item]):
     __slots__ = ()
 
     def __add__[Item_](
