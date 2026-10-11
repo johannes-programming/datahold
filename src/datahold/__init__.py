@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-__all__: list[str] = ["ListLike", "FrozenListLike", "FrozenListSlot"]
+__all__: list[str] = [
+    "FrozenListLike",
+    "FrozenListSlot",
+    "ListLike",
+    "MutableListLike",
+    "MutableListSlot",
+]
 
 import sys
 from abc import abstractmethod
@@ -122,8 +128,8 @@ class ListLike[Item](abc.Sequence[Item]):
     @abstractmethod
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
 
-    def __iter__(self) -> abc.Iterator[Item]:
-        return iter(self.__fget__())
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
+        yield from self.__fget__()
 
     @overload
     def __le__[Item_, Return](
@@ -215,6 +221,126 @@ class FrozenListLike[Item](ListLike[Item]):
         return hash(self.__fget__())
 
 
+class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
+
+    __slots__ = ()
+
+    def __delitem__(
+        self: Self,
+        index: SupportsIndex | Slice[SupportsIndex | None],
+        /,
+    ) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        del data[index]
+        self.__fset__(tuple(data))
+
+    @abstractmethod
+    def __fset__(self: Self, data: tuple[Item, ...], /) -> None: ...
+
+    @overload
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    def __getitem__(
+        self: Self, index: Slice[SupportsIndex | None], /
+    ) -> MutableListLike[Item]: ...
+
+    def __getitem__(
+        self: Self,
+        index: SupportsIndex | Slice[SupportsIndex | None],
+        /,
+    ) -> Item | MutableListLike[Item]:
+        if isinstance(index, SupportsIndex):
+            return self.__fget__()[index]
+        else:
+            return self.__type__(self.__fget__()[index])
+
+    def __imul__(self: Self, other: SupportsIndex, /) -> Self:
+        self.__fset__(self.__fget__() * other)
+        return self
+
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self.__fset__(tuple(data))
+
+    def __iter__(self: Self, /) -> abc.Iterator[Item]:
+        index: int
+        index = 0
+        while True:
+            try:
+                yield self.__fget__()[index]
+            except IndexError:
+                return
+            index += 1
+
+    @overload
+    def __setitem__(
+        self: Self, index: SupportsIndex, value: Item, /
+    ) -> None: ...
+
+    @overload
+    def __setitem__(
+        self: Self,
+        index: Slice[SupportsIndex | None],
+        value: abc.Iterable[Item],
+        /,
+    ) -> None: ...
+
+    def __setitem__(
+        self: Self,
+        index: Any,
+        value: Any,
+        /,
+    ) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        data[index] = value
+        self.__fset__(tuple(data))
+
+    @classmethod
+    def __type__(
+        cls: type[Self], data: abc.Iterable[Item], /
+    ) -> MutableListLike[Item]:
+        return cls(data)
+
+    def copy(self: Self, /) -> MutableListLike[Item]:
+        return self.__type__(self.__fget__())
+
+    def insert(self: Self, index: SupportsIndex, value: Item, /) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        data.insert(index, value)
+        self.__fset__(tuple(data))
+
+    @overload
+    def sort[T: SupportsGT[Self, bool] | SupportsLT[Self, bool]](
+        self: MutableListLike[T],
+        /,
+        *,
+        key: None = None,
+        reverse: bool = False,
+    ) -> None: ...
+    @overload
+    def sort[T: SupportsGT[Self, bool] | SupportsLT[Self, bool]](
+        self: Self,
+        /,
+        *,
+        key: abc.Callable[[Item], T],
+        reverse: bool = False,
+    ) -> None: ...
+    def sort(
+        self: Self,
+        /,
+        *,
+        key: Any = None,
+        reverse: bool = False,
+    ) -> None:
+        data: list[Item]
+        data = list(self.__fget__())
+        data.sort(key=key, reverse=reverse)
+        self.__fset__(tuple(data))
+
+
 class FrozenListSlot[Item](FrozenListLike[Item]):
     __slots__ = ("_slot",)
     _slot: tuple[Item, ...]
@@ -230,3 +356,21 @@ class FrozenListSlot[Item](FrozenListLike[Item]):
 
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         self._slot = tuple(data)
+
+
+class MutableListSlot[Item](MutableListLike[Item]):
+    __slots__ = ("_slot",)
+
+    _slot: tuple[Item, ...]
+
+    def __fget__(self: Self, /) -> tuple[Item, ...]:
+        return self._slot
+
+    def __fset__(self: Self, data: tuple[Item, ...], /) -> None:
+        self._slot = data
+
+    def __getstate__(
+        self: Self,
+        /,
+    ) -> tuple[None, dict[str, tuple[Item, ...]]]:
+        return None, {"_slot": self._slot}
