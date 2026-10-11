@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 __all__: list[str] = [
-    "TestOperatorsFrozenListSlot",
     "TestMethodsFrozenListSlot",
+    "TestOperatorsFrozenListSlot",
 ]
 
 import unittest
@@ -75,6 +75,118 @@ class ExplodingEquality:
 
     def __eq__(self: Self, other: object) -> bool:
         raise RuntimeError("equality failed")
+
+
+class TestMethodsFrozenListSlot(unittest.TestCase):
+    """The two public methods defined by tuple: count() and index()."""
+
+    @tuple_deco
+    def test_count(self: Self, cls: type[Any]) -> None:
+        nan: float
+        value: Any
+
+        value = cls([1, 2, 1, 3, 1, 2, None, False, 0, 1.0])
+        self.assertEqual(value.count(1), 4)
+        self.assertEqual(value.count(True), 4)
+        self.assertEqual(value.count(2), 2)
+        self.assertEqual(value.count(3), 1)
+        self.assertEqual(value.count(None), 1)
+        self.assertEqual(value.count(0), 2)
+        self.assertEqual(value.count(False), 2)
+        self.assertEqual(value.count(999), 0)
+        self.assertEqual(cls().count(1), 0)
+        self.assertEqual(cls([[], [1], []]).count([]), 2)
+        self.assertEqual(
+            cls([cls([1]), cls([2]), cls([1])]).count(cls([1])), 2
+        )
+
+        nan = float("nan")
+        self.assertEqual(cls([nan, nan]).count(nan), 2)
+        self.assertEqual(cls([nan, nan]).count(float("nan")), 0)
+        with self.assertRaises(RuntimeError):
+            cls([ExplodingEquality()]).count(123)
+
+        with self.assertRaises(TypeError):
+            value.count()
+        with self.assertRaises(TypeError):
+            value.count(1, 0)
+        with self.assertRaises(TypeError):
+            value.count(value=1)
+
+    @tuple_deco
+    def test_index(self: Self, cls: type[Any]) -> None:
+        args: tuple[object, ...]
+        expected: int
+        nan: float
+        value: Any
+
+        value = cls([0, 1, 0, 2, 0])
+        for args, expected in [
+            ((0,), 0),
+            ((1,), 1),
+            ((2,), 3),
+            ((0, 1), 2),
+            ((0, 3), 4),
+            ((0, 1, 4), 2),
+            ((0, 3, 5), 4),
+            ((0, -3), 2),
+            ((0, -2), 4),
+            ((0, -100), 0),
+            ((0, 0, -1), 0),
+            ((0, 0, 100), 0),
+            ((0, 0, 5), 0),
+            ((0, False, True), 0),
+            ((0, IndexOnly(1), IndexOnly(4)), 2),
+            ((0, -(10**50), 10**50), 0),
+        ]:
+            with self.subTest(args=args):
+                self.assertEqual(value.index(*args), expected)
+
+        for args in [
+            (9,),
+            (0, 5),
+            (0, 0, 0),
+            (0, 4, 4),
+            (0, 2, 2),
+            (1, 2),
+            (0, 100),
+            (0, 3, 3),
+            (0, 1, -4),
+        ]:
+            with self.subTest(missing_args=args):
+                with self.assertRaises(ValueError):
+                    value.index(*args)
+        with self.assertRaises(ValueError):
+            cls().index(0)
+
+        self.assertEqual(cls([[], [1], []]).index([]), 0)
+        self.assertEqual(cls([cls([1]), cls([2])]).index(cls([2])), 1)
+        nan = float("nan")
+        self.assertEqual(cls([nan]).index(nan), 0)
+        with self.assertRaises(ValueError):
+            cls([nan]).index(float("nan"))
+        with self.assertRaises(RuntimeError):
+            cls([ExplodingEquality()]).index(123)
+
+        for args in [
+            (0, 1.0),
+            (0, None),
+            (0, IntOnly()),
+            (0, 0, 1.5),
+            (0, 0, None),
+            (0, 0, "5"),
+            (),
+            (0, 0, 0, 0),
+        ]:
+            with self.subTest(invalid_args=args):
+                with self.assertRaises(TypeError):
+                    value.index(*args)
+        with self.assertRaises(TypeError):
+            value.index(value=0)
+        with self.assertRaises(TypeError):
+            value.index(0, start=0)
+        with self.assertRaises(TypeError):
+            value.index(0, stop=3)
 
 
 class TestOperatorsFrozenListSlot(unittest.TestCase):
@@ -680,118 +792,6 @@ class TestOperatorsFrozenListSlot(unittest.TestCase):
         self.assertEqual(
             _parse_sequence_pattern(cls([1, 2, 3, 4])), [1, 2, [3, 4]]
         )
-
-
-class TestMethodsFrozenListSlot(unittest.TestCase):
-    """The two public methods defined by tuple: count() and index()."""
-
-    @tuple_deco
-    def test_count(self: Self, cls: type[Any]) -> None:
-        nan: float
-        value: Any
-
-        value = cls([1, 2, 1, 3, 1, 2, None, False, 0, 1.0])
-        self.assertEqual(value.count(1), 4)
-        self.assertEqual(value.count(True), 4)
-        self.assertEqual(value.count(2), 2)
-        self.assertEqual(value.count(3), 1)
-        self.assertEqual(value.count(None), 1)
-        self.assertEqual(value.count(0), 2)
-        self.assertEqual(value.count(False), 2)
-        self.assertEqual(value.count(999), 0)
-        self.assertEqual(cls().count(1), 0)
-        self.assertEqual(cls([[], [1], []]).count([]), 2)
-        self.assertEqual(
-            cls([cls([1]), cls([2]), cls([1])]).count(cls([1])), 2
-        )
-
-        nan = float("nan")
-        self.assertEqual(cls([nan, nan]).count(nan), 2)
-        self.assertEqual(cls([nan, nan]).count(float("nan")), 0)
-        with self.assertRaises(RuntimeError):
-            cls([ExplodingEquality()]).count(123)
-
-        with self.assertRaises(TypeError):
-            value.count()
-        with self.assertRaises(TypeError):
-            value.count(1, 0)
-        with self.assertRaises(TypeError):
-            value.count(value=1)
-
-    @tuple_deco
-    def test_index(self: Self, cls: type[Any]) -> None:
-        args: tuple[object, ...]
-        expected: int
-        nan: float
-        value: Any
-
-        value = cls([0, 1, 0, 2, 0])
-        for args, expected in [
-            ((0,), 0),
-            ((1,), 1),
-            ((2,), 3),
-            ((0, 1), 2),
-            ((0, 3), 4),
-            ((0, 1, 4), 2),
-            ((0, 3, 5), 4),
-            ((0, -3), 2),
-            ((0, -2), 4),
-            ((0, -100), 0),
-            ((0, 0, -1), 0),
-            ((0, 0, 100), 0),
-            ((0, 0, 5), 0),
-            ((0, False, True), 0),
-            ((0, IndexOnly(1), IndexOnly(4)), 2),
-            ((0, -(10**50), 10**50), 0),
-        ]:
-            with self.subTest(args=args):
-                self.assertEqual(value.index(*args), expected)
-
-        for args in [
-            (9,),
-            (0, 5),
-            (0, 0, 0),
-            (0, 4, 4),
-            (0, 2, 2),
-            (1, 2),
-            (0, 100),
-            (0, 3, 3),
-            (0, 1, -4),
-        ]:
-            with self.subTest(missing_args=args):
-                with self.assertRaises(ValueError):
-                    value.index(*args)
-        with self.assertRaises(ValueError):
-            cls().index(0)
-
-        self.assertEqual(cls([[], [1], []]).index([]), 0)
-        self.assertEqual(cls([cls([1]), cls([2])]).index(cls([2])), 1)
-        nan = float("nan")
-        self.assertEqual(cls([nan]).index(nan), 0)
-        with self.assertRaises(ValueError):
-            cls([nan]).index(float("nan"))
-        with self.assertRaises(RuntimeError):
-            cls([ExplodingEquality()]).index(123)
-
-        for args in [
-            (0, 1.0),
-            (0, None),
-            (0, IntOnly()),
-            (0, 0, 1.5),
-            (0, 0, None),
-            (0, 0, "5"),
-            (),
-            (0, 0, 0, 0),
-        ]:
-            with self.subTest(invalid_args=args):
-                with self.assertRaises(TypeError):
-                    value.index(*args)
-        with self.assertRaises(TypeError):
-            value.index(value=0)
-        with self.assertRaises(TypeError):
-            value.index(0, start=0)
-        with self.assertRaises(TypeError):
-            value.index(0, stop=3)
 
 
 if __name__ == "__main__":
