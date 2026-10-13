@@ -839,6 +839,16 @@ class TestOperatorsMutableListSlot(unittest.TestCase):
         self.assertEqual(list(iterator), [2, 1])
         self.assertEqual(value, cls([1, 2, 3]))
 
+        value = list("world")
+        iterator = reversed(value)
+        self.assertEqual(next(iterator, None), "d")
+        self.assertEqual(next(iterator, None), "l")
+        self.assertEqual(value.pop(1), "o")
+        self.assertEqual(next(iterator, None), "l")
+        self.assertEqual(next(iterator, None), "r")
+        self.assertEqual(next(iterator, None), "w")
+        self.assertEqual(next(iterator, None), None)
+
     @list_deco
     def test_len(self: Self, cls: type[Any]) -> None:
         count: int
