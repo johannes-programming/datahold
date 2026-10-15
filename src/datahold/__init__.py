@@ -1,495 +1,795 @@
+"""Generic slot-backed sets, mappings, and sequences (Python 3.12+).
+
+Install the required third-party dependency with ``pip install frozendict``.
+"""
+
 from __future__ import annotations
 
 __all__: list[str] = [
     "Collection",
+    "DictLike",
+    "FrozenDictLike",
+    "FrozenDictSlot",
     "FrozenListLike",
     "FrozenListSlot",
+    "FrozenSetLike",
+    "FrozenSetSlot",
     "ListLike",
+    "MutableDictLike",
+    "MutableDictSlot",
     "MutableListLike",
     "MutableListSlot",
-    "MutableSequence",
-    "Sequence",
-    "Slot",
+    "MutableSetLike",
+    "MutableSetSlot",
+    "SetLike",
 ]
 
-import sys
 from abc import abstractmethod
 from collections import abc
+from contextlib import AbstractContextManager, contextmanager
 from reprlib import recursive_repr
 from types import NotImplementedType
 from typing import Any, Never, Protocol, Self, SupportsIndex, overload
 
-### PROTOCOLS AND ALIASES ###
+from frozendict import frozendict
 
+### TYPING ###
+
+
+class SupportsKeysAndGetItem[Key: abc.Hashable, Value](Protocol):
+    def __getitem__(self: Self, key: abc.Hashable, /) -> Value: ...
+    def keys(self: Self, /) -> abc.Iterable[Key]: ...
+
+
+type DictInit[Key, Value] = SupportsKeysAndGetItem[Key, Value] | abc.Iterable[
+    tuple[Key, Value]
+]
 type Slice[Index] = slice[Index, Index, Index]
 
 
-class SupportsGE[Other, Return](Protocol):
-    def __ge__(self: Self, other: Other, /) -> Return: ...
-class SupportsGT[Other, Return](Protocol):
-    def __gt__(self: Self, other: Other, /) -> Return: ...
-class SupportsLE[Other, Return](Protocol):
-    def __le__(self: Self, other: Other, /) -> Return: ...
-class SupportsLT[Other, Return](Protocol):
-    def __lt__(self: Self, other: Other, /) -> Return: ...
+class SupportsGE[Other](Protocol):
+    def __ge__(self: Self, other: Other, /) -> bool: ...
+class SupportsGT[Other](Protocol):
+    def __gt__(self: Self, other: Other, /) -> bool: ...
+class SupportsLE[Other](Protocol):
+    def __le__(self: Self, other: Other, /) -> bool: ...
+class SupportsLT[Other](Protocol):
+    def __lt__(self: Self, other: Other, /) -> bool: ...
 
 
-class Collection_Fget[Item](
-    abc.Sized,
-    abc.Iterable[Item],
-    abc.Container[Never],
-    Protocol,
+class CollectionData[Item](
+    abc.Sized, abc.Iterable[Item], abc.Container[Never], Protocol
 ): ...
 
 
-class Sequence_Fget[Item](
-    Collection_Fget[Item],
-    Protocol,
-):
-    @overload
-    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
-
-    @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> abc.Iterable[Item]: ...
+### BASE ###
 
 
-### ROOT ###
-
-
-class Slot[Data]:
-    __slots__ = ("_slot",)
-    _slot: Data
-
-    def __fget__(self: Self, /) -> Data:
-        return self._slot
-
-
-class Collection[Item](
-    abc.Sized,
-    abc.Iterable[Item],
-    abc.Container[object],
-):
+class Collection[Item](abc.Sized, abc.Iterable[Item], abc.Container[object]):
     __slots__ = ()
 
-    def __contains__(self, value: object, /) -> bool:
+    def __contains__(self: Self, other: object, /) -> bool:
         try:
-            return value in self.__fget__()
+            return other in self.__frozen__()
         except TypeError:
             return False
 
     @abstractmethod
-    def __fget__(self: Self, /) -> Collection_Fget[Item]: ...
-
+    def __frozen__(self: Self, /) -> CollectionData[Item]: ...
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        yield from self.__fget__()
+        return iter(self.__frozen__())
 
     def __len__(self: Self, /) -> int:
-        return len(self.__fget__())
+        return len(self.__frozen__())
 
 
-### LIST ###
-
-###   Sequence   ###
+### SET-LIKE ###
 
 
-class Sequence[Item](Collection[Item], abc.Sequence[Item]):
-    __slots__ = ()
-
-    @abstractmethod
-    def __fget__(self: Self, /) -> Sequence_Fget[Item]: ...
-
-    @overload
-    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
-
-    @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> abc.Sequence[Item]: ...
-
-    def __getitem__(
-        self: Self,
-        index: Any,
-        /,
-    ) -> Any:
-        if isinstance(index, SupportsIndex):
-            return self.__fget__()[index]
-        else:
-            return self.__type__(self.__fget__()[index])
-
-    @classmethod
-    @abstractmethod
-    def __type__(
-        cls: type[Self], data: abc.Iterable[Item], /
-    ) -> abc.Sequence[Item]: ...
-
-
-class MutableSequence[Item](Sequence[Item], abc.MutableSequence[Item]):
+class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
+    """Shared read-only set API; construction and storage remain abstract."""
 
     __slots__ = ()
 
-    def __delitem__(
-        self: Self,
-        index: SupportsIndex | Slice[SupportsIndex | None],
-        /,
-    ) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        del data[index]
-        self.__fset__(data)
-
+    # __and__ is inherited from abc.Set (via the overridable _from_iterable).
+    # __contains__ is inherited
+    # __eq__ is inherited from abc.Set.
     @abstractmethod
-    def __fset__(self: Self, data: abc.Iterable[Item], /) -> None: ...
+    def __frozen__(self: Self, /) -> frozenset[Item]:
+        """Return a frozen snapshot of this set."""
 
-    @overload
-    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
-
-    @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> abc.MutableSequence[Item]: ...
-
-    def __getitem__(
-        self: Self,
-        index: SupportsIndex | Slice[SupportsIndex | None],
-        /,
-    ) -> Item | abc.MutableSequence[Item]:
-        if isinstance(index, SupportsIndex):
-            return self.__fget__()[index]
-        else:
-            return self.__type__(self.__fget__()[index])
-
-    def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        index: int
-        index = 0
-        while True:
-            try:
-                yield self.__fget__()[index]
-            except IndexError:
-                return
-            index += 1
-
-    @overload
-    def __setitem__(
-        self: Self, index: SupportsIndex, value: Item, /
-    ) -> None: ...
-
-    @overload
-    def __setitem__(
-        self: Self,
-        index: Slice[SupportsIndex | None],
-        value: abc.Iterable[Item],
-        /,
-    ) -> None: ...
-
-    def __setitem__(
-        self: Self,
-        index: Any,
-        value: Any,
-        /,
-    ) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data[index] = value
-        self.__fset__(data)
-
-    @staticmethod
+    # __ge__ is inherited from abc.Set.
+    # __gt__ is inherited from abc.Set.
     @abstractmethod
-    def __type__(data: abc.Iterable[Item], /) -> abc.MutableSequence[Item]: ...
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        """Initialize the set from data."""
 
-    def insert(self: Self, index: SupportsIndex, value: Item, /) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data.insert(index, value)
-        self.__fset__(data)
+    # __iter__ is inherited
 
+    # __le__ is inherited from abc.Set.
+    # __len__ is inherited
 
-###   ListLike   ###
-
-
-class ListLike[Item](Sequence[Item]):
-    __slots__ = ()
-
-    def __add__[Item_](
-        self: Self,
-        other: ListLike[Item_],
-        /,
-    ) -> ListLike[Item | Item_]:
-        if isinstance(other, ListLike):
-            return self.__type__(  # type: ignore[return-value]
-                self.__fget__() + other.__fget__()  # type: ignore[operator]
-            )
-        else:
-            return NotImplemented
-
-    def __eq__(
-        self: Self,
-        other: object,
-        /,
-    ) -> bool | NotImplementedType:
-        if isinstance(other, ListLike):
-            return self.__fget__() == other.__fget__()
-        else:
-            return NotImplemented
-
-    @abstractmethod
-    def __fget__(self: Self, /) -> tuple[Item, ...]: ...
-
-    @overload
-    def __ge__[Item_, Return](
-        self: ListLike[SupportsGE[Item_, Return]],
-        other: ListLike[Item_],
-        /,
-    ) -> Return | bool: ...
-
-    @overload
-    def __ge__[Return](
-        self: Self,
-        other: ListLike[SupportsLE[Item, Return]],
-        /,
-    ) -> Return | bool: ...
-
-    def __ge__(
-        self: Self,
-        other: ListLike[Any],
-        /,
-    ) -> Any:
-        if isinstance(other, ListLike):
-            return self.__fget__() >= other.__fget__()
-        else:
-            return NotImplemented
-
-    @overload
-    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
-
-    @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> ListLike[Item]: ...
-
-    def __getitem__(
-        self: Self,
-        index: SupportsIndex | Slice[SupportsIndex | None],
-        /,
-    ) -> Item | ListLike[Item]:
-        if isinstance(index, SupportsIndex):
-            return self.__fget__()[index]
-        else:
-            return self.__type__(self.__fget__()[index])
-
-    @overload
-    def __gt__[Item_, Return](
-        self: ListLike[SupportsGT[Item_, Return]],
-        other: ListLike[Item_],
-        /,
-    ) -> Return | bool: ...
-
-    @overload
-    def __gt__[Return](
-        self: Self,
-        other: ListLike[SupportsLT[Item, Return]],
-        /,
-    ) -> Return | bool: ...
-
-    def __gt__(
-        self: Self,
-        other: ListLike[Any],
-        /,
-    ) -> Any:
-        if isinstance(other, ListLike):
-            return self.__fget__() > other.__fget__()
-        else:
-            return NotImplemented
-
-    @abstractmethod
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None: ...
-
-    @overload
-    def __le__[Item_, Return](
-        self: ListLike[SupportsLE[Item_, Return]],
-        other: ListLike[Item_],
-        /,
-    ) -> Return | bool: ...
-
-    @overload
-    def __le__[Return](
-        self: Self,
-        other: ListLike[SupportsGE[Item, Return]],
-        /,
-    ) -> Return | bool: ...
-
-    def __le__(
-        self: Self,
-        other: ListLike[Any],
-        /,
-    ) -> Any:
-        if isinstance(other, ListLike):
-            return self.__fget__() <= other.__fget__()
-        else:
-            return NotImplemented
-
-    @overload
-    def __lt__[Item_, Return](
-        self: ListLike[SupportsLT[Item_, Return]],
-        other: ListLike[Item_],
-        /,
-    ) -> Return | bool: ...
-
-    @overload
-    def __lt__[Return](
-        self: Self,
-        other: ListLike[SupportsGT[Item, Return]],
-        /,
-    ) -> Return | bool: ...
-
-    def __lt__(
-        self: Self,
-        other: ListLike[Any],
-        /,
-    ) -> Any:
-        if isinstance(other, ListLike):
-            return self.__fget__() < other.__fget__()
-        else:
-            return NotImplemented
-
-    def __mul__(
-        self: Self,
-        other: SupportsIndex,
-        /,
-    ) -> ListLike[Item]:
-        return self.__type__(self.__fget__() * other)
-
-    __rmul__ = __mul__
-
+    # __lt__ is inherited from abc.Set.
+    # __ne__ is inherited from object (negates __eq__).
+    # __or__ is inherited from abc.Set (via _from_iterable).
+    # __rand__ is inherited from abc.Set (via _from_iterable).
     @recursive_repr()
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}({list(self.__fget__())!r})"
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({set(self.__frozen__())})"
 
+    # __ror__ is inherited from abc.Set (via _from_iterable).
+    # __rsub__ is inherited from abc.Set (via _from_iterable).
+    # __rxor__ is inherited from abc.Set (via _from_iterable).
+    # __sub__ is inherited from abc.Set (via _from_iterable).
     @classmethod
-    def __type__(
-        cls: type[Self], data: abc.Iterable[Item], /
-    ) -> ListLike[Item]:
+    def __type__[Item_: abc.Hashable](
+        cls: type[SetLike[Item]], data: abc.Iterable[Item_], /
+    ) -> SetLike[Item_]:
         return cls(data)
 
-    def count(self: Self, item: Item, /) -> int:
-        return self.__fget__().count(item)
+    # __xor__ is inherited from abc.Set (via _from_iterable).
+    @classmethod
+    def _from_iterable[Item_: abc.Hashable](
+        cls: Any, data: abc.Iterable[Item_], /
+    ) -> SetLike[Item_]:
+        return cls.__type__(data)
 
-    def index(
-        self: Self,
-        item: Item,
-        start: SupportsIndex = 0,
-        stop: SupportsIndex = sys.maxsize,
-        /,
-    ) -> int:
-        return self.__fget__().index(item, start, stop)
+    def difference(
+        self: Self, /, *others: abc.Iterable[Item]
+    ) -> SetLike[Item]:
+        return type(self).__type__(self.__frozen__().difference(*others))
+
+    def intersection(
+        self: Self, /, *others: abc.Iterable[Item]
+    ) -> SetLike[Item]:
+        return type(self).__type__(self.__frozen__().intersection(*others))
+
+    # isdisjoint is inherited from abc.Set.
+    def issubset(self: Self, other: abc.Iterable[Item], /) -> bool:
+        return self.__frozen__().issubset(other)
+
+    def issuperset(self: Self, other: abc.Iterable[Item], /) -> bool:
+        return self.__frozen__().issuperset(other)
+
+    def symmetric_difference(
+        self: Self, other: abc.Iterable[Item], /
+    ) -> SetLike[Item]:
+        return type(self).__type__(
+            self.__frozen__().symmetric_difference(other)
+        )
+
+    def union(self: Self, /, *others: abc.Iterable[Item]) -> SetLike[Item]:
+        return type(self).__type__(self.__frozen__().union(*others))
 
 
-class FrozenListLike[Item](ListLike[Item]):
+class FrozenSetLike[Item: abc.Hashable](SetLike[Item]):
+    """Hashable abstract set specialization."""
+
     __slots__ = ()
 
+    # __frozen__ is inherited as an abstract requirement from SetLike.
     def __hash__(self: Self, /) -> int:
-        return hash(self.__fget__())
+        return hash(self.__frozen__())
+
+    # __init__ is inherited as an abstract requirement from SetLike.
 
 
-class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
+class FrozenSetSlot[Item: abc.Hashable](FrozenSetLike[Item]):
+    """A frozenset held in one instance slot."""
+
+    __slots__ = ("_slot",)
+
+    def __frozen__(self: Self, /) -> frozenset[Item]:
+        return self._slot
+
+    # __hash__ is inherited from FrozenSetLike.
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self._slot = frozenset(data)
+
+
+class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
+    """Mutable set operations committed through a context manager."""
 
     __slots__ = ()
+    __hash__ = None
 
-    def __delitem__(
-        self: Self,
-        index: SupportsIndex | Slice[SupportsIndex | None],
-        /,
-    ) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        del data[index]
-        self.__fset__(data)
+    def __frozen__(self: Self, /) -> frozenset[Item]:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            return frozenset(mutable)
 
-    @overload
-    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
-
-    @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> MutableListLike[Item]: ...
-
-    def __getitem__(
-        self: Self,
-        index: SupportsIndex | Slice[SupportsIndex | None],
-        /,
-    ) -> Item | MutableListLike[Item]:
-        if isinstance(index, SupportsIndex):
-            return self.__fget__()[index]
-        else:
-            return self.__type__(self.__fget__()[index])
-
-    def __imul__(self: Self, other: SupportsIndex, /) -> Self:
-        self.__fset__(self.__fget__() * other)
+    # __hash__ is disabled, as for built-in set.
+    def __iand__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+        mutable: set[Item]
+        if not isinstance(other, abc.Set):
+            return NotImplemented
+        with self.__mutate__() as mutable:
+            mutable.intersection_update(other)
         return self
 
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.__fset__(data)
+        self.update(data)
 
-    def __iter__(self: Self, /) -> abc.Iterator[Item]:
-        index: int
-        index = 0
-        while True:
-            try:
-                yield self.__fget__()[index]
-            except IndexError:
-                return
-            index += 1
+    def __ior__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+        mutable: set[Item]
+        if not isinstance(other, abc.Set):
+            return NotImplemented
+        with self.__mutate__() as mutable:
+            mutable.update(other)
+        return self
 
-    @overload
-    def __setitem__(
-        self: Self, index: SupportsIndex, value: Item, /
-    ) -> None: ...
+    def __isub__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+        mutable: set[Item]
+        if not isinstance(other, abc.Set):
+            return NotImplemented
+        with self.__mutate__() as mutable:
+            mutable.difference_update(other)
+        return self
 
-    @overload
-    def __setitem__(
-        self: Self,
-        index: Slice[SupportsIndex | None],
-        value: abc.Iterable[Item],
-        /,
-    ) -> None: ...
+    def __ixor__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+        mutable: set[Item]
+        if not isinstance(other, abc.Set):
+            return NotImplemented
+        with self.__mutate__() as mutable:
+            mutable.symmetric_difference_update(other)
+        return self
 
-    def __setitem__(
-        self: Self,
-        index: Any,
-        value: Any,
-        /,
-    ) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data[index] = value
-        self.__fset__(data)
+    @abstractmethod
+    def __mutate__(self: Self, /) -> AbstractContextManager[set[Item]]:
+        """Yield a mutable working set and commit on successful exit."""
 
     @classmethod
-    def __type__(
-        cls: type[Self], data: abc.Iterable[Item], /
-    ) -> MutableListLike[Item]:
+    def __type__[Item_: abc.Hashable](
+        cls: type[MutableSetLike[Item]], data: abc.Iterable[Item_], /
+    ) -> MutableSetLike[Item_]:
+        # redoing the same method is necessary because copy must return MutableSetLike[Item]
         return cls(data)
 
-    def copy(self: Self, /) -> MutableListLike[Item]:
-        return self.__type__(self.__fget__())
+    def add(self: Self, item: Item, /) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.add(item)
 
-    def insert(self: Self, index: SupportsIndex, value: Item, /) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data.insert(index, value)
-        self.__fset__(data)
+    # clear is inherited from abc.MutableSet.
+    def copy(self: Self, /) -> MutableSetLike[Item]:
+        return type(self).__type__(self.__frozen__())
+
+    def difference_update(self: Self, /, *others: abc.Iterable[Item]) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.difference_update(*others)
+
+    def discard(self: Self, item: abc.Hashable, /) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.discard(item)
+
+    def intersection_update(
+        self: Self, /, *others: abc.Iterable[Item]
+    ) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.intersection_update(*others)
+
+    def pop(self: Self, /) -> Item:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            return mutable.pop()
+
+    # remove is inherited from abc.MutableSet.
+    def symmetric_difference_update(
+        self: Self, other: abc.Iterable[Item], /
+    ) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.symmetric_difference_update(other)
+
+    def update(self: Self, /, *others: abc.Iterable[Item]) -> None:
+        mutable: set[Item]
+        with self.__mutate__() as mutable:
+            mutable.update(*others)
+
+
+class MutableSetSlot[Item: abc.Hashable](MutableSetLike[Item]):
+    """Mutable set with transactional replacement of a frozenset slot."""
+
+    __slots__ = ("_slot",)
+
+    def __frozen__(self: Self, /) -> frozenset[Item]:
+        return self._slot
+
+    # __init__ is inherited from MutableSetLike.
+    @contextmanager
+    def __mutate__(self: Self, /) -> abc.Iterator[set[Item]]:
+        mutable: set[Item]
+        mutable = set(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozenset(mutable)
+
+
+### DICT-LIKE ###
+
+
+class DictLike[Key: abc.Hashable, Value](
+    Collection[Key], abc.Mapping[Key, Value]
+):
+    """Shared read-only dictionary interface."""
+
+    __slots__ = ()
+
+    # __contains__ is inherited
+    # __eq__ is inherited from abc.Mapping.
+    @abstractmethod
+    def __frozen__(self: Self, /) -> frozendict[Key, Value]:
+        """Return an immutable mapping snapshot."""
+
+    def __getitem__(self: Self, key: Key, /) -> Value:
+        return self.__frozen__()[key]
 
     @overload
-    def sort[T: SupportsGT[Self, bool] | SupportsLT[Self, bool]](
-        self: MutableListLike[T],
+    def __init__(
+        self: Self,
+        data: DictInit[Key, Value] = (),
+        /,
+    ) -> None: ...
+
+    @overload
+    def __init__[Key_](
+        self: DictLike[Key_ | str, Value],
+        data: DictInit[Key_ | str, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None: ...
+
+    @abstractmethod
+    def __init__(
+        self: Any,
+        data: Any = (),
+        /,
+        **kwargs: Any,
+    ) -> None:
+        """Construct the mapping from pairs, a mapping and/or keywords."""
+
+    # __iter__ is inherited
+    # __len__ is inherited
+    # __ne__ is inherited from object (negates __eq__).
+    def __or__[Key_, Value_](
+        self: Self, other: DictLike[Key_, Value_], /
+    ) -> DictLike[Key | Key_, Value | Value_]:
+        if not isinstance(other, DictLike):
+            return NotImplemented
+        return type(self).__type__(self.__frozen__() | other.__frozen__())
+
+    @recursive_repr()
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({dict(self.__frozen__())})"
+
+    def __reversed__(self: Self, /) -> abc.Iterator[Key]:
+        return reversed(tuple(self))
+
+    # __ror__ is unnecessary because of __or__
+
+    @classmethod
+    def __type__[Key_: abc.Hashable, Value_](
+        cls: DictLike[Key, Value], data: DictInit[Key_, Value_], /
+    ) -> DictLike[Key_, Value_]:
+        return cls(data)
+
+    @overload
+    @classmethod
+    def fromkeys[Key_](
+        cls: type[Any], keys: abc.Iterable[Key_], /
+    ) -> DictLike[Key_, None]: ...
+
+    @overload
+    @classmethod
+    def fromkeys[Key_, Value_](
+        cls: type[Any], keys: abc.Iterable[Key_], value: Value_, /
+    ) -> DictLike[Key_, Value_]: ...
+
+    @classmethod
+    def fromkeys(
+        cls: type[Any], keys: Any, value: Any = None, /
+    ) -> DictLike[Any, Any]:
+        return cls.__type__(dict.fromkeys(keys, value))
+
+    # get is inherited from abc.Mapping.
+    # items is inherited from abc.Mapping.
+    # keys is inherited from abc.Mapping.
+    # values is inherited from abc.Mapping.
+
+
+class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
+    """Hashable abstract mapping specialization."""
+
+    __slots__ = ()
+
+    # __frozen__ is inherited as an abstract requirement from DictLike.
+    def __hash__(self: Self, /) -> int:
+        return hash(self.__frozen__())
+
+    # __init__ is inherited as an abstract requirement from DictLike.
+
+
+class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
+    """A frozendict held in one instance slot."""
+
+    __slots__ = ("_slot",)
+
+    def __frozen__(self: Self, /) -> frozendict[Key, Value]:
+        return self._slot
+
+    # __hash__ is inherited from FrozenDictLike.
+    def __init__(
+        self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
+    ) -> None:
+        self._slot = frozendict(data, **kwargs)
+
+
+class MutableDictLike[Key: abc.Hashable, Value](
+    DictLike[Key, Value], abc.MutableMapping[Key, Value]
+):
+    """Mutable mapping operations performed on a temporary dict."""
+
+    __slots__ = ()
+    __hash__ = None
+
+    def __delitem__(self: Self, key: abc.Hashable, /) -> None:
+        mutable: dict[Key, Value]
+        with self.__mutate__() as mutable:
+            del mutable[key]
+
+    def __frozen__(self: Self, /) -> frozendict[Key, Value]:
+        mutable: dict[Key, Value]
+        with self.__mutate__() as mutable:
+            return frozendict(mutable)
+
+    # __hash__ is disabled, as for built-in dict.
+    def __init__(
+        self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
+    ) -> None:
+        self.update(data, **kwargs)
+
+    def __ior__(
+        self: Self, other: DictInit[Key, Value], /
+    ) -> MutableDictLike[Key, Value]:
+        self.update(other)
+        return self
+
+    @abstractmethod
+    def __mutate__(self: Self, /) -> AbstractContextManager[dict[Key, Value]]:
+        """Yield a mutable working dictionary and commit on normal exit."""
+
+    def __setitem__(self: Self, key: Key, value: Value, /) -> None:
+        mutable: dict[Key, Value]
+        with self.__mutate__() as mutable:
+            mutable[key] = value
+
+    @classmethod
+    def __type__[Key_: abc.Hashable, Value_](
+        cls: type[MutableDictLike[Key, Value]],
+        data: DictInit[Key_, Value_],
+        /,
+    ) -> MutableDictLike[Key_, Value_]:
+        # redoing the same method is necessary because copy must return MutableDictLike[Item]
+        return cls(data)
+
+    # clear is inherited from abc.MutableMapping.
+
+    def copy(self: Self, /) -> DictLike[Key, Value]:
+        return type(self).__type__(self.__frozen__())
+
+    # pop is inherited from abc.MutableMapping.
+    def popitem(self: Self, /) -> tuple[Key, Value]:
+        mutable: dict[Key, Value]
+        with self.__mutate__() as mutable:
+            return mutable.popitem()
+
+    # setdefault is inherited from abc.MutableMapping.
+
+    @overload
+    def update(
+        self: Self,
+        other: DictInit[Key, Value] = (),
+        /,
+    ) -> None: ...
+    @overload
+    def update[Key_](
+        self: MutableDictLike[Key_ | str, Value],
+        other: DictInit[Key_ | str, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None: ...
+    def update(
+        self: Any, other: DictInit[Any, Any] = (), /, **kwargs: Value
+    ) -> None:
+        mutable: dict[Key, Value]
+        with self.__mutate__() as mutable:
+            mutable.update(other, **kwargs)
+
+
+class MutableDictSlot[Key: abc.Hashable, Value](MutableDictLike[Key, Value]):
+    """Mutable dictionary backed by a frozen dictionary slot."""
+
+    __slots__ = ("_slot",)
+
+    def __frozen__(self: Self, /) -> frozendict[Key, Value]:
+        return self._slot
+
+    # __init__ is inherited from MutableDictLike.
+    @contextmanager
+    def __mutate__(self: Self, /) -> abc.Iterator[dict[Key, Value]]:
+        mutable: dict[Key, Value]
+        mutable = dict(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = frozendict(mutable)
+
+
+### LIST-LIKE ###
+
+
+class ListLike[Item](Collection[Item], abc.Sequence[Item]):
+    """Shared read-only sequence with cross-variant tuple-style comparison."""
+
+    __slots__ = ()
+
+    def __add__(self: Self, other: ListLike[Item], /) -> ListLike[Item]:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return type(self).__type__(self.__frozen__() + other.__frozen__())
+
+    # __contains__ is inherited
+    def __eq__(self: Self, other: object, /) -> NotImplementedType | bool:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return self.__frozen__() == other.__frozen__()
+
+    @abstractmethod
+    def __frozen__(self: Self, /) -> tuple[Item, ...]:
+        """Return an immutable tuple snapshot."""
+
+    @overload
+    def __ge__[Item_](
+        self: ListLike[SupportsGE[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
+    def __ge__(self: Self, other: ListLike[SupportsLE[Item]], /) -> bool: ...
+    def __ge__(self: Any, other: ListLike[Any], /) -> Any:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return self.__frozen__() >= other.__frozen__()
+
+    @overload
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    def __getitem__(
+        self: Self, index: Slice[None | SupportsIndex], /
+    ) -> ListLike[Item]: ...
+
+    def __getitem__(
+        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+    ) -> Any:
+        if isinstance(index, SupportsIndex):
+            return self.__frozen__()[index]
+        else:
+            return type(self).__type__(self.__frozen__()[index])
+
+    @overload
+    def __gt__[Item_](
+        self: ListLike[SupportsGT[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
+    def __gt__(self: Self, other: ListLike[SupportsLT[Item]], /) -> bool: ...
+    def __gt__(self: Any, other: ListLike[Any], /) -> Any:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return self.__frozen__() > other.__frozen__()
+
+    @abstractmethod
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        """Initialize from an iterable."""
+
+    __iter__ = abc.Sequence.__iter__
+
+    @overload
+    def __le__[Item_](
+        self: ListLike[SupportsLE[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
+    def __le__(self: Self, other: ListLike[SupportsGE[Item]], /) -> bool: ...
+    def __le__(self: Any, other: ListLike[Any], /) -> Any:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return self.__frozen__() <= other.__frozen__()
+
+    @overload
+    def __lt__[Item_](
+        self: ListLike[SupportsLT[Item_]],
+        other: ListLike[Item_],
+        /,
+    ) -> bool: ...
+    @overload
+    def __lt__(self: Self, other: ListLike[SupportsGT[Item]], /) -> bool: ...
+    def __lt__(self: Any, other: ListLike[Any], /) -> Any:
+        if not isinstance(other, ListLike):
+            return NotImplemented
+        return self.__frozen__() < other.__frozen__()
+
+    def __mul__(self: Self, other: SupportsIndex, /) -> ListLike[Item]:
+        return type(self).__type__(self.__frozen__() * other)
+
+    __rmul__ = __mul__
+
+    # __ne__ is inherited from object (negates __eq__).
+    @recursive_repr()
+    def __repr__(self: Self, /) -> str:
+        return f"{type(self).__name__}({list(self.__frozen__())})"
+
+    # __reversed__ is inherited from abc.Sequence.
+
+    @classmethod
+    def __type__[Item_](
+        cls: type[ListLike[Item]],
+        data: abc.Iterable[Item_],
+        /,
+    ) -> ListLike[Item_]:
+        return cls(data)
+
+    # count is inherited from abc.Sequence.
+    # index is inherited from abc.Sequence.
+
+
+class FrozenListLike[Item](ListLike[Item]):
+    """Hashable abstract sequence specialization."""
+
+    __slots__ = ()
+
+    # __frozen__ is inherited as an abstract requirement from ListLike.
+    def __hash__(self: Self, /) -> int:
+        return hash(self.__frozen__())
+
+    # __init__ is inherited as an abstract requirement from ListLike.
+
+
+class FrozenListSlot[Item](FrozenListLike[Item]):
+    """A tuple stored in one instance slot."""
+
+    __slots__ = ("_slot",)
+
+    def __frozen__(self: Self, /) -> tuple[Item, ...]:
+        return self._slot
+
+    # __hash__ is inherited from FrozenListLike.
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self._slot = tuple(data)
+
+
+class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
+    """Mutable sequence operations committed through a temporary list."""
+
+    __slots__ = ()
+    __hash__ = None
+
+    def __delitem__(
+        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+    ) -> None:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            del mutable[index]
+
+    def __frozen__(self: Self, /) -> tuple[Item, ...]:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            return tuple(mutable)
+
+    @overload
+    def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
+
+    @overload
+    def __getitem__(
+        self: Self, index: Slice[None | SupportsIndex], /
+    ) -> MutableListLike[Item]: ...
+
+    __getitem__ = ListLike.__getitem__
+
+    # __hash__ is disabled, as for built-in list.
+    # __iadd__ is inherited from abc.MutableSequence.
+    def __imul__(self: Self, other: SupportsIndex, /) -> MutableListLike[Item]:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            mutable *= other
+        return self
+
+    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
+        self.extend(data)
+
+    @abstractmethod
+    def __mutate__(self: Self, /) -> AbstractContextManager[list[Item]]:
+        """Yield a mutable working list and commit on successful exit."""
+
+    @overload
+    def __setitem__(
+        self: Self, index: SupportsIndex, data: Item, /
+    ) -> None: ...
+
+    @overload
+    def __setitem__(
+        self: Self,
+        index: Slice[None | SupportsIndex],
+        data: abc.Iterable[Item],
+        /,
+    ) -> None: ...
+
+    def __setitem__(
+        self: Any,
+        index: Any,
+        data: Any,
+        /,
+    ) -> None:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            mutable[index] = data
+
+    @classmethod
+    def __type__[Item_](
+        cls: type[MutableListLike[Item]],
+        data: abc.Iterable[Item_],
+        /,
+    ) -> MutableListLike[Item_]:
+        # redoing the same method is necessary because copy must return MutableListLike[Item]
+        return cls(data)
+
+    # append is inherited from abc.MutableSequence.
+    # clear is inherited from abc.MutableSequence.
+    def copy(self: Self, /) -> MutableListLike[Item]:
+        return type(self).__type__(self.__frozen__())
+
+    def extend(self: Self, data: abc.Iterable[Item], /) -> None:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            mutable.extend(data)
+
+    def insert(self: Self, index: SupportsIndex, item: Item, /) -> None:
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            mutable.insert(index, item)
+
+    # pop is inherited from abc.MutableSequence.
+    # remove is inherited from abc.MutableSequence.
+    # reverse is inherited from abc.MutableSequence.
+    @overload
+    def sort[Item_: SupportsGT[Self]](
+        self: MutableListLike[Item_],
         /,
         *,
         key: None = None,
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[T: SupportsGT[Self, bool] | SupportsLT[Self, bool]](
+    def sort[Item_: SupportsLT[Self]](
+        self: MutableListLike[Item_],
+        /,
+        *,
+        key: None = None,
+        reverse: bool = False,
+    ) -> None: ...
+    @overload
+    def sort[T: SupportsLT[Self]](
+        self: Self,
+        /,
+        *,
+        key: abc.Callable[[Item], T],
+        reverse: bool = False,
+    ) -> None: ...
+    @overload
+    def sort[T: SupportsGT[Self]](
         self: Self,
         /,
         *,
@@ -497,29 +797,29 @@ class MutableListLike[Item](ListLike[Item], MutableSequence[Item]):
         reverse: bool = False,
     ) -> None: ...
     def sort(
-        self: Self,
+        self: Any,
         /,
         *,
         key: Any = None,
-        reverse: bool = False,
+        reverse: Any = False,
     ) -> None:
-        data: list[Item]
-        data = list(self.__fget__())
-        data.sort(key=key, reverse=reverse)
-        self.__fset__(data)
+        mutable: list[Item]
+        with self.__mutate__() as mutable:
+            mutable.sort(key=key, reverse=reverse)
 
 
-###   ListSlot   ###
-class FrozenListSlot[Item](Slot[tuple[Item, ...]], FrozenListLike[Item]):
+class MutableListSlot[Item](MutableListLike[Item]):
+    """Mutable sequence with transactional replacement of a tuple slot."""
 
-    __slots__ = ()
+    __slots__ = ("_slot",)
 
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = tuple(data)
+    def __frozen__(self: Self, /) -> tuple[Item, ...]:
+        return self._slot
 
-
-class MutableListSlot[Item](Slot[tuple[Item, ...]], MutableListLike[Item]):
-    __slots__ = ()
-
-    def __fset__(self: Self, data: abc.Iterable[Item], /) -> None:
-        self._slot = tuple(data)
+    # __init__ is inherited from MutableListLike.
+    @contextmanager
+    def __mutate__(self: Self, /) -> abc.Iterator[list[Item]]:
+        mutable: list[Item]
+        mutable = list(getattr(self, "_slot", ()))
+        yield mutable
+        self._slot = tuple(mutable)
