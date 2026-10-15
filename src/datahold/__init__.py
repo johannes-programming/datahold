@@ -26,7 +26,7 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from contextlib import AbstractContextManager, contextmanager
+from contextlib import contextmanager
 from reprlib import recursive_repr
 from types import NotImplementedType
 from typing import Any, Never, Protocol, Self, SupportsIndex, overload
@@ -56,6 +56,22 @@ class SupportsLE[Other](Protocol):
     def __le__(self: Self, other: Other, /) -> bool: ...
 class SupportsLT[Other](Protocol):
     def __lt__(self: Self, other: Other, /) -> bool: ...
+
+
+from types import TracebackType
+from typing import Protocol
+
+
+class ContextManager[Enter](Protocol):
+    def __enter__(self: Self, /) -> Enter: ...
+
+    def __exit__(
+        self: Self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+        /,
+    ) -> object: ...
 
 
 class CollectionData[Item](
@@ -101,9 +117,9 @@ class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
 
     # __ge__ is inherited from abc.Set.
     # __gt__ is inherited from abc.Set.
+
     @abstractmethod
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        """Initialize the set from data."""
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
 
     # __iter__ is inherited
 
@@ -184,8 +200,8 @@ class FrozenSetSlot[Item: abc.Hashable](FrozenSetLike[Item]):
         return self._slot
 
     # __hash__ is inherited from FrozenSetLike.
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = frozenset(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self._slot = frozenset(other)
 
 
 class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
@@ -212,8 +228,8 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
             mutable.intersection_update(other)
         return self
 
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.update(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self.update(other)
 
     def __ior__(  # type: ignore[misc,override]
         self: Self,
@@ -252,7 +268,7 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
         return self
 
     @abstractmethod
-    def __mutate__(self: Self, /) -> AbstractContextManager[set[Item]]:
+    def __mutate__(self: Self, /) -> ContextManager[set[Item]]:
         """Yield a mutable working set and commit on successful exit."""
 
     @classmethod
@@ -316,6 +332,7 @@ class MutableSetSlot[Item: abc.Hashable](MutableSetLike[Item]):
         return self._slot
 
     # __init__ is inherited from MutableSetLike.
+
     @contextmanager
     def __mutate__(self: Self, /) -> abc.Iterator[set[Item]]:
         mutable: set[Item]
@@ -346,14 +363,14 @@ class DictLike[Key: abc.Hashable, Value](
     @overload
     def __init__(
         self: Self,
-        data: DictInit[Key, Value] = (),
+        other: DictInit[Key, Value] = (),
         /,
     ) -> None: ...
 
     @overload
     def __init__[Key_](
         self: DictLike[Key_ | str, Value],
-        data: DictInit[Key_ | str, Value] = (),
+        other: DictInit[Key_ | str, Value] = (),
         /,
         **kwargs: Value,
     ) -> None: ...
@@ -361,7 +378,7 @@ class DictLike[Key: abc.Hashable, Value](
     @abstractmethod
     def __init__(
         self: Any,
-        data: Any = (),
+        other: Any = (),
         /,
         **kwargs: Any,
     ) -> None:
@@ -440,10 +457,10 @@ class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
 
     # __hash__ is inherited from FrozenDictLike.
     def __init__(
-        self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
+        self: Self, other: DictInit[Key, Value] = (), /, **kwargs: Value
     ) -> None:
         self._slot = frozendict(
-            data,  # type: ignore[arg-type]
+            other,  # type: ignore[arg-type]
             **kwargs,
         )
 
@@ -468,9 +485,9 @@ class MutableDictLike[Key: abc.Hashable, Value](
     __hash__ = None  # type: ignore[assignment]
 
     def __init__(
-        self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
+        self: Self, other: DictInit[Key, Value] = (), /, **kwargs: Value
     ) -> None:
-        self.update(data, **kwargs)
+        self.update(other, **kwargs)
 
     def __ior__(  # type: ignore[misc, override]
         self: Self, other: DictInit[Key, Value], /
@@ -479,7 +496,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
         return self
 
     @abstractmethod
-    def __mutate__(self: Self, /) -> AbstractContextManager[dict[Key, Value]]:
+    def __mutate__(self: Self, /) -> ContextManager[dict[Key, Value]]:
         """Yield a mutable working dictionary and commit on normal exit."""
 
     def __or__[Key_, Value_](
@@ -622,8 +639,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
         return self.__frozen__() > other.__frozen__()
 
     @abstractmethod
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        """Initialize from an iterable."""
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
 
     __iter__ = abc.Sequence.__iter__
 
@@ -698,8 +714,8 @@ class FrozenListSlot[Item](FrozenListLike[Item]):
         return self._slot
 
     # __hash__ is inherited from FrozenListLike.
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self._slot = tuple(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self._slot = tuple(other)
 
 
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
@@ -744,11 +760,11 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
             mutable *= other
         return self
 
-    def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
-        self.extend(data)
+    def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None:
+        self.extend(other)
 
     @abstractmethod
-    def __mutate__(self: Self, /) -> AbstractContextManager[list[Item]]:
+    def __mutate__(self: Self, /) -> ContextManager[list[Item]]:
         """Yield a mutable working list and commit on successful exit."""
 
     @overload
@@ -854,6 +870,7 @@ class MutableListSlot[Item](MutableListLike[Item]):
         return self._slot
 
     # __init__ is inherited from MutableListLike.
+
     @contextmanager
     def __mutate__(self: Self, /) -> abc.Iterator[list[Item]]:
         mutable: list[Item]
