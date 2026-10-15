@@ -371,7 +371,7 @@ class DictLike[Key: abc.Hashable, Value](
 
     @classmethod
     def __type__[Key_: abc.Hashable, Value_](
-        cls: DictLike[Key, Value], data: DictInit[Key_, Value_], /
+        cls: type[DictLike[Key, Value]], data: DictInit[Key_, Value_], /
     ) -> DictLike[Key_, Value_]:
         return cls(data)
 
