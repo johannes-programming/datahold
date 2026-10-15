@@ -36,6 +36,7 @@ from frozendict import frozendict
 ### TYPING ###
 
 
+# the dublication is a concession to mypy mistyping Mapping.__getitem__ and frozendict.__getitem__
 class SupportsKeysAndGetItem[Key: abc.Hashable, Value](Protocol):
     def __getitem__(self: Self, key: abc.Hashable, /) -> Value: ...
     def keys(self: Self, /) -> abc.Iterable[Key]: ...
@@ -123,16 +124,16 @@ class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     # __sub__ is inherited from abc.Set (via _from_iterable).
     @classmethod
     def __type__[Item_: abc.Hashable](
-        cls: type[SetLike[Item]], data: abc.Iterable[Item_], /
+        cls: type[Any], data: abc.Iterable[Item_], /
     ) -> SetLike[Item_]:
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     # __xor__ is inherited from abc.Set (via _from_iterable).
     @classmethod
     def _from_iterable[Item_: abc.Hashable](
-        cls: Any, data: abc.Iterable[Item_], /
+        cls: type[Any], data: abc.Iterable[Item_], /
     ) -> SetLike[Item_]:
-        return cls.__type__(data)
+        return cls.__type__(data)  # type: ignore[no-any-return]
 
     def difference(
         self: Self, /, *others: abc.Iterable[Item]
@@ -191,15 +192,19 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
     """Mutable set operations committed through a context manager."""
 
     __slots__ = ()
-    __hash__ = None
 
     def __frozen__(self: Self, /) -> frozenset[Item]:
         mutable: set[Item]
         with self.__mutate__() as mutable:
             return frozenset(mutable)
 
-    # __hash__ is disabled, as for built-in set.
-    def __iand__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+    __hash__ = None  # type: ignore[assignment]
+
+    def __iand__(  # type: ignore[misc, unused-ignore]
+        self: Self,
+        other: abc.Set[Item],
+        /,
+    ) -> MutableSetLike[Item]:
         mutable: set[Item]
         if not isinstance(other, abc.Set):
             return NotImplemented
@@ -210,7 +215,11 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
     def __init__(self: Self, data: abc.Iterable[Item] = (), /) -> None:
         self.update(data)
 
-    def __ior__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+    def __ior__(  # type: ignore[misc,override]
+        self: Self,
+        other: abc.Set[Item],
+        /,
+    ) -> MutableSetLike[Item]:
         mutable: set[Item]
         if not isinstance(other, abc.Set):
             return NotImplemented
@@ -218,7 +227,11 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
             mutable.update(other)
         return self
 
-    def __isub__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+    def __isub__(  # type: ignore[misc, unused-ignore]
+        self: Self,
+        other: abc.Set[Item],
+        /,
+    ) -> MutableSetLike[Item]:
         mutable: set[Item]
         if not isinstance(other, abc.Set):
             return NotImplemented
@@ -226,7 +239,11 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
             mutable.difference_update(other)
         return self
 
-    def __ixor__(self: Self, other: abc.Set[Item], /) -> MutableSetLike[Item]:
+    def __ixor__(  # type: ignore[misc,override]
+        self: Self,
+        other: abc.Set[Item],
+        /,
+    ) -> MutableSetLike[Item]:
         mutable: set[Item]
         if not isinstance(other, abc.Set):
             return NotImplemented
@@ -240,10 +257,10 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
 
     @classmethod
     def __type__[Item_: abc.Hashable](
-        cls: type[MutableSetLike[Item]], data: abc.Iterable[Item_], /
+        cls: type[Any], data: abc.Iterable[Item_], /
     ) -> MutableSetLike[Item_]:
         # redoing the same method is necessary because copy must return MutableSetLike[Item]
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     def add(self: Self, item: Item, /) -> None:
         mutable: set[Item]
@@ -323,8 +340,8 @@ class DictLike[Key: abc.Hashable, Value](
     def __frozen__(self: Self, /) -> frozendict[Key, Value]:
         """Return an immutable mapping snapshot."""
 
-    def __getitem__(self: Self, key: Key, /) -> Value:
-        return self.__frozen__()[key]
+    def __getitem__(self: Self, key: abc.Hashable, /) -> Value:
+        return self.__frozen__()[key]  # type: ignore[index]
 
     @overload
     def __init__(
@@ -358,7 +375,9 @@ class DictLike[Key: abc.Hashable, Value](
     ) -> DictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
             return NotImplemented
-        return type(self).__type__(self.__frozen__() | other.__frozen__())
+        return type(self).__type__(
+            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
+        )
 
     @recursive_repr()
     def __repr__(self: Self, /) -> str:
@@ -371,9 +390,9 @@ class DictLike[Key: abc.Hashable, Value](
 
     @classmethod
     def __type__[Key_: abc.Hashable, Value_](
-        cls: type[DictLike[Key, Value]], data: DictInit[Key_, Value_], /
+        cls: type[Any], data: DictInit[Key_, Value_], /
     ) -> DictLike[Key_, Value_]:
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     @overload
     @classmethod
@@ -391,7 +410,7 @@ class DictLike[Key: abc.Hashable, Value](
     def fromkeys(
         cls: type[Any], keys: Any, value: Any = None, /
     ) -> DictLike[Any, Any]:
-        return cls.__type__(dict.fromkeys(keys, value))
+        return cls.__type__(dict.fromkeys(keys, value))  # type: ignore[no-any-return]
 
     # get is inherited from abc.Mapping.
     # items is inherited from abc.Mapping.
@@ -423,7 +442,10 @@ class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
     def __init__(
         self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
     ) -> None:
-        self._slot = frozendict(data, **kwargs)
+        self._slot = frozendict(
+            data,  # type: ignore[arg-type]
+            **kwargs,
+        )
 
 
 class MutableDictLike[Key: abc.Hashable, Value](
@@ -432,25 +454,25 @@ class MutableDictLike[Key: abc.Hashable, Value](
     """Mutable mapping operations performed on a temporary dict."""
 
     __slots__ = ()
-    __hash__ = None
 
     def __delitem__(self: Self, key: abc.Hashable, /) -> None:
         mutable: dict[Key, Value]
         with self.__mutate__() as mutable:
-            del mutable[key]
+            del mutable[key]  # type: ignore[arg-type]
 
     def __frozen__(self: Self, /) -> frozendict[Key, Value]:
         mutable: dict[Key, Value]
         with self.__mutate__() as mutable:
             return frozendict(mutable)
 
-    # __hash__ is disabled, as for built-in dict.
+    __hash__ = None  # type: ignore[assignment]
+
     def __init__(
         self: Self, data: DictInit[Key, Value] = (), /, **kwargs: Value
     ) -> None:
         self.update(data, **kwargs)
 
-    def __ior__(
+    def __ior__(  # type: ignore[misc, override]
         self: Self, other: DictInit[Key, Value], /
     ) -> MutableDictLike[Key, Value]:
         self.update(other)
@@ -460,6 +482,15 @@ class MutableDictLike[Key: abc.Hashable, Value](
     def __mutate__(self: Self, /) -> AbstractContextManager[dict[Key, Value]]:
         """Yield a mutable working dictionary and commit on normal exit."""
 
+    def __or__[Key_, Value_](
+        self: Self, other: DictLike[Key_, Value_], /
+    ) -> MutableDictLike[Key | Key_, Value | Value_]:
+        if not isinstance(other, DictLike):
+            return NotImplemented
+        return type(self).__type__(
+            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
+        )
+
     def __setitem__(self: Self, key: Key, value: Value, /) -> None:
         mutable: dict[Key, Value]
         with self.__mutate__() as mutable:
@@ -467,17 +498,17 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     @classmethod
     def __type__[Key_: abc.Hashable, Value_](
-        cls: type[MutableDictLike[Key, Value]],
+        cls: type[Any],
         data: DictInit[Key_, Value_],
         /,
     ) -> MutableDictLike[Key_, Value_]:
         # redoing the same method is necessary because copy must return MutableDictLike[Item]
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     # clear is inherited from abc.MutableMapping.
 
     def copy(self: Self, /) -> DictLike[Key, Value]:
-        return type(self).__type__(self.__frozen__())
+        return type(self).__type__(self.__frozen__())  # type: ignore[arg-type]
 
     # pop is inherited from abc.MutableMapping.
     def popitem(self: Self, /) -> tuple[Key, Value]:
@@ -487,7 +518,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     # setdefault is inherited from abc.MutableMapping.
 
-    @overload
+    @overload  # type: ignore[override]
     def update(
         self: Self,
         other: DictInit[Key, Value] = (),
@@ -636,11 +667,11 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
 
     @classmethod
     def __type__[Item_](
-        cls: type[ListLike[Item]],
+        cls: type[Any],
         data: abc.Iterable[Item_],
         /,
     ) -> ListLike[Item_]:
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     # count is inherited from abc.Sequence.
     # index is inherited from abc.Sequence.
@@ -675,7 +706,6 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     """Mutable sequence operations committed through a temporary list."""
 
     __slots__ = ()
-    __hash__ = None
 
     def __delitem__(
         self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
@@ -697,9 +727,16 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         self: Self, index: Slice[None | SupportsIndex], /
     ) -> MutableListLike[Item]: ...
 
-    __getitem__ = ListLike.__getitem__
+    def __getitem__(
+        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+    ) -> Any:
+        if isinstance(index, SupportsIndex):
+            return self.__frozen__()[index]
+        else:
+            return type(self).__type__(self.__frozen__()[index])
 
-    # __hash__ is disabled, as for built-in list.
+    __hash__ = None  # type: ignore[assignment]
+
     # __iadd__ is inherited from abc.MutableSequence.
     def __imul__(self: Self, other: SupportsIndex, /) -> MutableListLike[Item]:
         mutable: list[Item]
@@ -739,12 +776,12 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     @classmethod
     def __type__[Item_](
-        cls: type[MutableListLike[Item]],
+        cls: type[Any],
         data: abc.Iterable[Item_],
         /,
     ) -> MutableListLike[Item_]:
         # redoing the same method is necessary because copy must return MutableListLike[Item]
-        return cls(data)
+        return cls(data)  # type: ignore[no-any-return]
 
     # append is inherited from abc.MutableSequence.
     # clear is inherited from abc.MutableSequence.
