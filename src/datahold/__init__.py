@@ -29,7 +29,15 @@ from collections import abc
 from contextlib import contextmanager
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Never, Protocol, Self, SupportsIndex, overload
+from typing import (
+    Any,
+    Never,
+    Protocol,
+    Self,
+    SupportsIndex,
+    overload,
+    runtime_checkable,
+)
 
 from frozendict import frozendict
 
@@ -37,6 +45,7 @@ from frozendict import frozendict
 
 
 # the dublication is a concession to mypy mistyping Mapping.__getitem__ and frozendict.__getitem__
+@runtime_checkable
 class SupportsKeysAndGetItem[Key: abc.Hashable, Value](Protocol):
     def __getitem__(self: Self, key: abc.Hashable, /) -> Value: ...
     def keys(self: Self, /) -> abc.Iterable[Key]: ...
@@ -77,6 +86,20 @@ class ContextManager[Enter](Protocol):
 class CollectionData[Item](
     abc.Sized, abc.Iterable[Item], abc.Container[Never], Protocol
 ): ...
+
+
+### HELPER ###
+
+
+# circumvent the rare case that other has keys but not __getitem__
+def dictable[Key: abc.Hashable, Value](
+    other: DictInit[Key, Value],
+    /,
+) -> DictInit[Key, Value]:
+    if isinstance(other, SupportsKeysAndGetItem):
+        return other
+    else:
+        return (item for item in other)
 
 
 ### BASE ###
@@ -368,7 +391,7 @@ class DictLike[Key: abc.Hashable, Value](
     ) -> None: ...
 
     @overload
-    def __init__[Key_](
+    def __init__[Key_: abc.Hashable](
         self: DictLike[Key_ | str, Value],
         other: DictInit[Key_ | str, Value] = (),
         /,
@@ -456,11 +479,30 @@ class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
         return self._slot
 
     # __hash__ is inherited from FrozenDictLike.
+
+    @overload
     def __init__(
-        self: Self, other: DictInit[Key, Value] = (), /, **kwargs: Value
+        self: Self,
+        other: DictInit[Key, Value] = (),
+        /,
+    ) -> None: ...
+
+    @overload
+    def __init__[Key_: abc.Hashable](
+        self: DictLike[Key_ | str, Value],
+        other: DictInit[Key_ | str, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None: ...
+
+    def __init__(
+        self: Any,
+        other: Any = (),
+        /,
+        **kwargs: Any,
     ) -> None:
         self._slot = frozendict(
-            other,  # type: ignore[arg-type]
+            dictable(other),  # type: ignore[arg-type]
             **kwargs,
         )
 
@@ -484,8 +526,26 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     __hash__ = None  # type: ignore[assignment]
 
+    @overload
     def __init__(
-        self: Self, other: DictInit[Key, Value] = (), /, **kwargs: Value
+        self: Self,
+        other: DictInit[Key, Value] = (),
+        /,
+    ) -> None: ...
+
+    @overload
+    def __init__[Key_: abc.Hashable](
+        self: DictLike[Key_ | str, Value],
+        other: DictInit[Key_ | str, Value] = (),
+        /,
+        **kwargs: Value,
+    ) -> None: ...
+
+    def __init__(
+        self: Any,
+        other: Any = (),
+        /,
+        **kwargs: Any,
     ) -> None:
         self.update(other, **kwargs)
 
@@ -524,7 +584,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     # clear is inherited from abc.MutableMapping.
 
-    def copy(self: Self, /) -> DictLike[Key, Value]:
+    def copy(self: Self, /) -> MutableDictLike[Key, Value]:
         return type(self).__type__(self.__frozen__())  # type: ignore[arg-type]
 
     # pop is inherited from abc.MutableMapping.
@@ -553,7 +613,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     ) -> None:
         mutable: dict[Key, Value]
         with self.__mutate__() as mutable:
-            mutable.update(other, **kwargs)
+            mutable.update(dictable(other), **kwargs)
 
 
 class MutableDictSlot[Key: abc.Hashable, Value](MutableDictLike[Key, Value]):
@@ -672,14 +732,14 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     def __mul__(self: Self, other: SupportsIndex, /) -> ListLike[Item]:
         return type(self).__type__(self.__frozen__() * other)
 
-    __rmul__ = __mul__
-
     # __ne__ is inherited from object (negates __eq__).
     @recursive_repr()
     def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.__frozen__())})"
 
     # __reversed__ is inherited from abc.Sequence.
+
+    __rmul__ = __mul__
 
     @classmethod
     def __type__[Item_](
