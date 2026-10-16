@@ -524,7 +524,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
 
     # clear is inherited from abc.MutableMapping.
 
-    def copy(self: Self, /) -> DictLike[Key, Value]:
+    def copy(self: Self, /) -> MutableDictLike[Key, Value]:
         return type(self).__type__(self.__frozen__())  # type: ignore[arg-type]
 
     # pop is inherited from abc.MutableMapping.

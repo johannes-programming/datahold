@@ -68,7 +68,7 @@ The typing conforms strictly to ``mypy``.
 Features
 --------
 
-Inherited features are not mentioned again, unless something changed.
+Only members defined directly in each class are listed below; members available solely through inheritance are omitted.
 
 ``datahold``
 ''''''''''''
@@ -138,11 +138,6 @@ The constructor is abstract.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract method returns a frozen snapshot of the set.
-
-``__or__(other: Set[Item], /) -> SetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self | other`` and is inherited from ``collections.abc.Set[Item]``.
 
 ``__repr__() -> str``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -289,11 +284,6 @@ This method returns a new instance, created from ``self.__frozen__()``.
 
 ``pop() -> Item``
 ^^^^^^^^^^^^^^^^^
-
-``remove(item: Item, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method is inherited from ``MutableSet[Item]``.
 
 ``symmetric_difference_update(other: Iterable[Item], /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -456,16 +446,10 @@ This magic method implements ``self[key] = value``.
 
 This ``classmethod`` constructs a mutable instance of ``cls``.
 
-``copy() -> DictLike[Key, Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``copy() -> MutableDictLike[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method constructs a copy from ``self.__frozen__()``.
-The declared return type is ``DictLike[Key, Value]``.
-
-``pop(key: Key, /) -> Value``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method is inherited from ``collections.abc.MutableMapping[Key, Value]``; an overload accepts a default.
 
 ``popitem() -> tuple[Key, Value]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -568,11 +552,6 @@ This magic method implements ``repr(self)``.
     def __repr__(self, /) -> str:
         return f"{type(self).__name__}({list(self.__frozen__())})"
 
-``__reversed__() -> Iterator[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method is inherited from ``collections.abc.Sequence[Item]``.
-
 ``__rmul__(other: SupportsIndex, /) -> ListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -641,11 +620,6 @@ This method creates a tuple from the mutable list yielded by ``__mutate__``.
 
 Mutable lists are unhashable.
 
-``__iadd__(other: Iterable[Item], /) -> MutableListLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This magic method implements ``self += other`` and is inherited from ``collections.abc.MutableSequence[Item]``.
-
 ``__imul__(other: SupportsIndex, /) -> MutableListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -679,11 +653,6 @@ This method constructs a copy from ``self.__frozen__()``.
 
 ``insert(index: SupportsIndex, item: Item, /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``pop(index: SupportsIndex = -1, /) -> Item``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method is inherited from ``collections.abc.MutableSequence[Item]``.
 
 ``sort[Item_: SupportsGT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item_: SupportsLT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[T: SupportsLT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None`` ``sort[T: SupportsGT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
