@@ -70,9 +70,6 @@ Features
 
 Only members defined directly in each class are listed below; members available solely through inheritance are omitted.
 
-``datahold``
-''''''''''''
-
 The classes below are defined directly in ``datahold`` and can be imported from it.
 Unlike version 3.0, there are no ``datahold.base``, ``datahold.core``,
 ``datahold.frozen``, or ``datahold.typing`` submodules in this distribution.
@@ -307,8 +304,8 @@ This method returns ``self._slot`` directly.
 This context manager copies ``self._slot`` into a temporary ``set[Item]`` (or starts from an empty set),
 yields it, and stores ``frozenset(mutable)`` in ``self._slot`` on successful exit.
 
-``class datahold.DictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``Collection[Key]`` and ``collections.abc.Mapping[Key, Value]``.
 It implements the non-mutating mapping operations that are not already provided by ``collections.abc.Mapping[Key, Value]``.
@@ -350,16 +347,16 @@ This magic method implements ``repr(self)``.
 
 This magic method implements ``reversed(self)`` over the keys.
 
-``__type__[Key_: Hashable, Value_](data: DictInit[Key_, Value_], /) -> DictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__type__[Key_: Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | Iterable[tuple[Key_, Value_]], /) -> DictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs an instance of ``cls`` from the supplied mapping or pairs.
 
-``fromkeys[Key_](keys: Iterable[Key_], /) -> DictLike[Key_, None]`` ``fromkeys[Key_, Value_](keys: Iterable[Key_], value: Value_, /) -> DictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod fromkeys[Key_: Hashable](keys: Iterable[Key_], /) -> DictLike[Key_, None]`` ``classmethod fromkeys[Key_: Hashable, Value_](keys: Iterable[Key_], value: Value_, /) -> DictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``class datahold.FrozenDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``DictLike[Key, Value]``.
 It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
@@ -373,8 +370,8 @@ It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
 This method implements ``hash(self)`` by returning ``hash(self.__frozen__())``.
 A ``TypeError`` may be raised if the mapping contains unhashable values.
 
-``class datahold.FrozenDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictSlot[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``FrozenDictLike[Key, Value]``.
 It stores a ``frozendict[Key, Value]`` in one slot.
@@ -389,8 +386,8 @@ Instances store their data in a single ``_slot`` attribute.
 
 This method returns ``self._slot``.
 
-``class datahold.MutableDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``DictLike[Key, Value]`` and ``MutableMapping[Key, Value]``.
 It inherits non-mutating mapping operations from ``DictLike[Key, Value]`` and implements mutating operations below.
@@ -414,8 +411,8 @@ Concrete subclasses may override it to return already-frozen data.
 
 Mutable dictionaries are unhashable.
 
-``__ior__(other: DictInit[Key, Value], /) -> MutableDictLike[Key, Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ior__(other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]], /) -> MutableDictLike[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self |= other``.
 
@@ -425,8 +422,8 @@ This magic method implements ``self |= other``.
 This abstract method provides a context manager yielding a mutable working dictionary.
 It must commit the updated data on successful exit.
 
-``__or__[Key_, Value_](other: DictLike[Key_, Value_], /) -> MutableDictLike[Key | Key_, Value | Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__or__[Key_: Hashable, Value_](other: DictLike[Key_, Value_], /) -> MutableDictLike[Key | Key_, Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method specializes the return type of ``DictLike.__or__`` to a mutable dictionary.
 
@@ -435,8 +432,8 @@ This method specializes the return type of ``DictLike.__or__`` to a mutable dict
 
 This magic method implements ``self[key] = value``.
 
-``__type__[Key_: Hashable, Value_](data: DictInit[Key_, Value_], /) -> MutableDictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__type__[Key_: Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | Iterable[tuple[Key, Value]], /) -> MutableDictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs a mutable instance of ``cls``.
 
@@ -450,13 +447,13 @@ This method constructs a copy from ``self.__frozen__()``.
 
 This method removes and returns a key-value pair from the mutable working dictionary.
 
-``update[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /) -> None`` ``update[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value) -> None``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``update(other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /) -> None`` ``update[Key = (Key_: Hashable) | str](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value) -> None``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The overload with keyword arguments requires a mapping whose keys can be strings.
 
-``class datahold.MutableDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: Key_ | str, Value][Key_: Hashable](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictSlot[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``MutableDictLike[Key, Value]``.
 It is a concrete mutable mapping backed by an immutable ``frozendict[Key, Value]`` in one instance slot.
@@ -648,8 +645,8 @@ This method constructs a copy from ``self.__frozen__()``.
 ``insert(index: SupportsIndex, item: Item, /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``sort[Item: SupportsGT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item: SupportsLT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[T: SupportsLT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None`` ``sort[T: SupportsGT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``sort[Item := SupportsGT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item := SupportsLT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[T: SupportsLT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None`` ``sort[T: SupportsGT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method sorts the temporary mutable list and commits it.
 It has overloads requiring comparable items or comparable results of ``key``.
