@@ -31,6 +31,7 @@ from reprlib import recursive_repr
 from types import NotImplementedType
 from typing import (
     Any,
+    ClassVar,
     Never,
     Protocol,
     Self,
@@ -67,6 +68,16 @@ class SupportsLT[Other](Protocol):
     def __lt__(self: Self, other: Other, /) -> bool: ...
 
 
+class SupportsGESelf(Protocol):
+    def __ge__(self: Self, other: Self, /) -> bool: ...
+class SupportsGTSelf(Protocol):
+    def __gt__(self: Self, other: Self, /) -> bool: ...
+class SupportsLESelf(Protocol):
+    def __le__(self: Self, other: Self, /) -> bool: ...
+class SupportsLTSelf(Protocol):
+    def __lt__(self: Self, other: Self, /) -> bool: ...
+
+
 from types import TracebackType
 from typing import Protocol
 
@@ -81,11 +92,6 @@ class ContextManager[Enter](Protocol):
         traceback: TracebackType | None,
         /,
     ) -> object: ...
-
-
-class CollectionData[Item](
-    abc.Sized, abc.Iterable[Item], abc.Container[Never], Protocol
-): ...
 
 
 ### HELPER ###
@@ -106,6 +112,14 @@ def dictable[Key: abc.Hashable, Value](
 
 
 class Collection[Item](abc.Sized, abc.Iterable[Item], abc.Container[object]):
+    class Frozen[FrozenItem](
+        abc.Sized,
+        abc.Iterable[FrozenItem],
+        abc.Container[Never],
+        abc.Hashable,
+        Protocol,
+    ): ...
+
     __slots__ = ()
 
     def __contains__(self: Self, other: object, /) -> bool:
@@ -115,7 +129,7 @@ class Collection[Item](abc.Sized, abc.Iterable[Item], abc.Container[object]):
             return False
 
     @abstractmethod
-    def __frozen__(self: Self, /) -> CollectionData[Item]: ...
+    def __frozen__(self: Self, /) -> Collection.Frozen[Item]: ...
     def __iter__(self: Self, /) -> abc.Iterator[Item]:
         return iter(self.__frozen__())
 
@@ -128,6 +142,8 @@ class Collection[Item](abc.Sized, abc.Iterable[Item], abc.Container[object]):
 
 class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     """Shared read-only set API; construction and storage remain abstract."""
+
+    type Frozen[FrozenItem: abc.Hashable] = frozenset[FrozenItem]
 
     __slots__ = ()
 
@@ -229,6 +245,8 @@ class FrozenSetSlot[Item: abc.Hashable](FrozenSetLike[Item]):
 
 class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
     """Mutable set operations committed through a context manager."""
+
+    type Mutable[MutableItem: abc.Hashable] = set[MutableItem]
 
     __slots__ = ()
 
@@ -351,9 +369,6 @@ class MutableSetSlot[Item: abc.Hashable](MutableSetLike[Item]):
 
     __slots__ = ("_slot",)
 
-    def __frozen__(self: Self, /) -> frozenset[Item]:
-        return self._slot
-
     # __init__ is inherited from MutableSetLike.
 
     @contextmanager
@@ -371,6 +386,10 @@ class DictLike[Key: abc.Hashable, Value](
     Collection[Key], abc.Mapping[Key, Value]
 ):
     """Shared read-only dictionary interface."""
+
+    type Frozen[FrozenKey: abc.Hashable, FrozenValue] = frozendict[
+        FrozenKey, FrozenValue
+    ]
 
     __slots__ = ()
 
@@ -410,7 +429,7 @@ class DictLike[Key: abc.Hashable, Value](
     # __iter__ is inherited
     # __len__ is inherited
     # __ne__ is inherited from object (negates __eq__).
-    def __or__[Key_, Value_](
+    def __or__[Key_: abc.Hashable, Value_](
         self: Self, other: DictLike[Key_, Value_], /
     ) -> DictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
@@ -436,13 +455,13 @@ class DictLike[Key: abc.Hashable, Value](
 
     @overload
     @classmethod
-    def fromkeys[Key_](
+    def fromkeys[Key_: abc.Hashable](
         cls: type[Any], keys: abc.Iterable[Key_], /
     ) -> DictLike[Key_, None]: ...
 
     @overload
     @classmethod
-    def fromkeys[Key_, Value_](
+    def fromkeys[Key_: abc.Hashable, Value_](
         cls: type[Any], keys: abc.Iterable[Key_], value: Value_, /
     ) -> DictLike[Key_, Value_]: ...
 
@@ -468,6 +487,15 @@ class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
         return hash(self.__frozen__())
 
     # __init__ is inherited as an abstract requirement from DictLike.
+
+    def __or__[Key_: abc.Hashable, Value_](
+        self: Self, other: DictLike[Key_, Value_], /
+    ) -> FrozenDictLike[Key | Key_, Value | Value_]:
+        if not isinstance(other, DictLike):
+            return NotImplemented
+        return type(self).__type__(
+            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
+        )
 
 
 class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
@@ -511,6 +539,10 @@ class MutableDictLike[Key: abc.Hashable, Value](
     DictLike[Key, Value], abc.MutableMapping[Key, Value]
 ):
     """Mutable mapping operations performed on a temporary dict."""
+
+    type Mutable[MutableKey: abc.Hashable, MutableValue] = dict[
+        MutableKey, MutableValue
+    ]
 
     __slots__ = ()
 
@@ -559,7 +591,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     def __mutate__(self: Self, /) -> ContextManager[dict[Key, Value]]:
         """Yield a mutable working dictionary and commit on normal exit."""
 
-    def __or__[Key_, Value_](
+    def __or__[Key_: abc.Hashable, Value_](
         self: Self, other: DictLike[Key_, Value_], /
     ) -> MutableDictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
@@ -621,9 +653,6 @@ class MutableDictSlot[Key: abc.Hashable, Value](MutableDictLike[Key, Value]):
 
     __slots__ = ("_slot",)
 
-    def __frozen__(self: Self, /) -> frozendict[Key, Value]:
-        return self._slot
-
     # __init__ is inherited from MutableDictLike.
     @contextmanager
     def __mutate__(self: Self, /) -> abc.Iterator[dict[Key, Value]]:
@@ -638,6 +667,8 @@ class MutableDictSlot[Key: abc.Hashable, Value](MutableDictLike[Key, Value]):
 
 class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     """Shared read-only sequence with cross-variant tuple-style comparison."""
+
+    type Frozen[FrozenItem] = tuple[FrozenItem, ...]
 
     __slots__ = ()
 
@@ -674,11 +705,11 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
 
     @overload
     def __getitem__(
-        self: Self, index: Slice[None | SupportsIndex], /
+        self: Self, index: Slice[SupportsIndex | None], /
     ) -> ListLike[Item]: ...
 
     def __getitem__(
-        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
     ) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
@@ -700,8 +731,6 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
 
     @abstractmethod
     def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
-
-    __iter__ = abc.Sequence.__iter__
 
     @overload
     def __le__[Item_](
@@ -781,10 +810,12 @@ class FrozenListSlot[Item](FrozenListLike[Item]):
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     """Mutable sequence operations committed through a temporary list."""
 
+    type Mutable[MutableItem] = list[MutableItem]
+
     __slots__ = ()
 
     def __delitem__(
-        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
     ) -> None:
         mutable: list[Item]
         with self.__mutate__() as mutable:
@@ -800,11 +831,11 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
 
     @overload
     def __getitem__(
-        self: Self, index: Slice[None | SupportsIndex], /
+        self: Self, index: Slice[SupportsIndex | None], /
     ) -> MutableListLike[Item]: ...
 
     def __getitem__(
-        self: Self, index: SupportsIndex | Slice[None | SupportsIndex], /
+        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
     ) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
@@ -835,7 +866,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     @overload
     def __setitem__(
         self: Self,
-        index: Slice[None | SupportsIndex],
+        index: Slice[SupportsIndex | None],
         data: abc.Iterable[Item],
         /,
     ) -> None: ...
@@ -878,7 +909,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     # remove is inherited from abc.MutableSequence.
     # reverse is inherited from abc.MutableSequence.
     @overload
-    def sort[Item_: SupportsGT[Self]](
+    def sort[Item_: SupportsGTSelf](
         self: MutableListLike[Item_],
         /,
         *,
@@ -886,7 +917,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[Item_: SupportsLT[Self]](
+    def sort[Item_: SupportsLTSelf](
         self: MutableListLike[Item_],
         /,
         *,
@@ -894,19 +925,19 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[T: SupportsLT[Self]](
+    def sort[Item_: SupportsGTSelf](
         self: Self,
         /,
         *,
-        key: abc.Callable[[Item], T],
+        key: abc.Callable[[Item], Item_],
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[T: SupportsGT[Self]](
+    def sort[Item_: SupportsLTSelf](
         self: Self,
         /,
         *,
-        key: abc.Callable[[Item], T],
+        key: abc.Callable[[Item], Item_],
         reverse: bool = False,
     ) -> None: ...
     def sort(
@@ -925,9 +956,6 @@ class MutableListSlot[Item](MutableListLike[Item]):
     """Mutable sequence with transactional replacement of a tuple slot."""
 
     __slots__ = ("_slot",)
-
-    def __frozen__(self: Self, /) -> tuple[Item, ...]:
-        return self._slot
 
     # __init__ is inherited from MutableListLike.
 
