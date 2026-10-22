@@ -9,8 +9,12 @@ But they suffer from one principal problem:
 They necessitate overriding multiple methods
 to effectively customize the data holder.
 This project allows creating a customized data holder
-by only overriding the ``__frozen__`` method for read-only access
-or the ``__mutate__`` context manager for mutable operations.
+by only overriding:
+
+- the ``__frozen__`` method (in any class)
+- the ``__init__`` method (in frozen classes)
+- the ``__mutate__`` context manager (in mutable classes)
+
 All proper methods and magic methods in the classes of this project
 use the ``__frozen__`` method to access the underlying data
 (and in the mutable ``Like`` classes the ``__mutate__`` context manager to modify it).
@@ -80,6 +84,11 @@ Unlike version 3.0, there are no ``datahold.base``, ``datahold.core``,
 This abstract base class inherits from ``collections.abc.Sized``, ``collections.abc.Iterable[Item]``, and ``collections.abc.Container[object]``.
 It is the ancestor of all set-like, dictionary-like, and list-like classes in ``datahold``.
 
+``class Frozen[FrozenItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This protocol inherits from ``collections.abc.Sized``, ``collections.abc.Iterable[FrozenItem]``, ``collections.abc.Container[Never]``, and ``collections.abc.Hashable``.
+
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
@@ -97,8 +106,8 @@ It returns ``False`` if the underlying membership check raises ``TypeError``.
         except TypeError:
             return False
 
-``__frozen__() -> CollectionData[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__frozen__() -> Frozen[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract method is at the center of this class and of its descendants.
 It supplies the collection used for all non-mutating operations.
@@ -121,12 +130,15 @@ This magic method implements ``iter(self)``.
     def __len__(self: Self, /) -> int:
         return len(self.__frozen__())
 
-``class datahold.SetLike[Item: Hashable](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.SetLike[Item: collections.abc.Hashable](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``Collection[Item]`` and from ``collections.abc.Set[Item]``.
 It implements the non-mutating set operations that are not already provided by the inherited abstract base class.
 The constructor is abstract.
+
+``type Frozen[FrozenItem: collections.abc.Hashable] = frozenset[FrozenItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -143,35 +155,39 @@ This magic method implements ``repr(self)``.
 
 .. code-block:: python
 
-    def __repr__(self, /) -> str:
+    @recursive_repr()
+    def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({set(self.__frozen__())})"
 
-``__type__[Item_: Hashable](data: Iterable[Item_], /) -> SetLike[Item_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Item_: collections.abc.Hashable](data: collections.abc.Iterable[Item_], /) -> SetLike[Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs an instance of ``cls`` from the iterable.
 It is used by methods creating new sets and may be overridden in subclasses.
 
-``difference(*others: Iterable[Item]) -> SetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod _from_iterable[Item_: collections.abc.Hashable](data: collections.abc.Iterable[Item_], /) -> SetLike[Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``intersection(*others: Iterable[Item]) -> SetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``difference(*others: collections.abc.Iterable[Item]) -> SetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``issubset(other: Iterable[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``intersection(*others: collections.abc.Iterable[Item]) -> SetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``issuperset(other: Iterable[Item], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``issubset(other: collections.abc.Iterable[Item], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``symmetric_difference(other: Iterable[Item], /) -> SetLike[Item]``
+``issuperset(other: collections.abc.Iterable[Item], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``symmetric_difference(other: collections.abc.Iterable[Item], /) -> SetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``union(*others: collections.abc.Iterable[Item]) -> SetLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``union(*others: Iterable[Item]) -> SetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``class datahold.FrozenSetLike[Item: Hashable](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenSetLike[Item: collections.abc.Hashable](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``SetLike[Item]``.
 It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
@@ -184,8 +200,8 @@ It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
 
 This method implements ``hash(self)`` by returning ``hash(self.__frozen__())``.
 
-``class datahold.FrozenSetSlot[Item: Hashable](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenSetSlot[Item: collections.abc.Hashable](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``FrozenSetLike[Item]``.
 It is a concrete, hashable set-like class backed by a ``frozenset[Item]``.
@@ -200,8 +216,11 @@ Instances store their data in a single ``_slot`` attribute.
 
 This method returns ``self._slot``.
 
-``class datahold.MutableSetLike[Item: Hashable](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableSetLike[Item: collections.abc.Hashable](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``type Mutable[MutableItem: collections.abc.Hashable] = set[MutableItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract base class inherits from ``SetLike[Item]`` and from ``collections.abc.MutableSet[Item]``.
 It inherits non-mutating operations from ``SetLike[Item]`` and implements mutating operations through ``__mutate__``.
@@ -220,26 +239,26 @@ A subclass may override it to access stored frozen data more efficiently.
 
 Mutable sets are unhashable.
 
-``__iand__(other: Set[Item], /) -> MutableSetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__iand__(other: collections.abc.Set[Item], /) -> MutableSetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self &= other``.
 The other operand must be a ``collections.abc.Set[Item]``.
 
-``__ior__(other: Set[Item], /) -> MutableSetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ior__(other: collections.abc.Set[Item], /) -> MutableSetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self |= other``.
 The other operand must be a ``collections.abc.Set[Item]``.
 
-``__isub__(other: Set[Item], /) -> MutableSetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__isub__(other: collections.abc.Set[Item], /) -> MutableSetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self -= other``.
 The other operand must be a ``collections.abc.Set[Item]``.
 
-``__ixor__(other: Set[Item], /) -> MutableSetLike[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ixor__(other: collections.abc.Set[Item], /) -> MutableSetLike[Item]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self ^= other``.
 The other operand must be a ``collections.abc.Set[Item]``.
@@ -251,8 +270,8 @@ This abstract method provides a context manager yielding a mutable working set.
 It must commit the updated data on successful exit.
 It is at the center of the mutable classes.
 
-``__type__[Item_: Hashable](data: Iterable[Item_], /) -> MutableSetLike[Item_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Item_: collections.abc.Hashable](data: collections.abc.Iterable[Item_], /) -> MutableSetLike[Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` creates a new mutable instance of ``cls``.
 
@@ -264,26 +283,26 @@ This ``classmethod`` creates a new mutable instance of ``cls``.
 
 This method returns a new instance, created from ``self.__frozen__()``.
 
-``difference_update(*others: Iterable[Item]) -> None``
+``difference_update(*others: collections.abc.Iterable[Item]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``discard(item: collections.abc.Hashable, /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``discard(item: Hashable, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``intersection_update(*others: Iterable[Item]) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``intersection_update(*others: collections.abc.Iterable[Item]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``pop() -> Item``
 ^^^^^^^^^^^^^^^^^
 
-``symmetric_difference_update(other: Iterable[Item], /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``symmetric_difference_update(other: collections.abc.Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``update(*others: Iterable[Item]) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``update(*others: collections.abc.Iterable[Item]) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``class datahold.MutableSetSlot[Item: Hashable](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableSetSlot[Item: collections.abc.Hashable](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``MutableSetLike[Item]``.
 It is a concrete mutable set backed by an immutable ``frozenset[Item]`` in one instance slot.
@@ -293,24 +312,22 @@ It is a concrete mutable set backed by an immutable ``frozenset[Item]`` in one i
 
 Instances store their data in a single ``_slot`` attribute.
 
-``__frozen__() -> frozenset[Item]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method returns ``self._slot`` directly.
-
 ``__mutate__() -> ContextManager[set[Item]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This context manager copies ``self._slot`` into a temporary ``set[Item]`` (or starts from an empty set),
 yields it, and stores ``frozenset(mutable)`` in ``self._slot`` on successful exit.
 
-``class datahold.DictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.DictLike[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.DictLike[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``Collection[Key]`` and ``collections.abc.Mapping[Key, Value]``.
 It implements the non-mutating mapping operations that are not already provided by ``collections.abc.Mapping[Key, Value]``.
 The constructor is abstract and accepts either key-value pairs or a mapping.
-The typed overload with keyword arguments requires string keys.
+The typed overload with keyword arguments requires a key type that accommodates strings.
+
+``type Frozen[FrozenKey: collections.abc.Hashable, FrozenValue] = frozendict[FrozenKey, FrozenValue]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -320,13 +337,13 @@ The typed overload with keyword arguments requires string keys.
 
 This abstract method returns an immutable mapping snapshot.
 
-``__getitem__(key: Hashable, /) -> Value``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__getitem__(key: collections.abc.Hashable, /) -> Value``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self[key]`` and delegates to ``self.__frozen__()``.
 
-``__or__[Key_, Value_](other: DictLike[Key_, Value_], /) -> DictLike[Key | Key_, Value | Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__or__[Key_: collections.abc.Hashable, Value_](other: DictLike[Key_, Value_], /) -> DictLike[Key | Key_, Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self | other``.
 Both operands must inherit from ``DictLike[Key, Value]``.
@@ -339,7 +356,8 @@ This magic method implements ``repr(self)``.
 
 .. code-block:: python
 
-    def __repr__(self, /) -> str:
+    @recursive_repr()
+    def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({dict(self.__frozen__())})"
 
 ``__reversed__() -> Iterator[Key]``
@@ -347,16 +365,16 @@ This magic method implements ``repr(self)``.
 
 This magic method implements ``reversed(self)`` over the keys.
 
-``__type__[Key_: Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | Iterable[tuple[Key_, Value_]], /) -> DictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Key_: collections.abc.Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | collections.abc.Iterable[tuple[Key_, Value_]], /) -> DictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs an instance of ``cls`` from the supplied mapping or pairs.
 
-``classmethod fromkeys[Key_: Hashable](keys: Iterable[Key_], /) -> DictLike[Key_, None]`` ``classmethod fromkeys[Key_: Hashable, Value_](keys: Iterable[Key_], value: Value_, /) -> DictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod fromkeys[Key_: collections.abc.Hashable](keys: collections.abc.Iterable[Key_], /) -> DictLike[Key_, None]`` ``classmethod fromkeys[Key_: collections.abc.Hashable, Value_](keys: collections.abc.Iterable[Key_], value: Value_, /) -> DictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``class datahold.FrozenDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenDictLike[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictLike[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``DictLike[Key, Value]``.
 It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
@@ -370,8 +388,11 @@ It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
 This method implements ``hash(self)`` by returning ``hash(self.__frozen__())``.
 A ``TypeError`` may be raised if the mapping contains unhashable values.
 
-``class datahold.FrozenDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictSlot[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``__or__[Key_: collections.abc.Hashable, Value_](other: DictLike[Key_, Value_], /) -> FrozenDictLike[Key | Key_, Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``class datahold.FrozenDictSlot[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictSlot[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``FrozenDictLike[Key, Value]``.
 It stores a ``frozendict[Key, Value]`` in one slot.
@@ -386,17 +407,20 @@ Instances store their data in a single ``_slot`` attribute.
 
 This method returns ``self._slot``.
 
-``class datahold.MutableDictLike[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictLike[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableDictLike[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictLike[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``DictLike[Key, Value]`` and ``MutableMapping[Key, Value]``.
 It inherits non-mutating mapping operations from ``DictLike[Key, Value]`` and implements mutating operations below.
 
+``type Mutable[MutableKey: collections.abc.Hashable, MutableValue] = dict[MutableKey, MutableValue]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``__delitem__(key: Hashable, /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__delitem__(key: collections.abc.Hashable, /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``del self[key]``.
 
@@ -411,8 +435,8 @@ Concrete subclasses may override it to return already-frozen data.
 
 Mutable dictionaries are unhashable.
 
-``__ior__(other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]], /) -> MutableDictLike[Key, Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ior__(other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]], /) -> MutableDictLike[Key, Value]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self |= other``.
 
@@ -422,8 +446,8 @@ This magic method implements ``self |= other``.
 This abstract method provides a context manager yielding a mutable working dictionary.
 It must commit the updated data on successful exit.
 
-``__or__[Key_: Hashable, Value_](other: DictLike[Key_, Value_], /) -> MutableDictLike[Key | Key_, Value | Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__or__[Key_: collections.abc.Hashable, Value_](other: DictLike[Key_, Value_], /) -> MutableDictLike[Key | Key_, Value | Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method specializes the return type of ``DictLike.__or__`` to a mutable dictionary.
 
@@ -432,8 +456,8 @@ This method specializes the return type of ``DictLike.__or__`` to a mutable dict
 
 This magic method implements ``self[key] = value``.
 
-``__type__[Key_: Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | Iterable[tuple[Key, Value]], /) -> MutableDictLike[Key_, Value_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Key_: collections.abc.Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | collections.abc.Iterable[tuple[Key_, Value_]], /) -> MutableDictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs a mutable instance of ``cls``.
 
@@ -447,13 +471,13 @@ This method constructs a copy from ``self.__frozen__()``.
 
 This method removes and returns a key-value pair from the mutable working dictionary.
 
-``update(other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /) -> None`` ``update[Key = (Key_: Hashable) | str](other: SupportsKeysAndGetItem[Key_ | str, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value) -> None``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``update(other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /) -> None`` ``update[Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key_ | str, Value] | collections.abc.Iterable[tuple[Key_ | str, Value]] = (), /, **kwargs: Value) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The overload with keyword arguments requires a mapping whose keys can be strings.
+The overload with keyword arguments requires a key type that accommodates strings.
 
-``class datahold.MutableDictSlot[Key: Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictSlot[Key := (Key_: Hashable) | str, Value](other: SupportsKeysAndGetItem[Key, Value] | Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableDictSlot[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.MutableDictSlot[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``MutableDictLike[Key, Value]``.
 It is a concrete mutable mapping backed by an immutable ``frozendict[Key, Value]`` in one instance slot.
@@ -463,23 +487,21 @@ It is a concrete mutable mapping backed by an immutable ``frozendict[Key, Value]
 
 Instances store their data in a single ``_slot`` attribute.
 
-``__frozen__() -> frozendict[Key, Value]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method returns ``self._slot`` directly.
-
 ``__mutate__() -> ContextManager[dict[Key, Value]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This context manager copies ``self._slot`` into a temporary ``dict`` (or starts from an empty dictionary),
 yields it, and stores ``frozendict(mutable)`` in ``self._slot`` on successful exit.
 
-``class datahold.ListLike[Item](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.ListLike[Item](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``Collection[Item]`` and ``collections.abc.Sequence[Item]``.
 It implements non-mutating sequence operations and comparison with other ``ListLike[Item]`` instances.
 It has no classmethod other than ``__type__``.
+
+``type Frozen[FrozenItem] = tuple[FrozenItem, ...]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
@@ -501,30 +523,27 @@ It compares the frozen tuple snapshots of two ``ListLike[Item]`` instances.
 
 This abstract method returns an immutable tuple snapshot.
 
-``__ge__[Item: SupportsGE[Item_]](other: ListLike[Item_], /) -> bool`` ``__ge__(other: ListLike[SupportsLE[Item]], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__ge__[Item_, Item: SupportsGE[Item_]](other: ListLike[Item_], /) -> bool`` ``__ge__(other: ListLike[SupportsLE[Item]], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self >= other`` by comparing tuple snapshots.
 The method has overloads for comparable item types.
 
-``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[None | SupportsIndex, None | SupportsIndex, None | SupportsIndex], /) -> ListLike[Item]``
+``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> ListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``__gt__[Item: SupportsGT[Item_]](other: ListLike[Item_], /) -> bool`` ``__gt__(other: ListLike[SupportsLT[Item]], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__gt__[Item_, Item: SupportsGT[Item_]](other: ListLike[Item_], /) -> bool`` ``__gt__(other: ListLike[SupportsLT[Item]], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self > other`` by comparing tuple snapshots.
 
-``__iter__ = collections.abc.Sequence.__iter__``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``__le__[Item: SupportsLE[Item_]](other: ListLike[Item_], /) -> bool`` ``__le__(other: ListLike[SupportsGE[Item]], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__le__[Item_, Item: SupportsLE[Item_]](other: ListLike[Item_], /) -> bool`` ``__le__(other: ListLike[SupportsGE[Item]], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self <= other`` by comparing tuple snapshots.
 
-``__lt__[Item: SupportsLT[Item_]](other: ListLike[Item_], /) -> bool`` ``__lt__(other: ListLike[SupportsGT[Item]], /) -> bool``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__lt__[Item_, Item: SupportsLT[Item_]](other: ListLike[Item_], /) -> bool`` ``__lt__(other: ListLike[SupportsGT[Item]], /) -> bool``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``self < other`` by comparing tuple snapshots.
 
@@ -540,7 +559,8 @@ This magic method implements ``repr(self)``.
 
 .. code-block:: python
 
-    def __repr__(self, /) -> str:
+    @recursive_repr()
+    def __repr__(self: Self, /) -> str:
         return f"{type(self).__name__}({list(self.__frozen__())})"
 
 ``__rmul__ = __mul__``
@@ -548,13 +568,13 @@ This magic method implements ``repr(self)``.
 
 This magic method implements ``other * self``.
 
-``__type__[Item_](data: Iterable[Item_], /) -> ListLike[Item_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Item_](data: collections.abc.Iterable[Item_], /) -> ListLike[Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs an instance of ``cls`` from the iterable.
 
-``class datahold.FrozenListLike[Item](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenListLike[Item](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``ListLike[Item]``.
 It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
@@ -568,8 +588,8 @@ It adds hashing, while leaving ``__frozen__`` and ``__init__`` abstract.
 This method implements ``hash(self)`` by returning ``hash(self.__frozen__())``.
 It requires hashable items.
 
-``class datahold.FrozenListSlot[Item](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.FrozenListSlot[Item](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``FrozenListLike[Item]``.
 It stores a ``tuple`` in one slot.
@@ -584,16 +604,19 @@ Instances store their data in a single ``_slot`` attribute.
 
 This method returns ``self._slot``.
 
-``class datahold.MutableListLike[Item](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableListLike[Item](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This abstract base class inherits from ``ListLike[Item]`` and ``collections.abc.MutableSequence[Item]``.
 It inherits non-mutating sequence operations and implements mutable list operations through ``__mutate__``.
 
+``type Mutable[MutableItem] = list[MutableItem]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``__slots__ = ()``
 ^^^^^^^^^^^^^^^^^^
 
-``__delitem__(index: SupportsIndex | slice[None | SupportsIndex, None | SupportsIndex, None | SupportsIndex], /) -> None``
+``__delitem__(index: SupportsIndex | slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements ``del self[index]``.
@@ -603,7 +626,7 @@ This magic method implements ``del self[index]``.
 
 This method creates a tuple from the mutable list yielded by ``__mutate__``.
 
-``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[None | SupportsIndex, None | SupportsIndex, None | SupportsIndex], /) -> MutableListLike[Item]``
+``__getitem__(index: SupportsIndex, /) -> Item`` ``__getitem__(index: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], /) -> MutableListLike[Item]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``__hash__ = None``
@@ -622,15 +645,15 @@ This magic method implements ``self *= other``.
 This abstract method provides a context manager yielding a mutable working list.
 It must commit the updated data on successful exit.
 
-``__setitem__(index: SupportsIndex, data: Item, /) -> None`` ``__setitem__(index: slice[None | SupportsIndex, None | SupportsIndex, None | SupportsIndex], data: Iterable[Item], /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``__setitem__(index: SupportsIndex, data: Item, /) -> None`` ``__setitem__(index: slice[SupportsIndex | None, SupportsIndex | None, SupportsIndex | None], data: collections.abc.Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This magic method implements assignment to an indexed element.
 
 This overload implements slice assignment.
 
-``__type__[Item_](data: Iterable[Item_], /) -> MutableListLike[Item_]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``classmethod __type__[Item_](data: collections.abc.Iterable[Item_], /) -> MutableListLike[Item_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This ``classmethod`` constructs a new mutable instance of ``cls``.
 
@@ -639,20 +662,20 @@ This ``classmethod`` constructs a new mutable instance of ``cls``.
 
 This method constructs a copy from ``self.__frozen__()``.
 
-``extend(data: Iterable[Item], /) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``extend(data: collections.abc.Iterable[Item], /) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``insert(index: SupportsIndex, item: Item, /) -> None``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-``sort[Item := SupportsGT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item := SupportsLT[Self]](*, key: None = None, reverse: bool = False) -> None`` ``sort[T: SupportsLT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None`` ``sort[T: SupportsGT[Self]](*, key: abc.Callable[[Item], T], reverse: bool = False) -> None``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``sort[Item_: SupportsGTSelf, Item: Item_](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item_: SupportsLTSelf, Item: Item_](*, key: None = None, reverse: bool = False) -> None`` ``sort[Item_: SupportsGTSelf](*, key: collections.abc.Callable[[Item], Item_], reverse: bool = False) -> None`` ``sort[Item_: SupportsLTSelf](*, key: collections.abc.Callable[[Item], Item_], reverse: bool = False) -> None``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method sorts the temporary mutable list and commits it.
 It has overloads requiring comparable items or comparable results of ``key``.
 
-``class datahold.MutableListSlot[Item](other: Iterable[Item] = (), /)``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``class datahold.MutableListSlot[Item](other: collections.abc.Iterable[Item] = (), /)``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This class inherits from ``MutableListLike[Item]``.
 It is a concrete mutable list backed by an immutable ``tuple`` in one instance slot.
@@ -661,11 +684,6 @@ It is a concrete mutable list backed by an immutable ``tuple`` in one instance s
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Instances store their data in a single ``_slot`` attribute.
-
-``__frozen__() -> tuple[Item, ...]``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This method returns ``self._slot`` directly.
 
 ``__mutate__() -> ContextManager[list[Item]]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
