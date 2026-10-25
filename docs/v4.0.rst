@@ -391,6 +391,9 @@ A ``TypeError`` may be raised if the mapping contains unhashable values.
 ``__or__[Key_: collections.abc.Hashable, Value_](other: DictLike[Key_, Value_], /) -> FrozenDictLike[Key | Key_, Value | Value_]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+``classmethod __type__[Key_: collections.abc.Hashable, Value_](data: SupportsKeysAndGetItem[Key_, Value_] | collections.abc.Iterable[tuple[Key_, Value_]], /) -> FrozenDictLike[Key_, Value_]``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``class datahold.FrozenDictSlot[Key: collections.abc.Hashable, Value](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /)`` ``class datahold.FrozenDictSlot[Key: collections.abc.Hashable, Value][Key_: collections.abc.Hashable, Key: Key_ | str](other: SupportsKeysAndGetItem[Key, Value] | collections.abc.Iterable[tuple[Key, Value]] = (), /, **kwargs: Value)``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

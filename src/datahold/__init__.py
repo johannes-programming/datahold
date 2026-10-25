@@ -31,7 +31,6 @@ from reprlib import recursive_repr
 from types import NotImplementedType
 from typing import (
     Any,
-    ClassVar,
     Never,
     Protocol,
     Self,
@@ -496,6 +495,12 @@ class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
         return type(self).__type__(
             self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
         )
+
+    @classmethod
+    def __type__[Key_: abc.Hashable, Value_](
+        cls: type[Any], data: DictInit[Key_, Value_], /
+    ) -> FrozenDictLike[Key_, Value_]:
+        return cls(data)  # type: ignore[no-any-return]
 
 
 class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
