@@ -58,15 +58,19 @@ rebase:
 reset:
 	git reset HEAD~1 ;
 
-test: dist
+test: dist py312
 	mkdir dist/out/ ;
-	conda run -n base python make/env.py test_datahold --python=3.12 --recreate >/dev/null;
-	conda run -n test_datahold pip install dist/*.tar.gz >/dev/null;
-	conda run -n test_datahold python make/run_introspection.py > dist/out/introspection_out.txt 2> dist/out/introspection_err.txt || true;
-	conda run -n test_datahold python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
-	conda run -n test_datahold pip install mypy >/dev/null;
-	conda run -n test_datahold python -m mypy --exclude build --exclude dist --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
-	conda run -n test_datahold python -m mypy --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
+	conda run -n py312 pip install "style_checker>=0.1.3,<0.2";
+	conda run -n py312 python -m style_checker -- "**/*.py" > dist/out/style_checker_out.txt 2> dist/out/style_checker_err.txt || true;
+	conda run -n base python make/env.py test_datahold_mypy --python=3.12 --recreate >/dev/null;
+	conda run -n test_datahold_mypy pip install dist/*.tar.gz >/dev/null;
+	conda run -n test_datahold_mypy python make/run_introspection.py > dist/out/introspection_out.txt 2> dist/out/introspection_err.txt || true;
+	conda run -n test_datahold_mypy pip install mypy >/dev/null;
+	conda run -n test_datahold_mypy python -m mypy --exclude build --exclude dist --strict . > dist/out/mypy_dir_out.txt 2> dist/out/mypy_dir_err.txt || true;
+	conda run -n test_datahold_mypy python -m mypy --strict -p datahold > dist/out/mypy_pkg_out.txt 2> dist/out/mypy_pkg_err.txt || true;
+	conda run -n base python make/env.py test_datahold_tests --python=3.12 --recreate >/dev/null;
+	conda run -n test_datahold_tests pip install dist/*.tar.gz >/dev/null;
+	conda run -n test_datahold_tests python run_tests.py > dist/out/tests_out.txt 2> dist/out/tests_err.txt || true;
 	zip -r dist/out.zip dist/out;
 
 toml_sorted: py312
