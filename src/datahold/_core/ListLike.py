@@ -8,7 +8,15 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Self, SupportsIndex, TypeVar, overload
+from typing import (
+    Any,
+    Generic,
+    Self,
+    SupportsIndex,
+    TypeAlias,
+    TypeVar,
+    overload,
+)
 
 from typing_extensions import TypeAliasType
 
@@ -19,10 +27,12 @@ from datahold._core.SupportsGT import SupportsGT
 from datahold._core.SupportsLE import SupportsLE
 from datahold._core.SupportsLT import SupportsLT
 
+Item = TypeVar("Item", covariant=True)
 FrozenItem = TypeVar("FrozenItem", covariant=True)
+Item_ = TypeVar("Item_")
 
 
-class ListLike[Item](Collection[Item], abc.Sequence[Item]):
+class ListLike(Collection[Item], abc.Sequence[Item], Generic[Item]):
     """Shared read-only sequence with cross-variant tuple-style comparison."""
 
     Frozen: TypeAliasType = TypeAliasType(
@@ -49,7 +59,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
         """Return an immutable tuple snapshot."""
 
     @overload
-    def __ge__[Item_](
+    def __ge__(
         self: ListLike[SupportsGE[Item_]],
         other: ListLike[Item_],
         /,
@@ -78,7 +88,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
             return type(self).__type__(self.__frozen__()[index])
 
     @overload
-    def __gt__[Item_](
+    def __gt__(
         self: ListLike[SupportsGT[Item_]],
         other: ListLike[Item_],
         /,
@@ -94,7 +104,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
 
     @overload
-    def __le__[Item_](
+    def __le__(
         self: ListLike[SupportsLE[Item_]],
         other: ListLike[Item_],
         /,
@@ -107,7 +117,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
         return self.__frozen__() <= other.__frozen__()
 
     @overload
-    def __lt__[Item_](
+    def __lt__(
         self: ListLike[SupportsLT[Item_]],
         other: ListLike[Item_],
         /,
@@ -132,7 +142,7 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     __rmul__ = __mul__
 
     @classmethod
-    def __type__[Item_](
+    def __type__(
         cls: type[Any],
         data: abc.Iterable[Item_],
         /,

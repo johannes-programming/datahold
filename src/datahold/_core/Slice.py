@@ -1,17 +1,15 @@
 from __future__ import annotations
 
+from types import GenericAlias
+from typing import TypeAlias, TypeVar
+
+Index = TypeVar("Index")
+
 __all__: list[str] = [
     "Slice",
 ]
 
-from typing import TypeVar
 
-from typing_extensions import TypeAliasType
+### TYPING ###
 
-Index = TypeVar("Index", covariant=True)
-
-Slice: TypeAliasType = TypeAliasType(
-    "Slice",
-    slice[Index, Index, Index],
-    type_params=(Index,),
-)
+Slice: TypeAlias = GenericAlias(slice, (Index, Index, Index))

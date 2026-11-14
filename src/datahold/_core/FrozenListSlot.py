@@ -5,14 +5,16 @@ __all__: list[str] = [
 ]
 
 from collections import abc
-from typing import Self
+from typing import Generic, Self, TypeVar
 
 from datahold._core.FrozenListLike import FrozenListLike
+
+Item = TypeVar("Item", covariant=True)
 
 ###
 
 
-class FrozenListSlot[Item](FrozenListLike[Item]):
+class FrozenListSlot(FrozenListLike[Item], Generic[Item]):
     """A tuple stored in one instance slot."""
 
     __slots__ = ("_slot",)

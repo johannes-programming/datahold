@@ -6,17 +6,19 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self, TypeVar
+from typing import Any, Generic, Self, TypeVar
 
 from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
 from datahold._core.SetLike import SetLike
 
+Item = TypeVar("Item", bound=abc.Hashable)
 MutableItem = TypeVar("MutableItem", bound=abc.Hashable)
+Item_ = TypeVar("Item_", bound=abc.Hashable)
 
 
-class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
+class MutableSetLike(SetLike[Item], abc.MutableSet[Item], Generic[Item]):
     """Mutable set operations committed through a context manager."""
 
     Mutable: TypeAliasType = TypeAliasType(
@@ -90,7 +92,7 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
         """Yield a mutable working set and commit on successful exit."""
 
     @classmethod
-    def __type__[Item_: abc.Hashable](
+    def __type__(
         cls: type[Any], data: abc.Iterable[Item_], /
     ) -> MutableSetLike[Item_]:
         # redoing the same method is necessary because copy must return MutableSetLike[Item]

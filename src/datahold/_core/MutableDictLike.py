@@ -6,7 +6,7 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self, TypeVar, overload
+from typing import Any, Generic, Self, TypeAlias, TypeVar, overload
 
 from frozendict import frozendict
 from typing_extensions import TypeAliasType
@@ -16,14 +16,19 @@ from datahold._core.dictable import dictable
 from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
 
+Key = TypeVar("Key", bound=abc.Hashable)
+Value = TypeVar("Value")
 MutableKey = TypeVar("MutableKey", bound=abc.Hashable)
 MutableValue = TypeVar("MutableValue")
+Key_ = TypeVar("Key_", bound=abc.Hashable)
+Value_ = TypeVar("Value_")
+UpdateKey = TypeVar("UpdateKey")
 
 ###
 
 
-class MutableDictLike[Key: abc.Hashable, Value](
-    DictLike[Key, Value], abc.MutableMapping[Key, Value]
+class MutableDictLike(
+    DictLike[Key, Value], abc.MutableMapping[Key, Value], Generic[Key, Value]
 ):
     """Mutable mapping operations performed on a temporary dict."""
 
@@ -55,7 +60,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     ) -> None: ...
 
     @overload
-    def __init__[Key_: abc.Hashable](
+    def __init__(
         self: DictLike[Key_ | str, Value],
         other: DictInit[Key_ | str, Value] = (),
         /,
@@ -80,7 +85,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
     def __mutate__(self: Self, /) -> ContextManager[dict[Key, Value]]:
         """Yield a mutable working dictionary and commit on normal exit."""
 
-    def __or__[Key_: abc.Hashable, Value_](
+    def __or__(
         self: Self, other: DictLike[Key_, Value_], /
     ) -> MutableDictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
@@ -95,7 +100,7 @@ class MutableDictLike[Key: abc.Hashable, Value](
             mutable[key] = value
 
     @classmethod
-    def __type__[Key_: abc.Hashable, Value_](
+    def __type__(
         cls: type[Any],
         data: DictInit[Key_, Value_],
         /,
@@ -123,9 +128,9 @@ class MutableDictLike[Key: abc.Hashable, Value](
         /,
     ) -> None: ...
     @overload
-    def update[Key_](
-        self: MutableDictLike[Key_ | str, Value],
-        other: DictInit[Key_ | str, Value] = (),
+    def update(
+        self: MutableDictLike[UpdateKey | str, Value],
+        other: DictInit[UpdateKey | str, Value] = (),
         /,
         **kwargs: Value,
     ) -> None: ...

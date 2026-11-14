@@ -7,7 +7,7 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Self, TypeVar, overload
+from typing import Any, Generic, Self, TypeAlias, TypeVar, overload
 
 from frozendict import frozendict
 from typing_extensions import TypeAliasType
@@ -15,15 +15,17 @@ from typing_extensions import TypeAliasType
 from datahold._core.Collection import Collection
 from datahold._core.DictInit import DictInit
 
+Key = TypeVar("Key", bound=abc.Hashable, covariant=True)
+Value = TypeVar("Value", covariant=True)
 FrozenKey = TypeVar("FrozenKey", bound=abc.Hashable)
 FrozenValue = TypeVar("FrozenValue")
+Key_ = TypeVar("Key_", bound=abc.Hashable)
+Value_ = TypeVar("Value_")
 
 ### DICT-LIKE ###
 
 
-class DictLike[Key: abc.Hashable, Value](
-    Collection[Key], abc.Mapping[Key, Value]
-):
+class DictLike(Collection[Key], abc.Mapping[Key, Value], Generic[Key, Value]):
     """Shared read-only dictionary interface."""
 
     Frozen: TypeAliasType = TypeAliasType(
@@ -51,7 +53,7 @@ class DictLike[Key: abc.Hashable, Value](
     ) -> None: ...
 
     @overload
-    def __init__[Key_: abc.Hashable](
+    def __init__(
         self: DictLike[Key_ | str, Value],
         other: DictInit[Key_ | str, Value] = (),
         /,
@@ -70,7 +72,7 @@ class DictLike[Key: abc.Hashable, Value](
     # __iter__ is inherited
     # __len__ is inherited
     # __ne__ is inherited from object (negates __eq__).
-    def __or__[Key_: abc.Hashable, Value_](
+    def __or__(
         self: Self, other: DictLike[Key_, Value_], /
     ) -> DictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
@@ -89,20 +91,20 @@ class DictLike[Key: abc.Hashable, Value](
     # __ror__ is unnecessary because of __or__
 
     @classmethod
-    def __type__[Key_: abc.Hashable, Value_](
+    def __type__(
         cls: type[Any], data: DictInit[Key_, Value_], /
     ) -> DictLike[Key_, Value_]:
         return cls(data)  # type: ignore[no-any-return]
 
     @overload
     @classmethod
-    def fromkeys[Key_: abc.Hashable](
+    def fromkeys(
         cls: type[Any], keys: abc.Iterable[Key_], /
     ) -> DictLike[Key_, None]: ...
 
     @overload
     @classmethod
-    def fromkeys[Key_: abc.Hashable, Value_](
+    def fromkeys(
         cls: type[Any], keys: abc.Iterable[Key_], value: Value_, /
     ) -> DictLike[Key_, Value_]: ...
 

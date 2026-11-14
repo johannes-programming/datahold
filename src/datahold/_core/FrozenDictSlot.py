@@ -5,7 +5,7 @@ __all__: list[str] = [
 ]
 
 from collections import abc
-from typing import Any, Self, overload
+from typing import Any, Generic, Self, TypeVar, overload
 
 from frozendict import frozendict
 
@@ -14,10 +14,14 @@ from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
 from datahold._core.FrozenDictLike import FrozenDictLike
 
+Key = TypeVar("Key", bound=abc.Hashable, covariant=True)
+Value = TypeVar("Value", covariant=True)
+Key_ = TypeVar("Key_", bound=abc.Hashable)
+
 ###
 
 
-class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
+class FrozenDictSlot(FrozenDictLike[Key, Value], Generic[Key, Value]):
     """A frozendict held in one instance slot."""
 
     __slots__ = ("_slot",)
@@ -35,7 +39,7 @@ class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
     ) -> None: ...
 
     @overload
-    def __init__[Key_: abc.Hashable](
+    def __init__(
         self: DictLike[Key_ | str, Value],
         other: DictInit[Key_ | str, Value] = (),
         /,

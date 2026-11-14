@@ -6,16 +6,19 @@ __all__: list[str] = [
 
 from collections import abc
 from contextlib import contextmanager
-from typing import Self
+from typing import Generic, Self, TypeVar
 
 from frozendict import frozendict
 
 from datahold._core.MutableDictLike import MutableDictLike
 
+Key = TypeVar("Key", bound=abc.Hashable)
+Value = TypeVar("Value")
+
 ###
 
 
-class MutableDictSlot[Key: abc.Hashable, Value](MutableDictLike[Key, Value]):
+class MutableDictSlot(MutableDictLike[Key, Value], Generic[Key, Value]):
     """Mutable dictionary backed by a frozen dictionary slot."""
 
     __slots__ = ("_slot",)

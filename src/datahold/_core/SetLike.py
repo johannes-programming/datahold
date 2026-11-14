@@ -7,23 +7,21 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Self, TypeVar
-
-from typing_extensions import TypeAliasType
+from typing import Any, Generic, Self, TypeAlias, TypeVar
 
 from datahold._core.Collection import Collection
 
+Item = TypeVar("Item", bound=abc.Hashable)
 FrozenItem = TypeVar("FrozenItem", bound=abc.Hashable)
+Item_ = TypeVar("Item_", bound=abc.Hashable)
 
 ### SET-LIKE ###
 
 
-class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
+class SetLike(Collection[Item], abc.Set[Item], Generic[Item]):
     """Shared read-only set API; construction and storage remain abstract."""
 
-    Frozen: TypeAliasType = TypeAliasType(
-        "Frozen", frozenset[FrozenItem], type_params=(FrozenItem,)
-    )
+    Frozen: TypeAlias = frozenset[FrozenItem]
 
     __slots__ = ()
 
@@ -58,14 +56,14 @@ class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     # __rxor__ is inherited from abc.Set (via _from_iterable).
     # __sub__ is inherited from abc.Set (via _from_iterable).
     @classmethod
-    def __type__[Item_: abc.Hashable](
+    def __type__(
         cls: type[Any], data: abc.Iterable[Item_], /
     ) -> SetLike[Item_]:
         return cls(data)  # type: ignore[no-any-return]
 
     # __xor__ is inherited from abc.Set (via _from_iterable).
     @classmethod
-    def _from_iterable[Item_: abc.Hashable](
+    def _from_iterable(
         cls: type[Any], data: abc.Iterable[Item_], /
     ) -> SetLike[Item_]:
         return cls.__type__(data)  # type: ignore[no-any-return]

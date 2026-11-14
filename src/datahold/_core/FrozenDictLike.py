@@ -5,15 +5,20 @@ __all__: list[str] = [
 ]
 
 from collections import abc
-from typing import Any, Self
+from typing import Any, Generic, Self, TypeVar
 
 from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
 
+Key = TypeVar("Key", bound=abc.Hashable, covariant=True)
+Value = TypeVar("Value", covariant=True)
+Key_ = TypeVar("Key_", bound=abc.Hashable)
+Value_ = TypeVar("Value_")
+
 ###
 
 
-class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
+class FrozenDictLike(DictLike[Key, Value], Generic[Key, Value]):
     """Hashable abstract mapping specialization."""
 
     __slots__ = ()
@@ -24,7 +29,7 @@ class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
 
     # __init__ is inherited as an abstract requirement from DictLike.
 
-    def __or__[Key_: abc.Hashable, Value_](
+    def __or__(
         self: Self, other: DictLike[Key_, Value_], /
     ) -> FrozenDictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
@@ -34,7 +39,7 @@ class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
         )
 
     @classmethod
-    def __type__[Key_: abc.Hashable, Value_](
+    def __type__(
         cls: type[Any], data: DictInit[Key_, Value_], /
     ) -> FrozenDictLike[Key_, Value_]:
         return cls(data)  # type: ignore[no-any-return]
