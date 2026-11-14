@@ -13,7 +13,6 @@ from typing import Any, Generic, Self, SupportsIndex, TypeVar, overload
 from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
-from datahold._core.Slice import Slice
 from datahold._core.SupportsGE import SupportsGE
 from datahold._core.SupportsGT import SupportsGT
 from datahold._core.SupportsLE import SupportsLE
@@ -68,11 +67,11 @@ class ListLike(Collection[Item], abc.Sequence[Item], Generic[Item]):
 
     @overload
     def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
+        self: Self, index: slice, /
     ) -> ListLike[Item]: ...
 
     def __getitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
+        self: Self, index: SupportsIndex | slice, /
     ) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]

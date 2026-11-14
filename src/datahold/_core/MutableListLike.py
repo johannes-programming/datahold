@@ -12,7 +12,6 @@ from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
 from datahold._core.ListLike import ListLike
-from datahold._core.Slice import Slice
 from datahold._core.SupportsGTSelf import SupportsGTSelf
 from datahold._core.SupportsLTSelf import SupportsLTSelf
 
@@ -37,7 +36,7 @@ class MutableListLike(
     __slots__ = ()
 
     def __delitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
+        self: Self, index: SupportsIndex | slice, /
     ) -> None:
         mutable: list[Item]
         with self.__mutate__() as mutable:
@@ -53,11 +52,11 @@ class MutableListLike(
 
     @overload
     def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
+        self: Self, index: slice, /
     ) -> MutableListLike[Item]: ...
 
     def __getitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
+        self: Self, index: SupportsIndex | slice, /
     ) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
@@ -88,7 +87,7 @@ class MutableListLike(
     @overload
     def __setitem__(
         self: Self,
-        index: Slice[SupportsIndex | None],
+        index: slice,
         data: abc.Iterable[Item],
         /,
     ) -> None: ...
