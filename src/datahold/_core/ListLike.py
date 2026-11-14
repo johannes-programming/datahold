@@ -66,13 +66,9 @@ class ListLike(Collection[Item], abc.Sequence[Item], Generic[Item]):
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
 
     @overload
-    def __getitem__(
-        self: Self, index: slice, /
-    ) -> ListLike[Item]: ...
+    def __getitem__(self: Self, index: slice, /) -> ListLike[Item]: ...
 
-    def __getitem__(
-        self: Self, index: SupportsIndex | slice, /
-    ) -> Any:
+    def __getitem__(self: Self, index: SupportsIndex | slice, /) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
         else:

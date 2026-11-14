@@ -35,9 +35,7 @@ class MutableListLike(
 
     __slots__ = ()
 
-    def __delitem__(
-        self: Self, index: SupportsIndex | slice, /
-    ) -> None:
+    def __delitem__(self: Self, index: SupportsIndex | slice, /) -> None:
         mutable: list[Item]
         with self.__mutate__() as mutable:
             del mutable[index]
@@ -51,13 +49,9 @@ class MutableListLike(
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
 
     @overload
-    def __getitem__(
-        self: Self, index: slice, /
-    ) -> MutableListLike[Item]: ...
+    def __getitem__(self: Self, index: slice, /) -> MutableListLike[Item]: ...
 
-    def __getitem__(
-        self: Self, index: SupportsIndex | slice, /
-    ) -> Any:
+    def __getitem__(self: Self, index: SupportsIndex | slice, /) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
         else:

@@ -5,9 +5,8 @@ __all__: list[str] = [
 ]
 
 from collections import abc
-from typing import TypeVar
 
-from typing_extensions import TypeAliasType
+from typing_extensions import TypeAliasType, TypeVar
 
 from datahold._core.SupportsKeysAndGetItem import SupportsKeysAndGetItem
 

@@ -53,6 +53,6 @@ class FrozenDictSlot(FrozenDictLike[Key, Value], Generic[Key, Value]):
         **kwargs: Any,
     ) -> None:
         self._slot = frozendict(
-            dictable(other),  # type: ignore[arg-type]
+            dictable(other),
             **kwargs,
         )
