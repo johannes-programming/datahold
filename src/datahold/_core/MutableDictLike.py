@@ -75,7 +75,7 @@ class MutableDictLike(
     ) -> None:
         self.update(other, **kwargs)
 
-    def __ior__(  # type: ignore[misc, override]
+    def __ior__(  # type: ignore[misc]
         self: Self, other: DictInit[Key, Value], /
     ) -> MutableDictLike[Key, Value]:
         self.update(other)
@@ -109,7 +109,7 @@ class MutableDictLike(
     # clear is inherited from abc.MutableMapping.
 
     def copy(self: Self, /) -> MutableDictLike[Key, Value]:
-        return type(self).__type__(self.__frozen__())  # type: ignore[arg-type]
+        return type(self).__type__(self.__frozen__())
 
     # pop is inherited from abc.MutableMapping.
     def popitem(self: Self, /) -> tuple[Key, Value]:
