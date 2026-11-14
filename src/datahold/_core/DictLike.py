@@ -7,12 +7,17 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Self, overload
+from typing import Any, Self, overload, TypeVar
 
 from frozendict import frozendict
 
 from datahold._core.Collection import Collection
 from datahold._core.DictInit import DictInit
+from typing_extensions import TypeAliasType
+
+
+FrozenKey = TypeVar("FrozenKey", bound=abc.Hashable)
+FrozenValue = TypeVar("FrozenValue")
 
 ### DICT-LIKE ###
 
@@ -22,9 +27,11 @@ class DictLike[Key: abc.Hashable, Value](
 ):
     """Shared read-only dictionary interface."""
 
-    type Frozen[FrozenKey: abc.Hashable, FrozenValue] = frozendict[
-        FrozenKey, FrozenValue
-    ]
+    Frozen : TypeAliasType = TypeAliasType(
+        "Frozen", 
+        frozendict[FrozenKey, FrozenValue], 
+        type_params=(FrozenKey, FrozenValue),
+    )
 
     __slots__ = ()
 

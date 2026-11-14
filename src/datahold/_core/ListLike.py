@@ -8,7 +8,8 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Self, SupportsIndex, overload
+from typing import Any, Self, SupportsIndex, overload, TypeVar
+from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
 from datahold._core.Slice import Slice
@@ -17,13 +18,17 @@ from datahold._core.SupportsGT import SupportsGT
 from datahold._core.SupportsLE import SupportsLE
 from datahold._core.SupportsLT import SupportsLT
 
-### LIST-LIKE ###
+FrozenItem = TypeVar("FrozenItem", covariant=True)
 
 
 class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     """Shared read-only sequence with cross-variant tuple-style comparison."""
 
-    type Frozen[FrozenItem] = tuple[FrozenItem, ...]
+    Frozen :TypeAliasType=TypeAliasType(
+        "Frozen", 
+        tuple[FrozenItem, ...], 
+        type_params=(FrozenItem,),
+    )
 
     __slots__ = ()
 

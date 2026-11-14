@@ -6,7 +6,7 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self, overload
+from typing import Any, Self, overload,TypeVar
 
 from frozendict import frozendict
 
@@ -14,6 +14,11 @@ from datahold._core.ContextManager import ContextManager
 from datahold._core.dictable import dictable
 from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
+from typing_extensions import TypeAliasType
+
+
+MutableKey = TypeVar("MutableKey", bound=abc.Hashable)
+MutableValue = TypeVar("MutableValue")
 
 ###
 
@@ -23,9 +28,11 @@ class MutableDictLike[Key: abc.Hashable, Value](
 ):
     """Mutable mapping operations performed on a temporary dict."""
 
-    type Mutable[MutableKey: abc.Hashable, MutableValue] = dict[
-        MutableKey, MutableValue
-    ]
+    Mutable = TypeAliasType(
+        "Mutable", 
+        dict[MutableKey, MutableValue], 
+        type_params=(MutableKey, MutableValue),
+    )
 
     __slots__ = ()
 

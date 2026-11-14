@@ -7,10 +7,14 @@ __all__: list[str] = [
 from collections import abc
 
 from datahold._core.SupportsKeysAndGetItem import SupportsKeysAndGetItem
+from typing_extensions import TypeAliasType
+from typing import TypeVar
 
-### TYPING ###
+Key = TypeVar("Key", covariant=True)
+Value = TypeVar("Value", covariant=True)
 
-
-type DictInit[Key, Value] = SupportsKeysAndGetItem[Key, Value] | abc.Iterable[
-    tuple[Key, Value]
-]
+DictInit :TypeAliasType=TypeAliasType(
+    "DictInit", 
+    SupportsKeysAndGetItem[Key, Value] | abc.Iterable[tuple[Key, Value]],
+    type_params=(Key, Value),
+)
