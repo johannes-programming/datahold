@@ -8,15 +8,7 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import (
-    Any,
-    Generic,
-    Self,
-    SupportsIndex,
-    TypeAlias,
-    TypeVar,
-    overload,
-)
+from typing import Any, Generic, Self, SupportsIndex, TypeVar, overload
 
 from typing_extensions import TypeAliasType
 

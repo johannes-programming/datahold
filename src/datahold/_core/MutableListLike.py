@@ -11,7 +11,6 @@ from typing import (
     Generic,
     Self,
     SupportsIndex,
-    TypeAlias,
     TypeVar,
     overload,
 )
@@ -30,15 +29,17 @@ Item_ = TypeVar("Item_")
 GTItem = TypeVar("GTItem", bound=SupportsGTSelf)
 LTItem = TypeVar("LTItem", bound=SupportsLTSelf)
 
-###
-
 
 class MutableListLike(
     ListLike[Item], abc.MutableSequence[Item], Generic[Item]
 ):
     """Mutable sequence operations committed through a temporary list."""
 
-    Mutable: TypeAlias = list[MutableItem]
+    Mutable:TypeAliasType = TypeAliasType(
+        "Mutable",
+        list[MutableItem],
+        type_params=(MutableItem,),
+    )
 
     __slots__ = ()
 

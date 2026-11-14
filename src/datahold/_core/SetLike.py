@@ -7,7 +7,9 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Generic, Self, TypeAlias, TypeVar
+from typing import Any, Generic, Self, TypeVar
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
 
@@ -21,7 +23,11 @@ Item_ = TypeVar("Item_", bound=abc.Hashable)
 class SetLike(Collection[Item], abc.Set[Item], Generic[Item]):
     """Shared read-only set API; construction and storage remain abstract."""
 
-    Frozen: TypeAlias = frozenset[FrozenItem]
+    Frozen: TypeAliasType = TypeAliasType(
+        "Frozen",
+        frozenset[FrozenItem],
+        type_params=(FrozenItem,),
+    )
 
     __slots__ = ()
 

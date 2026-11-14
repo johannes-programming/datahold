@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+__all__: list[str] = [
+    "Slice",
+]
+
 from types import GenericAlias
 from typing import TypeAlias, TypeVar
 
 Index = TypeVar("Index")
-
-__all__: list[str] = [
-    "Slice",
-]
 
 
 ### TYPING ###

@@ -7,7 +7,7 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Generic, Self, TypeAlias, TypeVar, overload
+from typing import Any, Generic, Self, TypeVar, overload
 
 from frozendict import frozendict
 from typing_extensions import TypeAliasType
