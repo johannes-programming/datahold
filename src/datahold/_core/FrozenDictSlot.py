@@ -10,9 +10,9 @@ from typing import Any, Self, overload
 from frozendict import frozendict
 
 from datahold._core.dictable import dictable
+from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
 from datahold._core.FrozenDictLike import FrozenDictLike
-from datahold._core.typing import DictInit
 
 ###
 
