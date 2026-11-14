@@ -77,9 +77,7 @@ class DictLike(Collection[Key], abc.Mapping[Key, Value], Generic[Key, Value]):
     ) -> DictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
             return NotImplemented
-        return type(self).__type__(
-            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
-        )
+        return type(self).__type__(self.__frozen__() | other.__frozen__())
 
     @recursive_repr()
     def __repr__(self: Self, /) -> str:

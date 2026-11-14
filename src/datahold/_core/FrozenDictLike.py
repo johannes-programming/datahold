@@ -34,9 +34,7 @@ class FrozenDictLike(DictLike[Key, Value], Generic[Key, Value]):
     ) -> FrozenDictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
             return NotImplemented
-        return type(self).__type__(
-            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
-        )
+        return type(self).__type__(self.__frozen__() | other.__frozen__())
 
     @classmethod
     def __type__(

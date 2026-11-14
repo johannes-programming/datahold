@@ -90,9 +90,7 @@ class MutableDictLike(
     ) -> MutableDictLike[Key | Key_, Value | Value_]:
         if not isinstance(other, DictLike):
             return NotImplemented
-        return type(self).__type__(
-            self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
-        )
+        return type(self).__type__(self.__frozen__() | other.__frozen__())
 
     def __setitem__(self: Self, key: Key, value: Value, /) -> None:
         mutable: dict[Key, Value]
