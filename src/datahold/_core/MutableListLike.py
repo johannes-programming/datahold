@@ -6,14 +6,7 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import (
-    Any,
-    Generic,
-    Self,
-    SupportsIndex,
-    TypeVar,
-    overload,
-)
+from typing import Any, Generic, Self, SupportsIndex, TypeVar, overload
 
 from typing_extensions import TypeAliasType
 
@@ -35,7 +28,7 @@ class MutableListLike(
 ):
     """Mutable sequence operations committed through a temporary list."""
 
-    Mutable:TypeAliasType = TypeAliasType(
+    Mutable: TypeAliasType = TypeAliasType(
         "Mutable",
         list[MutableItem],
         type_params=(MutableItem,),
