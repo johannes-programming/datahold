@@ -1,8 +1,3 @@
-"""Generic slot-backed sets, mappings, and sequences (Python 3.12+).
-
-Install the required third-party dependency with ``pip install frozendict``.
-"""
-
 from __future__ import annotations
 
 __all__: list[str] = [
@@ -28,10 +23,9 @@ from abc import abstractmethod
 from collections import abc
 from contextlib import contextmanager
 from reprlib import recursive_repr
-from types import NotImplementedType
+from types import NotImplementedType, TracebackType
 from typing import (
     Any,
-    ClassVar,
     Never,
     Protocol,
     Self,
@@ -68,18 +62,10 @@ class SupportsLT[Other](Protocol):
     def __lt__(self: Self, other: Other, /) -> bool: ...
 
 
-class SupportsGESelf(Protocol):
-    def __ge__(self: Self, other: Self, /) -> bool: ...
 class SupportsGTSelf(Protocol):
     def __gt__(self: Self, other: Self, /) -> bool: ...
-class SupportsLESelf(Protocol):
-    def __le__(self: Self, other: Self, /) -> bool: ...
 class SupportsLTSelf(Protocol):
     def __lt__(self: Self, other: Self, /) -> bool: ...
-
-
-from types import TracebackType
-from typing import Protocol
 
 
 class ContextManager[Enter](Protocol):
@@ -496,6 +482,12 @@ class FrozenDictLike[Key: abc.Hashable, Value](DictLike[Key, Value]):
         return type(self).__type__(
             self.__frozen__() | other.__frozen__()  # type: ignore[arg-type]
         )
+
+    @classmethod
+    def __type__[Key_: abc.Hashable, Value_](
+        cls: type[Any], data: DictInit[Key_, Value_], /
+    ) -> FrozenDictLike[Key_, Value_]:
+        return cls(data)  # type: ignore[no-any-return]
 
 
 class FrozenDictSlot[Key: abc.Hashable, Value](FrozenDictLike[Key, Value]):
