@@ -6,14 +6,15 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self, SupportsIndex, overload, TypeVar
+from typing import Any, Self, SupportsIndex, TypeVar, overload
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
 from datahold._core.ListLike import ListLike
 from datahold._core.Slice import Slice
 from datahold._core.SupportsGTSelf import SupportsGTSelf
 from datahold._core.SupportsLTSelf import SupportsLTSelf
-from typing_extensions import TypeAliasType
 
 MutableItem = TypeVar("MutableItem")
 
@@ -21,9 +22,9 @@ MutableItem = TypeVar("MutableItem")
 class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     """Mutable sequence operations committed through a temporary list."""
 
-    Mutable:TypeAliasType=TypeAliasType(
-        "Mutable", 
-        list[MutableItem], 
+    Mutable: TypeAliasType = TypeAliasType(
+        "Mutable",
+        list[MutableItem],
         type_params=(MutableItem,),
     )
 

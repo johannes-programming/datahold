@@ -7,6 +7,7 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from typing import Any, Self, TypeVar
+
 from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
@@ -18,10 +19,10 @@ MutableItem = TypeVar("MutableItem", bound=abc.Hashable)
 class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
     """Mutable set operations committed through a context manager."""
 
-    Mutable :TypeAliasType=TypeAliasType(
-        "Mutable", 
+    Mutable: TypeAliasType = TypeAliasType(
+        "Mutable",
         set[MutableItem],
-        type_params=(MutableItem, ),
+        type_params=(MutableItem,),
     )
 
     __slots__ = ()

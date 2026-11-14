@@ -8,7 +8,8 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Self, SupportsIndex, overload, TypeVar
+from typing import Any, Self, SupportsIndex, TypeVar, overload
+
 from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
@@ -24,9 +25,9 @@ FrozenItem = TypeVar("FrozenItem", covariant=True)
 class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     """Shared read-only sequence with cross-variant tuple-style comparison."""
 
-    Frozen :TypeAliasType=TypeAliasType(
-        "Frozen", 
-        tuple[FrozenItem, ...], 
+    Frozen: TypeAliasType = TypeAliasType(
+        "Frozen",
+        tuple[FrozenItem, ...],
         type_params=(FrozenItem,),
     )
 
