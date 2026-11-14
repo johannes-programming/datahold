@@ -8,13 +8,11 @@ from abc import abstractmethod
 from collections import abc
 from typing import Any, Self, SupportsIndex, overload
 
+from datahold._core.ContextManager import ContextManager
 from datahold._core.ListLike import ListLike
-from datahold._core.typing import (
-    ContextManager,
-    Slice,
-    SupportsGTSelf,
-    SupportsLTSelf,
-)
+from datahold._core.Slice import Slice
+from datahold._core.SupportsGTSelf import SupportsGTSelf
+from datahold._core.SupportsLTSelf import SupportsLTSelf
 
 ###
 

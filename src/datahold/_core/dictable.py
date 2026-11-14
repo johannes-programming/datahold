@@ -6,7 +6,8 @@ __all__: list[str] = [
 
 from collections import abc
 
-from datahold._core.typing import DictInit, SupportsKeysAndGetItem
+from datahold._core.DictInit import DictInit
+from datahold._core.SupportsKeysAndGetItem import SupportsKeysAndGetItem
 
 ### HELPER ###
 

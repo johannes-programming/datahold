@@ -11,13 +11,11 @@ from types import NotImplementedType
 from typing import Any, Self, SupportsIndex, overload
 
 from datahold._core.Collection import Collection
-from datahold._core.typing import (
-    Slice,
-    SupportsGE,
-    SupportsGT,
-    SupportsLE,
-    SupportsLT,
-)
+from datahold._core.Slice import Slice
+from datahold._core.SupportsGE import SupportsGE
+from datahold._core.SupportsGT import SupportsGT
+from datahold._core.SupportsLE import SupportsLE
+from datahold._core.SupportsLT import SupportsLT
 
 ### LIST-LIKE ###
 
