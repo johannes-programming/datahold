@@ -7,8 +7,8 @@ __all__: list[str] = [
 from collections import abc
 from typing import Any, Self
 
+from datahold._core.DictInit import DictInit
 from datahold._core.DictLike import DictLike
-from datahold._core.typing import DictInit
 
 ###
 

@@ -12,7 +12,7 @@ from typing import Any, Self, overload
 from frozendict import frozendict
 
 from datahold._core.Collection import Collection
-from datahold._core.typing import DictInit
+from datahold._core.DictInit import DictInit
 
 ### DICT-LIKE ###
 

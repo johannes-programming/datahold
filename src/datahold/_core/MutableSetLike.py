@@ -8,8 +8,8 @@ from abc import abstractmethod
 from collections import abc
 from typing import Any, Self
 
+from datahold._core.ContextManager import ContextManager
 from datahold._core.SetLike import SetLike
-from datahold._core.typing import ContextManager
 
 ###
 
