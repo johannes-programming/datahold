@@ -5,15 +5,19 @@ __all__: list[str] = [
 ]
 
 from collections import abc
+from typing import TypeVar
 
 from datahold._core.DictInit import DictInit
 from datahold._core.SupportsKeysAndGetItem import SupportsKeysAndGetItem
+
+Key = TypeVar("Key", bound=abc.Hashable)
+Value = TypeVar("Value")
 
 ### HELPER ###
 
 
 # circumvent the rare case that other has keys but not __getitem__
-def dictable[Key: abc.Hashable, Value](
+def dictable(
     other: DictInit[Key, Value],
     /,
 ) -> DictInit[Key, Value]:

@@ -4,10 +4,12 @@ __all__: list[str] = [
     "SupportsGT",
 ]
 
-from typing import Protocol, Self
+from typing import Protocol, Self, TypeVar
+
+Other = TypeVar("Other", contravariant=True)
 
 ### TYPING ###
 
 
-class SupportsGT[Other](Protocol):
+class SupportsGT(Protocol[Other]):
     def __gt__(self: Self, other: Other, /) -> bool: ...

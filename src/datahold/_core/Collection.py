@@ -6,18 +6,23 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Never, Protocol, Self
+from typing import Generic, Never, Protocol, Self, TypeVar
+
+Item = TypeVar("Item", covariant=True)
+FrozenItem = TypeVar("FrozenItem", covariant=True)
 
 ### BASE ###
 
 
-class Collection[Item](abc.Sized, abc.Iterable[Item], abc.Container[object]):
-    class Frozen[FrozenItem](
+class Collection(
+    abc.Sized, abc.Iterable[Item], abc.Container[object], Generic[Item]
+):
+    class Frozen(
         abc.Sized,
         abc.Iterable[FrozenItem],
         abc.Container[Never],
         abc.Hashable,
-        Protocol,
+        Protocol[FrozenItem],
     ): ...
 
     __slots__ = ()

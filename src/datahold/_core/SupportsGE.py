@@ -4,10 +4,12 @@ __all__: list[str] = [
     "SupportsGE",
 ]
 
-from typing import Protocol, Self
+from typing import Protocol, Self, TypeVar
+
+Other = TypeVar("Other", contravariant=True)
 
 ### TYPING ###
 
 
-class SupportsGE[Other](Protocol):
+class SupportsGE(Protocol[Other]):
     def __ge__(self: Self, other: Other, /) -> bool: ...

@@ -6,14 +6,16 @@ __all__: list[str] = [
 
 from collections import abc
 from contextlib import contextmanager
-from typing import Self
+from typing import Generic, Self, TypeVar
 
 from datahold._core.MutableSetLike import MutableSetLike
+
+Item = TypeVar("Item", bound=abc.Hashable)
 
 ###
 
 
-class MutableSetSlot[Item: abc.Hashable](MutableSetLike[Item]):
+class MutableSetSlot(MutableSetLike[Item], Generic[Item]):
     """Mutable set with transactional replacement of a frozenset slot."""
 
     __slots__ = ("_slot",)
