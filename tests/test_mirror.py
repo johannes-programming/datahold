@@ -754,21 +754,21 @@ class TestFrozenDictSlotDunderMethodRepr(unittest.TestCase):
 
     def test_1_repr(self: Self, /) -> None:
         self.assertEqual(
-            repr(FrozenDictSlot({"a": 1})),  # type: ignore[arg-type]
+            repr(FrozenDictSlot({"a": 1})),
             "FrozenDictSlot({'a': 1})",
         )
 
     def test_2_repr(self: Self, /) -> None:
         self.assertIn(
             "None",
-            repr(FrozenDictSlot({"a": None})),  # type: ignore[arg-type]
+            repr(FrozenDictSlot({"a": None})),
         )
 
     def test_3_repr(self: Self, /) -> None:
         obj: Any
         value: Any
         value = []
-        obj = FrozenDictSlot({"a": value})  # type: ignore[arg-type]
+        obj = FrozenDictSlot({"a": value})
         value.append(obj)
         self.assertIn("...", repr(obj))
 
@@ -2696,14 +2696,14 @@ class TestMutableDictSlotDunderMethodRepr(unittest.TestCase):
 
     def test_1_repr(self: Self, /) -> None:
         self.assertEqual(
-            repr(MutableDictSlot({"a": 1})),  # type: ignore[arg-type]
+            repr(MutableDictSlot({"a": 1})),
             "MutableDictSlot({'a': 1})",
         )
 
     def test_2_repr(self: Self, /) -> None:
         self.assertIn(
             "None",
-            repr(MutableDictSlot({"a": None})),  # type: ignore[arg-type]
+            repr(MutableDictSlot({"a": None})),
         )
 
     def test_3_repr(self: Self, /) -> None:
