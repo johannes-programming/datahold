@@ -108,8 +108,8 @@ This magic method implements ``self < other``.
 
 This magic method implements ``self != other``.
 
-``data: Hashable``
-^^^^^^^^^^^^^^^^^^
+``data: BaseDataObject.Data``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This abstract property is at the center of this class and of its descendants.
 
