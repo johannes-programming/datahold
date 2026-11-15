@@ -75,7 +75,7 @@ reset:
 
 test: dist py311
 	mkdir dist/out/ ;
-	conda run -n py311 pip install "style-checker<0.2,>=0.1.7";
+	conda run -n py311 pip install "style-checker<0.2,>=0.1.8";
 	conda run -n py311 python -m style_checker -- "**/*.py" > dist/out/style_checker_out.txt 2> dist/out/style_checker_err.txt || true;
 	conda run -n base python make/env.py test_datahold_mypy --python=3.11 --recreate >/dev/null;
 	conda run -n test_datahold_mypy pip install dist/*.tar.gz >/dev/null;
