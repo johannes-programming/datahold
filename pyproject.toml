@@ -18,7 +18,8 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "frozendict>=2.4,<3",
+    "frozendict<3,>=2.4",
+    "typing-extensions<5,>=4.16",
 ]
 description = "This project wraps common mutable data-structures for inheritance with modification."
 keywords = []
@@ -28,18 +29,18 @@ license-files = [
 ]
 name = "datahold"
 readme = "README.rst"
-requires-python = ">=3.12"
-version = "4.0.0"
+requires-python = ">=3.11"
+version = "4.0.2"
 
 [project.urls]
 Download = "https://pypi.org/project/datahold/#files"
 Index = "https://pypi.org/project/datahold/"
 Source = "https://github.com/johannes-programming/datahold/"
-Website = "http://datahold.johannes-programming.online/"
+Website = "https://datahold.johannes-programming.online/"
 
 [tool.mypy]
 files = [
     ".",
 ]
-python_version = "3.12"
+python_version = "3.11"
 strict = true
