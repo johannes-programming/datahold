@@ -274,7 +274,7 @@ class Mirror:
 
         index = 0
         while True:
-            method = getattr(self, "mirror_%s" % index, None)
+            method = getattr(self, f"mirror_{index}", None)
             if method is None:
                 return
             with self.subTest(Old=type(self).Old.__name__, mirror=index):
@@ -463,7 +463,7 @@ class TestFrozenDictSlotDunderMethodFormat(
             format(cls({"x": 1}), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls({"a": 1, "b": 2})), str)
+        self.assertIsInstance(f"{cls({"a": 1, "b": 2})}", str)
 
 
 class TestFrozenDictSlotDunderMethodGe(
@@ -1076,6 +1076,7 @@ class TestFrozenListSlotDunderMethodDir(
         self.assertEqual(dir(cls([1, 2, 3])), sorted(dir(cls([1, 2, 3]))))
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertTrue(
             all(isinstance(name, str) for name in dir(cls([1, 2, 3])))
         )
@@ -1118,7 +1119,7 @@ class TestFrozenListSlotDunderMethodFormat(
             format(cls([1]), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls([1, 2, 3])), str)
+        self.assertIsInstance(f"{cls([1, 2, 3])}", str)
 
 
 class TestFrozenListSlotDunderMethodGe(
@@ -1237,6 +1238,7 @@ class TestFrozenListSlotDunderMethodIter(
         self.assertEqual(list(iter(cls([]))), [])
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertEqual(
             sum(1 for item in cls([1, 2, 3])), len(cls([1, 2, 3]))
         )
@@ -1629,6 +1631,7 @@ class TestFrozenSetSlotDunderMethodDir(unittest.TestCase, MirrorFrozenSetSlot):
         self.assertEqual(dir(cls([1, 2, 3])), sorted(dir(cls([1, 2, 3]))))
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertTrue(
             all(isinstance(name, str) for name in dir(cls([1, 2, 3])))
         )
@@ -1669,7 +1672,7 @@ class TestFrozenSetSlotDunderMethodFormat(
             format(cls([1]), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls([1, 2, 3])), str)
+        self.assertIsInstance(f"{cls([1, 2, 3])}", str)
 
 
 class TestFrozenSetSlotDunderMethodGe(unittest.TestCase, MirrorFrozenSetSlot):
@@ -1767,6 +1770,7 @@ class TestFrozenSetSlotDunderMethodIter(
         self.assertEqual(list(iter(cls([]))), [])
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertEqual(
             sum(1 for item in cls([1, 2, 3])), len(cls([1, 2, 3]))
         )
@@ -2320,6 +2324,7 @@ class TestMutableDictSlotDunderMethodDir(
         )
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertTrue(
             all(isinstance(name, str) for name in dir(cls({"a": 1, "b": 2})))
         )
@@ -2365,7 +2370,7 @@ class TestMutableDictSlotDunderMethodFormat(
             format(cls({"x": 1}), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls({"a": 1, "b": 2})), str)
+        self.assertIsInstance(f"{cls({"a": 1, "b": 2})}", str)
 
 
 class TestMutableDictSlotDunderMethodGe(
@@ -2545,6 +2550,7 @@ class TestMutableDictSlotDunderMethodIter(
         self.assertEqual(list(iter(cls({}))), [])
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertEqual(
             sum(1 for item in cls({"a": 1, "b": 2})),
             len(cls({"a": 1, "b": 2})),
@@ -3230,6 +3236,7 @@ class TestMutableListSlotDunderMethodDir(
         self.assertEqual(dir(cls([1, 2, 3])), sorted(dir(cls([1, 2, 3]))))
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertTrue(
             all(isinstance(name, str) for name in dir(cls([1, 2, 3])))
         )
@@ -3272,7 +3279,7 @@ class TestMutableListSlotDunderMethodFormat(
             format(cls([1]), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls([1, 2, 3])), str)
+        self.assertIsInstance(f"{cls([1, 2, 3])}", str)
 
 
 class TestMutableListSlotDunderMethodGe(
@@ -3457,6 +3464,7 @@ class TestMutableListSlotDunderMethodIter(
         self.assertEqual(list(iter(cls([]))), [])
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertEqual(
             sum(1 for item in cls([1, 2, 3])), len(cls([1, 2, 3]))
         )
@@ -4144,6 +4152,7 @@ class TestMutableSetSlotDunderMethodDir(
         self.assertEqual(dir(cls([1, 2, 3])), sorted(dir(cls([1, 2, 3]))))
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertTrue(
             all(isinstance(name, str) for name in dir(cls([1, 2, 3])))
         )
@@ -4186,7 +4195,7 @@ class TestMutableSetSlotDunderMethodFormat(
             format(cls([1]), "bad")
 
     def mirror_3(self: Self, cls: type[Any], /) -> None:
-        self.assertIsInstance(str(cls([1, 2, 3])), str)
+        self.assertIsInstance(f"{cls([1, 2, 3])}", str)
 
 
 class TestMutableSetSlotDunderMethodGe(
@@ -4386,6 +4395,7 @@ class TestMutableSetSlotDunderMethodIter(
         self.assertEqual(list(iter(cls([]))), [])
 
     def mirror_2(self: Self, cls: type[Any], /) -> None:
+
         self.assertEqual(
             sum(1 for item in cls([1, 2, 3])), len(cls([1, 2, 3]))
         )
