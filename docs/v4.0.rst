@@ -61,9 +61,6 @@ Open your terminal and run:
 
     pip install datahold
 
-Version 4.0 requires Python 3.12 or newer and ``frozendict``.
-The latter is installed automatically by ``pip``.
-
 Typing
 ------
 
