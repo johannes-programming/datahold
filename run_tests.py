@@ -1,15 +1,16 @@
-__all__: list[str] = ["main", "run"]
+from __future__ import annotations
+
+__all__: list[str] = ["main", "test"]
 
 import sys
 import unittest
-from typing import Never
 
 
-def main() -> Never:
-    sys.exit(not run().wasSuccessful())
+def main() -> int:
+    return int(not test().wasSuccessful())
 
 
-def run() -> unittest.TextTestResult:
+def test() -> unittest.TextTestResult:
     loader: unittest.TestLoader
     runner: unittest.TextTestRunner
     suite: unittest.TestSuite
@@ -20,4 +21,4 @@ def run() -> unittest.TextTestResult:
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
