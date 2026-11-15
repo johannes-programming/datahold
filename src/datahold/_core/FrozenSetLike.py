@@ -4,15 +4,16 @@ __all__: list[str] = [
     "FrozenSetLike",
 ]
 
+
 from collections import abc
-from typing import Self
+from typing import Self, TypeVar
 
 from datahold._core.SetLike import SetLike
 
-###
+Item = TypeVar("Item", bound=abc.Hashable, covariant=True)
 
 
-class FrozenSetLike[Item: abc.Hashable](SetLike[Item]):
+class FrozenSetLike(SetLike[Item]):
     """Hashable abstract set specialization."""
 
     __slots__ = ()

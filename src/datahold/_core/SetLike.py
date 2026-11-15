@@ -7,17 +7,26 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Self
+from typing import Any, Self, TypeVar
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
 
-### SET-LIKE ###
+Item = TypeVar("Item", bound=abc.Hashable, covariant=True)
+FrozenItem = TypeVar("FrozenItem", bound=abc.Hashable, covariant=True)
+TypeItem = TypeVar("TypeItem", bound=abc.Hashable)
+FromItem = TypeVar("FromItem", bound=abc.Hashable)
 
 
-class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
+class SetLike(Collection[Item], abc.Set[Item]):
     """Shared read-only set API; construction and storage remain abstract."""
 
-    type Frozen[FrozenItem: abc.Hashable] = frozenset[FrozenItem]
+    Frozen = TypeAliasType(
+        "Frozen",
+        frozenset[FrozenItem],
+        type_params=(FrozenItem,),
+    )
 
     __slots__ = ()
 
@@ -52,17 +61,17 @@ class SetLike[Item: abc.Hashable](Collection[Item], abc.Set[Item]):
     # __rxor__ is inherited from abc.Set (via _from_iterable).
     # __sub__ is inherited from abc.Set (via _from_iterable).
     @classmethod
-    def __type__[Item_: abc.Hashable](
-        cls: type[Any], data: abc.Iterable[Item_], /
-    ) -> SetLike[Item_]:
-        return cls(data)  # type: ignore[no-any-return]
+    def __type__(
+        cls: type[Any], other: abc.Iterable[TypeItem], /
+    ) -> SetLike[TypeItem]:
+        return cls(other)  # type: ignore[no-any-return]
 
     # __xor__ is inherited from abc.Set (via _from_iterable).
     @classmethod
-    def _from_iterable[Item_: abc.Hashable](
-        cls: type[Any], data: abc.Iterable[Item_], /
-    ) -> SetLike[Item_]:
-        return cls.__type__(data)  # type: ignore[no-any-return]
+    def _from_iterable(
+        cls: type[Any], other: abc.Iterable[FromItem], /
+    ) -> SetLike[FromItem]:
+        return cls.__type__(other)  # type: ignore[no-any-return]
 
     def difference(
         self: Self, /, *others: abc.Iterable[Item]

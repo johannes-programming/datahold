@@ -7,24 +7,38 @@ __all__: list[str] = [
 from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
-from typing import Any, Self, overload
+from typing import Any, Self, TypeVar, overload
 
 from frozendict import frozendict
+from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
 from datahold._core.DictInit import DictInit
 
-### DICT-LIKE ###
+Key = TypeVar("Key", bound=abc.Hashable, covariant=True)
+Value = TypeVar("Value", covariant=True)
+FromKey = TypeVar("FromKey", bound=abc.Hashable)
+FromValue = TypeVar("FromValue")
+FrozenKey = TypeVar("FrozenKey", bound=abc.Hashable, covariant=True)
+FrozenValue = TypeVar("FrozenValue", covariant=True)
+InitKey = TypeVar("InitKey", bound=abc.Hashable, covariant=True)
+OrKey = TypeVar("OrKey", bound=abc.Hashable)
+OrValue = TypeVar("OrValue")
+TypeKey = TypeVar("TypeKey", bound=abc.Hashable)
+TypeValue = TypeVar("TypeValue")
 
 
-class DictLike[Key: abc.Hashable, Value](
-    Collection[Key], abc.Mapping[Key, Value]
+class DictLike(  # type: ignore[type-var]
+    Collection[Key],
+    abc.Mapping[Key, Value],
 ):
     """Shared read-only dictionary interface."""
 
-    type Frozen[FrozenKey: abc.Hashable, FrozenValue] = frozendict[
-        FrozenKey, FrozenValue
-    ]
+    Frozen = TypeAliasType(
+        "Frozen",
+        frozendict[FrozenKey, FrozenValue],
+        type_params=(FrozenKey, FrozenValue),
+    )
 
     __slots__ = ()
 
@@ -45,9 +59,9 @@ class DictLike[Key: abc.Hashable, Value](
     ) -> None: ...
 
     @overload
-    def __init__[Key_: abc.Hashable](
-        self: DictLike[Key_ | str, Value],
-        other: DictInit[Key_ | str, Value] = (),
+    def __init__(
+        self: DictLike[InitKey | str, Value],
+        other: DictInit[InitKey | str, Value] = (),
         /,
         **kwargs: Value,
     ) -> None: ...
@@ -64,9 +78,9 @@ class DictLike[Key: abc.Hashable, Value](
     # __iter__ is inherited
     # __len__ is inherited
     # __ne__ is inherited from object (negates __eq__).
-    def __or__[Key_: abc.Hashable, Value_](
-        self: Self, other: DictLike[Key_, Value_], /
-    ) -> DictLike[Key | Key_, Value | Value_]:
+    def __or__(
+        self: Self, other: DictLike[OrKey, OrValue], /
+    ) -> DictLike[Key | OrKey, Value | OrValue]:
         if not isinstance(other, DictLike):
             return NotImplemented
         return type(self).__type__(
@@ -83,22 +97,22 @@ class DictLike[Key: abc.Hashable, Value](
     # __ror__ is unnecessary because of __or__
 
     @classmethod
-    def __type__[Key_: abc.Hashable, Value_](
-        cls: type[Any], data: DictInit[Key_, Value_], /
-    ) -> DictLike[Key_, Value_]:
-        return cls(data)  # type: ignore[no-any-return]
+    def __type__(
+        cls: type[Any], other: DictInit[TypeKey, TypeValue], /
+    ) -> DictLike[TypeKey, TypeValue]:
+        return cls(other)  # type: ignore[no-any-return]
 
     @overload
     @classmethod
-    def fromkeys[Key_: abc.Hashable](
-        cls: type[Any], keys: abc.Iterable[Key_], /
-    ) -> DictLike[Key_, None]: ...
+    def fromkeys(
+        cls: type[Any], keys: abc.Iterable[FromKey], /
+    ) -> DictLike[FromKey, None]: ...
 
     @overload
     @classmethod
-    def fromkeys[Key_: abc.Hashable, Value_](
-        cls: type[Any], keys: abc.Iterable[Key_], value: Value_, /
-    ) -> DictLike[Key_, Value_]: ...
+    def fromkeys(
+        cls: type[Any], keys: abc.Iterable[FromKey], value: FromValue, /
+    ) -> DictLike[FromKey, FromValue]: ...
 
     @classmethod
     def fromkeys(

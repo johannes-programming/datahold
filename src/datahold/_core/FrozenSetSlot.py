@@ -5,14 +5,14 @@ __all__: list[str] = [
 ]
 
 from collections import abc
-from typing import Self
+from typing import Self, TypeVar
 
 from datahold._core.FrozenSetLike import FrozenSetLike
 
-###
+Item = TypeVar("Item", bound=abc.Hashable, covariant=True)
 
 
-class FrozenSetSlot[Item: abc.Hashable](FrozenSetLike[Item]):
+class FrozenSetSlot(FrozenSetLike[Item]):
     """A frozenset held in one instance slot."""
 
     __slots__ = ("_slot",)

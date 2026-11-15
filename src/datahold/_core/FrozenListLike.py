@@ -4,14 +4,14 @@ __all__: list[str] = [
     "FrozenListLike",
 ]
 
-from typing import Self
+from typing import Self, TypeVar
 
 from datahold._core.ListLike import ListLike
 
-###
+Item = TypeVar("Item", covariant=True)
 
 
-class FrozenListLike[Item](ListLike[Item]):
+class FrozenListLike(ListLike[Item]):
     """Hashable abstract sequence specialization."""
 
     __slots__ = ()

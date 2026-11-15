@@ -6,8 +6,6 @@ __all__: list[str] = [
 
 from typing import Protocol, Self
 
-### TYPING ###
-
 
 class SupportsGTSelf(Protocol):
     def __gt__(self: Self, other: Self, /) -> bool: ...

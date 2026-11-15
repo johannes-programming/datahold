@@ -8,22 +8,33 @@ from abc import abstractmethod
 from collections import abc
 from reprlib import recursive_repr
 from types import NotImplementedType
-from typing import Any, Self, SupportsIndex, overload
+from typing import Any, Self, SupportsIndex, TypeVar, overload
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.Collection import Collection
-from datahold._core.Slice import Slice
 from datahold._core.SupportsGE import SupportsGE
 from datahold._core.SupportsGT import SupportsGT
 from datahold._core.SupportsLE import SupportsLE
 from datahold._core.SupportsLT import SupportsLT
 
-### LIST-LIKE ###
+Item = TypeVar("Item", covariant=True)
+FrozenItem = TypeVar("FrozenItem", covariant=True)
+GEItem = TypeVar("GEItem")
+GTItem = TypeVar("GTItem")
+LEItem = TypeVar("LEItem")
+LTItem = TypeVar("LTItem")
+TypeItem = TypeVar("TypeItem")
 
 
-class ListLike[Item](Collection[Item], abc.Sequence[Item]):
+class ListLike(Collection[Item], abc.Sequence[Item]):
     """Shared read-only sequence with cross-variant tuple-style comparison."""
 
-    type Frozen[FrozenItem] = tuple[FrozenItem, ...]
+    Frozen = TypeAliasType(
+        "Frozen",
+        tuple[FrozenItem, ...],
+        type_params=(FrozenItem,),
+    )
 
     __slots__ = ()
 
@@ -43,9 +54,9 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
         """Return an immutable tuple snapshot."""
 
     @overload
-    def __ge__[Item_](
-        self: ListLike[SupportsGE[Item_]],
-        other: ListLike[Item_],
+    def __ge__(
+        self: ListLike[SupportsGE[GEItem]],
+        other: ListLike[GEItem],
         /,
     ) -> bool: ...
     @overload
@@ -59,22 +70,18 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
 
     @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> ListLike[Item]: ...
+    def __getitem__(self: Self, index: slice, /) -> ListLike[Item]: ...
 
-    def __getitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
-    ) -> Any:
+    def __getitem__(self: Self, index: SupportsIndex | slice, /) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
         else:
             return type(self).__type__(self.__frozen__()[index])
 
     @overload
-    def __gt__[Item_](
-        self: ListLike[SupportsGT[Item_]],
-        other: ListLike[Item_],
+    def __gt__(
+        self: ListLike[SupportsGT[GTItem]],
+        other: ListLike[GTItem],
         /,
     ) -> bool: ...
     @overload
@@ -88,9 +95,9 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     def __init__(self: Self, other: abc.Iterable[Item] = (), /) -> None: ...
 
     @overload
-    def __le__[Item_](
-        self: ListLike[SupportsLE[Item_]],
-        other: ListLike[Item_],
+    def __le__(
+        self: ListLike[SupportsLE[LEItem]],
+        other: ListLike[LEItem],
         /,
     ) -> bool: ...
     @overload
@@ -101,9 +108,9 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
         return self.__frozen__() <= other.__frozen__()
 
     @overload
-    def __lt__[Item_](
-        self: ListLike[SupportsLT[Item_]],
-        other: ListLike[Item_],
+    def __lt__(
+        self: ListLike[SupportsLT[LTItem]],
+        other: ListLike[LTItem],
         /,
     ) -> bool: ...
     @overload
@@ -126,12 +133,12 @@ class ListLike[Item](Collection[Item], abc.Sequence[Item]):
     __rmul__ = __mul__
 
     @classmethod
-    def __type__[Item_](
+    def __type__(
         cls: type[Any],
-        data: abc.Iterable[Item_],
+        other: abc.Iterable[TypeItem],
         /,
-    ) -> ListLike[Item_]:
-        return cls(data)  # type: ignore[no-any-return]
+    ) -> ListLike[TypeItem]:
+        return cls(other)  # type: ignore[no-any-return]
 
     # count is inherited from abc.Sequence.
     # index is inherited from abc.Sequence.

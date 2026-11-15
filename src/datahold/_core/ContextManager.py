@@ -5,12 +5,12 @@ __all__: list[str] = [
 ]
 
 from types import TracebackType
-from typing import Protocol, Self
+from typing import Protocol, Self, TypeVar
 
-### TYPING ###
+Enter = TypeVar("Enter", covariant=True)
 
 
-class ContextManager[Enter](Protocol):
+class ContextManager(Protocol[Enter]):
     def __enter__(self: Self, /) -> Enter: ...
 
     def __exit__(

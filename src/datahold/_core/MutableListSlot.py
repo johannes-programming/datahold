@@ -6,14 +6,14 @@ __all__: list[str] = [
 
 from collections import abc
 from contextlib import contextmanager
-from typing import Self
+from typing import Self, TypeVar
 
 from datahold._core.MutableListLike import MutableListLike
 
-###
+Item = TypeVar("Item")
 
 
-class MutableListSlot[Item](MutableListLike[Item]):
+class MutableListSlot(MutableListLike[Item]):
     """Mutable sequence with transactional replacement of a tuple slot."""
 
     __slots__ = ("_slot",)

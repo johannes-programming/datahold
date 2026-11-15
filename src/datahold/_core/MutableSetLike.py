@@ -6,18 +6,26 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self
+from typing import Any, Self, TypeVar
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
 from datahold._core.SetLike import SetLike
 
-###
+Item = TypeVar("Item", bound=abc.Hashable)
+MutableItem = TypeVar("MutableItem", bound=abc.Hashable)
+TypeItem = TypeVar("TypeItem", bound=abc.Hashable)
 
 
-class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
+class MutableSetLike(SetLike[Item], abc.MutableSet[Item]):
     """Mutable set operations committed through a context manager."""
 
-    type Mutable[MutableItem: abc.Hashable] = set[MutableItem]
+    Mutable = TypeAliasType(
+        "Mutable",
+        set[MutableItem],
+        type_params=(MutableItem,),
+    )
 
     __slots__ = ()
 
@@ -84,11 +92,11 @@ class MutableSetLike[Item: abc.Hashable](SetLike[Item], abc.MutableSet[Item]):
         """Yield a mutable working set and commit on successful exit."""
 
     @classmethod
-    def __type__[Item_: abc.Hashable](
-        cls: type[Any], data: abc.Iterable[Item_], /
-    ) -> MutableSetLike[Item_]:
+    def __type__(
+        cls: type[Any], other: abc.Iterable[TypeItem], /
+    ) -> MutableSetLike[TypeItem]:
         # redoing the same method is necessary because copy must return MutableSetLike[Item]
-        return cls(data)  # type: ignore[no-any-return]
+        return cls(other)  # type: ignore[no-any-return]
 
     def add(self: Self, item: Item, /) -> None:
         mutable: set[Item]

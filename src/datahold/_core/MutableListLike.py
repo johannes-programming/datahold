@@ -6,27 +6,34 @@ __all__: list[str] = [
 
 from abc import abstractmethod
 from collections import abc
-from typing import Any, Self, SupportsIndex, overload
+from typing import Any, Self, SupportsIndex, TypeVar, overload
+
+from typing_extensions import TypeAliasType
 
 from datahold._core.ContextManager import ContextManager
 from datahold._core.ListLike import ListLike
-from datahold._core.Slice import Slice
 from datahold._core.SupportsGTSelf import SupportsGTSelf
 from datahold._core.SupportsLTSelf import SupportsLTSelf
 
-###
+Item = TypeVar("Item")
+MutableItem = TypeVar("MutableItem")
+TypeItem = TypeVar("TypeItem")
+SortGTItem = TypeVar("SortGTItem", bound=SupportsGTSelf)
+SortLTItem = TypeVar("SortLTItem", bound=SupportsLTSelf)
 
 
-class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
+class MutableListLike(ListLike[Item], abc.MutableSequence[Item]):
     """Mutable sequence operations committed through a temporary list."""
 
-    type Mutable[MutableItem] = list[MutableItem]
+    Mutable = TypeAliasType(
+        "Mutable",
+        list[MutableItem],
+        type_params=(MutableItem,),
+    )
 
     __slots__ = ()
 
-    def __delitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
-    ) -> None:
+    def __delitem__(self: Self, index: SupportsIndex | slice, /) -> None:
         mutable: list[Item]
         with self.__mutate__() as mutable:
             del mutable[index]
@@ -40,13 +47,9 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     def __getitem__(self: Self, index: SupportsIndex, /) -> Item: ...
 
     @overload
-    def __getitem__(
-        self: Self, index: Slice[SupportsIndex | None], /
-    ) -> MutableListLike[Item]: ...
+    def __getitem__(self: Self, index: slice, /) -> MutableListLike[Item]: ...
 
-    def __getitem__(
-        self: Self, index: SupportsIndex | Slice[SupportsIndex | None], /
-    ) -> Any:
+    def __getitem__(self: Self, index: SupportsIndex | slice, /) -> Any:
         if isinstance(index, SupportsIndex):
             return self.__frozen__()[index]
         else:
@@ -76,7 +79,7 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     @overload
     def __setitem__(
         self: Self,
-        index: Slice[SupportsIndex | None],
+        index: slice,
         data: abc.Iterable[Item],
         /,
     ) -> None: ...
@@ -92,13 +95,13 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
             mutable[index] = data
 
     @classmethod
-    def __type__[Item_](
+    def __type__(
         cls: type[Any],
-        data: abc.Iterable[Item_],
+        other: abc.Iterable[TypeItem],
         /,
-    ) -> MutableListLike[Item_]:
+    ) -> MutableListLike[TypeItem]:
         # redoing the same method is necessary because copy must return MutableListLike[Item]
-        return cls(data)  # type: ignore[no-any-return]
+        return cls(other)  # type: ignore[no-any-return]
 
     # append is inherited from abc.MutableSequence.
     # clear is inherited from abc.MutableSequence.
@@ -119,35 +122,35 @@ class MutableListLike[Item](ListLike[Item], abc.MutableSequence[Item]):
     # remove is inherited from abc.MutableSequence.
     # reverse is inherited from abc.MutableSequence.
     @overload
-    def sort[Item_: SupportsGTSelf](
-        self: MutableListLike[Item_],
+    def sort(
+        self: MutableListLike[SortGTItem],
         /,
         *,
         key: None = None,
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[Item_: SupportsLTSelf](
-        self: MutableListLike[Item_],
+    def sort(
+        self: MutableListLike[SortLTItem],
         /,
         *,
         key: None = None,
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[Item_: SupportsGTSelf](
+    def sort(
         self: Self,
         /,
         *,
-        key: abc.Callable[[Item], Item_],
+        key: abc.Callable[[Item], SortGTItem],
         reverse: bool = False,
     ) -> None: ...
     @overload
-    def sort[Item_: SupportsLTSelf](
+    def sort(
         self: Self,
         /,
         *,
-        key: abc.Callable[[Item], Item_],
+        key: abc.Callable[[Item], SortLTItem],
         reverse: bool = False,
     ) -> None: ...
     def sort(

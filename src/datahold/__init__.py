@@ -35,3 +35,12 @@ from datahold._core.MutableListSlot import MutableListSlot
 from datahold._core.MutableSetLike import MutableSetLike
 from datahold._core.MutableSetSlot import MutableSetSlot
 from datahold._core.SetLike import SetLike
+
+
+def init() -> None:
+    name: str
+    for name in __all__:
+        globals()[name].__module__ = "datahold"
+
+
+init()

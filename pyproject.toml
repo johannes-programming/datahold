@@ -5,41 +5,55 @@ requires = [
 ]
 
 [project]
-authors = [
-    { email = "johannes.programming@gmail.com", name = "Johannes" },
-]
-classifiers = [
-    "Intended Audience :: Developers",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Typing :: Typed",
-]
-dependencies = [
-    "frozendict<3,>=2.4",
-]
+name = "datahold"
+version = "4.1.3"
 description = "This project wraps common mutable data-structures for inheritance with modification."
+readme = "README.rst"
 keywords = []
 license = "MIT"
 license-files = [
     "LICENSE.txt",
 ]
-name = "datahold"
-readme = "README.rst"
-requires-python = ">=3.12"
-version = "4.1.2"
+authors = [
+    { name = "Johannes", email = "johannes.programming@gmail.com" },
+]
+requires-python = ">=3.11"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Typing :: Typed",
+]
+dependencies = [
+    "frozendict<3,>=2.4",
+    "typing-extensions<5,>=4.16",
+]
+urls.Download = "https://pypi.org/project/datahold/#files"
+urls.Index = "https://pypi.org/project/datahold/"
+urls.Source = "https://github.com/johannes-programming/datahold/"
+urls.Website = "https://datahold.johannes-programming.online/"
 
-[project.urls]
-Download = "https://pypi.org/project/datahold/#files"
-Index = "https://pypi.org/project/datahold/"
-Source = "https://github.com/johannes-programming/datahold/"
-Website = "https://datahold.johannes-programming.online/"
+[tool.ruff]
+line-length = 79
+lint.select = [
+    "I",
+]
+
+[tool.pyproject-fmt]
+indent = 4
+keep_full_version = true
+max_supported_python = "3.15"
 
 [tool.mypy]
 files = [
     ".",
 ]
-python_version = "3.12"
+python_version = "3.11"
 strict = true
