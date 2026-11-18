@@ -262,6 +262,7 @@ from datahold import (
 
 
 class Mirror:
+
     New: ClassVar[type[Any]]
     Old: ClassVar[type[Any]]
 
@@ -284,31 +285,37 @@ class Mirror:
 
 
 class MirrorFrozenDictSlot(Mirror):
+
     New: ClassVar[type[Any]] = FrozenDictSlot
     Old: ClassVar[type[Any]] = frozendict
 
 
 class MirrorFrozenListSlot(Mirror):
+
     New: ClassVar[type[Any]] = FrozenListSlot
     Old: ClassVar[type[Any]] = tuple
 
 
 class MirrorFrozenSetSlot(Mirror):
+
     New: ClassVar[type[Any]] = FrozenSetSlot
     Old: ClassVar[type[Any]] = frozenset
 
 
 class MirrorMutableDictSlot(Mirror):
+
     New: ClassVar[type[Any]] = MutableDictSlot
     Old: ClassVar[type[Any]] = dict
 
 
 class MirrorMutableListSlot(Mirror):
+
     New: ClassVar[type[Any]] = MutableListSlot
     Old: ClassVar[type[Any]] = list
 
 
 class MirrorMutableSetSlot(Mirror):
+
     New: ClassVar[type[Any]] = MutableSetSlot
     Old: ClassVar[type[Any]] = set
 
@@ -316,6 +323,7 @@ class MirrorMutableSetSlot(Mirror):
 class TestFrozenDictSlotDunderMethodBool(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls({})))
 
@@ -332,6 +340,7 @@ class TestFrozenDictSlotDunderMethodBool(
 class TestFrozenDictSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[str, int]), cls)
 
@@ -348,6 +357,7 @@ class TestFrozenDictSlotDunderMethodClassGetitem(
 class TestFrozenDictSlotDunderMethodContains(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("a", cls({"a": 1, "b": 2}))
 
@@ -366,6 +376,7 @@ class TestFrozenDictSlotDunderMethodContains(
 class TestFrozenDictSlotDunderMethodDelattr(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1, "b": 2})
@@ -397,6 +408,7 @@ class TestFrozenDictSlotDunderMethodDelattr(
 class TestFrozenDictSlotDunderMethodDir(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls({"a": 1, "b": 2})))
 
@@ -420,6 +432,7 @@ class TestFrozenDictSlotDunderMethodDir(
 class TestFrozenDictSlotDunderMethodEq(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1, "b": 2}), cls({"a": 1, "b": 2}))
 
@@ -436,6 +449,7 @@ class TestFrozenDictSlotDunderMethodEq(
 class TestFrozenDictSlotDunderMethodFormat(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls({})), str(cls({})))
 
@@ -455,6 +469,7 @@ class TestFrozenDictSlotDunderMethodFormat(
 class TestFrozenDictSlotDunderMethodGe(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -483,6 +498,7 @@ class TestFrozenDictSlotDunderMethodGe(
 class TestFrozenDictSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls({"a": 1, "b": 2}), "__class__"), cls)
 
@@ -503,6 +519,7 @@ class TestFrozenDictSlotDunderMethodGetattribute(
 class TestFrozenDictSlotDunderMethodGetitem(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1})["a"], 1)
 
@@ -520,6 +537,7 @@ class TestFrozenDictSlotDunderMethodGetitem(
 class TestFrozenDictSlotDunderMethodGt(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -548,6 +566,7 @@ class TestFrozenDictSlotDunderMethodGt(
 class TestFrozenDictSlotDunderMethodHash(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(hash(cls({"a": 1})), int)
 
@@ -565,6 +584,7 @@ class TestFrozenDictSlotDunderMethodHash(
 class TestFrozenDictSlotDunderMethodInit(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls({})), 0)
 
@@ -581,6 +601,7 @@ class TestFrozenDictSlotDunderMethodInit(
 class TestFrozenDictSlotDunderMethodIter(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(iter(cls({"a": 1, "b": 2}))), {"a", "b"})
 
@@ -600,6 +621,7 @@ class TestFrozenDictSlotDunderMethodIter(
 class TestFrozenDictSlotDunderMethodLe(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -628,6 +650,7 @@ class TestFrozenDictSlotDunderMethodLe(
 class TestFrozenDictSlotDunderMethodLen(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls({})), 0)
 
@@ -644,6 +667,7 @@ class TestFrozenDictSlotDunderMethodLen(
 class TestFrozenDictSlotDunderMethodLt(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -672,6 +696,7 @@ class TestFrozenDictSlotDunderMethodLt(
 class TestFrozenDictSlotDunderMethodNe(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls({"a": 1}), cls({"a": 2}))
 
@@ -691,6 +716,7 @@ class TestFrozenDictSlotDunderMethodNe(
 class TestFrozenDictSlotDunderMethodNew(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls({})), cls)
 
@@ -707,6 +733,7 @@ class TestFrozenDictSlotDunderMethodNew(
 class TestFrozenDictSlotDunderMethodOr(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(dict(cls({"a": 1}) | cls({"b": 2})), {"a": 1, "b": 2})
 
@@ -721,6 +748,7 @@ class TestFrozenDictSlotDunderMethodOr(
 
 
 class TestFrozenDictSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(FrozenDictSlot({})), "FrozenDictSlot({})")
 
@@ -748,6 +776,7 @@ class TestFrozenDictSlotDunderMethodRepr(unittest.TestCase):
 class TestFrozenDictSlotDunderMethodReversed(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(reversed(cls({"a": 1, "b": 2}))), ["b", "a"])
 
@@ -766,6 +795,7 @@ class TestFrozenDictSlotDunderMethodReversed(
 class TestFrozenDictSlotDunderMethodSetattr(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1, "b": 2})
@@ -796,6 +826,7 @@ class TestFrozenDictSlotDunderMethodSetattr(
 class TestFrozenDictSlotDunderMethodSizeof(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls({})), 0)
 
@@ -812,6 +843,7 @@ class TestFrozenDictSlotDunderMethodSizeof(
 class TestFrozenDictSlotDunderMethodStr(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls({})), str)
 
@@ -830,6 +862,7 @@ class TestFrozenDictSlotDunderMethodStr(
 class TestFrozenDictSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -846,6 +879,7 @@ class TestFrozenDictSlotDunderMethodSubclasshook(
 class TestFrozenDictSlotPublicMethodFromkeys(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(
             dict(cls.fromkeys(["a", "b"])), {"a": None, "b": None}
@@ -864,6 +898,7 @@ class TestFrozenDictSlotPublicMethodFromkeys(
 class TestFrozenDictSlotPublicMethodGet(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1}).get("a"), 1)
 
@@ -880,6 +915,7 @@ class TestFrozenDictSlotPublicMethodGet(
 class TestFrozenDictSlotPublicMethodItems(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(
             set(cls({"a": 1, "b": 2}).items()), {("a", 1), ("b", 2)}
@@ -898,6 +934,7 @@ class TestFrozenDictSlotPublicMethodItems(
 class TestFrozenDictSlotPublicMethodKeys(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls({"a": 1, "b": 2}).keys()), {"a", "b"})
 
@@ -914,6 +951,7 @@ class TestFrozenDictSlotPublicMethodKeys(
 class TestFrozenDictSlotPublicMethodValues(
     unittest.TestCase, MirrorFrozenDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(cls({"a": 1, "b": 2}).values()), [1, 2])
 
@@ -930,6 +968,7 @@ class TestFrozenDictSlotPublicMethodValues(
 class TestFrozenListSlotDunderMethodAdd(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1]) + cls([2]), cls([1, 2]))
 
@@ -946,6 +985,7 @@ class TestFrozenListSlotDunderMethodAdd(
 class TestFrozenListSlotDunderMethodBool(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls([])))
 
@@ -962,6 +1002,7 @@ class TestFrozenListSlotDunderMethodBool(
 class TestFrozenListSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[int]), cls)
 
@@ -978,6 +1019,7 @@ class TestFrozenListSlotDunderMethodClassGetitem(
 class TestFrozenListSlotDunderMethodContains(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn(2, cls([1, 2, 3]))
 
@@ -994,6 +1036,7 @@ class TestFrozenListSlotDunderMethodContains(
 class TestFrozenListSlotDunderMethodDelattr(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -1025,6 +1068,7 @@ class TestFrozenListSlotDunderMethodDelattr(
 class TestFrozenListSlotDunderMethodDir(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls([1, 2, 3])))
 
@@ -1045,6 +1089,7 @@ class TestFrozenListSlotDunderMethodDir(
 class TestFrozenListSlotDunderMethodEq(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 3]), cls([1, 2, 3]))
 
@@ -1061,6 +1106,7 @@ class TestFrozenListSlotDunderMethodEq(
 class TestFrozenListSlotDunderMethodFormat(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls([])), str(cls([])))
 
@@ -1078,6 +1124,7 @@ class TestFrozenListSlotDunderMethodFormat(
 class TestFrozenListSlotDunderMethodGe(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) >= cls([]), True)
 
@@ -1094,6 +1141,7 @@ class TestFrozenListSlotDunderMethodGe(
 class TestFrozenListSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls([1, 2, 3]), "__class__"), cls)
 
@@ -1112,6 +1160,7 @@ class TestFrozenListSlotDunderMethodGetattribute(
 class TestFrozenListSlotDunderMethodGetitem(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([4, 5, 6])[0], 4)
 
@@ -1128,6 +1177,7 @@ class TestFrozenListSlotDunderMethodGetitem(
 class TestFrozenListSlotDunderMethodGt(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) > cls([]), False)
 
@@ -1144,6 +1194,7 @@ class TestFrozenListSlotDunderMethodGt(
 class TestFrozenListSlotDunderMethodHash(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(hash(cls([1, 2])), int)
 
@@ -1161,6 +1212,7 @@ class TestFrozenListSlotDunderMethodHash(
 class TestFrozenListSlotDunderMethodInit(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -1177,6 +1229,7 @@ class TestFrozenListSlotDunderMethodInit(
 class TestFrozenListSlotDunderMethodIter(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(iter(cls([1, 2, 3]))), [1, 2, 3])
 
@@ -1197,6 +1250,7 @@ class TestFrozenListSlotDunderMethodIter(
 class TestFrozenListSlotDunderMethodLe(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) <= cls([]), True)
 
@@ -1213,6 +1267,7 @@ class TestFrozenListSlotDunderMethodLe(
 class TestFrozenListSlotDunderMethodLen(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -1229,6 +1284,7 @@ class TestFrozenListSlotDunderMethodLen(
 class TestFrozenListSlotDunderMethodLt(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) < cls([]), False)
 
@@ -1245,6 +1301,7 @@ class TestFrozenListSlotDunderMethodLt(
 class TestFrozenListSlotDunderMethodMul(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2]) * 3, cls([1, 2, 1, 2, 1, 2]))
 
@@ -1261,6 +1318,7 @@ class TestFrozenListSlotDunderMethodMul(
 class TestFrozenListSlotDunderMethodNe(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls([1]), cls([2]))
 
@@ -1277,6 +1335,7 @@ class TestFrozenListSlotDunderMethodNe(
 class TestFrozenListSlotDunderMethodNew(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls([])), cls)
 
@@ -1291,6 +1350,7 @@ class TestFrozenListSlotDunderMethodNew(
 
 
 class TestFrozenListSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(FrozenListSlot([])), "FrozenListSlot([])")
 
@@ -1314,6 +1374,7 @@ class TestFrozenListSlotDunderMethodRepr(unittest.TestCase):
 class TestFrozenListSlotDunderMethodReversed(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(reversed(cls([1, 2, 3]))), [3, 2, 1])
 
@@ -1330,6 +1391,7 @@ class TestFrozenListSlotDunderMethodReversed(
 class TestFrozenListSlotDunderMethodRmul(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(3 * cls([1]), cls([1, 1, 1]))
 
@@ -1346,6 +1408,7 @@ class TestFrozenListSlotDunderMethodRmul(
 class TestFrozenListSlotDunderMethodSetattr(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -1376,6 +1439,7 @@ class TestFrozenListSlotDunderMethodSetattr(
 class TestFrozenListSlotDunderMethodSizeof(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls([])), 0)
 
@@ -1392,6 +1456,7 @@ class TestFrozenListSlotDunderMethodSizeof(
 class TestFrozenListSlotDunderMethodStr(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls([])), str)
 
@@ -1408,6 +1473,7 @@ class TestFrozenListSlotDunderMethodStr(
 class TestFrozenListSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -1424,6 +1490,7 @@ class TestFrozenListSlotDunderMethodSubclasshook(
 class TestFrozenListSlotPublicMethodCount(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 1]).count(1), 2)
 
@@ -1440,6 +1507,7 @@ class TestFrozenListSlotPublicMethodCount(
 class TestFrozenListSlotPublicMethodIndex(
     unittest.TestCase, MirrorFrozenListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([4, 5, 6]).index(5), 1)
 
@@ -1455,6 +1523,7 @@ class TestFrozenListSlotPublicMethodIndex(
 
 
 class TestFrozenSetSlotDunderMethodAnd(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) & cls([2, 3])), {2})
 
@@ -1471,6 +1540,7 @@ class TestFrozenSetSlotDunderMethodAnd(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodBool(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls([])))
 
@@ -1487,6 +1557,7 @@ class TestFrozenSetSlotDunderMethodBool(
 class TestFrozenSetSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[int]), cls)
 
@@ -1503,6 +1574,7 @@ class TestFrozenSetSlotDunderMethodClassGetitem(
 class TestFrozenSetSlotDunderMethodContains(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn(2, cls([1, 2, 3]))
 
@@ -1519,6 +1591,7 @@ class TestFrozenSetSlotDunderMethodContains(
 class TestFrozenSetSlotDunderMethodDelattr(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -1548,6 +1621,7 @@ class TestFrozenSetSlotDunderMethodDelattr(
 
 
 class TestFrozenSetSlotDunderMethodDir(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls([1, 2, 3])))
 
@@ -1566,6 +1640,7 @@ class TestFrozenSetSlotDunderMethodDir(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodEq(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 3]), cls([1, 2, 3]))
 
@@ -1582,6 +1657,7 @@ class TestFrozenSetSlotDunderMethodEq(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodFormat(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls([])), str(cls([])))
 
@@ -1597,6 +1673,7 @@ class TestFrozenSetSlotDunderMethodFormat(
 
 
 class TestFrozenSetSlotDunderMethodGe(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) >= cls([]), True)
 
@@ -1613,6 +1690,7 @@ class TestFrozenSetSlotDunderMethodGe(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls([1, 2, 3]), "__class__"), cls)
 
@@ -1629,6 +1707,7 @@ class TestFrozenSetSlotDunderMethodGetattribute(
 
 
 class TestFrozenSetSlotDunderMethodGt(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) > cls([]), False)
 
@@ -1645,6 +1724,7 @@ class TestFrozenSetSlotDunderMethodGt(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodHash(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(hash(cls([1, 2])), int)
 
@@ -1662,6 +1742,7 @@ class TestFrozenSetSlotDunderMethodHash(
 class TestFrozenSetSlotDunderMethodInit(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -1678,6 +1759,7 @@ class TestFrozenSetSlotDunderMethodInit(
 class TestFrozenSetSlotDunderMethodIter(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(iter(cls([1, 2, 3]))), set([1, 2, 3]))
 
@@ -1694,6 +1776,7 @@ class TestFrozenSetSlotDunderMethodIter(
 
 
 class TestFrozenSetSlotDunderMethodLe(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) <= cls([]), True)
 
@@ -1708,6 +1791,7 @@ class TestFrozenSetSlotDunderMethodLe(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodLen(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -1722,6 +1806,7 @@ class TestFrozenSetSlotDunderMethodLen(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodLt(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) < cls([]), False)
 
@@ -1736,6 +1821,7 @@ class TestFrozenSetSlotDunderMethodLt(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodNe(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls([1]), cls([2]))
 
@@ -1750,6 +1836,7 @@ class TestFrozenSetSlotDunderMethodNe(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodNew(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls([])), cls)
 
@@ -1764,6 +1851,7 @@ class TestFrozenSetSlotDunderMethodNew(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodOr(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) | cls([2, 3])), {1, 2, 3})
 
@@ -1780,6 +1868,7 @@ class TestFrozenSetSlotDunderMethodOr(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodRand(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) & cls([2, 3])), {2})
 
@@ -1794,6 +1883,7 @@ class TestFrozenSetSlotDunderMethodRand(
 
 
 class TestFrozenSetSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(FrozenSetSlot([])), "FrozenSetSlot(set())")
 
@@ -1810,6 +1900,7 @@ class TestFrozenSetSlotDunderMethodRepr(unittest.TestCase):
 
 
 class TestFrozenSetSlotDunderMethodRor(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) | cls([2, 3])), {1, 2, 3})
 
@@ -1826,6 +1917,7 @@ class TestFrozenSetSlotDunderMethodRor(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodRsub(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) - cls([2, 3])), {1})
 
@@ -1842,6 +1934,7 @@ class TestFrozenSetSlotDunderMethodRsub(
 class TestFrozenSetSlotDunderMethodRxor(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) ^ cls([2, 3])), {1, 3})
 
@@ -1858,6 +1951,7 @@ class TestFrozenSetSlotDunderMethodRxor(
 class TestFrozenSetSlotDunderMethodSetattr(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -1888,6 +1982,7 @@ class TestFrozenSetSlotDunderMethodSetattr(
 class TestFrozenSetSlotDunderMethodSizeof(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls([])), 0)
 
@@ -1902,6 +1997,7 @@ class TestFrozenSetSlotDunderMethodSizeof(
 
 
 class TestFrozenSetSlotDunderMethodStr(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls([])), str)
 
@@ -1916,6 +2012,7 @@ class TestFrozenSetSlotDunderMethodStr(unittest.TestCase, MirrorFrozenSetSlot):
 
 
 class TestFrozenSetSlotDunderMethodSub(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) - cls([2, 3])), {1})
 
@@ -1932,6 +2029,7 @@ class TestFrozenSetSlotDunderMethodSub(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -1946,6 +2044,7 @@ class TestFrozenSetSlotDunderMethodSubclasshook(
 
 
 class TestFrozenSetSlotDunderMethodXor(unittest.TestCase, MirrorFrozenSetSlot):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) ^ cls([2, 3])), {1, 3})
 
@@ -1962,6 +2061,7 @@ class TestFrozenSetSlotDunderMethodXor(unittest.TestCase, MirrorFrozenSetSlot):
 class TestFrozenSetSlotPublicMethodDifference(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).difference([2, 3])), {1})
 
@@ -1978,6 +2078,7 @@ class TestFrozenSetSlotPublicMethodDifference(
 class TestFrozenSetSlotPublicMethodIntersection(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).intersection([2, 3])), {2})
 
@@ -1994,6 +2095,7 @@ class TestFrozenSetSlotPublicMethodIntersection(
 class TestFrozenSetSlotPublicMethodIsdisjoint(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1]).isdisjoint([2]))
 
@@ -2010,6 +2112,7 @@ class TestFrozenSetSlotPublicMethodIsdisjoint(
 class TestFrozenSetSlotPublicMethodIssubset(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1]).issubset([1, 2]))
 
@@ -2026,6 +2129,7 @@ class TestFrozenSetSlotPublicMethodIssubset(
 class TestFrozenSetSlotPublicMethodIssuperset(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1, 2]).issuperset([1]))
 
@@ -2042,6 +2146,7 @@ class TestFrozenSetSlotPublicMethodIssuperset(
 class TestFrozenSetSlotPublicMethodSymmetricDifference(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(
         self: Self,
         cls: type[Any],
@@ -2074,6 +2179,7 @@ class TestFrozenSetSlotPublicMethodSymmetricDifference(
 class TestFrozenSetSlotPublicMethodUnion(
     unittest.TestCase, MirrorFrozenSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).union([2, 3])), {1, 2, 3})
 
@@ -2090,6 +2196,7 @@ class TestFrozenSetSlotPublicMethodUnion(
 class TestMutableDictSlotDunderMethodBool(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls({})))
 
@@ -2106,6 +2213,7 @@ class TestMutableDictSlotDunderMethodBool(
 class TestMutableDictSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[str, int]), cls)
 
@@ -2122,6 +2230,7 @@ class TestMutableDictSlotDunderMethodClassGetitem(
 class TestMutableDictSlotDunderMethodContains(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("a", cls({"a": 1, "b": 2}))
 
@@ -2140,6 +2249,7 @@ class TestMutableDictSlotDunderMethodContains(
 class TestMutableDictSlotDunderMethodDelattr(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1, "b": 2})
@@ -2171,6 +2281,7 @@ class TestMutableDictSlotDunderMethodDelattr(
 class TestMutableDictSlotDunderMethodDelitem(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1, "b": 2})
@@ -2199,6 +2310,7 @@ class TestMutableDictSlotDunderMethodDelitem(
 class TestMutableDictSlotDunderMethodDir(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls({"a": 1, "b": 2})))
 
@@ -2222,6 +2334,7 @@ class TestMutableDictSlotDunderMethodDir(
 class TestMutableDictSlotDunderMethodEq(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1, "b": 2}), cls({"a": 1, "b": 2}))
 
@@ -2238,6 +2351,7 @@ class TestMutableDictSlotDunderMethodEq(
 class TestMutableDictSlotDunderMethodFormat(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls({})), str(cls({})))
 
@@ -2257,6 +2371,7 @@ class TestMutableDictSlotDunderMethodFormat(
 class TestMutableDictSlotDunderMethodGe(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -2285,6 +2400,7 @@ class TestMutableDictSlotDunderMethodGe(
 class TestMutableDictSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls({"a": 1, "b": 2}), "__class__"), cls)
 
@@ -2305,6 +2421,7 @@ class TestMutableDictSlotDunderMethodGetattribute(
 class TestMutableDictSlotDunderMethodGetitem(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1})["a"], 1)
 
@@ -2322,6 +2439,7 @@ class TestMutableDictSlotDunderMethodGetitem(
 class TestMutableDictSlotDunderMethodGt(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -2350,6 +2468,7 @@ class TestMutableDictSlotDunderMethodGt(
 class TestMutableDictSlotDunderMethodHash(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(TypeError):
             hash(cls({"a": 1}))
@@ -2369,6 +2488,7 @@ class TestMutableDictSlotDunderMethodHash(
 class TestMutableDictSlotDunderMethodInit(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls({})), 0)
 
@@ -2385,6 +2505,7 @@ class TestMutableDictSlotDunderMethodInit(
 class TestMutableDictSlotDunderMethodIor(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -2416,6 +2537,7 @@ class TestMutableDictSlotDunderMethodIor(
 class TestMutableDictSlotDunderMethodIter(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(iter(cls({"a": 1, "b": 2}))), {"a", "b"})
 
@@ -2435,6 +2557,7 @@ class TestMutableDictSlotDunderMethodIter(
 class TestMutableDictSlotDunderMethodLe(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -2463,6 +2586,7 @@ class TestMutableDictSlotDunderMethodLe(
 class TestMutableDictSlotDunderMethodLen(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls({})), 0)
 
@@ -2479,6 +2603,7 @@ class TestMutableDictSlotDunderMethodLen(
 class TestMutableDictSlotDunderMethodLt(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(
             TypeError, msg="mapping ordering must raise TypeError"
@@ -2507,6 +2632,7 @@ class TestMutableDictSlotDunderMethodLt(
 class TestMutableDictSlotDunderMethodNe(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls({"a": 1}), cls({"a": 2}))
 
@@ -2526,6 +2652,7 @@ class TestMutableDictSlotDunderMethodNe(
 class TestMutableDictSlotDunderMethodNew(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls({})), cls)
 
@@ -2542,6 +2669,7 @@ class TestMutableDictSlotDunderMethodNew(
 class TestMutableDictSlotDunderMethodOr(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(dict(cls({"a": 1}) | cls({"b": 2})), {"a": 1, "b": 2})
 
@@ -2556,6 +2684,7 @@ class TestMutableDictSlotDunderMethodOr(
 
 
 class TestMutableDictSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(MutableDictSlot({})), "MutableDictSlot({})")
 
@@ -2581,6 +2710,7 @@ class TestMutableDictSlotDunderMethodRepr(unittest.TestCase):
 class TestMutableDictSlotDunderMethodReversed(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(reversed(cls({"a": 1, "b": 2}))), ["b", "a"])
 
@@ -2599,6 +2729,7 @@ class TestMutableDictSlotDunderMethodReversed(
 class TestMutableDictSlotDunderMethodSetattr(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1, "b": 2})
@@ -2629,6 +2760,7 @@ class TestMutableDictSlotDunderMethodSetattr(
 class TestMutableDictSlotDunderMethodSetitem(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1})
@@ -2657,6 +2789,7 @@ class TestMutableDictSlotDunderMethodSetitem(
 class TestMutableDictSlotDunderMethodSizeof(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls({})), 0)
 
@@ -2673,6 +2806,7 @@ class TestMutableDictSlotDunderMethodSizeof(
 class TestMutableDictSlotDunderMethodStr(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls({})), str)
 
@@ -2691,6 +2825,7 @@ class TestMutableDictSlotDunderMethodStr(
 class TestMutableDictSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -2707,6 +2842,7 @@ class TestMutableDictSlotDunderMethodSubclasshook(
 class TestMutableDictSlotPublicMethodClear(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1})
@@ -2736,6 +2872,7 @@ class TestMutableDictSlotPublicMethodClear(
 class TestMutableDictSlotPublicMethodCopy(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(dict(cls({"a": 1}).copy()), {"a": 1})
 
@@ -2754,6 +2891,7 @@ class TestMutableDictSlotPublicMethodCopy(
 class TestMutableDictSlotPublicMethodFromkeys(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(
             dict(cls.fromkeys(["a", "b"])), {"a": None, "b": None}
@@ -2772,6 +2910,7 @@ class TestMutableDictSlotPublicMethodFromkeys(
 class TestMutableDictSlotPublicMethodGet(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls({"a": 1}).get("a"), 1)
 
@@ -2788,6 +2927,7 @@ class TestMutableDictSlotPublicMethodGet(
 class TestMutableDictSlotPublicMethodItems(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(
             set(cls({"a": 1, "b": 2}).items()), {("a", 1), ("b", 2)}
@@ -2806,6 +2946,7 @@ class TestMutableDictSlotPublicMethodItems(
 class TestMutableDictSlotPublicMethodKeys(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls({"a": 1, "b": 2}).keys()), {"a", "b"})
 
@@ -2822,6 +2963,7 @@ class TestMutableDictSlotPublicMethodKeys(
 class TestMutableDictSlotPublicMethodPop(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1})
@@ -2849,6 +2991,7 @@ class TestMutableDictSlotPublicMethodPop(
 class TestMutableDictSlotPublicMethodPopitem(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1})
@@ -2876,6 +3019,7 @@ class TestMutableDictSlotPublicMethodPopitem(
 class TestMutableDictSlotPublicMethodSetdefault(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({})
@@ -2903,6 +3047,7 @@ class TestMutableDictSlotPublicMethodSetdefault(
 class TestMutableDictSlotPublicMethodUpdate(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls({"a": 1})
@@ -2931,6 +3076,7 @@ class TestMutableDictSlotPublicMethodUpdate(
 class TestMutableDictSlotPublicMethodValues(
     unittest.TestCase, MirrorMutableDictSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(cls({"a": 1, "b": 2}).values()), [1, 2])
 
@@ -2947,6 +3093,7 @@ class TestMutableDictSlotPublicMethodValues(
 class TestMutableListSlotDunderMethodAdd(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1]) + cls([2]), cls([1, 2]))
 
@@ -2963,6 +3110,7 @@ class TestMutableListSlotDunderMethodAdd(
 class TestMutableListSlotDunderMethodBool(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls([])))
 
@@ -2979,6 +3127,7 @@ class TestMutableListSlotDunderMethodBool(
 class TestMutableListSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[int]), cls)
 
@@ -2995,6 +3144,7 @@ class TestMutableListSlotDunderMethodClassGetitem(
 class TestMutableListSlotDunderMethodContains(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn(2, cls([1, 2, 3]))
 
@@ -3011,6 +3161,7 @@ class TestMutableListSlotDunderMethodContains(
 class TestMutableListSlotDunderMethodDelattr(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3042,6 +3193,7 @@ class TestMutableListSlotDunderMethodDelattr(
 class TestMutableListSlotDunderMethodDelitem(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3070,6 +3222,7 @@ class TestMutableListSlotDunderMethodDelitem(
 class TestMutableListSlotDunderMethodDir(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls([1, 2, 3])))
 
@@ -3090,6 +3243,7 @@ class TestMutableListSlotDunderMethodDir(
 class TestMutableListSlotDunderMethodEq(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 3]), cls([1, 2, 3]))
 
@@ -3106,6 +3260,7 @@ class TestMutableListSlotDunderMethodEq(
 class TestMutableListSlotDunderMethodFormat(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls([])), str(cls([])))
 
@@ -3123,6 +3278,7 @@ class TestMutableListSlotDunderMethodFormat(
 class TestMutableListSlotDunderMethodGe(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) >= cls([]), True)
 
@@ -3139,6 +3295,7 @@ class TestMutableListSlotDunderMethodGe(
 class TestMutableListSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls([1, 2, 3]), "__class__"), cls)
 
@@ -3157,6 +3314,7 @@ class TestMutableListSlotDunderMethodGetattribute(
 class TestMutableListSlotDunderMethodGetitem(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([4, 5, 6])[0], 4)
 
@@ -3173,6 +3331,7 @@ class TestMutableListSlotDunderMethodGetitem(
 class TestMutableListSlotDunderMethodGt(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) > cls([]), False)
 
@@ -3189,6 +3348,7 @@ class TestMutableListSlotDunderMethodGt(
 class TestMutableListSlotDunderMethodHash(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(TypeError):
             hash(cls([1, 2]))
@@ -3208,6 +3368,7 @@ class TestMutableListSlotDunderMethodHash(
 class TestMutableListSlotDunderMethodIadd(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -3239,6 +3400,7 @@ class TestMutableListSlotDunderMethodIadd(
 class TestMutableListSlotDunderMethodImul(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -3270,6 +3432,7 @@ class TestMutableListSlotDunderMethodImul(
 class TestMutableListSlotDunderMethodInit(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -3286,6 +3449,7 @@ class TestMutableListSlotDunderMethodInit(
 class TestMutableListSlotDunderMethodIter(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(iter(cls([1, 2, 3]))), [1, 2, 3])
 
@@ -3306,6 +3470,7 @@ class TestMutableListSlotDunderMethodIter(
 class TestMutableListSlotDunderMethodLe(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) <= cls([]), True)
 
@@ -3322,6 +3487,7 @@ class TestMutableListSlotDunderMethodLe(
 class TestMutableListSlotDunderMethodLen(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -3338,6 +3504,7 @@ class TestMutableListSlotDunderMethodLen(
 class TestMutableListSlotDunderMethodLt(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) < cls([]), False)
 
@@ -3354,6 +3521,7 @@ class TestMutableListSlotDunderMethodLt(
 class TestMutableListSlotDunderMethodMul(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2]) * 3, cls([1, 2, 1, 2, 1, 2]))
 
@@ -3370,6 +3538,7 @@ class TestMutableListSlotDunderMethodMul(
 class TestMutableListSlotDunderMethodNe(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls([1]), cls([2]))
 
@@ -3386,6 +3555,7 @@ class TestMutableListSlotDunderMethodNe(
 class TestMutableListSlotDunderMethodNew(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls([])), cls)
 
@@ -3400,6 +3570,7 @@ class TestMutableListSlotDunderMethodNew(
 
 
 class TestMutableListSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(MutableListSlot([])), "MutableListSlot([])")
 
@@ -3423,6 +3594,7 @@ class TestMutableListSlotDunderMethodRepr(unittest.TestCase):
 class TestMutableListSlotDunderMethodReversed(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(list(reversed(cls([1, 2, 3]))), [3, 2, 1])
 
@@ -3439,6 +3611,7 @@ class TestMutableListSlotDunderMethodReversed(
 class TestMutableListSlotDunderMethodRmul(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(3 * cls([1]), cls([1, 1, 1]))
 
@@ -3455,6 +3628,7 @@ class TestMutableListSlotDunderMethodRmul(
 class TestMutableListSlotDunderMethodSetattr(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3485,6 +3659,7 @@ class TestMutableListSlotDunderMethodSetattr(
 class TestMutableListSlotDunderMethodSetitem(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -3513,6 +3688,7 @@ class TestMutableListSlotDunderMethodSetitem(
 class TestMutableListSlotDunderMethodSizeof(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls([])), 0)
 
@@ -3529,6 +3705,7 @@ class TestMutableListSlotDunderMethodSizeof(
 class TestMutableListSlotDunderMethodStr(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls([])), str)
 
@@ -3545,6 +3722,7 @@ class TestMutableListSlotDunderMethodStr(
 class TestMutableListSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -3561,6 +3739,7 @@ class TestMutableListSlotDunderMethodSubclasshook(
 class TestMutableListSlotPublicMethodAppend(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([])
@@ -3589,6 +3768,7 @@ class TestMutableListSlotPublicMethodAppend(
 class TestMutableListSlotPublicMethodClear(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -3618,6 +3798,7 @@ class TestMutableListSlotPublicMethodClear(
 class TestMutableListSlotPublicMethodCopy(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         copy: Any
         obj: Any
@@ -3646,6 +3827,7 @@ class TestMutableListSlotPublicMethodCopy(
 class TestMutableListSlotPublicMethodCount(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 1]).count(1), 2)
 
@@ -3662,6 +3844,7 @@ class TestMutableListSlotPublicMethodCount(
 class TestMutableListSlotPublicMethodExtend(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1])
@@ -3690,6 +3873,7 @@ class TestMutableListSlotPublicMethodExtend(
 class TestMutableListSlotPublicMethodIndex(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([4, 5, 6]).index(5), 1)
 
@@ -3707,6 +3891,7 @@ class TestMutableListSlotPublicMethodIndex(
 class TestMutableListSlotPublicMethodInsert(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 3])
@@ -3735,6 +3920,7 @@ class TestMutableListSlotPublicMethodInsert(
 class TestMutableListSlotPublicMethodPop(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -3763,6 +3949,7 @@ class TestMutableListSlotPublicMethodPop(
 class TestMutableListSlotPublicMethodRemove(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3791,6 +3978,7 @@ class TestMutableListSlotPublicMethodRemove(
 class TestMutableListSlotPublicMethodReverse(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3819,6 +4007,7 @@ class TestMutableListSlotPublicMethodReverse(
 class TestMutableListSlotPublicMethodSort(
     unittest.TestCase, MirrorMutableListSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([3, 1, 2])
@@ -3847,6 +4036,7 @@ class TestMutableListSlotPublicMethodSort(
 class TestMutableSetSlotDunderMethodAnd(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) & cls([2, 3])), {2})
 
@@ -3863,6 +4053,7 @@ class TestMutableSetSlotDunderMethodAnd(
 class TestMutableSetSlotDunderMethodBool(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertFalse(bool(cls([])))
 
@@ -3879,6 +4070,7 @@ class TestMutableSetSlotDunderMethodBool(
 class TestMutableSetSlotDunderMethodClassGetitem(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(get_origin(cls[int]), cls)
 
@@ -3895,6 +4087,7 @@ class TestMutableSetSlotDunderMethodClassGetitem(
 class TestMutableSetSlotDunderMethodContains(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn(2, cls([1, 2, 3]))
 
@@ -3911,6 +4104,7 @@ class TestMutableSetSlotDunderMethodContains(
 class TestMutableSetSlotDunderMethodDelattr(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -3942,6 +4136,7 @@ class TestMutableSetSlotDunderMethodDelattr(
 class TestMutableSetSlotDunderMethodDir(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIn("__class__", dir(cls([1, 2, 3])))
 
@@ -3962,6 +4157,7 @@ class TestMutableSetSlotDunderMethodDir(
 class TestMutableSetSlotDunderMethodEq(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2, 3]), cls([1, 2, 3]))
 
@@ -3978,6 +4174,7 @@ class TestMutableSetSlotDunderMethodEq(
 class TestMutableSetSlotDunderMethodFormat(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(format(cls([])), str(cls([])))
 
@@ -3995,6 +4192,7 @@ class TestMutableSetSlotDunderMethodFormat(
 class TestMutableSetSlotDunderMethodGe(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) >= cls([]), True)
 
@@ -4011,6 +4209,7 @@ class TestMutableSetSlotDunderMethodGe(
 class TestMutableSetSlotDunderMethodGetattribute(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(getattr(cls([1, 2, 3]), "__class__"), cls)
 
@@ -4029,6 +4228,7 @@ class TestMutableSetSlotDunderMethodGetattribute(
 class TestMutableSetSlotDunderMethodGt(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) > cls([]), False)
 
@@ -4045,6 +4245,7 @@ class TestMutableSetSlotDunderMethodGt(
 class TestMutableSetSlotDunderMethodHash(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         with self.assertRaises(TypeError):
             hash(cls([1, 2]))
@@ -4064,6 +4265,7 @@ class TestMutableSetSlotDunderMethodHash(
 class TestMutableSetSlotDunderMethodIand(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -4095,6 +4297,7 @@ class TestMutableSetSlotDunderMethodIand(
 class TestMutableSetSlotDunderMethodInit(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -4111,6 +4314,7 @@ class TestMutableSetSlotDunderMethodInit(
 class TestMutableSetSlotDunderMethodIor(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -4142,6 +4346,7 @@ class TestMutableSetSlotDunderMethodIor(
 class TestMutableSetSlotDunderMethodIsub(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -4173,6 +4378,7 @@ class TestMutableSetSlotDunderMethodIsub(
 class TestMutableSetSlotDunderMethodIter(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(iter(cls([1, 2, 3]))), set([1, 2, 3]))
 
@@ -4191,6 +4397,7 @@ class TestMutableSetSlotDunderMethodIter(
 class TestMutableSetSlotDunderMethodIxor(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         ref: Any
@@ -4222,6 +4429,7 @@ class TestMutableSetSlotDunderMethodIxor(
 class TestMutableSetSlotDunderMethodLe(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) <= cls([]), True)
 
@@ -4238,6 +4446,7 @@ class TestMutableSetSlotDunderMethodLe(
 class TestMutableSetSlotDunderMethodLen(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(len(cls([])), 0)
 
@@ -4254,6 +4463,7 @@ class TestMutableSetSlotDunderMethodLen(
 class TestMutableSetSlotDunderMethodLt(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(cls([]) < cls([]), False)
 
@@ -4270,6 +4480,7 @@ class TestMutableSetSlotDunderMethodLt(
 class TestMutableSetSlotDunderMethodNe(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertNotEqual(cls([1]), cls([2]))
 
@@ -4286,6 +4497,7 @@ class TestMutableSetSlotDunderMethodNe(
 class TestMutableSetSlotDunderMethodNew(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIs(type(cls([])), cls)
 
@@ -4302,6 +4514,7 @@ class TestMutableSetSlotDunderMethodNew(
 class TestMutableSetSlotDunderMethodOr(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) | cls([2, 3])), {1, 2, 3})
 
@@ -4318,6 +4531,7 @@ class TestMutableSetSlotDunderMethodOr(
 class TestMutableSetSlotDunderMethodRand(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) & cls([2, 3])), {2})
 
@@ -4332,6 +4546,7 @@ class TestMutableSetSlotDunderMethodRand(
 
 
 class TestMutableSetSlotDunderMethodRepr(unittest.TestCase):
+
     def test_0_repr(self: Self, /) -> None:
         self.assertEqual(repr(MutableSetSlot([])), "MutableSetSlot(set())")
 
@@ -4350,6 +4565,7 @@ class TestMutableSetSlotDunderMethodRepr(unittest.TestCase):
 class TestMutableSetSlotDunderMethodRor(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) | cls([2, 3])), {1, 2, 3})
 
@@ -4366,6 +4582,7 @@ class TestMutableSetSlotDunderMethodRor(
 class TestMutableSetSlotDunderMethodRsub(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) - cls([2, 3])), {1})
 
@@ -4382,6 +4599,7 @@ class TestMutableSetSlotDunderMethodRsub(
 class TestMutableSetSlotDunderMethodRxor(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(frozenset([1, 2]) ^ cls([2, 3])), {1, 3})
 
@@ -4398,6 +4616,7 @@ class TestMutableSetSlotDunderMethodRxor(
 class TestMutableSetSlotDunderMethodSetattr(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2, 3])
@@ -4428,6 +4647,7 @@ class TestMutableSetSlotDunderMethodSetattr(
 class TestMutableSetSlotDunderMethodSizeof(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertGreater(sys.getsizeof(cls([])), 0)
 
@@ -4444,6 +4664,7 @@ class TestMutableSetSlotDunderMethodSizeof(
 class TestMutableSetSlotDunderMethodStr(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertIsInstance(str(cls([])), str)
 
@@ -4460,6 +4681,7 @@ class TestMutableSetSlotDunderMethodStr(
 class TestMutableSetSlotDunderMethodSub(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) - cls([2, 3])), {1})
 
@@ -4476,6 +4698,7 @@ class TestMutableSetSlotDunderMethodSub(
 class TestMutableSetSlotDunderMethodSubclasshook(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(issubclass(cls, abc.Iterable))
 
@@ -4492,6 +4715,7 @@ class TestMutableSetSlotDunderMethodSubclasshook(
 class TestMutableSetSlotDunderMethodXor(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]) ^ cls([2, 3])), {1, 3})
 
@@ -4508,6 +4732,7 @@ class TestMutableSetSlotDunderMethodXor(
 class TestMutableSetSlotPublicMethodAdd(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([])
@@ -4536,6 +4761,7 @@ class TestMutableSetSlotPublicMethodAdd(
 class TestMutableSetSlotPublicMethodClear(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -4565,6 +4791,7 @@ class TestMutableSetSlotPublicMethodClear(
 class TestMutableSetSlotPublicMethodCopy(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(cls([1, 2]).copy(), cls([1, 2]))
 
@@ -4583,6 +4810,7 @@ class TestMutableSetSlotPublicMethodCopy(
 class TestMutableSetSlotPublicMethodDifference(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).difference([2, 3])), {1})
 
@@ -4599,6 +4827,7 @@ class TestMutableSetSlotPublicMethodDifference(
 class TestMutableSetSlotPublicMethodDifferenceUpdate(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -4627,6 +4856,7 @@ class TestMutableSetSlotPublicMethodDifferenceUpdate(
 class TestMutableSetSlotPublicMethodDiscard(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -4655,6 +4885,7 @@ class TestMutableSetSlotPublicMethodDiscard(
 class TestMutableSetSlotPublicMethodIntersection(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).intersection([2, 3])), {2})
 
@@ -4671,6 +4902,7 @@ class TestMutableSetSlotPublicMethodIntersection(
 class TestMutableSetSlotPublicMethodIntersectionUpdate(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(
         self: Self,
         cls: type[Any],
@@ -4715,6 +4947,7 @@ class TestMutableSetSlotPublicMethodIntersectionUpdate(
 class TestMutableSetSlotPublicMethodIsdisjoint(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1]).isdisjoint([2]))
 
@@ -4731,6 +4964,7 @@ class TestMutableSetSlotPublicMethodIsdisjoint(
 class TestMutableSetSlotPublicMethodIssubset(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1]).issubset([1, 2]))
 
@@ -4747,6 +4981,7 @@ class TestMutableSetSlotPublicMethodIssubset(
 class TestMutableSetSlotPublicMethodIssuperset(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertTrue(cls([1, 2]).issuperset([1]))
 
@@ -4763,6 +4998,7 @@ class TestMutableSetSlotPublicMethodIssuperset(
 class TestMutableSetSlotPublicMethodPop(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1])
@@ -4793,6 +5029,7 @@ class TestMutableSetSlotPublicMethodPop(
 class TestMutableSetSlotPublicMethodRemove(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1, 2])
@@ -4821,6 +5058,7 @@ class TestMutableSetSlotPublicMethodRemove(
 class TestMutableSetSlotPublicMethodSymmetricDifference(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(
         self: Self,
         cls: type[Any],
@@ -4853,6 +5091,7 @@ class TestMutableSetSlotPublicMethodSymmetricDifference(
 class TestMutableSetSlotPublicMethodSymmetricDifferenceUpdate(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(
         self: Self,
         cls: type[Any],
@@ -4897,6 +5136,7 @@ class TestMutableSetSlotPublicMethodSymmetricDifferenceUpdate(
 class TestMutableSetSlotPublicMethodUnion(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         self.assertEqual(set(cls([1, 2]).union([2, 3])), {1, 2, 3})
 
@@ -4913,6 +5153,7 @@ class TestMutableSetSlotPublicMethodUnion(
 class TestMutableSetSlotPublicMethodUpdate(
     unittest.TestCase, MirrorMutableSetSlot
 ):
+
     def mirror_0(self: Self, cls: type[Any], /) -> None:
         obj: Any
         obj = cls([1])
